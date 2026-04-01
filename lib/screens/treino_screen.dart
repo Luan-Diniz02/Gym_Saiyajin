@@ -24,10 +24,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
   late final TreinoController _controller;
   int _ultimoEventoDescanso = 0;
 
-  // ==========================================
-  // MODAIS
-  // ==========================================
-
   @override
   void initState() {
     super.initState();
@@ -130,10 +126,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
     super.dispose();
   }
 
-  // ==========================================
-  // CONSTRUÇÃO DA TELA (BUILD)
-  // ==========================================
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -215,10 +207,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
     );
   }
 
-  // ==========================================
-  // WIDGETS AUXILIARES
-  // ==========================================
-
   Widget _buildTelaLimpa() {
     return Container(
       padding: const EdgeInsets.all(32),
@@ -269,7 +257,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     return Column(
       children: [
-        // Cabeçalho do Exercício
         Text(
           exercicioAtual.nome,
           style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
@@ -290,8 +277,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
           child: Text('SÉRIES', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
         ),
         const SizedBox(height: 16),
-
-        // Lista de Séries
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -304,8 +289,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
           },
         ),
         const SizedBox(height: 24),
-
-        // Botões de Ação do Exercício
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -348,7 +331,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
     );
   }
 
-  // O Card Retrátil do Histórico (reaproveitado para a Sessão)
   Widget _buildCardLogExercicio(Exercicio exercicio) {
     final List<Serie> detalhes = exercicio.seriesDetalhes;
 

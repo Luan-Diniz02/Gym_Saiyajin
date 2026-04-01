@@ -2,7 +2,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  // Padrão Singleton: garante que só exista uma conexão aberta com o banco
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
@@ -20,14 +19,12 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1, // Se precisarmos adicionar colunas no futuro, mudamos a versão
+      version: 1,
       onCreate: _createDB,
     );
   }
 
-  // Criação das Tabelas usando SQL puro
   Future _createDB(Database db, int version) async {
-    // Tabela 1: Sessoes de Treino (O "Pai")
     await db.execute('''
       CREATE TABLE sessoes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +33,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Tabela 2: Exercicios realizados na Sessão (O "Filho")
     await db.execute('''
       CREATE TABLE exercicios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +43,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Tabela 3: Séries de cada Exercicio (O "Neto")
     await db.execute('''
       CREATE TABLE series (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

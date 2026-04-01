@@ -21,6 +21,8 @@ O projeto foi refatorado para uma base mais limpa e escalável, com:
 - sqflite
 - path
 - fl_chart
+- shared_preferences
+- vibration
 
 ## Arquitetura Atual
 

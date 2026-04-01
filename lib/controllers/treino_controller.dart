@@ -31,16 +31,6 @@ class TreinoController extends ChangeNotifier {
 
   final TextInputFormatter _repsInputFormatter = FilteringTextInputFormatter.digitsOnly;
 
-  final List<Exercicio> _exerciciosCadastrados = [
-    Exercicio(nome: 'Crucifixo', grupo: 'PEITO', seriesDetalhes: []),
-    Exercicio(nome: 'Agachamento Livre', grupo: 'PERNAS', seriesDetalhes: []),
-    Exercicio(nome: 'Leg Press', grupo: 'PERNAS', seriesDetalhes: []),
-    Exercicio(nome: 'Remada Curvada', grupo: 'COSTAS', seriesDetalhes: []),
-    Exercicio(nome: 'Puxada Frontal', grupo: 'COSTAS', seriesDetalhes: []),
-    Exercicio(nome: 'Rosca Direta', grupo: 'BÍCEPS', seriesDetalhes: []),
-    Exercicio(nome: 'Supino Reto', grupo: 'PEITO', seriesDetalhes: []),
-  ];
-
   int get tempoDescansoPadrao => _tempoDescansoPadrao;
   int get tempoAtual => _tempoAtual;
   bool get isTimerRodando => _isTimerRodando;
@@ -48,7 +38,6 @@ class TreinoController extends ChangeNotifier {
 
   Exercicio? get exercicioAtual => _sessaoTreino.exercicioAtual;
   List<Exercicio> get exerciciosConcluidosHoje => UnmodifiableListView(_sessaoTreino.exerciciosConcluidosHoje);
-  List<Exercicio> get exerciciosCadastrados => UnmodifiableListView(_exerciciosCadastrados);
 
   TextInputFormatter get pesoInputFormatter => _pesoInputFormatter;
   TextInputFormatter get repsInputFormatter => _repsInputFormatter;

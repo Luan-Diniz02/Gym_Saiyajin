@@ -24,7 +24,6 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     _controller.carregarDados();
   }
 
-  // --- MODAL DE MEDIDAS ---
   void _abrirModalAtualizarMedidas() {
     final pesoController = TextEditingController(text: _controller.pesoAtual.toString());
     final alturaController = TextEditingController(text: _controller.altura.toString());
@@ -189,7 +188,6 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     );
   }
 
-  // --- CARD DE PESO COM BOTÃO DE EDITAR ---
   Widget _buildPesoCorporalCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -214,7 +212,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
               const SizedBox(width: 8),
               IconButton(
                 icon: const Icon(Icons.edit, color: AppColors.textDimmed, size: 20),
-                onPressed: _abrirModalAtualizarMedidas, // Abre o modal
+                onPressed: _abrirModalAtualizarMedidas,
               )
             ],
           ),
