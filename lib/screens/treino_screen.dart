@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
 import '../theme/app_colors.dart';
 import '../controllers/treino_controller.dart';
 import '../models/exercicio.dart';
@@ -39,9 +40,25 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     if (_controller.descansoFinalizadoEvento != _ultimoEventoDescanso) {
       _ultimoEventoDescanso = _controller.descansoFinalizadoEvento;
-      HapticFeedback.heavyImpact();
+      _dispararVibracao(1000, 128);
       _mostrarDialogoDescansoFinalizado();
     }
+  }
+
+  Future<void> _dispararVibracao(int duration, int amplitude) async {
+    final hasVibrator = await Vibration.hasVibrator();
+    if (!hasVibrator) {
+      await HapticFeedback.heavyImpact();
+      return;
+    }
+
+    final hasAmplitudeControl = await Vibration.hasAmplitudeControl();
+    if (hasAmplitudeControl) {
+      await Vibration.vibrate(duration: duration, amplitude: amplitude);
+      return;
+    }
+
+    await Vibration.vibrate(duration: duration);
   }
 
   void _mostrarDialogoDescansoFinalizado() {
