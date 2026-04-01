@@ -129,8 +129,14 @@ class _TreinoScreenState extends State<TreinoScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CronometroWidget(
-                  controller: _controller,
+                  tempoFormatado: _controller.tempoFormatado,
+                  tempoAtual: _controller.tempoAtual,
+                  tempoDescansoPadrao: _controller.tempoDescansoPadrao,
+                  isTimerRodando: _controller.isTimerRodando,
                   onTapConfig: _abrirConfigTempoDescanso,
+                  onPausar: _controller.pausarTimer,
+                  onReiniciar: _controller.reiniciarTimer,
+                  onIniciarOuContinuar: _controller.continuarTimer,
                 ),
                 const SizedBox(height: 32),
                 if (_controller.exerciciosConcluidosHoje.isNotEmpty) ...[

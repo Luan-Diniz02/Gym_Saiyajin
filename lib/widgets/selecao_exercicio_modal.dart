@@ -18,13 +18,40 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
   String _termoBusca = '';
 
   final List<Map<String, String>> _exerciciosPadrao = [
-    {'nome': 'Crucifixo', 'grupo': 'PEITO'},
-    {'nome': 'Agachamento Livre', 'grupo': 'PERNAS'},
-    {'nome': 'Leg Press', 'grupo': 'PERNAS'},
-    {'nome': 'Remada Curvada', 'grupo': 'COSTAS'},
-    {'nome': 'Puxada Frontal', 'grupo': 'COSTAS'},
-    {'nome': 'Rosca Direta', 'grupo': 'BÍCEPS'},
+    // PEITO
     {'nome': 'Supino Reto', 'grupo': 'PEITO'},
+    {'nome': 'Supino Inclinado', 'grupo': 'PEITO'},
+    {'nome': 'Supino Declinado', 'grupo': 'PEITO'},
+    {'nome': 'Crucifixo', 'grupo': 'PEITO'},
+    {'nome': 'Crossover', 'grupo': 'PEITO'},
+    {'nome': 'Voador', 'grupo': 'PEITO'},
+    // COSTAS
+    {'nome': 'Puxada Frontal', 'grupo': 'COSTAS'},
+    {'nome': 'Remada Curvada', 'grupo': 'COSTAS'},
+    {'nome': 'Remada Baixa', 'grupo': 'COSTAS'},
+    {'nome': 'Serrote', 'grupo': 'COSTAS'},
+    {'nome': 'Barra Fixa', 'grupo': 'COSTAS'},
+    // PERNAS
+    {'nome': 'Agachamento Livre', 'grupo': 'PERNAS'},
+    {'nome': 'Leg Press 45', 'grupo': 'PERNAS'},
+    {'nome': 'Cadeira Extensora', 'grupo': 'PERNAS'},
+    {'nome': 'Cadeira Flexora', 'grupo': 'PERNAS'},
+    {'nome': 'Mesa Flexora', 'grupo': 'PERNAS'},
+    {'nome': 'Panturrilha Máquina', 'grupo': 'PERNAS'},
+    {'nome': 'Elevacao Pélvica', 'grupo': 'PERNAS'},
+    // OMBROS
+    {'nome': 'Desenvolvimento Halteres', 'grupo': 'OMBROS'},
+    {'nome': 'Elevação Lateral', 'grupo': 'OMBROS'},
+    {'nome': 'Elevação Frontal', 'grupo': 'OMBROS'},
+    // BÍCEPS E TRÍCEPS
+    {'nome': 'Rosca Direta', 'grupo': 'BÍCEPS'},
+    {'nome': 'Rosca Martelo', 'grupo': 'BÍCEPS'},
+    {'nome': 'Tríceps Polia', 'grupo': 'TRÍCEPS'},
+    {'nome': 'Tríceps Testa', 'grupo': 'TRÍCEPS'},
+    {'nome': 'Tríceps Francês', 'grupo': 'TRÍCEPS'},
+    // ABDÔMEN
+    {'nome': 'Abdominal Supra', 'grupo': 'ABDÔMEN'},
+    {'nome': 'Prancha', 'grupo': 'ABDÔMEN'},
   ];
 
   List<Map<String, String>> get _exerciciosFiltrados {
