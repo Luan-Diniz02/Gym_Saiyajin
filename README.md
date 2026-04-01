@@ -8,14 +8,11 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 
 ## Imagens da Aplicação
 
-### Tela de Treino
-![Tela de Treino](docs/images/treino.png)
-
-### Histórico de Sessões
-![Histórico](docs/images/historico.png)
-
-### Dashboard de Progresso
-![Dashboard de Progresso](docs/images/progresso.png)
+<p align="center">
+  <img src="docs/images/treino.png" width="30%" />
+  <img src="docs/images/historico.png" width="30%" />
+  <img src="docs/images/progresso.png" width="30%" />
+</p>
 
 ## Visão Geral
 
