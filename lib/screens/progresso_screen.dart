@@ -197,11 +197,14 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('PESO ATUAL', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-              Text('Última atualização: Hoje', style: TextStyle(fontSize: 12, color: AppColors.textDimmed)),
+              Text(
+                'Última atualização: ${_controller.dataUltimaAtualizacaoFormatada}',
+                style: TextStyle(fontSize: 12, color: AppColors.textDimmed),
+              ),
             ],
           ),
           Row(

@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/exercicio.dart';
 import '../models/sessao_treino.dart';
@@ -10,6 +11,10 @@ import '../repositories/treino_repository.dart';
 
 class ProgressoController extends ChangeNotifier {
   final TreinoRepository _repository;
+  static const String _pesoAtualKey = 'progresso_peso_atual';
+  static const String _alturaKey = 'progresso_altura';
+  static const String _metaDiasSemanaKey = 'progresso_meta_dias_semana';
+  static const String _dataUltimaAtualizacaoPesoKey = 'progresso_data_ultima_atualizacao_peso';
 
   ProgressoController({required TreinoRepository repository}) : _repository = repository;
 
@@ -17,6 +22,7 @@ class ProgressoController extends ChangeNotifier {
   double _altura = 1.70;
   int _diasTreinadosNaSemana = 0;
   int _metaDiasSemana = 3;
+  DateTime? _dataUltimaAtualizacaoPeso;
 
   String _exercicioFiltro = 'SUPINO RETO';
   final List<String> _exerciciosDisponiveis = ['SUPINO RETO'];
@@ -28,6 +34,22 @@ class ProgressoController extends ChangeNotifier {
   double get altura => _altura;
   int get diasTreinadosNaSemana => _diasTreinadosNaSemana;
   int get metaDiasSemana => _metaDiasSemana;
+  String get dataUltimaAtualizacaoFormatada {
+    final data = _dataUltimaAtualizacaoPeso;
+    if (data == null) return '--';
+
+    final agora = DateTime.now();
+    final hoje = DateTime(agora.year, agora.month, agora.day);
+    final dataSemHorario = DateTime(data.year, data.month, data.day);
+    if (dataSemHorario == hoje) {
+      return 'Hoje';
+    }
+
+    final dia = data.day.toString().padLeft(2, '0');
+    final mes = data.month.toString().padLeft(2, '0');
+    final ano = data.year.toString();
+    return '$dia/$mes/$ano';
+  }
 
   String get exercicioFiltro => _exercicioFiltro;
   List<String> get exerciciosDisponiveis => UnmodifiableListView(_exerciciosDisponiveis);
@@ -42,6 +64,8 @@ class ProgressoController extends ChangeNotifier {
   String get classificacaoImc => imc < 25 ? 'PESO NORMAL' : 'SOBREPESO';
 
   Future<void> carregarDados() async {
+    await _carregarPreferencias();
+
     final historico = await _repository.buscarHistoricoTreinos();
     _historicoCache = historico;
 
@@ -154,12 +178,55 @@ class ProgressoController extends ChangeNotifier {
   void atualizarMedidas({required double peso, required double altura}) {
     _pesoAtual = peso;
     _altura = altura;
+    _dataUltimaAtualizacaoPeso = DateTime.now();
+    _salvarPreferencias();
     notifyListeners();
   }
 
   void atualizarMetaDiasSemana(int novaMeta) {
     if (novaMeta < 1 || novaMeta > 7) return;
     _metaDiasSemana = novaMeta;
+    _salvarPreferencias();
+    notifyListeners();
+  }
+
+  Future<void> _salvarPreferencias() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_pesoAtualKey, _pesoAtual);
+    await prefs.setDouble(_alturaKey, _altura);
+    await prefs.setInt(_metaDiasSemanaKey, _metaDiasSemana);
+
+    final data = _dataUltimaAtualizacaoPeso;
+    if (data != null) {
+      await prefs.setString(_dataUltimaAtualizacaoPesoKey, data.toIso8601String());
+    } else {
+      await prefs.remove(_dataUltimaAtualizacaoPesoKey);
+    }
+  }
+
+  Future<void> _carregarPreferencias() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final pesoSalvo = prefs.getDouble(_pesoAtualKey);
+    if (pesoSalvo != null) {
+      _pesoAtual = pesoSalvo;
+    }
+
+    final alturaSalva = prefs.getDouble(_alturaKey);
+    if (alturaSalva != null) {
+      _altura = alturaSalva;
+    }
+
+    final metaSalva = prefs.getInt(_metaDiasSemanaKey);
+    if (metaSalva != null) {
+      _metaDiasSemana = metaSalva;
+    }
+
+    final dataSalva = prefs.getString(_dataUltimaAtualizacaoPesoKey);
+    if (dataSalva != null && dataSalva.isNotEmpty) {
+      _dataUltimaAtualizacaoPeso = DateTime.tryParse(dataSalva);
+    }
+
     notifyListeners();
   }
 }
