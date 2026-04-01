@@ -24,8 +24,8 @@ class ProgressoController extends ChangeNotifier {
   int _metaDiasSemana = 3;
   DateTime? _dataUltimaAtualizacaoPeso;
 
-  String _exercicioFiltro = 'SUPINO RETO';
-  final List<String> _exerciciosDisponiveis = ['SUPINO RETO'];
+  String _exercicioFiltro = 'Nenhum exercício';
+  final List<String> _exerciciosDisponiveis = ['Nenhum exercício'];
   final List<FlSpot> _pontosDoGraficoFiltrado = [];
   final List<String> _datasDoGrafico = [];
   List<SessaoTreino> _historicoCache = [];
@@ -107,7 +107,7 @@ class ProgressoController extends ChangeNotifier {
 
     _exerciciosDisponiveis
       ..clear()
-      ..addAll(unicos.isEmpty ? ['SUPINO RETO'] : unicos.toList()..sort());
+      ..addAll(unicos.isEmpty ? ['Nenhum exercício'] : unicos.toList()..sort());
 
     if (!_exerciciosDisponiveis.contains(_exercicioFiltro)) {
       _exercicioFiltro = _exerciciosDisponiveis.first;
@@ -115,6 +115,12 @@ class ProgressoController extends ChangeNotifier {
   }
 
   void _recalcularDadosGrafico() {
+    if (_exercicioFiltro == 'Nenhum exercício') {
+      _pontosDoGraficoFiltrado.clear();
+      _datasDoGrafico.clear();
+      return;
+    }
+
     final sessoesComExercicio = _historicoCache
         .where((sessao) => sessao.exerciciosConcluidosHoje.any((ex) => ex.nome == _exercicioFiltro))
         .toList()
