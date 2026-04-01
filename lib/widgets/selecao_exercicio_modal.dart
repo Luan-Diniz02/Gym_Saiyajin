@@ -1,15 +1,121 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/treino_controller.dart';
 import '../theme/app_colors.dart';
 
-class SelecaoExercicioModal extends StatelessWidget {
-  final TreinoController controller;
+class SelecaoExercicioModal extends StatefulWidget {
+  final void Function(String nome, String grupo) onSelecionarExercicio;
 
   const SelecaoExercicioModal({
     super.key,
-    required this.controller,
+    required this.onSelecionarExercicio,
   });
+
+  @override
+  State<SelecaoExercicioModal> createState() => _SelecaoExercicioModalState();
+}
+
+class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
+  String _termoBusca = '';
+
+  final List<Map<String, String>> _exerciciosPadrao = [
+    {'nome': 'Crucifixo', 'grupo': 'PEITO'},
+    {'nome': 'Agachamento Livre', 'grupo': 'PERNAS'},
+    {'nome': 'Leg Press', 'grupo': 'PERNAS'},
+    {'nome': 'Remada Curvada', 'grupo': 'COSTAS'},
+    {'nome': 'Puxada Frontal', 'grupo': 'COSTAS'},
+    {'nome': 'Rosca Direta', 'grupo': 'BÍCEPS'},
+    {'nome': 'Supino Reto', 'grupo': 'PEITO'},
+  ];
+
+  List<Map<String, String>> get _exerciciosFiltrados {
+    final termo = _termoBusca.trim().toLowerCase();
+    if (termo.isEmpty) return _exerciciosPadrao;
+
+    return _exerciciosPadrao.where((exercicio) {
+      final nome = (exercicio['nome'] ?? '').toLowerCase();
+      final grupo = (exercicio['grupo'] ?? '').toLowerCase();
+      return nome.contains(termo) || grupo.contains(termo);
+    }).toList();
+  }
+
+  bool get _deveExibirCriarNovo {
+    final termo = _termoBusca.trim();
+    if (termo.isEmpty) return false;
+
+    final termoNormalizado = termo.toLowerCase();
+    final temResultadoExato = _exerciciosFiltrados.any(
+      (exercicio) => (exercicio['nome'] ?? '').toLowerCase() == termoNormalizado,
+    );
+
+    return !temResultadoExato;
+  }
+
+  Future<void> _abrirDialogGrupoMuscular() async {
+    final String nomeNovoExercicio = _termoBusca.trim();
+    if (nomeNovoExercicio.isEmpty) return;
+
+    final grupos = [
+      'PEITO',
+      'COSTAS',
+      'PERNAS',
+      'BÍCEPS',
+      'TRÍCEPS',
+      'OMBROS',
+      'ABDÔMEN',
+      'OUTROS',
+    ];
+
+    final grupoSelecionado = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text(
+            'Qual o grupo muscular?',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          content: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: grupos.map((grupo) {
+              return InkWell(
+                onTap: () => Navigator.pop(dialogContext, grupo),
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                  ),
+                  child: Text(
+                    grupo,
+                    style: const TextStyle(
+                      color: AppColors.textLight,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!mounted || grupoSelecionado == null) return;
+
+    Navigator.pop(context);
+    widget.onSelecionarExercicio(nomeNovoExercicio, grupoSelecionado);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +145,11 @@ class SelecaoExercicioModal extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextField(
+              onChanged: (valor) {
+                setState(() {
+                  _termoBusca = valor;
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Buscar exercício...',
                 hintStyle: const TextStyle(color: AppColors.textDimmed),
@@ -53,18 +164,32 @@ class SelecaoExercicioModal extends StatelessWidget {
             Flexible(
               child: ListView.separated(
                 shrinkWrap: true,
-                itemCount: controller.exerciciosCadastrados.length,
+                itemCount: _exerciciosFiltrados.length + (_deveExibirCriarNovo ? 1 : 0),
                 separatorBuilder: (context, index) => const Divider(color: AppColors.background),
                 itemBuilder: (context, index) {
-                  final ex = controller.exerciciosCadastrados[index];
+                  if (_deveExibirCriarNovo && index == _exerciciosFiltrados.length) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.add_circle, color: AppColors.accent),
+                      title: Text(
+                        "Criar novo exercício: '${_termoBusca.trim()}'",
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent),
+                      ),
+                      onTap: _abrirDialogGrupoMuscular,
+                    );
+                  }
+
+                  final ex = _exerciciosFiltrados[index];
+                  final nome = ex['nome'] ?? '';
+                  final grupo = ex['grupo'] ?? '';
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(ex.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(ex.grupo, style: const TextStyle(color: AppColors.primary, fontSize: 12)),
+                    title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(grupo, style: const TextStyle(color: AppColors.primary, fontSize: 12)),
                     trailing: const Icon(Icons.add_circle_outline, color: AppColors.primary),
                     onTap: () {
-                      controller.iniciarNovoExercicio(ex.nome, ex.grupo);
                       Navigator.pop(context);
+                      widget.onSelecionarExercicio(nome, grupo);
                     },
                   );
                 },

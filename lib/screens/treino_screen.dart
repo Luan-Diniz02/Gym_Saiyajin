@@ -99,7 +99,9 @@ class _TreinoScreenState extends State<TreinoScreen> {
       context: context,
       builder: (context) {
         return SelecaoExercicioModal(
-          controller: _controller,
+          onSelecionarExercicio: (nome, grupo) {
+            _controller.iniciarNovoExercicio(nome, grupo);
+          },
         );
       },
     );
