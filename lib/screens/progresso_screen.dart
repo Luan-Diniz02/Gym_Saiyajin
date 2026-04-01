@@ -10,21 +10,155 @@ class ProgressoScreen extends StatefulWidget {
 }
 
 class _ProgressoScreenState extends State<ProgressoScreen> {
-  // Dados para o IMC e Meta
+  // --- ESTADO FÍSICO ---
   double pesoAtual = 69.0;
   double altura = 1.70;
   int diasTreinadosNaSemana = 2;
   int metaDiasSemana = 3;
 
-  // Mock de dados para o gráfico (Data vs Carga Máxima no Supino)
-  final List<FlSpot> dadosGrafico = [
-    const FlSpot(0, 50), // 08/11
-    const FlSpot(1, 60), // 09/11
-    const FlSpot(2, 64), // 10/11
-  ];
+  // --- ESTADO DO GRÁFICO ---
+  String exercicioFiltro = 'SUPINO RETO';
+  final List<String> exerciciosDisponiveis = ['SUPINO RETO', 'AGACHAMENTO', 'REMADA CURVADA'];
+  
+  // Dados mockados simulando o banco de dados para diferentes exercícios
+  final Map<String, List<FlSpot>> historicoGrafico = {
+    'SUPINO RETO': [const FlSpot(0, 50), const FlSpot(1, 60), const FlSpot(2, 64)],
+    'AGACHAMENTO': [const FlSpot(0, 70), const FlSpot(1, 80), const FlSpot(2, 84)],
+    'REMADA CURVADA': [const FlSpot(0, 40), const FlSpot(1, 45), const FlSpot(2, 50)],
+  };
 
   double calcularIMC() {
     return pesoAtual / (altura * altura);
+  }
+
+  // --- MODAL DE MEDIDAS ---
+  void _abrirModalAtualizarMedidas() {
+    final pesoController = TextEditingController(text: pesoAtual.toString());
+    final alturaController = TextEditingController(text: altura.toString());
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          title: const Text('ATUALIZAR MEDIDAS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: pesoController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Peso (kg)',
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: alturaController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Altura (m)',
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  pesoAtual = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? pesoAtual;
+                  altura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? altura;
+                });
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: AppColors.background),
+              child: const Text('SALVAR', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _abrirModalAtualizarMeta() {
+    int metaTemporaria = metaDiasSemana;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return AlertDialog(
+              backgroundColor: AppColors.surface,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Center(
+                child: Text('META SEMANAL', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Quantos dias você quer treinar?',
+                    style: TextStyle(color: AppColors.textDimmed, fontSize: 12),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (metaTemporaria > 1) setStateModal(() => metaTemporaria--);
+                        },
+                        icon: const Icon(Icons.remove_circle_outline, size: 32, color: AppColors.primary),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        '$metaTemporaria',
+                        style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: AppColors.accent),
+                      ),
+                      const SizedBox(width: 20),
+                      IconButton(
+                        onPressed: () {
+                          if (metaTemporaria < 7) setStateModal(() => metaTemporaria++);
+                        },
+                        icon: const Icon(Icons.add_circle_outline, size: 32, color: AppColors.primary),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() => metaDiasSemana = metaTemporaria);
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                  ),
+                  child: const Text('SALVAR', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -42,7 +176,6 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
             ),
             const SizedBox(height: 30),
 
-            // --- BLOCO 1: META SEMANAL E IMC ---
             Row(
               children: [
                 Expanded(child: _buildMetaCard()),
@@ -51,13 +184,10 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
               ],
             ),
             const SizedBox(height: 24),
-
-            // --- BLOCO 2: GRÁFICO DE CARGA ---
+            
             _buildChartSection(),
             
             const SizedBox(height: 24),
-            
-            // --- BLOCO 3: PESO CORPORAL ---
             _buildPesoCorporalCard(),
           ],
         ),
@@ -65,19 +195,38 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     );
   }
 
+  // ... (Mantenha _buildMetaCard e _buildIMCCard iguais ao que você já tinha)
   Widget _buildMetaCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        children: [
-          const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
-          const SizedBox(height: 12),
-          const Text('META SEMANAL', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-          Text('$diasTreinadosNaSemana / $metaDiasSemana', 
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
-          const Text('DIAS ATIVOS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-        ],
+    return GestureDetector(
+      onTap: _abrirModalAtualizarMeta, // <--- Chama o modal ao tocar no card
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface, 
+          borderRadius: BorderRadius.circular(16)
+        ),
+        child: Stack(
+          children: [
+            // Ícone de edição no canto superior direito
+            const Align(
+              alignment: Alignment.topRight,
+              child: Icon(Icons.edit, color: AppColors.textDimmed, size: 16),
+            ),
+            // Conteúdo principal
+            Column(
+              children: [
+                const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
+                const SizedBox(height: 12),
+                const Text('META SEMANAL', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
+                Text(
+                  '$diasTreinadosNaSemana / $metaDiasSemana', 
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)
+                ),
+                const Text('DIAS ATIVOS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -100,6 +249,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     );
   }
 
+  // --- SEÇÃO DO GRÁFICO ATUALIZADA COM FILTRO ---
   Widget _buildChartSection() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -107,9 +257,34 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('PROGRESSÃO DE CARGA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          const Text('SUPINO RETO (KG)', style: TextStyle(fontSize: 12, color: AppColors.textDimmed)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('PROGRESSÃO DE CARGA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Icon(Icons.filter_list, color: AppColors.primary, size: 20),
+            ],
+          ),
+          const SizedBox(height: 8),
+          
+          // O Dropdown de Filtro
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(8)),
+            child: DropdownButton<String>(
+              value: exercicioFiltro,
+              dropdownColor: AppColors.surface,
+              isExpanded: true,
+              underline: const SizedBox(), // Remove a linha feia padrão do dropdown
+              style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 12),
+              items: exerciciosDisponiveis.map((ex) => DropdownMenuItem(value: ex, child: Text(ex))).toList(),
+              onChanged: (novoExercicio) {
+                if (novoExercicio != null) {
+                  setState(() => exercicioFiltro = novoExercicio);
+                }
+              },
+            ),
+          ),
+          
           const SizedBox(height: 30),
           SizedBox(
             height: 200,
@@ -120,7 +295,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
                   LineChartBarData(
-                    spots: dadosGrafico,
+                    spots: historicoGrafico[exercicioFiltro] ?? [], // Puxa os dados baseados no filtro!
                     isCurved: true,
                     color: AppColors.primary,
                     barWidth: 4,
@@ -128,7 +303,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                     dotData: const FlDotData(show: true),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppColors.primary.withOpacity(0.15), // Efeito de aura/glow
+                      color: AppColors.primary.withOpacity(0.15),
                     ),
                   ),
                 ],
@@ -140,6 +315,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     );
   }
 
+  // --- CARD DE PESO COM BOTÃO DE EDITAR ---
   Widget _buildPesoCorporalCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -154,8 +330,17 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
               Text('Última atualização: Hoje', style: TextStyle(fontSize: 12, color: AppColors.textDimmed)),
             ],
           ),
-          Text('$pesoAtual kg', 
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
+          Row(
+            children: [
+              Text('${pesoAtual.toStringAsFixed(1)} kg', 
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.edit, color: AppColors.textDimmed, size: 20),
+                onPressed: _abrirModalAtualizarMedidas, // Abre o modal
+              )
+            ],
+          ),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import 'dart:async';
 
@@ -14,6 +15,14 @@ class TreinoScreen extends StatefulWidget {
 
 class _TreinoScreenState extends State<TreinoScreen> {
   Timer? _timer;
+  final TextInputFormatter _pesoInputFormatter = TextInputFormatter.withFunction((oldValue, newValue) {
+    final texto = newValue.text;
+    if (texto.isEmpty || RegExp(r'^\d+([.,]\d{0,2})?$').hasMatch(texto)) {
+      return newValue;
+    }
+    return oldValue;
+  });
+  final TextInputFormatter _repsInputFormatter = FilteringTextInputFormatter.digitsOnly;
   int _tempoDescansoPadrao = 90; // 90 segundos = 01:30
   int _tempoAtual = 90;
   bool _isTimerRodando = false;
@@ -23,15 +32,15 @@ class _TreinoScreenState extends State<TreinoScreen> {
   String grupoAtual = 'PEITO';
   // Estado mockado (simulando o banco de dados).
   List<Map<String, dynamic>> series = [
-    {'peso': '60', 'reps': '12', 'concluida': true},
-    {'peso': '60', 'reps': '12', 'concluida': true},
-    {'peso': '60', 'reps': '12', 'concluida': false},
-    {'peso': '60', 'reps': '12', 'concluida': false},
+    {'peso': 60.0, 'reps': 12, 'concluida': true},
+    {'peso': 60.0, 'reps': 12, 'concluida': true},
+    {'peso': 60.0, 'reps': 12, 'concluida': false},
+    {'peso': 60.0, 'reps': 12, 'concluida': false},
   ];
 
   void _adicionarSerie() {
     setState(() {
-      series.add({'peso': '', 'reps': '', 'concluida': false});
+      series.add({'peso': null, 'reps': null, 'concluida': false});
     });
   }
 
@@ -263,7 +272,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
       
       // Zera a lista de séries, deixando apenas uma vazia para começar
       series = [
-        {'peso': '', 'reps': '', 'concluida': false}
+        {'peso': null, 'reps': null, 'concluida': false}
       ];
     });}
 
@@ -686,6 +695,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
   // Extraímos a linha da série para não poluir a árvore principal.
   Widget _buildSerieRow(int index, Map<String, dynamic> serie) {
     bool isConcluida = serie['concluida'];
+    final double? peso = serie['peso'] as double?;
+    final int? reps = serie['reps'] as int?;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -725,7 +736,17 @@ class _TreinoScreenState extends State<TreinoScreen> {
               children: [
                 const Text('PESO (KG)', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
                 const SizedBox(height: 4),
-                _buildCustomTextField(serie['peso'], isConcluida),
+                _buildCustomTextField(
+                  chave: 'peso-${exercicioAtual}-${index}',
+                  valorInicial: peso?.toStringAsFixed(peso % 1 == 0 ? 0 : 1) ?? '',
+                  isConcluida: isConcluida,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [_pesoInputFormatter],
+                  onChanged: (valor) {
+                    final valorNormalizado = valor.replaceAll(',', '.').trim();
+                    series[index]['peso'] = valorNormalizado.isEmpty ? null : double.tryParse(valorNormalizado);
+                  },
+                ),
               ],
             ),
           ),
@@ -738,7 +759,17 @@ class _TreinoScreenState extends State<TreinoScreen> {
               children: [
                 const Text('REPS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
                 const SizedBox(height: 4),
-                _buildCustomTextField(serie['reps'], isConcluida),
+                _buildCustomTextField(
+                  chave: 'reps-${exercicioAtual}-${index}',
+                  valorInicial: reps?.toString() ?? '',
+                  isConcluida: isConcluida,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [_repsInputFormatter],
+                  onChanged: (valor) {
+                    final valorLimpo = valor.trim();
+                    series[index]['reps'] = valorLimpo.isEmpty ? null : int.tryParse(valorLimpo);
+                  },
+                ),
               ],
             ),
           ),
@@ -767,11 +798,22 @@ class _TreinoScreenState extends State<TreinoScreen> {
   }
 
   // Reutilizando o input para manter o visual consistente
-  Widget _buildCustomTextField(String valorInicial, bool isConcluida) {
+  // --- FUNÇÃO CORRIGIDA ---
+  Widget _buildCustomTextField({
+    required String chave, // <--- Novo parâmetro
+    required String valorInicial,
+    required bool isConcluida,
+    required TextInputType keyboardType,
+    required List<TextInputFormatter> inputFormatters,
+    required ValueChanged<String> onChanged,
+  }) {
     return TextFormField(
+      key: ValueKey(chave), // <--- Usa a chave estável aqui
       initialValue: valorInicial,
-      readOnly: isConcluida, // Trava a edição se a série já foi concluída
-      keyboardType: TextInputType.number,
+      readOnly: isConcluida, 
+      keyboardType: keyboardType,
+      inputFormatters: isConcluida ? null : inputFormatters,
+      onChanged: isConcluida ? null : onChanged,
       style: TextStyle(
         fontWeight: FontWeight.bold, 
         fontSize: 16,
@@ -787,5 +829,4 @@ class _TreinoScreenState extends State<TreinoScreen> {
         ),
       ),
     );
-  }
-}
+  }}
