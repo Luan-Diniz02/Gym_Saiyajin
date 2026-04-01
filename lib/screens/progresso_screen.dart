@@ -290,12 +290,55 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
             height: 200,
             child: LineChart(
               LineChartData(
-                gridData: const FlGridData(show: false),
-                titlesData: const FlTitlesData(show: false),
-                borderData: FlBorderData(show: false),
+                // 1. Linhas de grade (Horizontais) suaves
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false, 
+                  getDrawingHorizontalLine: (value) => FlLine(
+                    color: AppColors.textDimmed.withOpacity(0.1),
+                    strokeWidth: 1,
+                  ),
+                ),
+                // 2. Configuração dos Eixos (Textos)
+                titlesData: FlTitlesData(
+                  show: true,
+                  // Eixo X (Embaixo) - Datas
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 24,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        // Simulando as datas dos últimos 3 treinos
+                        const datas = ['26/03', '28/03', '30/03']; 
+                        if (value.toInt() >= 0 && value.toInt() < datas.length) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(datas[value.toInt()], style: const TextStyle(color: AppColors.textDimmed, fontSize: 10, fontWeight: FontWeight.bold)),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                  // Eixo Y (Esquerda) - Pesos
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 36, // Espaço para caber os números
+                      getTitlesWidget: (value, meta) {
+                        return Text('${value.toInt()}kg', style: const TextStyle(color: AppColors.textDimmed, fontSize: 10, fontWeight: FontWeight.bold));
+                      },
+                    ),
+                  ),
+                  // Esconde os textos de cima e da direita
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                borderData: FlBorderData(show: false), // Remove a caixa quadrada envolta do gráfico
                 lineBarsData: [
                   LineChartBarData(
-                    spots: historicoGrafico[exercicioFiltro] ?? [], // Puxa os dados baseados no filtro!
+                    spots: historicoGrafico[exercicioFiltro] ?? [], 
                     isCurved: true,
                     color: AppColors.primary,
                     barWidth: 4,

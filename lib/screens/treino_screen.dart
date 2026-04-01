@@ -553,8 +553,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8, // Espaço horizontal entre os botões
+              runSpacing: 8, // Espaço vertical caso quebre a linha
               children: [
                 OutlinedButton.icon(
                   onPressed: _isTimerRodando ? _pausarTimer : null,
@@ -565,7 +567,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     side: const BorderSide(color: AppColors.primary),
                   ),
                 ),
-                const SizedBox(width: 8),
                 OutlinedButton.icon(
                   onPressed: _tempoAtual != _tempoDescansoPadrao || _isTimerRodando ? _reiniciarTimer : null,
                   icon: const Icon(Icons.restart_alt, size: 18),
@@ -575,7 +576,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     side: const BorderSide(color: AppColors.primary),
                   ),
                 ),
-                const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: !_isTimerRodando ? _continuarTimer : null,
                   icon: const Icon(Icons.play_arrow, size: 18),
