@@ -34,6 +34,9 @@ class MetricasDashboardWidget extends StatelessWidget {
                       ),
                       Column(
                         children: [
+                          const Align(
+                            alignment: Alignment.topCenter,
+                          ),  
                           const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
                           const SizedBox(height: 12),
                           const Text('META SEMANAL', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
@@ -56,7 +59,7 @@ class MetricasDashboardWidget extends StatelessWidget {
                 decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
                 child: Column(
                   children: [
-                    const Icon(Icons.monitor_weight, color: AppColors.primary, size: 30),
+                    const Icon(Icons.monitor_weight_outlined, color: AppColors.primary, size: 30),
                     const SizedBox(height: 12),
                     const Text('MEU IMC', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
                     Text(
