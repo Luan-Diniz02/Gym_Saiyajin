@@ -423,7 +423,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 child: Text('JÁ REALIZADOS HOJE:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textDimmed)),
               ),
               const SizedBox(height: 12),
-              ...exerciciosConcluidosHoje.map((ex) => _buildCardLogExercicio(ex)).toList(),
+              ...exerciciosConcluidosHoje.map((ex) => _buildCardLogExercicio(ex)),
               const SizedBox(height: 32),
             ],
 
@@ -752,7 +752,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 const Text('PESO (KG)', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
                 const SizedBox(height: 4),
                 _buildCustomTextField(
-                  chave: 'peso-${exercicioAtual}-${index}',
+                  chave: 'peso-$exercicioAtual-$index',
                   valorInicial: peso?.toStringAsFixed(peso % 1 == 0 ? 0 : 1) ?? '',
                   isConcluida: isConcluida,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -773,7 +773,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 const Text('REPS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
                 const SizedBox(height: 4),
                 _buildCustomTextField(
-                  chave: 'reps-${exercicioAtual}-${index}',
+                  chave: 'reps-$exercicioAtual-$index',
                   valorInicial: reps?.toString() ?? '',
                   isConcluida: isConcluida,
                   keyboardType: TextInputType.number,
