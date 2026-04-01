@@ -6,7 +6,9 @@ import '../widgets/metricas_dashboard_widget.dart';
 import '../widgets/progresso_grafico_widget.dart';
 
 class ProgressoScreen extends StatefulWidget {
-  const ProgressoScreen({super.key});
+  final ProgressoController controller;
+
+  const ProgressoScreen({super.key, required this.controller});
 
   @override
   State<ProgressoScreen> createState() => _ProgressoScreenState();
@@ -18,7 +20,8 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = ProgressoController();
+    _controller = widget.controller;
+    _controller.carregarDados();
   }
 
   // --- MODAL DE MEDIDAS ---
@@ -152,7 +155,6 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 

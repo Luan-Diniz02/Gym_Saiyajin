@@ -4,7 +4,9 @@ import '../theme/app_colors.dart';
 import '../widgets/historico_card_widget.dart';
 
 class HistoricoScreen extends StatefulWidget {
-  const HistoricoScreen({super.key});
+  final HistoricoController controller;
+
+  const HistoricoScreen({super.key, required this.controller});
 
   @override
   State<HistoricoScreen> createState() => _HistoricoScreenState();
@@ -16,12 +18,12 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = HistoricoController();
+    _controller = widget.controller;
+    _controller.carregarHistorico();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 

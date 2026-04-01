@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'controllers/historico_controller.dart';
+import 'controllers/progresso_controller.dart';
+import 'controllers/treino_controller.dart';
+import 'repositories/treino_repository.dart';
 import 'theme/app_colors.dart';
 import 'screens/treino_screen.dart';
 import 'screens/historico_screen.dart';
@@ -49,20 +53,46 @@ class TelaBase extends StatefulWidget {
 
 class _TelaBaseState extends State<TelaBase> {
   int _indiceAtual = 0;
+  late final TreinoRepository _treinoRepository;
+  late final TreinoController _treinoController;
+  late final HistoricoController _historicoController;
+  late final ProgressoController _progressoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _treinoRepository = TreinoRepository();
+    _treinoController = TreinoController(repository: _treinoRepository);
+    _historicoController = HistoricoController(repository: _treinoRepository);
+    _progressoController = ProgressoController(repository: _treinoRepository);
+    _historicoController.carregarHistorico();
+    _progressoController.carregarDados();
+  }
+
+  @override
+  void dispose() {
+    _treinoController.dispose();
+    _historicoController.dispose();
+    _progressoController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     // Colocamos a lista aqui dentro para ela ter acesso ao setState desta classe
     final List<Widget> telas = [
       TreinoScreen(
+        controller: _treinoController,
         onEncerrarTreino: () {
+          _historicoController.carregarHistorico();
+          _progressoController.carregarDados();
           setState(() {
             _indiceAtual = 1; // <--- Muda o foco da aba para o Histórico (índice 1)
           });
         },
       ),
-      const HistoricoScreen(),
-      const ProgressoScreen(),
+      HistoricoScreen(controller: _historicoController),
+      ProgressoScreen(controller: _progressoController),
     ];
 
     return Scaffold(

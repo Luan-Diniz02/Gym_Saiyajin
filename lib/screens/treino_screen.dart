@@ -11,8 +11,9 @@ import '../widgets/serie_row_widget.dart';
 
 class TreinoScreen extends StatefulWidget {
   final VoidCallback onEncerrarTreino;
+  final TreinoController controller;
 
-  const TreinoScreen({super.key, required this.onEncerrarTreino});
+  const TreinoScreen({super.key, required this.onEncerrarTreino, required this.controller});
 
   @override
   State<TreinoScreen> createState() => _TreinoScreenState();
@@ -29,7 +30,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = TreinoController();
+    _controller = widget.controller;
     _controller.addListener(_onControllerChanged);
   }
 
@@ -107,7 +108,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
-    _controller.dispose();
     super.dispose();
   }
 
@@ -150,11 +150,23 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Treino salvo com sucesso!')),
-                        );
-                        widget.onEncerrarTreino();
+                      onPressed: () async {
+                        try {
+                          await _controller.encerrarTreino();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Treino salvo com sucesso!')),
+                          );
+                          widget.onEncerrarTreino();
+                        } catch (_) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Erro ao salvar treino. Tente novamente.'),
+                              backgroundColor: Color(0xFFB71C1C),
+                            ),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.sports_score, size: 20),
                       label: const Text(

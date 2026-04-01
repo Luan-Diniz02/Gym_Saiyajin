@@ -45,7 +45,7 @@ class ProgressoGraficoWidget extends StatelessWidget {
                       .toList(),
                   onChanged: (novoExercicio) {
                     if (novoExercicio != null) {
-                      controller.atualizarFiltroExercicio(novoExercicio);
+                      controller.mudarExercicioFiltro(novoExercicio);
                     }
                   },
                 ),

@@ -2,9 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-import '../models/exercicio.dart';
-import '../models/serie.dart';
 import '../models/sessao_treino.dart';
+import '../repositories/treino_repository.dart';
 
 class HistoricoDia {
   final String dataLabel;
@@ -17,50 +16,37 @@ class HistoricoDia {
 }
 
 class HistoricoController extends ChangeNotifier {
-  final List<HistoricoDia> _historicoTreinos = [
-    HistoricoDia(
-      dataLabel: '30 de Março de 2026',
-      sessao: SessaoTreino(
-        exerciciosConcluidosHoje: [
-          Exercicio(
-            nome: 'SUPINO RETO',
-            grupo: 'PEITO',
-            seriesDetalhes: [
-              Serie(reps: 15, peso: 20),
-              Serie(reps: 12, peso: 60),
-              Serie(reps: 10, peso: 60),
-              Serie(reps: 8, peso: 64),
-            ],
-          ),
-          Exercicio(
-            nome: 'CRUCIFIXO',
-            grupo: 'PEITO',
-            seriesDetalhes: [
-              Serie(reps: 12, peso: 16),
-              Serie(reps: 12, peso: 16),
-              Serie(reps: 10, peso: 18),
-            ],
-          ),
-        ],
-      ),
-    ),
-    HistoricoDia(
-      dataLabel: '28 de Março de 2026',
-      sessao: SessaoTreino(
-        exerciciosConcluidosHoje: [
-          Exercicio(
-            nome: 'AGACHAMENTO',
-            grupo: 'PERNAS',
-            seriesDetalhes: [
-              Serie(reps: 10, peso: 80),
-              Serie(reps: 10, peso: 80),
-              Serie(reps: 8, peso: 84),
-            ],
-          ),
-        ],
-      ),
-    ),
-  ];
+  final TreinoRepository _repository;
+  final List<SessaoTreino> _sessoesTreino = [];
 
-  List<HistoricoDia> get historicoTreinos => UnmodifiableListView(_historicoTreinos);
+  HistoricoController({required TreinoRepository repository}) : _repository = repository;
+
+  Future<void> carregarHistorico() async {
+    final sessoes = await _repository.buscarHistoricoTreinos();
+    _sessoesTreino
+      ..clear()
+      ..addAll(sessoes);
+    notifyListeners();
+  }
+
+  String _formatarData(DateTime? data) {
+    if (data == null) return 'Sem data';
+    final dia = data.day.toString().padLeft(2, '0');
+    final mes = data.month.toString().padLeft(2, '0');
+    final ano = data.year.toString();
+    return '$dia/$mes/$ano';
+  }
+
+  List<SessaoTreino> get sessoesTreino => UnmodifiableListView(_sessoesTreino);
+
+  List<HistoricoDia> get historicoTreinos => UnmodifiableListView(
+        _sessoesTreino
+            .map(
+              (sessao) => HistoricoDia(
+                dataLabel: _formatarData(sessao.data),
+                sessao: sessao,
+              ),
+            )
+            .toList(),
+      );
 }

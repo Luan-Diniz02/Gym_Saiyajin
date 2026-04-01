@@ -7,9 +7,13 @@ import 'package:flutter/services.dart';
 import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
+import '../repositories/treino_repository.dart';
 
 class TreinoController extends ChangeNotifier {
+  final TreinoRepository _repository;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
+
+  TreinoController({required TreinoRepository repository}) : _repository = repository;
 
   Timer? _timer;
   int _tempoDescansoPadrao = 90;
@@ -87,6 +91,30 @@ class TreinoController extends ChangeNotifier {
     _sessaoTreino.exercicioAtual = null;
     notifyListeners();
     return null;
+  }
+
+  Future<void> encerrarTreino() async {
+    if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return;
+
+    final sessaoParaSalvar = SessaoTreino(
+      data: DateTime.now(),
+      exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
+          .map(
+            (exercicio) => exercicio.copyWith(
+              seriesDetalhes: exercicio.seriesDetalhes.map((serie) => serie.copy()).toList(),
+            ),
+          )
+          .toList(),
+    );
+
+    await _repository.salvarSessaoTreino(sessaoParaSalvar);
+
+    _sessaoTreino.exerciciosConcluidosHoje.clear();
+    _sessaoTreino.exercicioAtual = null;
+    _timer?.cancel();
+    _tempoAtual = _tempoDescansoPadrao;
+    _isTimerRodando = false;
+    notifyListeners();
   }
 
   void adicionarSerie() {
