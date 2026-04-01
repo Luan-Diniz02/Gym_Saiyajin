@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
+
+import '../controllers/progresso_controller.dart';
 import '../theme/app_colors.dart';
+import '../widgets/metricas_dashboard_widget.dart';
+import '../widgets/progresso_grafico_widget.dart';
 
 class ProgressoScreen extends StatefulWidget {
   const ProgressoScreen({super.key});
@@ -10,31 +13,18 @@ class ProgressoScreen extends StatefulWidget {
 }
 
 class _ProgressoScreenState extends State<ProgressoScreen> {
-  // --- ESTADO FÍSICO ---
-  double pesoAtual = 69.0;
-  double altura = 1.70;
-  int diasTreinadosNaSemana = 2;
-  int metaDiasSemana = 3;
+  late final ProgressoController _controller;
 
-  // --- ESTADO DO GRÁFICO ---
-  String exercicioFiltro = 'SUPINO RETO';
-  final List<String> exerciciosDisponiveis = ['SUPINO RETO', 'AGACHAMENTO', 'REMADA CURVADA'];
-  
-  // Dados mockados simulando o banco de dados para diferentes exercícios
-  final Map<String, List<FlSpot>> historicoGrafico = {
-    'SUPINO RETO': [const FlSpot(0, 50), const FlSpot(1, 60), const FlSpot(2, 64)],
-    'AGACHAMENTO': [const FlSpot(0, 70), const FlSpot(1, 80), const FlSpot(2, 84)],
-    'REMADA CURVADA': [const FlSpot(0, 40), const FlSpot(1, 45), const FlSpot(2, 50)],
-  };
-
-  double calcularIMC() {
-    return pesoAtual / (altura * altura);
+  @override
+  void initState() {
+    super.initState();
+    _controller = ProgressoController();
   }
 
   // --- MODAL DE MEDIDAS ---
   void _abrirModalAtualizarMedidas() {
-    final pesoController = TextEditingController(text: pesoAtual.toString());
-    final alturaController = TextEditingController(text: altura.toString());
+    final pesoController = TextEditingController(text: _controller.pesoAtual.toString());
+    final alturaController = TextEditingController(text: _controller.altura.toString());
 
     showDialog(
       context: context,
@@ -75,10 +65,9 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  pesoAtual = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? pesoAtual;
-                  altura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? altura;
-                });
+                final novoPeso = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? _controller.pesoAtual;
+                final novaAltura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? _controller.altura;
+                _controller.atualizarMedidas(peso: novoPeso, altura: novaAltura);
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: AppColors.background),
@@ -91,7 +80,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
   }
 
   void _abrirModalAtualizarMeta() {
-    int metaTemporaria = metaDiasSemana;
+    int metaTemporaria = _controller.metaDiasSemana;
 
     showDialog(
       context: context,
@@ -144,7 +133,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() => metaDiasSemana = metaTemporaria);
+                    _controller.atualizarMetaDiasSemana(metaTemporaria);
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
@@ -162,199 +151,39 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double imc = calcularIMC();
-
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const Text(
-              'SEU PROGRESSO',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
-            ),
-            const SizedBox(height: 30),
-
-            Row(
+    return ListenableBuilder(
+      listenable: _controller,
+      builder: (context, _) {
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
               children: [
-                Expanded(child: _buildMetaCard()),
-                const SizedBox(width: 16),
-                Expanded(child: _buildIMCCard(imc)),
+                const Text(
+                  'SEU PROGRESSO',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+                ),
+                const SizedBox(height: 30),
+                MetricasDashboardWidget(
+                  controller: _controller,
+                  onEditarMeta: _abrirModalAtualizarMeta,
+                ),
+                const SizedBox(height: 24),
+                ProgressoGraficoWidget(controller: _controller),
+                const SizedBox(height: 24),
+                _buildPesoCorporalCard(),
               ],
             ),
-            const SizedBox(height: 24),
-            
-            _buildChartSection(),
-            
-            const SizedBox(height: 24),
-            _buildPesoCorporalCard(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ... (Mantenha _buildMetaCard e _buildIMCCard iguais ao que você já tinha)
-  Widget _buildMetaCard() {
-    return GestureDetector(
-      onTap: _abrirModalAtualizarMeta, // <--- Chama o modal ao tocar no card
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.surface, 
-          borderRadius: BorderRadius.circular(16)
-        ),
-        child: Stack(
-          children: [
-            // Ícone de edição no canto superior direito
-            const Align(
-              alignment: Alignment.topRight,
-              child: Icon(Icons.edit, color: AppColors.textDimmed, size: 16),
-            ),
-            // Conteúdo principal
-            Column(
-              children: [
-                const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
-                const SizedBox(height: 12),
-                const Text('META SEMANAL', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-                Text(
-                  '$diasTreinadosNaSemana / $metaDiasSemana', 
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)
-                ),
-                const Text('DIAS ATIVOS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIMCCard(double imc) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        children: [
-          const Icon(Icons.monitor_weight, color: AppColors.primary, size: 30),
-          const SizedBox(height: 12),
-          const Text('MEU IMC', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-          Text(imc.toStringAsFixed(1), 
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
-          Text(imc < 25 ? 'PESO NORMAL' : 'SOBREPESO', 
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary)),
-        ],
-      ),
-    );
-  }
-
-  // --- SEÇÃO DO GRÁFICO ATUALIZADA COM FILTRO ---
-  Widget _buildChartSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(20)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('PROGRESSÃO DE CARGA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const Icon(Icons.filter_list, color: AppColors.primary, size: 20),
-            ],
           ),
-          const SizedBox(height: 8),
-          
-          // O Dropdown de Filtro
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(8)),
-            child: DropdownButton<String>(
-              value: exercicioFiltro,
-              dropdownColor: AppColors.surface,
-              isExpanded: true,
-              underline: const SizedBox(), // Remove a linha feia padrão do dropdown
-              style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 12),
-              items: exerciciosDisponiveis.map((ex) => DropdownMenuItem(value: ex, child: Text(ex))).toList(),
-              onChanged: (novoExercicio) {
-                if (novoExercicio != null) {
-                  setState(() => exercicioFiltro = novoExercicio);
-                }
-              },
-            ),
-          ),
-          
-          const SizedBox(height: 30),
-          SizedBox(
-            height: 200,
-            child: LineChart(
-              LineChartData(
-                // 1. Linhas de grade (Horizontais) suaves
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false, 
-                  getDrawingHorizontalLine: (value) => FlLine(
-                    color: AppColors.textDimmed.withOpacity(0.1),
-                    strokeWidth: 1,
-                  ),
-                ),
-                // 2. Configuração dos Eixos (Textos)
-                titlesData: FlTitlesData(
-                  show: true,
-                  // Eixo X (Embaixo) - Datas
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 24,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        // Simulando as datas dos últimos 3 treinos
-                        const datas = ['26/03', '28/03', '30/03']; 
-                        if (value.toInt() >= 0 && value.toInt() < datas.length) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(datas[value.toInt()], style: const TextStyle(color: AppColors.textDimmed, fontSize: 10, fontWeight: FontWeight.bold)),
-                          );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                  ),
-                  // Eixo Y (Esquerda) - Pesos
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 36, // Espaço para caber os números
-                      getTitlesWidget: (value, meta) {
-                        return Text('${value.toInt()}kg', style: const TextStyle(color: AppColors.textDimmed, fontSize: 10, fontWeight: FontWeight.bold));
-                      },
-                    ),
-                  ),
-                  // Esconde os textos de cima e da direita
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                ),
-                borderData: FlBorderData(show: false), // Remove a caixa quadrada envolta do gráfico
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: historicoGrafico[exercicioFiltro] ?? [], 
-                    isCurved: true,
-                    color: AppColors.primary,
-                    barWidth: 4,
-                    isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: AppColors.primary.withOpacity(0.15),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -375,7 +204,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
           ),
           Row(
             children: [
-              Text('${pesoAtual.toStringAsFixed(1)} kg', 
+              Text('${_controller.pesoAtual.toStringAsFixed(1)} kg', 
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
               const SizedBox(width: 8),
               IconButton(
