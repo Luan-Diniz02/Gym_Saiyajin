@@ -2,21 +2,20 @@ import 'dart:collection';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/exercicio.dart';
 import '../models/sessao_treino.dart';
 import '../models/serie.dart';
 import '../repositories/treino_repository.dart';
+import '../services/preferences_service.dart';
 
 class ProgressoController extends ChangeNotifier {
   final TreinoRepository _repository;
-  static const String _pesoAtualKey = 'progresso_peso_atual';
-  static const String _alturaKey = 'progresso_altura';
-  static const String _metaDiasSemanaKey = 'progresso_meta_dias_semana';
-  static const String _dataUltimaAtualizacaoPesoKey = 'progresso_data_ultima_atualizacao_peso';
+  final PreferencesService _preferencesService;
 
-  ProgressoController({required TreinoRepository repository}) : _repository = repository;
+  ProgressoController({required TreinoRepository repository, required PreferencesService preferencesService})
+      : _repository = repository,
+        _preferencesService = preferencesService;
 
   double _pesoAtual = 69.0;
   double _altura = 1.70;
@@ -197,41 +196,36 @@ class ProgressoController extends ChangeNotifier {
   }
 
   Future<void> _salvarPreferencias() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(_pesoAtualKey, _pesoAtual);
-    await prefs.setDouble(_alturaKey, _altura);
-    await prefs.setInt(_metaDiasSemanaKey, _metaDiasSemana);
+    await _preferencesService.salvarDouble(PreferencesService.keyPesoAtual, _pesoAtual);
+    await _preferencesService.salvarDouble(PreferencesService.keyAltura, _altura);
+    await _preferencesService.salvarInt(PreferencesService.keyMetaDiasSemana, _metaDiasSemana);
 
     final data = _dataUltimaAtualizacaoPeso;
     if (data != null) {
-      await prefs.setString(_dataUltimaAtualizacaoPesoKey, data.toIso8601String());
+      await _preferencesService.salvarString(PreferencesService.keyDataUltimaAtualizacaoPeso, data.toIso8601String());
     } else {
-      await prefs.remove(_dataUltimaAtualizacaoPesoKey);
+      await _preferencesService.remover(PreferencesService.keyDataUltimaAtualizacaoPeso);
     }
   }
 
   Future<void> _carregarPreferencias() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final pesoSalvo = prefs.getDouble(_pesoAtualKey);
+    final pesoSalvo = await _preferencesService.lerDouble(PreferencesService.keyPesoAtual);
     if (pesoSalvo != null) {
       _pesoAtual = pesoSalvo;
     }
 
-    final alturaSalva = prefs.getDouble(_alturaKey);
+    final alturaSalva = await _preferencesService.lerDouble(PreferencesService.keyAltura);
     if (alturaSalva != null) {
       _altura = alturaSalva;
     }
 
-    final metaSalva = prefs.getInt(_metaDiasSemanaKey);
+    final metaSalva = await _preferencesService.lerInt(PreferencesService.keyMetaDiasSemana);
     if (metaSalva != null) {
       _metaDiasSemana = metaSalva;
     }
 
-    final dataSalva = prefs.getString(_dataUltimaAtualizacaoPesoKey);
-    if (dataSalva != null && dataSalva.isNotEmpty) {
-      _dataUltimaAtualizacaoPeso = DateTime.tryParse(dataSalva);
-    }
+    final dataSalva = await _preferencesService.lerString(PreferencesService.keyDataUltimaAtualizacaoPeso);
+    _dataUltimaAtualizacaoPeso = (dataSalva != null && dataSalva.isNotEmpty) ? DateTime.tryParse(dataSalva) : null;
 
     notifyListeners();
   }

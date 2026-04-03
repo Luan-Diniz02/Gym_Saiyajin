@@ -3,6 +3,7 @@ import 'controllers/historico_controller.dart';
 import 'controllers/progresso_controller.dart';
 import 'controllers/treino_controller.dart';
 import 'repositories/treino_repository.dart';
+import 'services/preferences_service.dart';
 import 'theme/app_colors.dart';
 import 'screens/treino_screen.dart';
 import 'screens/historico_screen.dart';
@@ -50,6 +51,7 @@ class TelaBase extends StatefulWidget {
 class _TelaBaseState extends State<TelaBase> {
   int _indiceAtual = 0;
   late final TreinoRepository _treinoRepository;
+  late final PreferencesService _preferencesService;
   late final TreinoController _treinoController;
   late final HistoricoController _historicoController;
   late final ProgressoController _progressoController;
@@ -58,9 +60,13 @@ class _TelaBaseState extends State<TelaBase> {
   void initState() {
     super.initState();
     _treinoRepository = TreinoRepository();
-    _treinoController = TreinoController(repository: _treinoRepository);
+    _preferencesService = PreferencesService();
+    _treinoController = TreinoController(repository: _treinoRepository, preferencesService: _preferencesService);
     _historicoController = HistoricoController(repository: _treinoRepository);
-    _progressoController = ProgressoController(repository: _treinoRepository);
+    _progressoController = ProgressoController(
+      repository: _treinoRepository,
+      preferencesService: _preferencesService,
+    );
     _historicoController.carregarHistorico();
     _progressoController.carregarDados();
   }

@@ -3,19 +3,21 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
+import '../services/preferences_service.dart';
 
 class TreinoController extends ChangeNotifier {
   final TreinoRepository _repository;
+  final PreferencesService _preferencesService;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
-  static const String _tempoDescansoPadraoKey = 'treino_tempo_descanso_padrao';
 
-  TreinoController({required TreinoRepository repository}) : _repository = repository {
+  TreinoController({required TreinoRepository repository, required PreferencesService preferencesService})
+      : _repository = repository,
+        _preferencesService = preferencesService {
     _carregarPreferencias();
   }
 
@@ -162,13 +164,11 @@ class TreinoController extends ChangeNotifier {
   }
 
   Future<void> _salvarTempoDescansoPadrao() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_tempoDescansoPadraoKey, _tempoDescansoPadrao);
+    await _preferencesService.salvarInt(PreferencesService.keyTempoDescanso, _tempoDescansoPadrao);
   }
 
   Future<void> _carregarPreferencias() async {
-    final prefs = await SharedPreferences.getInstance();
-    final tempoSalvo = prefs.getInt(_tempoDescansoPadraoKey);
+    final tempoSalvo = await _preferencesService.lerInt(PreferencesService.keyTempoDescanso);
     if (tempoSalvo == null || tempoSalvo <= 0) return;
 
     _tempoDescansoPadrao = tempoSalvo;
