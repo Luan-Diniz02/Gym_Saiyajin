@@ -98,21 +98,21 @@ class CronometroWidget extends StatelessWidget {
               onPressed: tempoAtual != tempoDescansoPadrao || isTimerRodando
                   ? onReiniciar
                   : null,
-              child: const Icon(Icons.restart_alt, size: 18),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
               ),
+              child: const Icon(Icons.restart_alt, size: 18),
             ),
             ElevatedButton(
               onPressed: isTimerRodando ? onPausar : onIniciarOuContinuar,
-              child: Icon(
-                isTimerRodando ? Icons.pause : Icons.play_arrow,
-                size: 18,
-              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
+              ),
+              child: Icon(
+                isTimerRodando ? Icons.pause : Icons.play_arrow,
+                size: 18,
               ),
             ),
           ],

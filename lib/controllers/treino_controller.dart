@@ -189,8 +189,9 @@ class TreinoController extends ChangeNotifier {
 
   void atualizarPesoSerie(int index, String valor) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
       return;
+    }
 
     final v = valor.replaceAll(',', '.').trim();
     atual.seriesDetalhes[index].peso = v.isEmpty ? null : double.tryParse(v);
@@ -198,8 +199,9 @@ class TreinoController extends ChangeNotifier {
 
   void atualizarRepsSerie(int index, String valor) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
       return;
+    }
 
     final v = valor.trim();
     atual.seriesDetalhes[index].reps = v.isEmpty ? null : int.tryParse(v);
@@ -207,8 +209,9 @@ class TreinoController extends ChangeNotifier {
 
   void toggleConcluidaSerie(int index) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
       return;
+    }
 
     final serie = atual.seriesDetalhes[index];
     final agoraConcluida = !serie.concluida;
