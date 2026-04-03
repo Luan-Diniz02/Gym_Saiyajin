@@ -21,6 +21,7 @@ O projeto foi refatorado para uma base mais limpa e escalável, com:
 - Modelos tipados (sem uso de Map<String, dynamic> no domínio)
 - Controllers com ChangeNotifier para regras de negócio
 - Camada de repositório para persistência no SQLite
+- Serviço dedicado para persistência de preferências (SharedPreferences)
 - Widgets extraídos para UI mais declarativa e reutilizável
 
 ## Stack Tecnológico
@@ -40,6 +41,7 @@ Organização principal em camadas:
 - `controllers/`: estado + regras de negócio
 - `repositories/`: acesso a dados (SQLite)
 - `database/`: configuração e schema do banco
+- `services/`: serviços de infraestrutura (preferências e configurações)
 - `widgets/`: componentes visuais reutilizáveis
 - `screens/`: composição de telas
 
@@ -60,6 +62,8 @@ gym_saiyajin/
 |  |  `- sessao_treino.dart
 |  |- repositories/
 |  |  `- treino_repository.dart
+|  |- services/
+|  |  `- preferences_service.dart
 |  |- screens/
 |  |  |- treino_screen.dart
 |  |  |- historico_screen.dart
@@ -98,6 +102,7 @@ Repositório principal:
 - Seleção de exercício com busca por nome/grupo e criação de novo exercício via modal (seleção de grupo muscular).
 - Registro de séries (peso/reps) e marcação de série concluída.
 - Cronômetro global de descanso com iniciar, pausar, reiniciar, continuar. Anel de progresso visual que esvazia com o tempo e vibração nativa ao finalizar.
+- Tempo de descanso padrão persistido com SharedPreferences (sobrevive entre sessões do app).
 - Encerramento do treino com persistência transacional.
 
 ### Histórico
@@ -116,8 +121,23 @@ Repositório principal:
 No ponto central da aplicação (TelaBase):
 
 - Instância única de TreinoRepository injetada em TreinoController, HistoricoController e ProgressoController.
+- Instância única de PreferencesService injetada em TreinoController e ProgressoController.
 
 Com isso, treino, histórico e progresso compartilham a mesma fonte de dados simultaneamente.
+
+## Navegação e Retenção de Estado
+
+- A navegação por abas usa `IndexedStack` no `body` do `Scaffold` da `TelaBase`.
+- Essa abordagem mantém as telas vivas ao alternar abas, evitando perda de estado visual e de controllers.
+
+## Persistência de Preferências (SharedPreferences)
+
+A classe `PreferencesService` centraliza:
+
+- Chaves de configuração da aplicação (`keyTempoDescanso`, `keyPesoAtual`, etc.)
+- Operações genéricas assíncronas: `salvarInt`, `lerInt`, `salvarDouble`, `lerDouble`, `salvarString`, `lerString`, `remover`
+
+Os controllers não instanciam `SharedPreferences` diretamente; todo acesso é feito via serviço injetado, melhorando coesão e testabilidade.
 
 ## Como Rodar
 
