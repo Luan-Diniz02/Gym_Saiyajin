@@ -319,7 +319,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'JÁ REALIZADOS HOJE:',
+                      'JÁ REALIZADOS:',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
