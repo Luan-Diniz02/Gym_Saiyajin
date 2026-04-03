@@ -91,7 +91,10 @@ class _TelaBaseState extends State<TelaBase> {
     ];
 
     return Scaffold(
-      body: telas[_indiceAtual],
+      body: IndexedStack(
+        index: _indiceAtual,
+        children: telas,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _indiceAtual,
         onTap: (index) {
