@@ -92,7 +92,12 @@ class _TelaBaseState extends State<TelaBase> {
           });
         },
       ),
-      HistoricoScreen(controller: _historicoController),
+      HistoricoScreen(
+        controller: _historicoController,
+        onHistoricoAtualizado: () {
+          _progressoController.carregarDados();
+        },
+      ),
       ProgressoScreen(controller: _progressoController),
     ];
 

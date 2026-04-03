@@ -113,4 +113,21 @@ class TreinoRepository {
       throw Exception('Erro ao buscar historico de treinos: $e');
     }
   }
+
+  Future<void> excluirSessaoTreino(int sessaoId) async {
+    try {
+      final db = await _databaseHelper.database;
+
+      await db.transaction((txn) async {
+        await txn.rawDelete(
+          'DELETE FROM series WHERE exercicio_id IN (SELECT id FROM exercicios WHERE sessao_id = ?)',
+          [sessaoId],
+        );
+        await txn.delete('exercicios', where: 'sessao_id = ?', whereArgs: [sessaoId]);
+        await txn.delete('sessoes', where: 'id = ?', whereArgs: [sessaoId]);
+      });
+    } catch (e) {
+      throw Exception('Erro ao excluir sessao de treino: $e');
+    }
+  }
 }

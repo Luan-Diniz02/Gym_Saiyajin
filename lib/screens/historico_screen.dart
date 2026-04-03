@@ -5,8 +5,9 @@ import '../widgets/historico_card_widget.dart';
 
 class HistoricoScreen extends StatefulWidget {
   final HistoricoController controller;
+  final VoidCallback? onHistoricoAtualizado;
 
-  const HistoricoScreen({super.key, required this.controller});
+  const HistoricoScreen({super.key, required this.controller, this.onHistoricoAtualizado});
 
   @override
   State<HistoricoScreen> createState() => _HistoricoScreenState();
@@ -25,6 +26,48 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<bool> _confirmarExclusaoSessao() async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Excluir Treino?'),
+          content: const Text(
+            'Tem certeza que deseja apagar permanentemente este treino? Todo o progresso registrado nesta sessão será perdido.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Excluir', style: TextStyle(color: Color(0xFFB71C1C))),
+            ),
+          ],
+        );
+      },
+    );
+
+    return confirmado == true;
+  }
+
+  Future<void> _onExcluirSessao(HistoricoDia diaTreino) async {
+    final sessaoId = diaTreino.sessao.id;
+    if (sessaoId == null) return;
+
+    final confirmado = await _confirmarExclusaoSessao();
+    if (!confirmado) return;
+
+    await _controller.excluirSessao(sessaoId);
+    widget.onHistoricoAtualizado?.call();
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Treino excluido com sucesso.')),
+    );
   }
 
   @override
@@ -88,9 +131,21 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  diaTreino.dataLabel,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        diaTreino.dataLabel,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _onExcluirSessao(diaTreino),
+                      icon: const Icon(Icons.delete_outline),
+                      color: Colors.grey[600],
+                      tooltip: 'Excluir treino',
+                    ),
+                  ],
                 ),
                 Text(
                   '${exercicios.length} EXERCÍCIOS',

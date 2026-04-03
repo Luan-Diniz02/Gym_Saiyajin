@@ -29,6 +29,12 @@ class HistoricoController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> excluirSessao(int sessaoId) async {
+    await _repository.excluirSessaoTreino(sessaoId);
+    _sessoesTreino.removeWhere((sessao) => sessao.id == sessaoId);
+    notifyListeners();
+  }
+
   String _formatarData(DateTime? data) {
     if (data == null) return 'Sem data';
     final dia = data.day.toString().padLeft(2, '0');
