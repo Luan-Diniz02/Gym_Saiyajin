@@ -120,6 +120,19 @@ class _TreinoScreenState extends State<TreinoScreen> {
     );
   }
 
+  Future<void> _selecionarDataSessao() async {
+    final dataEscolhida = await showDatePicker(
+      context: context,
+      initialDate: _controller.dataSessao,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (dataEscolhida != null) {
+      _controller.alterarDataSessao(dataEscolhida);
+    }
+  }
+
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
@@ -131,6 +144,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
+        final textoEncerrarTreino = _controller.dataSessaoFormatada == 'Hoje'
+          ? 'ENCERRAR TREINO (HOJE)'
+          : 'ENCERRAR TREINO (${_controller.dataSessaoFormatada})';
+
         return SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
@@ -146,6 +163,22 @@ class _TreinoScreenState extends State<TreinoScreen> {
                   onPausar: _controller.pausarTimer,
                   onReiniciar: _controller.reiniciarTimer,
                   onIniciarOuContinuar: _controller.continuarTimer,
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: _selecionarDataSessao,
+                    icon: const Icon(Icons.calendar_today, size: 18),
+                    label: Text(
+                      _controller.dataSessaoFormatada,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 32),
                 if (_controller.exerciciosConcluidosHoje.isNotEmpty) ...[
@@ -186,9 +219,9 @@ class _TreinoScreenState extends State<TreinoScreen> {
                         }
                       },
                       icon: const Icon(Icons.sports_score, size: 20),
-                      label: const Text(
-                        'ENCERRAR TREINO DE HOJE',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 1.0),
+                      label: Text(
+                        textoEncerrarTreino,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 1.0),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFB71C1C),

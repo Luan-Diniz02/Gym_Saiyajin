@@ -26,6 +26,7 @@ class TreinoController extends ChangeNotifier {
   int _tempoAtual = 90;
   bool _isTimerRodando = false;
   int _descansoFinalizadoEvento = 0;
+  DateTime _dataSessao = DateTime.now();
 
   final TextInputFormatter _pesoInputFormatter = TextInputFormatter.withFunction((oldValue, newValue) {
     final texto = newValue.text;
@@ -41,6 +42,18 @@ class TreinoController extends ChangeNotifier {
   int get tempoAtual => _tempoAtual;
   bool get isTimerRodando => _isTimerRodando;
   int get descansoFinalizadoEvento => _descansoFinalizadoEvento;
+  DateTime get dataSessao => _dataSessao;
+
+  String get dataSessaoFormatada {
+    if (_mesmoDia(_dataSessao, DateTime.now())) {
+      return 'Hoje';
+    }
+
+    final dia = _dataSessao.day.toString().padLeft(2, '0');
+    final mes = _dataSessao.month.toString().padLeft(2, '0');
+    final ano = _dataSessao.year.toString();
+    return '$dia/$mes/$ano';
+  }
 
   Exercicio? get exercicioAtual => _sessaoTreino.exercicioAtual;
   List<Exercicio> get exerciciosConcluidosHoje => UnmodifiableListView(_sessaoTreino.exerciciosConcluidosHoje);
@@ -58,6 +71,11 @@ class TreinoController extends ChangeNotifier {
     final minutos = totalSegundos ~/ 60;
     final segundos = totalSegundos % 60;
     return '${minutos.toString().padLeft(2, '0')}:${segundos.toString().padLeft(2, '0')}';
+  }
+
+  void alterarDataSessao(DateTime novaData) {
+    _dataSessao = DateTime(novaData.year, novaData.month, novaData.day);
+    notifyListeners();
   }
 
   void iniciarNovoExercicio(String nome, String grupo) {
@@ -92,7 +110,7 @@ class TreinoController extends ChangeNotifier {
     if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return;
 
     final sessaoParaSalvar = SessaoTreino(
-      data: DateTime.now(),
+      data: _dataSessao,
       exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
           .map(
             (exercicio) => exercicio.copyWith(
@@ -109,6 +127,7 @@ class TreinoController extends ChangeNotifier {
     _timer?.cancel();
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
+    _dataSessao = DateTime.now();
     notifyListeners();
   }
 
@@ -223,6 +242,10 @@ class TreinoController extends ChangeNotifier {
       _descansoFinalizadoEvento++;
       notifyListeners();
     });
+  }
+
+  bool _mesmoDia(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   @override
