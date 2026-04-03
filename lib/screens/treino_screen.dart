@@ -200,25 +200,19 @@ class _TreinoScreenState extends State<TreinoScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text('Exercício em andamento'),
-            content: const Text(
-              'Você tem um exercício não finalizado na tela. O que deseja fazer?',
-            ),
+            title: const Text('Exercício pendente'),
+            content: const Text('Há um exercício não finalizado. O que fazer?'),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, null),
-                child: const Text('Cancelar'),
-              ),
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 child: const Text(
-                  'Descartar Exercício',
+                  'Descartar',
                   style: TextStyle(color: Color(0xFFB71C1C)),
                 ),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text('Salvar e Encerrar'),
+                child: const Text('Salvar'),
               ),
             ],
           );
@@ -229,10 +223,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text('Encerrar Treino?'),
-          content: const Text(
-            'Tem certeza que deseja finalizar e salvar o treino de hoje?',
-          ),
+          title: const Text('Encerrar treino?'),
+          content: const Text('Finalizar e salvar o treino de hoje?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, null),
