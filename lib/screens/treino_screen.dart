@@ -14,7 +14,11 @@ class TreinoScreen extends StatefulWidget {
   final VoidCallback onEncerrarTreino;
   final TreinoController controller;
 
-  const TreinoScreen({super.key, required this.onEncerrarTreino, required this.controller});
+  const TreinoScreen({
+    super.key,
+    required this.onEncerrarTreino,
+    required this.controller,
+  });
 
   @override
   State<TreinoScreen> createState() => _TreinoScreenState();
@@ -64,12 +68,17 @@ class _TreinoScreenState extends State<TreinoScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: const Row(
             children: [
               Icon(Icons.timer, color: AppColors.accent, size: 28),
               SizedBox(width: 8),
-              Text('DESCANSO FINALIZADO!', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              Text(
+                'DESCANSO FINALIZADO!',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
             ],
           ),
           content: const Text(
@@ -85,9 +94,14 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.background,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-                child: const Text('BORA!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                child: const Text(
+                  'BORA!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ),
           ],
@@ -100,9 +114,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return ConfigTempoDescansoModal(
-          controller: _controller,
-        );
+        return ConfigTempoDescansoModal(controller: _controller);
       },
     );
   }
@@ -139,9 +151,13 @@ class _TreinoScreenState extends State<TreinoScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: const Text('Remover Exercício?'),
-          content: Text('Tem certeza que deseja remover ${exercicio.nome} do treino atual?'),
+          content: Text(
+            'Tem certeza que deseja remover ${exercicio.nome} do treino atual?',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -149,7 +165,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Remover', style: TextStyle(color: Color(0xFFB71C1C))),
+              child: const Text(
+                'Remover',
+                style: TextStyle(color: Color(0xFFB71C1C)),
+              ),
             ),
           ],
         );
@@ -171,6 +190,88 @@ class _TreinoScreenState extends State<TreinoScreen> {
     return true;
   }
 
+  Future<void> _confirmarEncerramentoTreino() async {
+    final bool? acaoSalvarAtual = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        if (_controller.temExercicioEmAndamento) {
+          return AlertDialog(
+            backgroundColor: AppColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text('Exercício em andamento'),
+            content: const Text(
+              'Você tem um exercício não finalizado na tela. O que deseja fazer?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, null),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text(
+                  'Descartar Exercício',
+                  style: TextStyle(color: Color(0xFFB71C1C)),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Salvar e Encerrar'),
+              ),
+            ],
+          );
+        }
+
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text('Encerrar Treino?'),
+          content: const Text(
+            'Tem certeza que deseja finalizar e salvar o treino de hoje?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, null),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Encerrar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (acaoSalvarAtual == null) return;
+
+    try {
+      if (acaoSalvarAtual) {
+        await _controller.encerrarTreino(descartarAtual: false);
+      } else {
+        await _controller.encerrarTreino(descartarAtual: true);
+      }
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Treino salvo com sucesso!')),
+      );
+      widget.onEncerrarTreino();
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao salvar treino. Tente novamente.'),
+          backgroundColor: Color(0xFFB71C1C),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
@@ -183,8 +284,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
       listenable: _controller,
       builder: (context, _) {
         final textoEncerrarTreino = _controller.dataSessaoFormatada == 'Hoje'
-          ? 'ENCERRAR TREINO (HOJE)'
-          : 'ENCERRAR TREINO (${_controller.dataSessaoFormatada})';
+            ? 'ENCERRAR TREINO (HOJE)'
+            : 'ENCERRAR TREINO (${_controller.dataSessaoFormatada})';
 
         return SafeArea(
           child: SingleChildScrollView(
@@ -214,7 +315,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     ),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 6,
+                      ),
                     ),
                   ),
                 ),
@@ -222,10 +326,19 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 if (_controller.exerciciosConcluidosHoje.isNotEmpty) ...[
                   const Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('JÁ REALIZADOS HOJE:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textDimmed)),
+                    child: Text(
+                      'JÁ REALIZADOS HOJE:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textDimmed,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 12),
-                  ..._controller.exerciciosConcluidosHoje.map((ex) => _buildCardLogExercicio(ex)),
+                  ..._controller.exerciciosConcluidosHoje.map(
+                    (ex) => _buildCardLogExercicio(ex),
+                  ),
                   const SizedBox(height: 32),
                 ],
                 if (_controller.exercicioAtual == null)
@@ -233,39 +346,29 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 else
                   _buildExercicioAtual(),
                 const SizedBox(height: 48),
-                if (_controller.exerciciosConcluidosHoje.isNotEmpty || _controller.exercicioAtual != null)
+                if (_controller.exerciciosConcluidosHoje.isNotEmpty ||
+                    _controller.exercicioAtual != null)
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton.icon(
-                      onPressed: () async {
-                        try {
-                          await _controller.encerrarTreino();
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Treino salvo com sucesso!')),
-                          );
-                          widget.onEncerrarTreino();
-                        } catch (_) {
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Erro ao salvar treino. Tente novamente.'),
-                              backgroundColor: Color(0xFFB71C1C),
-                            ),
-                          );
-                        }
-                      },
+                      onPressed: _confirmarEncerramentoTreino,
                       icon: const Icon(Icons.sports_score, size: 20),
                       label: Text(
                         textoEncerrarTreino,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 1.0),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFB71C1C),
                         foregroundColor: AppColors.textLight,
                         elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),
@@ -284,15 +387,23 @@ class _TreinoScreenState extends State<TreinoScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.surface, width: 2)
+        border: Border.all(color: AppColors.surface, width: 2),
       ),
       child: Column(
         children: [
-          const Icon(Icons.fitness_center, size: 64, color: AppColors.textDimmed),
+          const Icon(
+            Icons.fitness_center,
+            size: 64,
+            color: AppColors.textDimmed,
+          ),
           const SizedBox(height: 16),
           const Text(
             'PRONTO PARA DESTRUIR?',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textLight),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textLight,
+            ),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -307,14 +418,23 @@ class _TreinoScreenState extends State<TreinoScreen> {
             child: ElevatedButton.icon(
               onPressed: _abrirListaExercicios,
               icon: const Icon(Icons.add, size: 24),
-              label: const Text('INICIAR TREINO', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+              label: const Text(
+                'INICIAR TREINO',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accent,
                 foregroundColor: AppColors.background,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -335,7 +455,11 @@ class _TreinoScreenState extends State<TreinoScreen> {
             children: [
               Text(
                 exercicioAtual.nome,
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
+                ),
                 textAlign: TextAlign.center,
               ),
               Align(
@@ -353,17 +477,31 @@ class _TreinoScreenState extends State<TreinoScreen> {
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Text(
             exercicioAtual.grupo,
-            style: const TextStyle(color: AppColors.background, fontWeight: FontWeight.bold, fontSize: 12),
+            style: const TextStyle(
+              color: AppColors.background,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
           ),
         ),
         const SizedBox(height: 32),
 
         const Align(
           alignment: Alignment.centerLeft,
-          child: Text('SÉRIES', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+          child: Text(
+            'SÉRIES',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         ListView.builder(
@@ -371,10 +509,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: exercicioAtual.seriesDetalhes.length,
           itemBuilder: (context, index) {
-            return SerieRowWidget(
-              index: index,
-              controller: _controller,
-            );
+            return SerieRowWidget(index: index, controller: _controller);
           },
         ),
         const SizedBox(height: 24),
@@ -384,10 +519,16 @@ class _TreinoScreenState extends State<TreinoScreen> {
           child: ElevatedButton.icon(
             onPressed: _controller.adicionarSerie,
             icon: const Icon(Icons.add, size: 20),
-            label: const Text('ADICIONAR NOVA SÉRIE', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            label: const Text(
+              'ADICIONAR NOVA SÉRIE',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent, foregroundColor: AppColors.background,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              backgroundColor: AppColors.accent,
+              foregroundColor: AppColors.background,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ),
@@ -401,18 +542,26 @@ class _TreinoScreenState extends State<TreinoScreen> {
               if (erro != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(erro, style: const TextStyle(color: Colors.white)),
+                    content: Text(
+                      erro,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                     backgroundColor: const Color(0xFFB71C1C),
                   ),
                 );
               }
             },
             icon: const Icon(Icons.check_circle_outline, size: 20),
-            label: const Text('FINALIZAR EXERCÍCIO', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            label: const Text(
+              'FINALIZAR EXERCÍCIO',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
               side: const BorderSide(color: AppColors.primary, width: 2),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ),
@@ -448,15 +597,26 @@ class _TreinoScreenState extends State<TreinoScreen> {
           child: ExpansionTile(
             iconColor: AppColors.primary,
             collapsedIconColor: AppColors.textDimmed,
-            tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            tilePadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             title: Row(
               children: [
-                const Icon(Icons.check_circle, color: AppColors.primary, size: 20),
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     exercicio.nome,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textLight,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -467,12 +627,31 @@ class _TreinoScreenState extends State<TreinoScreen> {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
-                    child: Text(exercicio.grupo, style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold)),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      exercicio.grupo,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 12),
-                  Text('${detalhes.length} SÉRIES', style: const TextStyle(color: AppColors.textDimmed, fontSize: 12)),
+                  Text(
+                    '${detalhes.length} SÉRIES',
+                    style: const TextStyle(
+                      color: AppColors.textDimmed,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -481,7 +660,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
                   color: AppColors.background,
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
                 ),
                 child: Column(
                   children: detalhes.asMap().entries.map((entry) {
@@ -492,25 +674,42 @@ class _TreinoScreenState extends State<TreinoScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Série $serieIndex', style: const TextStyle(color: AppColors.textDimmed, fontSize: 14)),
+                          Text(
+                            'Série $serieIndex',
+                            style: const TextStyle(
+                              color: AppColors.textDimmed,
+                              fontSize: 14,
+                            ),
+                          ),
                           Row(
                             children: [
-                              Text('${serieData.reps ?? '-'} reps', style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold)),
+                              Text(
+                                '${serieData.reps ?? '-'} reps',
+                                style: const TextStyle(
+                                  color: AppColors.textLight,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               const SizedBox(width: 16),
-                              Text('${serieData.peso ?? '-'} kg', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                              Text(
+                                '${serieData.peso ?? '-'} kg',
+                                style: const TextStyle(
+                                  color: AppColors.accent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     );
                   }).toList(),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
 }

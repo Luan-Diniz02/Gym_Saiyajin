@@ -21,10 +21,9 @@ class TreinoController extends ChangeNotifier {
     required TreinoRepository repository,
     required PreferencesService preferencesService,
     required NotificationService notificationService,
-  })
-      : _repository = repository,
-        _preferencesService = preferencesService,
-        _notificationService = notificationService {
+  }) : _repository = repository,
+       _preferencesService = preferencesService,
+       _notificationService = notificationService {
     _carregarPreferencias();
   }
 
@@ -35,15 +34,17 @@ class TreinoController extends ChangeNotifier {
   int _descansoFinalizadoEvento = 0;
   DateTime _dataSessao = DateTime.now();
 
-  final TextInputFormatter _pesoInputFormatter = TextInputFormatter.withFunction((oldValue, newValue) {
-    final texto = newValue.text;
-    if (texto.isEmpty || RegExp(r'^\d+([.,]\d{0,2})?$').hasMatch(texto)) {
-      return newValue;
-    }
-    return oldValue;
-  });
+  final TextInputFormatter _pesoInputFormatter =
+      TextInputFormatter.withFunction((oldValue, newValue) {
+        final texto = newValue.text;
+        if (texto.isEmpty || RegExp(r'^\d+([.,]\d{0,2})?$').hasMatch(texto)) {
+          return newValue;
+        }
+        return oldValue;
+      });
 
-  final TextInputFormatter _repsInputFormatter = FilteringTextInputFormatter.digitsOnly;
+  final TextInputFormatter _repsInputFormatter =
+      FilteringTextInputFormatter.digitsOnly;
 
   int get tempoDescansoPadrao => _tempoDescansoPadrao;
   int get tempoAtual => _tempoAtual;
@@ -63,7 +64,9 @@ class TreinoController extends ChangeNotifier {
   }
 
   Exercicio? get exercicioAtual => _sessaoTreino.exercicioAtual;
-  List<Exercicio> get exerciciosConcluidosHoje => UnmodifiableListView(_sessaoTreino.exerciciosConcluidosHoje);
+  bool get temExercicioEmAndamento => _sessaoTreino.exercicioAtual != null;
+  List<Exercicio> get exerciciosConcluidosHoje =>
+      UnmodifiableListView(_sessaoTreino.exerciciosConcluidosHoje);
 
   TextInputFormatter get pesoInputFormatter => _pesoInputFormatter;
   TextInputFormatter get repsInputFormatter => _repsInputFormatter;
@@ -98,14 +101,18 @@ class TreinoController extends ChangeNotifier {
     final atual = _sessaoTreino.exercicioAtual;
     if (atual == null) return null;
 
-    final temSerieIncompleta = atual.seriesDetalhes.any((serie) => serie.peso == null || serie.reps == null);
+    final temSerieIncompleta = atual.seriesDetalhes.any(
+      (serie) => serie.peso == null || serie.reps == null,
+    );
     if (temSerieIncompleta) {
       return 'Preencha o peso e as repetições de TODAS as séries antes de finalizar!';
     }
 
     _sessaoTreino.exerciciosConcluidosHoje.add(
       atual.copyWith(
-        seriesDetalhes: atual.seriesDetalhes.map((serie) => serie.copy()).toList(),
+        seriesDetalhes: atual.seriesDetalhes
+            .map((serie) => serie.copy())
+            .toList(),
       ),
     );
     _sessaoTreino.exercicioAtual = null;
@@ -123,7 +130,28 @@ class TreinoController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> encerrarTreino() async {
+  Future<void> encerrarTreino({bool descartarAtual = false}) async {
+    final exercicioAtual = _sessaoTreino.exercicioAtual;
+
+    if (!descartarAtual && exercicioAtual != null) {
+      final seriesFiltradas = exercicioAtual.seriesDetalhes
+          .where(
+            (serie) =>
+                serie.peso != null &&
+                serie.reps != null &&
+                serie.peso! > 0 &&
+                serie.reps! > 0,
+          )
+          .map((serie) => serie.copy())
+          .toList();
+
+      if (seriesFiltradas.isNotEmpty) {
+        _sessaoTreino.exerciciosConcluidosHoje.add(
+          exercicioAtual.copyWith(seriesDetalhes: seriesFiltradas),
+        );
+      }
+    }
+
     if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return;
 
     final sessaoParaSalvar = SessaoTreino(
@@ -131,7 +159,9 @@ class TreinoController extends ChangeNotifier {
       exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
           .map(
             (exercicio) => exercicio.copyWith(
-              seriesDetalhes: exercicio.seriesDetalhes.map((serie) => serie.copy()).toList(),
+              seriesDetalhes: exercicio.seriesDetalhes
+                  .map((serie) => serie.copy())
+                  .toList(),
             ),
           )
           .toList(),
@@ -159,7 +189,8 @@ class TreinoController extends ChangeNotifier {
 
   void atualizarPesoSerie(int index, String valor) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) return;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+      return;
 
     final v = valor.replaceAll(',', '.').trim();
     atual.seriesDetalhes[index].peso = v.isEmpty ? null : double.tryParse(v);
@@ -167,7 +198,8 @@ class TreinoController extends ChangeNotifier {
 
   void atualizarRepsSerie(int index, String valor) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) return;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+      return;
 
     final v = valor.trim();
     atual.seriesDetalhes[index].reps = v.isEmpty ? null : int.tryParse(v);
@@ -175,7 +207,8 @@ class TreinoController extends ChangeNotifier {
 
   void toggleConcluidaSerie(int index) {
     final atual = _sessaoTreino.exercicioAtual;
-    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) return;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length)
+      return;
 
     final serie = atual.seriesDetalhes[index];
     final agoraConcluida = !serie.concluida;
@@ -201,11 +234,16 @@ class TreinoController extends ChangeNotifier {
   }
 
   Future<void> _salvarTempoDescansoPadrao() async {
-    await _preferencesService.salvarInt(PreferencesService.keyTempoDescanso, _tempoDescansoPadrao);
+    await _preferencesService.salvarInt(
+      PreferencesService.keyTempoDescanso,
+      _tempoDescansoPadrao,
+    );
   }
 
   Future<void> _carregarPreferencias() async {
-    final tempoSalvo = await _preferencesService.lerInt(PreferencesService.keyTempoDescanso);
+    final tempoSalvo = await _preferencesService.lerInt(
+      PreferencesService.keyTempoDescanso,
+    );
     if (tempoSalvo == null || tempoSalvo <= 0) return;
 
     _tempoDescansoPadrao = tempoSalvo;
