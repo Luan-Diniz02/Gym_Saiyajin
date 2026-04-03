@@ -106,6 +106,16 @@ class TreinoController extends ChangeNotifier {
     return null;
   }
 
+  void removerExercicio(Exercicio exercicio) {
+    _sessaoTreino.exerciciosConcluidosHoje.remove(exercicio);
+
+    if (identical(_sessaoTreino.exercicioAtual, exercicio)) {
+      _sessaoTreino.exercicioAtual = null;
+    }
+
+    notifyListeners();
+  }
+
   Future<void> encerrarTreino() async {
     if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return;
 

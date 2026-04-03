@@ -133,6 +133,44 @@ class _TreinoScreenState extends State<TreinoScreen> {
     }
   }
 
+  Future<bool> _confirmarRemocaoExercicio(Exercicio exercicio) async {
+    final confirmarRemocao = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('Remover Exercício?'),
+          content: Text('Tem certeza que deseja remover ${exercicio.nome} do treino atual?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Remover', style: TextStyle(color: Color(0xFFB71C1C))),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmarRemocao != true) return false;
+
+    _controller.removerExercicio(exercicio);
+    if (!mounted) return true;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${exercicio.nome} removido do treino atual.'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+
+    return true;
+  }
+
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
@@ -290,9 +328,27 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     return Column(
       children: [
-        Text(
-          exercicioAtual.nome,
-          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+        SizedBox(
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                exercicioAtual.nome,
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+                textAlign: TextAlign.center,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () => _confirmarRemocaoExercicio(exercicioAtual),
+                  icon: const Icon(Icons.delete_outline, size: 24),
+                  color: Colors.grey[600],
+                  tooltip: 'Remover exercício',
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -367,73 +423,91 @@ class _TreinoScreenState extends State<TreinoScreen> {
   Widget _buildCardLogExercicio(Exercicio exercicio) {
     final List<Serie> detalhes = exercicio.seriesDetalhes;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+    return Dismissible(
+      key: ValueKey(exercicio.nome),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFB71C1C),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        alignment: Alignment.centerRight,
+        child: const Icon(Icons.delete, color: Colors.white),
       ),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          iconColor: AppColors.primary,
-          collapsedIconColor: AppColors.textDimmed,
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          title: Row(
-            children: [
-              const Icon(Icons.check_circle, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                exercicio.nome,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
-              ),
-            ],
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 28),
-            child: Row(
+      confirmDismiss: (_) => _confirmarRemocaoExercicio(exercicio),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            iconColor: AppColors.primary,
+            collapsedIconColor: AppColors.textDimmed,
+            tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            title: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
-                  child: Text(exercicio.grupo, style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold)),
+                const Icon(Icons.check_circle, color: AppColors.primary, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    exercicio.nome,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                const SizedBox(width: 12),
-                Text('${detalhes.length} SÉRIES', style: const TextStyle(color: AppColors.textDimmed, fontSize: 12)),
               ],
             ),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 28),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                    child: Text(exercicio.grupo, style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold)),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('${detalhes.length} SÉRIES', style: const TextStyle(color: AppColors.textDimmed, fontSize: 12)),
+                ],
+              ),
+            ),
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                ),
+                child: Column(
+                  children: detalhes.asMap().entries.map((entry) {
+                    int serieIndex = entry.key + 1;
+                    final Serie serieData = entry.value;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Série $serieIndex', style: const TextStyle(color: AppColors.textDimmed, fontSize: 14)),
+                          Row(
+                            children: [
+                              Text('${serieData.reps ?? '-'} reps', style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 16),
+                              Text('${serieData.peso ?? '-'} kg', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
+            ],
           ),
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
-              ),
-              child: Column(
-                children: detalhes.asMap().entries.map((entry) {
-                  int serieIndex = entry.key + 1;
-                  final Serie serieData = entry.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Série $serieIndex', style: const TextStyle(color: AppColors.textDimmed, fontSize: 14)),
-                        Row(
-                          children: [
-                            Text('${serieData.reps ?? '-'} reps', style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold)),
-                            const SizedBox(width: 16),
-                            Text('${serieData.peso ?? '-'} kg', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            )
-          ],
         ),
       ),
     );
