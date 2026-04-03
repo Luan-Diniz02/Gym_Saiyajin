@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -38,6 +39,13 @@ class NotificationService {
           badge: true,
           sound: true,
         );
+    
+    // Solicitação de permissões para Android 13+ e Alarmes Exatos (Android 12+)
+    final androidImplementation = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    if (androidImplementation != null) {
+      await androidImplementation.requestNotificationsPermission();
+      await androidImplementation.requestExactAlarmsPermission();
+    }
   }
 
   Future<void> agendarNotificacaoDescanso(int segundos) async {
@@ -45,25 +53,65 @@ class NotificationService {
 
     const detalhes = NotificationDetails(
       android: AndroidNotificationDetails(
-        'descanso_channel',
+        'descanso_channel_v2',
         'Descanso',
         channelDescription: 'Notificacoes para fim do descanso',
         importance: Importance.max,
         priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),
     );
 
-    await _plugin.zonedSchedule(
-      id: 1,
-      title: 'Descanso Finalizado! ⏰',
-      body: 'Bora voltar para o treino, monstro!',
-      scheduledDate: tz.TZDateTime.now(tz.local).add(Duration(seconds: segundos)),
-      notificationDetails: detalhes,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: null,
-    );
+    final dataAgendada = tz.TZDateTime.now(tz.local).add(Duration(seconds: segundos));
+    final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+    AndroidScheduleMode modoAgendamento = AndroidScheduleMode.exactAllowWhileIdle;
+
+    if (android != null) {
+      final notificacoesHabilitadas = await android.areNotificationsEnabled();
+      if (notificacoesHabilitadas == false) {
+        final concedida = await android.requestNotificationsPermission();
+        if (concedida != true) {
+          debugPrint('Notificacao nao agendada: permissao de notificacao negada.');
+          return;
+        }
+      }
+
+      final podeAgendarExato = await android.canScheduleExactNotifications();
+      if (podeAgendarExato != true) {
+        modoAgendamento = AndroidScheduleMode.inexactAllowWhileIdle;
+      }
+    }
+
+    try {
+      await _plugin.zonedSchedule(
+        id: 1,
+        title: 'Descanso Finalizado! ⏰',
+        body: 'Bora voltar para o treino, monstro!',
+        scheduledDate: dataAgendada,
+        notificationDetails: detalhes,
+        androidScheduleMode: modoAgendamento,
+        matchDateTimeComponents: null,
+      );
+    } catch (e) {
+      if (modoAgendamento == AndroidScheduleMode.exactAllowWhileIdle) {
+        await _plugin.zonedSchedule(
+          id: 1,
+          title: 'Descanso Finalizado! ⏰',
+          body: 'Bora voltar para o treino, monstro!',
+          scheduledDate: dataAgendada,
+          notificationDetails: detalhes,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          matchDateTimeComponents: null,
+        );
+        return;
+      }
+
+      rethrow;
+    }
   }
 
   Future<void> cancelarNotificacao() async {
