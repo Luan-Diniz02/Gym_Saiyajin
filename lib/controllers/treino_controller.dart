@@ -8,16 +8,23 @@ import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
+import '../services/notification_service.dart';
 import '../services/preferences_service.dart';
 
 class TreinoController extends ChangeNotifier {
   final TreinoRepository _repository;
   final PreferencesService _preferencesService;
+  final NotificationService _notificationService;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
 
-  TreinoController({required TreinoRepository repository, required PreferencesService preferencesService})
+  TreinoController({
+    required TreinoRepository repository,
+    required PreferencesService preferencesService,
+    required NotificationService notificationService,
+  })
       : _repository = repository,
-        _preferencesService = preferencesService {
+        _preferencesService = preferencesService,
+        _notificationService = notificationService {
     _carregarPreferencias();
   }
 
@@ -135,6 +142,7 @@ class TreinoController extends ChangeNotifier {
     _sessaoTreino.exerciciosConcluidosHoje.clear();
     _sessaoTreino.exercicioAtual = null;
     _timer?.cancel();
+    unawaited(_notificationService.cancelarNotificacao());
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
     _dataSessao = DateTime.now();
@@ -210,6 +218,7 @@ class TreinoController extends ChangeNotifier {
   void iniciarTimer() {
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = true;
+    unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
     _iniciarTicker();
   }
@@ -217,6 +226,7 @@ class TreinoController extends ChangeNotifier {
   void pausarTimer() {
     _timer?.cancel();
     _isTimerRodando = false;
+    unawaited(_notificationService.cancelarNotificacao());
     notifyListeners();
   }
 
@@ -227,6 +237,7 @@ class TreinoController extends ChangeNotifier {
       _tempoAtual = _tempoDescansoPadrao;
     }
     _isTimerRodando = true;
+    unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
     _iniciarTicker();
   }
@@ -235,6 +246,7 @@ class TreinoController extends ChangeNotifier {
     _timer?.cancel();
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
+    unawaited(_notificationService.cancelarNotificacao());
     notifyListeners();
   }
 

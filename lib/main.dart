@@ -3,18 +3,24 @@ import 'controllers/historico_controller.dart';
 import 'controllers/progresso_controller.dart';
 import 'controllers/treino_controller.dart';
 import 'repositories/treino_repository.dart';
+import 'services/notification_service.dart';
 import 'services/preferences_service.dart';
 import 'theme/app_colors.dart';
 import 'screens/treino_screen.dart';
 import 'screens/historico_screen.dart';
 import 'screens/progresso_screen.dart';
 
-void main() {
-  runApp(const GymSaiyajinApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final notificationService = NotificationService();
+  await notificationService.init();
+  runApp(GymSaiyajinApp(notificationService: notificationService));
 }
 
 class GymSaiyajinApp extends StatelessWidget {
-  const GymSaiyajinApp({super.key});
+  final NotificationService notificationService;
+
+  const GymSaiyajinApp({super.key, required this.notificationService});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +42,15 @@ class GymSaiyajinApp extends StatelessWidget {
           unselectedItemColor: AppColors.textDimmed,
         ),
       ),
-      home: const TelaBase(),
+      home: TelaBase(notificationService: notificationService),
     );
   }
 }
 
 class TelaBase extends StatefulWidget {
-  const TelaBase({super.key});
+  final NotificationService notificationService;
+
+  const TelaBase({super.key, required this.notificationService});
 
   @override
   State<TelaBase> createState() => _TelaBaseState();
@@ -61,7 +69,11 @@ class _TelaBaseState extends State<TelaBase> {
     super.initState();
     _treinoRepository = TreinoRepository();
     _preferencesService = PreferencesService();
-    _treinoController = TreinoController(repository: _treinoRepository, preferencesService: _preferencesService);
+    _treinoController = TreinoController(
+      repository: _treinoRepository,
+      preferencesService: _preferencesService,
+      notificationService: widget.notificationService,
+    );
     _historicoController = HistoricoController(repository: _treinoRepository);
     _progressoController = ProgressoController(
       repository: _treinoRepository,
