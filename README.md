@@ -31,6 +31,8 @@ O projeto foi refatorado para uma base mais limpa e escalável, com:
 - **path** (Gerenciamento de diretórios do SO)
 - **fl_chart** (Gráficos analíticos)
 - **shared_preferences** (Persistência de configurações chave-valor)
+- **flutter_local_notifications** (Notificações locais para fim do descanso)
+- **timezone** (Agendamento consistente de notificações por fuso horário)
 - **vibration** (Feedback tátil nativo de hardware)
 
 ## Arquitetura Atual
@@ -41,7 +43,7 @@ Organização principal em camadas:
 - `controllers/`: estado + regras de negócio
 - `repositories/`: acesso a dados (SQLite)
 - `database/`: configuração e schema do banco
-- `services/`: serviços de infraestrutura (preferências e configurações)
+- `services/`: serviços de infraestrutura (preferências e notificações)
 - `widgets/`: componentes visuais reutilizáveis
 - `screens/`: composição de telas
 
@@ -63,7 +65,8 @@ gym_saiyajin/
 |  |- repositories/
 |  |  `- treino_repository.dart
 |  |- services/
-|  |  `- preferences_service.dart
+|  |  |- preferences_service.dart
+|  |  `- notification_service.dart
 |  |- screens/
 |  |  |- treino_screen.dart
 |  |  |- historico_screen.dart
@@ -103,6 +106,7 @@ Repositório principal:
 - Registro de séries (peso/reps) e marcação de série concluída.
 - Cronômetro global de descanso com iniciar, pausar, reiniciar, continuar. Anel de progresso visual que esvazia com o tempo e vibração nativa ao finalizar.
 - Tempo de descanso padrão persistido com SharedPreferences (sobrevive entre sessões do app).
+- Encerramento protegido: se houver exercício em andamento, o usuário pode salvar séries válidas ou descartar antes de encerrar.
 - Encerramento do treino com persistência transacional.
 
 ### Histórico
@@ -122,6 +126,7 @@ No ponto central da aplicação (TelaBase):
 
 - Instância única de TreinoRepository injetada em TreinoController, HistoricoController e ProgressoController.
 - Instância única de PreferencesService injetada em TreinoController e ProgressoController.
+- Instância única de NotificationService inicializada no app e injetada no TreinoController.
 
 Com isso, treino, histórico e progresso compartilham a mesma fonte de dados simultaneamente.
 
