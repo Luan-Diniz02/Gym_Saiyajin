@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/exercicio.dart';
 import '../models/serie.dart';
@@ -12,8 +13,11 @@ import '../repositories/treino_repository.dart';
 class TreinoController extends ChangeNotifier {
   final TreinoRepository _repository;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
+  static const String _tempoDescansoPadraoKey = 'treino_tempo_descanso_padrao';
 
-  TreinoController({required TreinoRepository repository}) : _repository = repository;
+  TreinoController({required TreinoRepository repository}) : _repository = repository {
+    _carregarPreferencias();
+  }
 
   Timer? _timer;
   int _tempoDescansoPadrao = 90;
@@ -147,10 +151,30 @@ class TreinoController extends ChangeNotifier {
   }
 
   void atualizarTempoDescanso(int tempoSelecionado) {
+    if (tempoSelecionado <= 0) return;
+
     _tempoDescansoPadrao = tempoSelecionado;
     _tempoAtual = tempoSelecionado;
     _isTimerRodando = false;
     _timer?.cancel();
+    _salvarTempoDescansoPadrao();
+    notifyListeners();
+  }
+
+  Future<void> _salvarTempoDescansoPadrao() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_tempoDescansoPadraoKey, _tempoDescansoPadrao);
+  }
+
+  Future<void> _carregarPreferencias() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tempoSalvo = prefs.getInt(_tempoDescansoPadraoKey);
+    if (tempoSalvo == null || tempoSalvo <= 0) return;
+
+    _tempoDescansoPadrao = tempoSalvo;
+    if (!_isTimerRodando) {
+      _tempoAtual = tempoSalvo;
+    }
     notifyListeners();
   }
 
