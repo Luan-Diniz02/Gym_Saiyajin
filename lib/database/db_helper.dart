@@ -56,6 +56,10 @@ class DatabaseHelper {
         FOREIGN KEY (exercicio_id) REFERENCES exercicios (id) ON DELETE CASCADE
       )
     ''');
+
+    // Criação de índices para otimizar buscas e o ON DELETE CASCADE
+    await db.execute('CREATE INDEX idx_exercicios_sessao_id ON exercicios (sessao_id)');
+    await db.execute('CREATE INDEX idx_series_exercicio_id ON series (exercicio_id)');
   }
 
   Future close() async {
