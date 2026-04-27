@@ -55,55 +55,51 @@ class TreinoRepository {
         'sessoes',
         orderBy: 'id DESC',
       );
+      
+      if (sessoesRows.isEmpty) return [];
 
+      final List<Map<String, Object?>> exerciciosRows = await db.query(
+        'exercicios',
+        orderBy: 'id ASC',
+      );
+      
+      final List<Map<String, Object?>> seriesRows = await db.query(
+        'series',
+        orderBy: 'id ASC',
+      );
+
+      // Agrupando series por exercicio_id
+      final Map<int, List<Serie>> seriesMap = {};
+      for (final row in seriesRows) {
+        final exId = (row['exercicio_id'] as num).toInt();
+        seriesMap.putIfAbsent(exId, () => []).add(Serie(
+          peso: (row['peso'] as num).toDouble(),
+          reps: (row['reps'] as num).toInt(),
+          concluida: ((row['concluida'] as num).toInt()) == 1,
+        ));
+      }
+
+      // Agrupando exercicios por sessao_id
+      final Map<int, List<Exercicio>> exerciciosMap = {};
+      for (final row in exerciciosRows) {
+        final sessaoId = (row['sessao_id'] as num).toInt();
+        final exId = (row['id'] as num).toInt();
+        exerciciosMap.putIfAbsent(sessaoId, () => []).add(Exercicio(
+          nome: row['nome'] as String,
+          grupo: row['grupo'] as String,
+          seriesDetalhes: seriesMap[exId] ?? [],
+        ));
+      }
+
+      // Construindo o historico
       final List<SessaoTreino> historico = [];
-
-      for (final sessaoRow in sessoesRows) {
-        final int sessaoId = (sessaoRow['id'] as num).toInt();
-
-        final List<Map<String, Object?>> exerciciosRows = await db.query(
-          'exercicios',
-          where: 'sessao_id = ?',
-          whereArgs: [sessaoId],
-          orderBy: 'id ASC',
-        );
-
-        final List<Exercicio> exercicios = [];
-
-        for (final exercicioRow in exerciciosRows) {
-          final int exercicioId = (exercicioRow['id'] as num).toInt();
-
-          final List<Map<String, Object?>> seriesRows = await db.query(
-            'series',
-            where: 'exercicio_id = ?',
-            whereArgs: [exercicioId],
-            orderBy: 'id ASC',
-          );
-
-          final List<Serie> series = seriesRows
-              .map(
-                (serieRow) => Serie(
-                  peso: (serieRow['peso'] as num).toDouble(),
-                  reps: (serieRow['reps'] as num).toInt(),
-                  concluida: ((serieRow['concluida'] as num).toInt()) == 1,
-                ),
-              )
-              .toList();
-
-          exercicios.add(
-            Exercicio(
-              nome: exercicioRow['nome'] as String,
-              grupo: exercicioRow['grupo'] as String,
-              seriesDetalhes: series,
-            ),
-          );
-        }
-
+      for (final row in sessoesRows) {
+        final sessaoId = (row['id'] as num).toInt();
         historico.add(
           SessaoTreino(
             id: sessaoId,
-            data: DateTime.parse(sessaoRow['data'] as String),
-            exerciciosConcluidosHoje: exercicios,
+            data: DateTime.parse(row['data'] as String),
+            exerciciosConcluidosHoje: exerciciosMap[sessaoId] ?? [],
           ),
         );
       }

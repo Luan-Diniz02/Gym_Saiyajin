@@ -250,13 +250,13 @@ class _TreinoScreenState extends State<TreinoScreen> {
         await _controller.encerrarTreino(descartarAtual: true);
       }
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Treino salvo com sucesso!')),
       );
       widget.onEncerrarTreino();
     } catch (_) {
-      if (!context.mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro ao salvar treino. Tente novamente.'),
