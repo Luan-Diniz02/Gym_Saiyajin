@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../theme/app_colors.dart';
 import '../controllers/treino_controller.dart';
 import '../models/exercicio.dart';
@@ -40,6 +41,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     if (_controller.descansoFinalizadoEvento != _ultimoEventoDescanso) {
       _ultimoEventoDescanso = _controller.descansoFinalizadoEvento;
+      FlutterRingtonePlayer().playNotification(asAlarm: true);
       _dispararVibracao(1000, 128);
       _mostrarDialogoDescansoFinalizado();
     }
