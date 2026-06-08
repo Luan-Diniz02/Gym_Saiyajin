@@ -13,9 +13,11 @@ class ProgressoController extends ChangeNotifier {
   final TreinoRepository _repository;
   final PreferencesService _preferencesService;
 
-  ProgressoController({required TreinoRepository repository, required PreferencesService preferencesService})
-      : _repository = repository,
-        _preferencesService = preferencesService;
+  ProgressoController({
+    required TreinoRepository repository,
+    required PreferencesService preferencesService,
+  }) : _repository = repository,
+       _preferencesService = preferencesService;
 
   double _pesoAtual = 69.0;
   double _altura = 1.70;
@@ -51,10 +53,12 @@ class ProgressoController extends ChangeNotifier {
   }
 
   String get exercicioFiltro => _exercicioFiltro;
-  List<String> get exerciciosDisponiveis => UnmodifiableListView(_exerciciosDisponiveis);
+  List<String> get exerciciosDisponiveis =>
+      UnmodifiableListView(_exerciciosDisponiveis);
   List<String> get datasDoGrafico => UnmodifiableListView(_datasDoGrafico);
 
-  List<FlSpot> get pontosDoGraficoFiltrado => UnmodifiableListView(_pontosDoGraficoFiltrado);
+  List<FlSpot> get pontosDoGraficoFiltrado =>
+      UnmodifiableListView(_pontosDoGraficoFiltrado);
 
   double calcularIMC() => _pesoAtual / (_altura * _altura);
 
@@ -78,7 +82,10 @@ class ProgressoController extends ChangeNotifier {
   void _calcularDiasAtivos(List<SessaoTreino> historico) {
     final agora = DateTime.now();
     final hoje = DateTime(agora.year, agora.month, agora.day);
-    final inicioJanela = hoje.subtract(const Duration(days: 6));
+
+    // Obtém o domingo da semana atual
+    final diasDesdeDomingo = hoje.weekday % 7;
+    final inicioSemana = hoje.subtract(Duration(days: diasDesdeDomingo));
 
     final Set<String> diasUnicos = {};
     for (final sessao in historico) {
@@ -86,7 +93,7 @@ class ProgressoController extends ChangeNotifier {
       if (data == null) continue;
 
       final diaSessao = DateTime(data.year, data.month, data.day);
-      if (diaSessao.isBefore(inicioJanela) || diaSessao.isAfter(hoje)) continue;
+      if (diaSessao.isBefore(inicioSemana) || diaSessao.isAfter(hoje)) continue;
 
       diasUnicos.add('${diaSessao.year}-${diaSessao.month}-${diaSessao.day}');
     }
@@ -106,7 +113,10 @@ class ProgressoController extends ChangeNotifier {
 
     _exerciciosDisponiveis
       ..clear()
-      ..addAll(unicos.isEmpty ? ['Nenhum exercício'] : unicos.toList()..sort());
+      ..addAll(
+        unicos.isEmpty ? ['Nenhum exercício'] : unicos.toList()
+          ..sort(),
+      );
 
     if (!_exerciciosDisponiveis.contains(_exercicioFiltro)) {
       _exercicioFiltro = _exerciciosDisponiveis.first;
@@ -120,24 +130,33 @@ class ProgressoController extends ChangeNotifier {
       return;
     }
 
-    final sessoesComExercicio = _historicoCache
-        .where((sessao) => sessao.exerciciosConcluidosHoje.any((ex) => ex.nome == _exercicioFiltro))
-        .toList()
-      ..sort((a, b) {
-        final dataA = a.data;
-        final dataB = b.data;
-        if (dataA == null && dataB == null) return (a.id ?? 0).compareTo(b.id ?? 0);
-        if (dataA == null) return -1;
-        if (dataB == null) return 1;
-        return dataA.compareTo(dataB);
-      });
+    final sessoesComExercicio =
+        _historicoCache
+            .where(
+              (sessao) => sessao.exerciciosConcluidosHoje.any(
+                (ex) => ex.nome == _exercicioFiltro,
+              ),
+            )
+            .toList()
+          ..sort((a, b) {
+            final dataA = a.data;
+            final dataB = b.data;
+            if (dataA == null && dataB == null)
+              return (a.id ?? 0).compareTo(b.id ?? 0);
+            if (dataA == null) return -1;
+            if (dataB == null) return 1;
+            return dataA.compareTo(dataB);
+          });
 
     _pontosDoGraficoFiltrado.clear();
     _datasDoGrafico.clear();
 
     for (int i = 0; i < sessoesComExercicio.length; i++) {
       final sessao = sessoesComExercicio[i];
-      final double? pesoMaximo = _buscarPesoMaximo(sessao.exerciciosConcluidosHoje, _exercicioFiltro);
+      final double? pesoMaximo = _buscarPesoMaximo(
+        sessao.exerciciosConcluidosHoje,
+        _exercicioFiltro,
+      );
       if (pesoMaximo == null) continue;
 
       _pontosDoGraficoFiltrado.add(FlSpot(i.toDouble(), pesoMaximo));
@@ -196,36 +215,60 @@ class ProgressoController extends ChangeNotifier {
   }
 
   Future<void> _salvarPreferencias() async {
-    await _preferencesService.salvarDouble(PreferencesService.keyPesoAtual, _pesoAtual);
-    await _preferencesService.salvarDouble(PreferencesService.keyAltura, _altura);
-    await _preferencesService.salvarInt(PreferencesService.keyMetaDiasSemana, _metaDiasSemana);
+    await _preferencesService.salvarDouble(
+      PreferencesService.keyPesoAtual,
+      _pesoAtual,
+    );
+    await _preferencesService.salvarDouble(
+      PreferencesService.keyAltura,
+      _altura,
+    );
+    await _preferencesService.salvarInt(
+      PreferencesService.keyMetaDiasSemana,
+      _metaDiasSemana,
+    );
 
     final data = _dataUltimaAtualizacaoPeso;
     if (data != null) {
-      await _preferencesService.salvarString(PreferencesService.keyDataUltimaAtualizacaoPeso, data.toIso8601String());
+      await _preferencesService.salvarString(
+        PreferencesService.keyDataUltimaAtualizacaoPeso,
+        data.toIso8601String(),
+      );
     } else {
-      await _preferencesService.remover(PreferencesService.keyDataUltimaAtualizacaoPeso);
+      await _preferencesService.remover(
+        PreferencesService.keyDataUltimaAtualizacaoPeso,
+      );
     }
   }
 
   Future<void> _carregarPreferencias() async {
-    final pesoSalvo = await _preferencesService.lerDouble(PreferencesService.keyPesoAtual);
+    final pesoSalvo = await _preferencesService.lerDouble(
+      PreferencesService.keyPesoAtual,
+    );
     if (pesoSalvo != null) {
       _pesoAtual = pesoSalvo;
     }
 
-    final alturaSalva = await _preferencesService.lerDouble(PreferencesService.keyAltura);
+    final alturaSalva = await _preferencesService.lerDouble(
+      PreferencesService.keyAltura,
+    );
     if (alturaSalva != null) {
       _altura = alturaSalva;
     }
 
-    final metaSalva = await _preferencesService.lerInt(PreferencesService.keyMetaDiasSemana);
+    final metaSalva = await _preferencesService.lerInt(
+      PreferencesService.keyMetaDiasSemana,
+    );
     if (metaSalva != null) {
       _metaDiasSemana = metaSalva;
     }
 
-    final dataSalva = await _preferencesService.lerString(PreferencesService.keyDataUltimaAtualizacaoPeso);
-    _dataUltimaAtualizacaoPeso = (dataSalva != null && dataSalva.isNotEmpty) ? DateTime.tryParse(dataSalva) : null;
+    final dataSalva = await _preferencesService.lerString(
+      PreferencesService.keyDataUltimaAtualizacaoPeso,
+    );
+    _dataUltimaAtualizacaoPeso = (dataSalva != null && dataSalva.isNotEmpty)
+        ? DateTime.tryParse(dataSalva)
+        : null;
 
     notifyListeners();
   }
