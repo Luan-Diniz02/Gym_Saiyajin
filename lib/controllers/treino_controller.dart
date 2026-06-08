@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,9 @@ class TreinoController extends ChangeNotifier {
   final PreferencesService _preferencesService;
   final NotificationService _notificationService;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
+
+  List<Map<String, String>> _exerciciosCustomizados = [];
+  List<Map<String, String>> get exerciciosCustomizados => _exerciciosCustomizados;
 
   TreinoController({
     required TreinoRepository repository,
@@ -247,13 +251,81 @@ class TreinoController extends ChangeNotifier {
     final tempoSalvo = await _preferencesService.lerInt(
       PreferencesService.keyTempoDescanso,
     );
-    if (tempoSalvo == null || tempoSalvo <= 0) return;
-
-    _tempoDescansoPadrao = tempoSalvo;
-    if (!_isTimerRodando) {
-      _tempoAtual = tempoSalvo;
+    if (tempoSalvo != null && tempoSalvo > 0) {
+      _tempoDescansoPadrao = tempoSalvo;
+      if (!_isTimerRodando) {
+        _tempoAtual = tempoSalvo;
+      }
     }
+    await carregarExerciciosCustomizados();
     notifyListeners();
+  }
+
+  Future<void> carregarExerciciosCustomizados() async {
+    try {
+      final dbExercicios = await _repository.buscarExerciciosUnicosRegistrados();
+      final prefsString = await _preferencesService.lerString(PreferencesService.keyExerciciosCustomizados);
+      
+      List<Map<String, String>> prefsExercicios = [];
+      if (prefsString != null) {
+        try {
+          final List<dynamic> decoded = jsonDecode(prefsString);
+          prefsExercicios = decoded.map((e) => {
+            'nome': (e['nome'] as String? ?? '').trim(),
+            'grupo': (e['grupo'] as String? ?? '').trim(),
+          }).toList();
+        } catch (_) {}
+      }
+
+      final Map<String, Map<String, String>> merged = {};
+      for (final ex in dbExercicios) {
+        final nome = ex['nome'] ?? '';
+        final grupo = ex['grupo'] ?? '';
+        if (nome.isNotEmpty && grupo.isNotEmpty) {
+          merged[nome.toLowerCase().trim()] = {
+            'nome': nome.trim(),
+            'grupo': grupo.trim(),
+          };
+        }
+      }
+      for (final ex in prefsExercicios) {
+        final nome = ex['nome'] ?? '';
+        final grupo = ex['grupo'] ?? '';
+        if (nome.isNotEmpty && grupo.isNotEmpty) {
+          merged[nome.toLowerCase().trim()] = {
+            'nome': nome.trim(),
+            'grupo': grupo.trim(),
+          };
+        }
+      }
+
+      _exerciciosCustomizados = merged.values.toList();
+    } catch (_) {}
+  }
+
+  Future<void> salvarNovoExercicioCustomizado(String nome, String grupo) async {
+    final nomeTrimmed = nome.trim();
+    final grupoTrimmed = grupo.trim();
+    if (nomeTrimmed.isEmpty || grupoTrimmed.isEmpty) return;
+
+    final existe = _exerciciosCustomizados.any(
+      (e) => e['nome']!.toLowerCase() == nomeTrimmed.toLowerCase(),
+    );
+
+    if (!existe) {
+      _exerciciosCustomizados.add({
+        'nome': nomeTrimmed,
+        'grupo': grupoTrimmed,
+      });
+
+      try {
+        await _preferencesService.salvarString(
+          PreferencesService.keyExerciciosCustomizados,
+          jsonEncode(_exerciciosCustomizados),
+        );
+      } catch (_) {}
+      notifyListeners();
+    }
   }
 
   void iniciarTimer() {

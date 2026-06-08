@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/treino_controller.dart';
 import '../theme/app_colors.dart';
 
 class SelecaoExercicioModal extends StatefulWidget {
+  final TreinoController controller;
   final void Function(String nome, String grupo) onSelecionarExercicio;
 
   const SelecaoExercicioModal({
     super.key,
+    required this.controller,
     required this.onSelecionarExercicio,
   });
 
@@ -56,9 +59,25 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
 
   List<Map<String, String>> get _exerciciosFiltrados {
     final termo = _termoBusca.trim().toLowerCase();
-    if (termo.isEmpty) return _exerciciosPadrao;
 
-    return _exerciciosPadrao.where((exercicio) {
+    final Map<String, Map<String, String>> merged = {};
+    for (final ex in _exerciciosPadrao) {
+      final nome = ex['nome'] ?? '';
+      if (nome.isNotEmpty) {
+        merged[nome.toLowerCase()] = ex;
+      }
+    }
+    for (final ex in widget.controller.exerciciosCustomizados) {
+      final nome = ex['nome'] ?? '';
+      if (nome.isNotEmpty && !merged.containsKey(nome.toLowerCase())) {
+        merged[nome.toLowerCase()] = ex;
+      }
+    }
+
+    final todosExercicios = merged.values.toList();
+    if (termo.isEmpty) return todosExercicios;
+
+    return todosExercicios.where((exercicio) {
       final nome = (exercicio['nome'] ?? '').toLowerCase();
       final grupo = (exercicio['grupo'] ?? '').toLowerCase();
       return nome.contains(termo) || grupo.contains(termo);
@@ -140,6 +159,9 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
 
     if (!mounted || grupoSelecionado == null) return;
 
+    await widget.controller.salvarNovoExercicioCustomizado(nomeNovoExercicio, grupoSelecionado);
+
+    if (!mounted) return;
     Navigator.pop(context);
     widget.onSelecionarExercicio(nomeNovoExercicio, grupoSelecionado);
   }
@@ -150,11 +172,14 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       insetPadding: const EdgeInsets.all(20),
-      child: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
-        padding: const EdgeInsets.all(20),
-        child: Column(
+      child: ListenableBuilder(
+        listenable: widget.controller,
+        builder: (context, _) {
+          return Container(
+            width: double.infinity,
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+            padding: const EdgeInsets.all(20),
+            child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -224,7 +249,9 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    },
+  ),
+);
   }
 }

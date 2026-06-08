@@ -47,6 +47,21 @@ class TreinoRepository {
     }
   }
 
+  Future<List<Map<String, String>>> buscarExerciciosUnicosRegistrados() async {
+    try {
+      final db = await _databaseHelper.database;
+      final List<Map<String, Object?>> rows = await db.rawQuery(
+        'SELECT DISTINCT nome, grupo FROM exercicios ORDER BY nome ASC',
+      );
+      return rows.map((row) => {
+        'nome': row['nome'] as String? ?? '',
+        'grupo': row['grupo'] as String? ?? '',
+      }).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<SessaoTreino>> buscarHistoricoTreinos() async {
     try {
       final db = await _databaseHelper.database;

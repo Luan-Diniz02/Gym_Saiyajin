@@ -6,6 +6,7 @@ class PreferencesService {
   static const String keyAltura = 'progresso_altura';
   static const String keyMetaDiasSemana = 'progresso_meta_dias_semana';
   static const String keyDataUltimaAtualizacaoPeso = 'progresso_data_ultima_atualizacao_peso';
+  static const String keyExerciciosCustomizados = 'exercicios_customizados';
 
   Future<void> salvarInt(String chave, int valor) async {
     final prefs = await SharedPreferences.getInstance();
