@@ -15,7 +15,7 @@ class TreinoRepository {
 
       await db.transaction((txn) async {
         final int sessaoId = await txn.insert('sessoes', {
-          'data': DateTime.now().toIso8601String(),
+          'data': (sessao.data ?? DateTime.now()).toIso8601String(),
           'nome_treino': null,
         });
 
