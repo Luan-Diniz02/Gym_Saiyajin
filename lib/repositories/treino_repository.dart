@@ -53,7 +53,7 @@ class TreinoRepository {
 
       final List<Map<String, Object?>> sessoesRows = await db.query(
         'sessoes',
-        orderBy: 'id DESC',
+        orderBy: 'data DESC',
       );
       
       if (sessoesRows.isEmpty) return [];
