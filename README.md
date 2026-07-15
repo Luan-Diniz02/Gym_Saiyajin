@@ -104,7 +104,7 @@ Repositório principal:
 
 - Seleção de exercício com busca por nome/grupo e criação de novo exercício via modal (seleção de grupo muscular).
 - Registro de séries (peso/reps) e marcação de série concluída.
-- Cronômetro global de descanso com iniciar, pausar, reiniciar, continuar. Anel de progresso visual que esvazia com o tempo e vibração nativa ao finalizar.
+- Cronômetro global de descanso sincronizado com o ciclo de vida do app (funciona corretamente mesmo em segundo plano). Possui funções de iniciar, pausar, reiniciar, continuar, anel de progresso visual e vibração nativa ao finalizar.
 - Tempo de descanso padrão persistido com SharedPreferences (sobrevive entre sessões do app).
 - Encerramento protegido: se houver exercício em andamento, o usuário pode salvar séries válidas ou descartar antes de encerrar.
 - Encerramento do treino com persistência transacional.
