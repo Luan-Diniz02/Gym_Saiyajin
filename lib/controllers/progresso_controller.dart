@@ -141,8 +141,9 @@ class ProgressoController extends ChangeNotifier {
           ..sort((a, b) {
             final dataA = a.data;
             final dataB = b.data;
-            if (dataA == null && dataB == null)
+            if (dataA == null && dataB == null) {
               return (a.id ?? 0).compareTo(b.id ?? 0);
+            }
             if (dataA == null) return -1;
             if (dataB == null) return 1;
             return dataA.compareTo(dataB);

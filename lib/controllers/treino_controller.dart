@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import '../models/exercicio.dart';
 import '../models/serie.dart';
@@ -12,7 +13,7 @@ import '../repositories/treino_repository.dart';
 import '../services/notification_service.dart';
 import '../services/preferences_service.dart';
 
-class TreinoController extends ChangeNotifier {
+class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   final TreinoRepository _repository;
   final PreferencesService _preferencesService;
   final NotificationService _notificationService;
@@ -28,10 +29,12 @@ class TreinoController extends ChangeNotifier {
   }) : _repository = repository,
        _preferencesService = preferencesService,
        _notificationService = notificationService {
+    WidgetsBinding.instance.addObserver(this);
     _carregarPreferencias();
   }
 
   Timer? _timer;
+  DateTime? _timerEndTime;
   int _tempoDescansoPadrao = 90;
   int _tempoAtual = 90;
   bool _isTimerRodando = false;
@@ -176,6 +179,7 @@ class TreinoController extends ChangeNotifier {
     _sessaoTreino.exerciciosConcluidosHoje.clear();
     _sessaoTreino.exercicioAtual = null;
     _timer?.cancel();
+    _timerEndTime = null;
     unawaited(_notificationService.cancelarNotificacao());
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
@@ -236,6 +240,7 @@ class TreinoController extends ChangeNotifier {
     _tempoAtual = tempoSelecionado;
     _isTimerRodando = false;
     _timer?.cancel();
+    _timerEndTime = null;
     _salvarTempoDescansoPadrao();
     notifyListeners();
   }
@@ -330,6 +335,7 @@ class TreinoController extends ChangeNotifier {
 
   void iniciarTimer() {
     _tempoAtual = _tempoDescansoPadrao;
+    _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
@@ -338,6 +344,7 @@ class TreinoController extends ChangeNotifier {
 
   void pausarTimer() {
     _timer?.cancel();
+    _timerEndTime = null;
     _isTimerRodando = false;
     unawaited(_notificationService.cancelarNotificacao());
     notifyListeners();
@@ -349,6 +356,7 @@ class TreinoController extends ChangeNotifier {
     if (_tempoAtual <= 0) {
       _tempoAtual = _tempoDescansoPadrao;
     }
+    _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
@@ -357,6 +365,7 @@ class TreinoController extends ChangeNotifier {
 
   void reiniciarTimer() {
     _timer?.cancel();
+    _timerEndTime = null;
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
     unawaited(_notificationService.cancelarNotificacao());
@@ -366,16 +375,19 @@ class TreinoController extends ChangeNotifier {
   void _iniciarTicker() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (_tempoAtual > 0) {
-        _tempoAtual--;
-        notifyListeners();
-        return;
+      if (_timerEndTime != null) {
+        final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
+        if (remaining > 0) {
+          _tempoAtual = remaining;
+          notifyListeners();
+        } else {
+          _timer?.cancel();
+          _isTimerRodando = false;
+          _tempoAtual = 0;
+          _descansoFinalizadoEvento++;
+          notifyListeners();
+        }
       }
-
-      _timer?.cancel();
-      _isTimerRodando = false;
-      _descansoFinalizadoEvento++;
-      notifyListeners();
     });
   }
 
@@ -384,7 +396,25 @@ class TreinoController extends ChangeNotifier {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _isTimerRodando && _timerEndTime != null) {
+      final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
+      if (remaining > 0) {
+        _tempoAtual = remaining;
+        notifyListeners();
+      } else {
+        _tempoAtual = 0;
+        _timer?.cancel();
+        _isTimerRodando = false;
+        _descansoFinalizadoEvento++;
+        notifyListeners();
+      }
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     super.dispose();
   }
