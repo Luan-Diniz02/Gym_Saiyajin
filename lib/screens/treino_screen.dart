@@ -5,10 +5,13 @@ import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../theme/app_colors.dart';
 import '../controllers/treino_controller.dart';
 import '../models/exercicio.dart';
+import '../models/ficha_treino.dart';
 import '../models/serie.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
 import '../widgets/compartilhar_card_modal.dart';
+import '../widgets/gerenciar_fichas_modal.dart';
+import '../widgets/modal_encerrar_treino.dart';
 import '../widgets/selecao_exercicio_modal.dart';
 import '../widgets/serie_row_widget.dart';
 
@@ -29,6 +32,7 @@ class TreinoScreen extends StatefulWidget {
 class _TreinoScreenState extends State<TreinoScreen> {
   late final TreinoController _controller;
   int _ultimoEventoDescanso = 0;
+  bool _proximosFichaExpandido = false;
 
   @override
   void initState() {
@@ -149,6 +153,106 @@ class _TreinoScreenState extends State<TreinoScreen> {
     }
   }
 
+  void _abrirGerenciarFichas() {
+    showDialog(
+      context: context,
+      builder: (context) => GerenciarFichasModal(controller: _controller),
+    );
+  }
+
+  Future<void> _tocarIniciarExercicioPendente(int index, FichaExercicioItem item) async {
+    final atual = _controller.exercicioAtual;
+    if (atual != null) {
+      final temSerieFeita = atual.seriesDetalhes
+          .any((s) => s.concluida || (s.peso != null && s.reps != null));
+      if (temSerieFeita) {
+        final bool? salvarAtual = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+            title: const Text('Exercício em andamento', style: TextStyle(color: AppColors.textLight)),
+            content: Text(
+              'Você tem séries em "${atual.nome}". Deseja salvá-lo antes de iniciar "${item.nome}"?',
+              style: const TextStyle(color: AppColors.textDimmed),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, null),
+                child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Descartar atual', style: TextStyle(color: AppColors.danger)),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.background,
+                ),
+                child: const Text('Salvar e Iniciar'),
+              ),
+            ],
+          ),
+        );
+
+        if (salvarAtual == null) return;
+        if (salvarAtual == true) {
+          final erro = _controller.finalizarExercicioAtual();
+          if (erro != null) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(erro), backgroundColor: AppColors.danger),
+            );
+            return;
+          }
+        }
+      }
+    }
+
+    _controller.iniciarExercicioPendente(index);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Iniciando ${item.nome}!')),
+    );
+  }
+
+  void _substituirExercicioAtual() {
+    final atual = _controller.exercicioAtual;
+    if (atual == null) return;
+    showDialog(
+      context: context,
+      builder: (context) => SelecaoExercicioModal(
+        controller: _controller,
+        onSelecionarExercicio: (nome, grupo) {
+          _controller.substituirExercicioAtual(nome, grupo);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Exercício substituído por $nome!')),
+          );
+        },
+      ),
+    );
+  }
+
+  void _substituirExercicioPendente(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => SelecaoExercicioModal(
+        controller: _controller,
+        onSelecionarExercicio: (nome, grupo) {
+          _controller.substituirExercicioPendente(index, nome, grupo);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Exercício da ficha substituído por $nome!')),
+          );
+        },
+      ),
+    );
+  }
+
   Future<bool> _confirmarRemocaoExercicio(Exercicio exercicio) async {
     final confirmarRemocao = await showDialog<bool>(
       context: context,
@@ -195,60 +299,27 @@ class _TreinoScreenState extends State<TreinoScreen> {
   }
 
   Future<void> _confirmarEncerramentoTreino() async {
-    final bool? acaoSalvarAtual = await showDialog<bool>(
+    final resultado = await showDialog<ResultadoEncerrarTreino>(
       context: context,
-      builder: (context) {
-        if (_controller.temExercicioEmAndamento) {
-          return AlertDialog(
-            backgroundColor: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text('Exercício pendente'),
-            content: const Text('Há um exercício não finalizado. O que fazer?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text(
-                  'Descartar',
-                  style: TextStyle(color: AppColors.danger),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('Salvar'),
-              ),
-            ],
-          );
-        }
-
-        return AlertDialog(
-          backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text('Encerrar treino?'),
-          content: const Text('Finalizar e salvar o treino de hoje?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, null),
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Encerrar'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => ModalEncerrarTreinoDialog(controller: _controller),
     );
 
-    if (acaoSalvarAtual == null) return;
+    if (resultado == null) return;
 
     try {
-      final sessaoSalva = acaoSalvarAtual
-          ? await _controller.encerrarTreino(descartarAtual: false)
-          : await _controller.encerrarTreino(descartarAtual: true);
+      if (resultado.nomeTreino != null && resultado.nomeTreino!.trim().isNotEmpty) {
+        _controller.definirNomeTreino(resultado.nomeTreino!.trim());
+      }
+
+      final sessaoSalva = await _controller.encerrarTreino(
+        descartarAtual: resultado.descartarAtual,
+      );
+
+      if (resultado.salvarComoFicha &&
+          resultado.nomeFicha != null &&
+          resultado.nomeFicha!.trim().isNotEmpty) {
+        await _controller.salvarTreinoAtualComoFicha(resultado.nomeFicha!.trim());
+      }
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -403,60 +474,140 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 const SizedBox(height: 16),
                 _buildBarraTempoTreino(),
                 const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: _selecionarDataSessao,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.5),
-                          width: 1.5,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: _selecionarDataSessao,
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.1),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.5),
+                            width: 1.5,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.calendar_today,
-                            size: 16,
-                            color: AppColors.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _controller.dataSessaoFormatada,
-                            style: const TextStyle(
-                              color: AppColors.textLight,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            size: 18,
-                            color: AppColors.primary,
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.calendar_today,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              _controller.dataSessaoFormatada,
+                              style: const TextStyle(
+                                color: AppColors.textLight,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.arrow_drop_down,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                    if (_controller.nomeTreino != null)
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.35),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.bookmark_outline, size: 14, color: AppColors.primary),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    _controller.nomeTreino!,
+                                    style: const TextStyle(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (_controller.exercicioAtual != null ||
+                        _controller.exerciciosConcluidosHoje.isNotEmpty ||
+                        _controller.exerciciosFichaPendentes.isNotEmpty)
+                      InkWell(
+                        onTap: _abrirGerenciarFichas,
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: AppColors.accent.withValues(alpha: 0.6),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.assignment_outlined,
+                                size: 16,
+                                color: AppColors.accent,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                'FICHAS',
+                                style: TextStyle(
+                                  color: AppColors.accent,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  letterSpacing: 0.8,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
                 if (_controller.exerciciosConcluidosHoje.isNotEmpty) ...[
                   const Align(
                     alignment: Alignment.centerLeft,
@@ -475,13 +626,15 @@ class _TreinoScreenState extends State<TreinoScreen> {
                   ),
                   const SizedBox(height: 32),
                 ],
+                if (_controller.exerciciosFichaPendentes.isNotEmpty)
+                  _buildSecaoExerciciosFichaPendentes(),
                 if (_controller.exercicioAtual == null)
                   _buildTelaLimpa()
                 else
                   _buildExercicioAtual(),
                 const SizedBox(height: 48),
                 if (_controller.exerciciosConcluidosHoje.isNotEmpty ||
-                    _controller.exercicioAtual != null)
+                    _controller.exercicioAtual != null) ...[
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -506,12 +659,199 @@ class _TreinoScreenState extends State<TreinoScreen> {
                       ),
                     ),
                   ),
+                ],
                 const SizedBox(height: 20),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSecaoExerciciosFichaPendentes() {
+    final pendentes = _controller.exerciciosFichaPendentes;
+    if (pendentes.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () => setState(() => _proximosFichaExpandido = !_proximosFichaExpandido),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _proximosFichaExpandido
+                    ? AppColors.primary.withValues(alpha: 0.5)
+                    : AppColors.cardBorder,
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.playlist_play, color: AppColors.primary, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  'PRÓXIMOS DA FICHA (${pendentes.length})',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textLight,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  _proximosFichaExpandido ? 'Ocultar' : 'Ver lista',
+                  style: TextStyle(
+                    color: _proximosFichaExpandido ? AppColors.primary : AppColors.accent,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  _proximosFichaExpandido ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  color: _proximosFichaExpandido ? AppColors.primary : AppColors.accent,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_proximosFichaExpandido) ...[
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Toque para iniciar • Arraste para reordenar',
+                  style: TextStyle(color: AppColors.textDimmed, fontSize: 11),
+                ),
+                Text(
+                  'Aparelho ocupado? Troque',
+                  style: TextStyle(color: AppColors.textDimmed.withValues(alpha: 0.7), fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            buildDefaultDragHandles: false,
+            itemCount: pendentes.length,
+            onReorder: (oldIndex, newIndex) {
+              _controller.reordenarExerciciosPendentes(oldIndex, newIndex);
+            },
+            itemBuilder: (context, index) {
+              final item = pendentes[index];
+              return Container(
+                key: ValueKey('${item.nome}_${item.grupo}_$index'),
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.surface.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.cardBorder),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _tocarIniciarExercicioPendente(index, item),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      child: Row(
+                        children: [
+                          ReorderableDragStartListener(
+                            index: index,
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                              child: Icon(
+                                Icons.drag_indicator,
+                                size: 18,
+                                color: AppColors.textDimmed,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 26,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.background,
+                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.nome,
+                                  style: const TextStyle(
+                                    color: AppColors.textLight,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  '${item.grupo} • ${item.seriesPadrao} séries sugeridas',
+                                  style: const TextStyle(color: AppColors.textDimmed, fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.play_arrow_rounded, size: 22, color: AppColors.accent),
+                            tooltip: 'Iniciar este exercício agora',
+                            onPressed: () => _tocarIniciarExercicioPendente(index, item),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.swap_horiz, size: 20, color: AppColors.primary),
+                            tooltip: 'Substituir exercício',
+                            onPressed: () => _substituirExercicioPendente(index),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.close, size: 18, color: AppColors.textDimmed),
+                            tooltip: 'Remover do treino de hoje',
+                            onPressed: () {
+                              _controller.removerExercicioPendente(index);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('${item.nome} removido do treino de hoje.')),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+        const SizedBox(height: 20),
+      ],
     );
   }
 
@@ -548,23 +888,47 @@ class _TreinoScreenState extends State<TreinoScreen> {
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
-            height: 56,
+            height: 54,
             child: ElevatedButton.icon(
               onPressed: _abrirListaExercicios,
-              icon: const Icon(Icons.add, size: 24),
+              icon: const Icon(Icons.add, size: 22),
               label: const Text(
-                'INICIAR TREINO',
+                'INICIAR TREINO LIVRE',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
+                  letterSpacing: 1.2,
                 ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accent,
                 foregroundColor: AppColors.background,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedButton.icon(
+              onPressed: _abrirGerenciarFichas,
+              icon: const Icon(Icons.assignment, size: 20, color: AppColors.primary),
+              label: const Text(
+                'CARREGAR FICHA DE TREINO',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                  letterSpacing: 1.0,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.primary, width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
                 ),
               ),
             ),
@@ -582,42 +946,95 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     return Column(
       children: [
-        Row(
+        Stack(
+          alignment: Alignment.topCenter,
           children: [
-            Expanded(
-              child: Text(
-                exercicioAtual.nome,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                ),
-                textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48.0),
+              child: Column(
+                children: [
+                  Text(
+                    exercicioAtual.nome,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.1,
+                      color: AppColors.textLight,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Text(
+                      exercicioAtual.grupo.toUpperCase(),
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 11,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            IconButton(
-              onPressed: () => _confirmarRemocaoExercicio(exercicioAtual),
-              icon: const Icon(Icons.delete_outline, size: 24),
-              color: Colors.grey[600],
-              tooltip: 'Remover exercício',
+            Positioned(
+              right: 0,
+              top: 0,
+              child: PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: AppColors.textDimmed),
+                color: AppColors.surface,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: AppColors.cardBorder),
+                ),
+                tooltip: 'Opções do exercício',
+                onSelected: (value) {
+                  if (value == 'trocar') {
+                    _substituirExercicioAtual();
+                  } else if (value == 'excluir') {
+                    _confirmarRemocaoExercicio(exercicioAtual);
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'trocar',
+                    child: Row(
+                      children: [
+                        Icon(Icons.swap_horiz, size: 18, color: AppColors.accent),
+                        SizedBox(width: 10),
+                        Text(
+                          'Trocar exercício',
+                          style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'excluir',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_outline, size: 18, color: AppColors.danger),
+                        SizedBox(width: 10),
+                        Text(
+                          'Remover do treino',
+                          style: TextStyle(color: AppColors.danger, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            exercicioAtual.grupo,
-            style: const TextStyle(
-              color: AppColors.background,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
-          ),
         ),
         const SizedBox(height: 32),
 

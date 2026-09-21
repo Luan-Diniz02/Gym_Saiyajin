@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../models/exercicio.dart';
+import '../models/ficha_treino.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
@@ -17,6 +18,16 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   final PreferencesService _preferencesService;
   final NotificationService _notificationService;
   final SessaoTreino _sessaoTreino = SessaoTreino.vazia();
+
+  String? _nomeTreino;
+  String? get nomeTreino => _nomeTreino;
+
+  final Map<String, List<Serie>> _ultimasSeriesCache = {};
+  List<FichaTreino> _fichas = [];
+  List<FichaTreino> get fichas => UnmodifiableListView(_fichas);
+  List<FichaExercicioItem> _exerciciosFichaPendentes = [];
+  List<FichaExercicioItem> get exerciciosFichaPendentes =>
+      UnmodifiableListView(_exerciciosFichaPendentes);
 
   List<Map<String, String>> _exerciciosCustomizados = [];
   List<Map<String, String>> get exerciciosCustomizados => _exerciciosCustomizados;
@@ -30,6 +41,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
        _notificationService = notificationService {
     WidgetsBinding.instance.addObserver(this);
     _carregarPreferencias();
+    carregarFichas();
   }
 
   Timer? _timer;
@@ -155,14 +167,128 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     });
   }
 
-  void iniciarNovoExercicio(String nome, String grupo) {
+  void definirNomeTreino(String? nome) {
+    final valor = nome?.trim();
+    _nomeTreino = (valor == null || valor.isEmpty) ? null : valor;
+    notifyListeners();
+  }
+
+  Future<void> carregarSeriesAnteriores(String nomeExercicio) async {
+    final chave = nomeExercicio.toLowerCase().trim();
+    if (chave.isEmpty) return;
+    try {
+      final series = await _repository.buscarUltimasSeriesExercicio(nomeExercicio);
+      _ultimasSeriesCache[chave] = series;
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Serie? obterSerieAnterior(String nomeExercicio, int index) {
+    final chave = nomeExercicio.toLowerCase().trim();
+    final series = _ultimasSeriesCache[chave];
+    if (series == null || series.isEmpty) return null;
+    if (index < series.length) {
+      return series[index];
+    }
+    return series.last;
+  }
+
+  void iniciarNovoExercicio(String nome, String grupo, {int quantidadeSeries = 1}) {
     iniciarTreinoSeNecessario();
+    final qte = quantidadeSeries > 0 ? quantidadeSeries : 1;
     _sessaoTreino.exercicioAtual = Exercicio(
       nome: nome,
       grupo: grupo,
-      seriesDetalhes: [Serie()],
+      seriesDetalhes: List.generate(qte, (_) => Serie()),
+    );
+    unawaited(carregarSeriesAnteriores(nome));
+    notifyListeners();
+  }
+
+  void substituirExercicioAtual(String novoNome, String novoGrupo) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null) return;
+    final qteSeries = atual.seriesDetalhes.length;
+    _sessaoTreino.exercicioAtual = Exercicio(
+      nome: novoNome,
+      grupo: novoGrupo,
+      seriesDetalhes: List.generate(qteSeries, (_) => Serie()),
+    );
+    unawaited(carregarSeriesAnteriores(novoNome));
+    notifyListeners();
+  }
+
+  void substituirExercicioPendente(int index, String novoNome, String novoGrupo) {
+    if (index < 0 || index >= _exerciciosFichaPendentes.length) return;
+    final anterior = _exerciciosFichaPendentes[index];
+    _exerciciosFichaPendentes[index] = anterior.copyWith(
+      nome: novoNome,
+      grupo: novoGrupo,
     );
     notifyListeners();
+  }
+
+  void removerExercicioPendente(int index) {
+    if (index < 0 || index >= _exerciciosFichaPendentes.length) return;
+    _exerciciosFichaPendentes.removeAt(index);
+    notifyListeners();
+  }
+
+  void reordenarExerciciosPendentes(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    if (oldIndex < 0 ||
+        oldIndex >= _exerciciosFichaPendentes.length ||
+        newIndex < 0 ||
+        newIndex >= _exerciciosFichaPendentes.length) {
+      return;
+    }
+    final item = _exerciciosFichaPendentes.removeAt(oldIndex);
+    _exerciciosFichaPendentes.insert(newIndex, item);
+    notifyListeners();
+  }
+
+  void iniciarExercicioPendente(int index) {
+    if (index < 0 || index >= _exerciciosFichaPendentes.length) return;
+
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual != null) {
+      final temSerieFeita = atual.seriesDetalhes
+          .any((s) => s.concluida || (s.peso != null && s.reps != null));
+      if (!temSerieFeita) {
+        _exerciciosFichaPendentes.add(FichaExercicioItem(
+          nome: atual.nome,
+          grupo: atual.grupo,
+          seriesPadrao: atual.seriesDetalhes.length,
+        ));
+      }
+    }
+
+    final selecionado = _exerciciosFichaPendentes.removeAt(index);
+    iniciarNovoExercicio(
+      selecionado.nome,
+      selecionado.grupo,
+      quantidadeSeries: selecionado.seriesPadrao,
+    );
+  }
+
+  Future<List<SessaoTreino>> buscarHistoricoParaFichas() async {
+    try {
+      return await _repository.buscarHistoricoTreinos();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  void iniciarProximoExercicioFicha() {
+    if (_exerciciosFichaPendentes.isEmpty) return;
+    final proximo = _exerciciosFichaPendentes.removeAt(0);
+    iniciarNovoExercicio(
+      proximo.nome,
+      proximo.grupo,
+      quantidadeSeries: proximo.seriesPadrao,
+    );
   }
 
   String? finalizarExercicioAtual() {
@@ -184,7 +310,12 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       ),
     );
     _sessaoTreino.exercicioAtual = null;
-    notifyListeners();
+
+    if (_exerciciosFichaPendentes.isNotEmpty) {
+      iniciarProximoExercicioFicha();
+    } else {
+      notifyListeners();
+    }
     return null;
   }
 
@@ -196,6 +327,68 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     notifyListeners();
+  }
+
+  Future<void> carregarFichas() async {
+    try {
+      _fichas = await _repository.buscarFichas();
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Future<void> salvarFicha(FichaTreino ficha) async {
+    try {
+      await _repository.salvarFicha(ficha);
+      await carregarFichas();
+    } catch (_) {}
+  }
+
+  Future<void> excluirFicha(int fichaId) async {
+    try {
+      await _repository.excluirFicha(fichaId);
+      await carregarFichas();
+    } catch (_) {}
+  }
+
+  void carregarFichaParaTreino(FichaTreino ficha) {
+    iniciarTreinoSeNecessario();
+    _nomeTreino = ficha.nome;
+    _exerciciosFichaPendentes = List.from(ficha.exercicios);
+    if (_sessaoTreino.exercicioAtual == null && _exerciciosFichaPendentes.isNotEmpty) {
+      final primeiro = _exerciciosFichaPendentes.removeAt(0);
+      iniciarNovoExercicio(
+        primeiro.nome,
+        primeiro.grupo,
+        quantidadeSeries: primeiro.seriesPadrao,
+      );
+    }
+    notifyListeners();
+  }
+
+  Future<FichaTreino?> salvarTreinoAtualComoFicha(String nomeFicha) async {
+    final nomeTrimmed = nomeFicha.trim();
+    if (nomeTrimmed.isEmpty) return null;
+
+    final List<Exercicio> todos = List.from(_sessaoTreino.exerciciosConcluidosHoje);
+    if (_sessaoTreino.exercicioAtual != null) {
+      todos.add(_sessaoTreino.exercicioAtual!);
+    }
+    if (todos.isEmpty) return null;
+
+    final itens = <FichaExercicioItem>[];
+    for (int i = 0; i < todos.length; i++) {
+      final ex = todos[i];
+      itens.add(FichaExercicioItem(
+        nome: ex.nome,
+        grupo: ex.grupo,
+        ordem: i,
+        seriesPadrao: ex.seriesDetalhes.isNotEmpty ? ex.seriesDetalhes.length : 3,
+      ));
+    }
+
+    final novaFicha = FichaTreino(nome: nomeTrimmed, exercicios: itens);
+    await salvarFicha(novaFicha);
+    return novaFicha;
   }
 
   Future<SessaoTreino?> encerrarTreino({bool descartarAtual = false}) async {
@@ -224,6 +417,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     final sessaoParaSalvar = SessaoTreino(
       data: _dataSessao,
+      nomeTreino: _nomeTreino,
       duracaoSegundos: _duracaoTreinoSegundos,
       descansoTotalSegundos: _descansoTotalSegundos,
       exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
@@ -241,6 +435,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     _sessaoTreino.exerciciosConcluidosHoje.clear();
     _sessaoTreino.exercicioAtual = null;
+    _nomeTreino = null;
+    _exerciciosFichaPendentes.clear();
     _timer?.cancel();
     _timerEndTime = null;
     _sessaoTimer?.cancel();

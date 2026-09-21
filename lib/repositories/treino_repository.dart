@@ -1,5 +1,6 @@
 import '../database/db_helper.dart';
 import '../models/exercicio.dart';
+import '../models/ficha_treino.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 
@@ -220,6 +221,134 @@ class TreinoRepository {
       });
     } catch (e) {
       throw Exception('Erro ao importar sessões de treino: $e');
+    }
+  }
+
+  Future<List<Serie>> buscarUltimasSeriesExercicio(String nomeExercicio) async {
+    try {
+      final db = await _databaseHelper.database;
+      final List<Map<String, Object?>> exRows = await db.rawQuery('''
+        SELECT e.id as ex_id
+        FROM exercicios e
+        JOIN sessoes s ON e.sessao_id = s.id
+        WHERE LOWER(TRIM(e.nome)) = LOWER(TRIM(?))
+        ORDER BY s.data DESC, e.id DESC
+        LIMIT 1
+      ''', [nomeExercicio]);
+
+      if (exRows.isEmpty) return [];
+
+      final exId = (exRows.first['ex_id'] as num).toInt();
+      final List<Map<String, Object?>> seriesRows = await db.query(
+        'series',
+        where: 'exercicio_id = ?',
+        whereArgs: [exId],
+        orderBy: 'id ASC',
+      );
+
+      return seriesRows.map((row) => Serie(
+        peso: (row['peso'] as num?)?.toDouble(),
+        reps: (row['reps'] as num?)?.toInt(),
+        concluida: ((row['concluida'] as num?)?.toInt() ?? 0) == 1,
+      )).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<List<FichaTreino>> buscarFichas() async {
+    try {
+      final db = await _databaseHelper.database;
+      final List<Map<String, Object?>> fichasRows = await db.query('fichas', orderBy: 'nome ASC');
+      if (fichasRows.isEmpty) return [];
+
+      final List<Map<String, Object?>> itensRows = await db.query('ficha_exercicios', orderBy: 'ordem ASC, id ASC');
+
+      final Map<int, List<FichaExercicioItem>> itensPorFicha = {};
+      for (final row in itensRows) {
+        final fId = (row['ficha_id'] as num).toInt();
+        itensPorFicha.putIfAbsent(fId, () => []).add(
+          FichaExercicioItem(
+            id: (row['id'] as num?)?.toInt(),
+            fichaId: fId,
+            nome: row['nome'] as String? ?? '',
+            grupo: row['grupo'] as String? ?? '',
+            ordem: (row['ordem'] as num?)?.toInt() ?? 0,
+            seriesPadrao: (row['series_padrao'] as num?)?.toInt() ?? 3,
+          ),
+        );
+      }
+
+      return fichasRows.map((row) {
+        final fId = (row['id'] as num).toInt();
+        return FichaTreino(
+          id: fId,
+          nome: row['nome'] as String? ?? '',
+          descricao: row['descricao'] as String?,
+          exercicios: itensPorFicha[fId] ?? [],
+        );
+      }).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<int> salvarFicha(FichaTreino ficha) async {
+    try {
+      final db = await _databaseHelper.database;
+
+      return await db.transaction<int>((txn) async {
+        int fichaId;
+        if (ficha.id == null) {
+          fichaId = await txn.insert('fichas', {
+            'nome': ficha.nome.trim(),
+            'descricao': ficha.descricao?.trim(),
+          });
+        } else {
+          fichaId = ficha.id!;
+          await txn.update(
+            'fichas',
+            {
+              'nome': ficha.nome.trim(),
+              'descricao': ficha.descricao?.trim(),
+            },
+            where: 'id = ?',
+            whereArgs: [fichaId],
+          );
+          await txn.delete(
+            'ficha_exercicios',
+            where: 'ficha_id = ?',
+            whereArgs: [fichaId],
+          );
+        }
+
+        for (int i = 0; i < ficha.exercicios.length; i++) {
+          final item = ficha.exercicios[i];
+          await txn.insert('ficha_exercicios', {
+            'ficha_id': fichaId,
+            'nome': item.nome.trim(),
+            'grupo': item.grupo.trim(),
+            'ordem': i,
+            'series_padrao': item.seriesPadrao,
+          });
+        }
+
+        return fichaId;
+      });
+    } catch (e) {
+      throw Exception('Erro ao salvar ficha de treino: $e');
+    }
+  }
+
+  Future<void> excluirFicha(int fichaId) async {
+    try {
+      final db = await _databaseHelper.database;
+      await db.transaction((txn) async {
+        await txn.delete('ficha_exercicios', where: 'ficha_id = ?', whereArgs: [fichaId]);
+        await txn.delete('fichas', where: 'id = ?', whereArgs: [fichaId]);
+      });
+    } catch (e) {
+      throw Exception('Erro ao excluir ficha de treino: $e');
     }
   }
 }

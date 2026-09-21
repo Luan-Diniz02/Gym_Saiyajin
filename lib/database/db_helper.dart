@@ -19,7 +19,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -36,6 +36,29 @@ class DatabaseHelper {
       await db.execute(
         'ALTER TABLE sessoes ADD COLUMN descanso_total_segundos INTEGER DEFAULT 0;',
       );
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS fichas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          nome TEXT NOT NULL,
+          descricao TEXT
+        )
+      ''');
+
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS ficha_exercicios (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          ficha_id INTEGER NOT NULL,
+          nome TEXT NOT NULL,
+          grupo TEXT NOT NULL,
+          ordem INTEGER NOT NULL DEFAULT 0,
+          series_padrao INTEGER NOT NULL DEFAULT 3,
+          FOREIGN KEY (ficha_id) REFERENCES fichas (id) ON DELETE CASCADE
+        )
+      ''');
+
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_ficha_exercicios_ficha_id ON ficha_exercicios (ficha_id)');
     }
   }
 
@@ -71,9 +94,30 @@ class DatabaseHelper {
       )
     ''');
 
+    await db.execute('''
+      CREATE TABLE fichas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        descricao TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE ficha_exercicios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ficha_id INTEGER NOT NULL,
+        nome TEXT NOT NULL,
+        grupo TEXT NOT NULL,
+        ordem INTEGER NOT NULL DEFAULT 0,
+        series_padrao INTEGER NOT NULL DEFAULT 3,
+        FOREIGN KEY (ficha_id) REFERENCES fichas (id) ON DELETE CASCADE
+      )
+    ''');
+
     // Criação de índices para otimizar buscas e o ON DELETE CASCADE
     await db.execute('CREATE INDEX idx_exercicios_sessao_id ON exercicios (sessao_id)');
     await db.execute('CREATE INDEX idx_series_exercicio_id ON series (exercicio_id)');
+    await db.execute('CREATE INDEX idx_ficha_exercicios_ficha_id ON ficha_exercicios (ficha_id)');
   }
 
   Future close() async {

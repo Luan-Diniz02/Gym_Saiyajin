@@ -383,21 +383,46 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Topo com métricas limpas (estilo Hevy)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // Topo com nome do treino e métricas limpas
+                Column(
                   children: [
-                    _buildMetricaOverlay(
-                      rotulo: 'Duração',
-                      valor: widget.sessao.duracaoFormatada,
-                    ),
-                    _buildMetricaOverlay(
-                      rotulo: 'Volume',
-                      valor: volumeStr,
-                    ),
-                    _buildMetricaOverlay(
-                      rotulo: 'Séries',
-                      valor: '$totalSeries',
+                    if (widget.sessao.nomeTreino != null &&
+                        widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.8)),
+                        ),
+                        child: Text(
+                          widget.sessao.nomeTreino!.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                    ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildMetricaOverlay(
+                          rotulo: 'Duração',
+                          valor: widget.sessao.duracaoFormatada,
+                        ),
+                        _buildMetricaOverlay(
+                          rotulo: 'Volume',
+                          valor: volumeStr,
+                        ),
+                        _buildMetricaOverlay(
+                          rotulo: 'Séries',
+                          valor: '$totalSeries',
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -605,6 +630,27 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              if (widget.sessao.nomeTreino != null &&
+                  widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+                  ),
+                  child: Text(
+                    widget.sessao.nomeTreino!.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.primary,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
 

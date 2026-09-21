@@ -380,13 +380,41 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Text(
-                    diaTreino.dataLabel,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textLight,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        diaTreino.dataLabel,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      if (diaTreino.sessao.nomeTreino != null &&
+                          diaTreino.sessao.nomeTreino!.trim().isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: Text(
+                            diaTreino.sessao.nomeTreino!.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primary,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 IconButton(

@@ -17,6 +17,17 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
+- **Nome & Divisão do Treino**:
+  - Barra superior de chips rápidos padronizados (`Treino A`, `Treino B`, `Treino C`, `Push`, `Pull`, `Legs`, `Superiores`, `Inferiores`) e botão para digitação de nomes customizados.
+  - O nome é registrado na sessão, exibido com badge dourado na timeline do histórico e estampado no card de compartilhamento para redes sociais.
+- **📋 Fichas / Templates de Treino Pré-configurados**:
+  - **Carregamento em 1 Toque**: Escolha uma rotina pré-configurada na gaveta de fichas e inicie o treino com todos os exercícios já enfileirados.
+  - **Aparelho Ocupado? Substituição Ágil**: Se uma máquina estiver em uso, toque no botão de troca (`Swap`) para substituir o exercício (atual ou pendente na fila) por outro do mesmo grupo muscular sem alterar a ficha base.
+  - **Salvar Treino como Ficha**: Transforme a sessão do dia em um template permanente com um único toque.
+  - **Liberdade Total**: Adicione novos exercícios extras a qualquer momento ou exclua exercícios do dia mantendo a ficha original intacta.
+- **👻 "Carga Anterior" de Referência (Sobrecarga Progressiva)**:
+  - Ao iniciar qualquer exercício, o app busca automaticamente o histórico da última sessão concluída.
+  - Carga e repetições aparecem como sugestão suave nos inputs (`hintText`) e em uma linha discreta de apoio (`Anterior: X kg × Y reps`), facilitando a progressão contínua de carga (*Progressive Overload*).
 - **Catálogo & Criação de Exercícios**: Modal de busca instantânea com barra de pesquisa por texto e chips de filtragem por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, etc.). Suporte a criação dinâmica de novos exercícios personalizados.
 - **Séries com Ergonomia Avançada**: 
   - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
@@ -122,13 +133,15 @@ gym_saiyajin/
 
 ## 💾 Banco de Dados (SQLite)
 
-* Arquivo: `gym_saiyajin.db` (Versão do schema: `2`)
+* Arquivo: `gym_saiyajin.db` (Versão do schema: `3`)
 * `PRAGMA foreign_keys = ON;` ativo via callback `onConfigure`
-* Migração transacional automática via `onUpgrade` (versão 1 -> 2)
+* Migrações transacionais automáticas via `onUpgrade` (versão 1 -> 2 -> 3)
 * Tabelas:
   * `sessoes`: `id`, `data`, `nome_treino`, `duracao_segundos`, `descanso_total_segundos`
   * `exercicios`: `id`, `sessao_id`, `nome`, `grupo`
   * `series`: `id`, `exercicio_id`, `peso`, `reps`, `concluida`
+  * `fichas`: `id`, `nome`, `descricao`
+  * `ficha_exercicios`: `id`, `ficha_id`, `nome`, `grupo`, `ordem`, `series_padrao`
 * Índices dedicados em chaves estrangeiras para otimização de consultas e exclusão em cascata.
 
 ---

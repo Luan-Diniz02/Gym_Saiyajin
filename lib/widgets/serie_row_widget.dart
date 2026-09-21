@@ -31,6 +31,15 @@ class SerieRowWidget extends StatelessWidget {
         final String nomeExercicioAtual = exercicioAtual.nome;
         final bool podeExcluir = exercicioAtual.seriesDetalhes.length > 1;
 
+        final serieAnterior = controller.obterSerieAnterior(nomeExercicioAtual, index);
+        final String? hintPeso = serieAnterior?.peso != null
+            ? (serieAnterior!.peso! % 1 == 0
+                ? serieAnterior.peso!.toInt().toString()
+                : serieAnterior.peso!.toString())
+            : null;
+        final String? hintReps =
+            serieAnterior?.reps != null ? serieAnterior!.reps.toString() : null;
+
         final cardConteudo = Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -39,105 +48,132 @@ class SerieRowWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.cardBorder),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: isConcluida ? AppColors.accent : Colors.transparent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.accent, width: 2),
-                ),
-                child: Center(
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                      color: isConcluida ? AppColors.background : AppColors.accent,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isConcluida ? AppColors.accent : Colors.transparent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.accent, width: 2),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'PESO (KG)',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textDimmed,
-                        letterSpacing: 0.5,
+                    child: Center(
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          color: isConcluida ? AppColors.background : AppColors.accent,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    _buildCustomTextField(
-                      chave: 'peso-$nomeExercicioAtual-$index',
-                      valorInicial: peso?.toStringAsFixed(peso % 1 == 0 ? 0 : 1) ?? '',
-                      isConcluida: isConcluida,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [controller.pesoInputFormatter],
-                      onChanged: (valor) => controller.atualizarPesoSerie(index, valor),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'PESO (KG)',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        _buildCustomTextField(
+                          chave: 'peso-$nomeExercicioAtual-$index',
+                          valorInicial: peso?.toStringAsFixed(peso % 1 == 0 ? 0 : 1) ?? '',
+                          hintText: hintPeso,
+                          isConcluida: isConcluida,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: [controller.pesoInputFormatter],
+                          onChanged: (valor) => controller.atualizarPesoSerie(index, valor),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'REPS',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textDimmed,
-                        letterSpacing: 0.5,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'REPS',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        _buildCustomTextField(
+                          chave: 'reps-$nomeExercicioAtual-$index',
+                          valorInicial: reps?.toString() ?? '',
+                          hintText: hintReps,
+                          isConcluida: isConcluida,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          inputFormatters: [controller.repsInputFormatter],
+                          onChanged: (valor) => controller.atualizarRepsSerie(index, valor),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  GestureDetector(
+                    onTap: () => controller.toggleConcluidaSerie(index),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: isConcluida ? AppColors.primary : AppColors.background,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isConcluida ? AppColors.primary : AppColors.cardBorder,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.check,
+                        size: 24,
+                        color: isConcluida ? AppColors.background : AppColors.textDimmed,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    _buildCustomTextField(
-                      chave: 'reps-$nomeExercicioAtual-$index',
-                      valorInicial: reps?.toString() ?? '',
-                      isConcluida: isConcluida,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      inputFormatters: [controller.repsInputFormatter],
-                      onChanged: (valor) => controller.atualizarRepsSerie(index, valor),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 14),
-              GestureDetector(
-                onTap: () => controller.toggleConcluidaSerie(index),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: isConcluida ? AppColors.primary : AppColors.background,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isConcluida ? AppColors.primary : AppColors.cardBorder,
-                      width: 1.5,
-                    ),
                   ),
-                  child: Icon(
-                    Icons.check,
-                    size: 24,
-                    color: isConcluida ? AppColors.background : AppColors.textDimmed,
+                ],
+              ),
+              if (serieAnterior != null && (serieAnterior.peso != null || serieAnterior.reps != null)) ...[
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.only(left: 58.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.history, size: 13, color: AppColors.primary),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Anterior: ${hintPeso ?? '-'} kg × ${hintReps ?? '-'} reps',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textDimmed,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              ],
             ],
           ),
         );
@@ -192,6 +228,7 @@ class SerieRowWidget extends StatelessWidget {
   Widget _buildCustomTextField({
     required String chave,
     required String valorInicial,
+    String? hintText,
     required bool isConcluida,
     required TextInputType keyboardType,
     TextInputAction? textInputAction,
@@ -215,6 +252,12 @@ class SerieRowWidget extends StatelessWidget {
           color: isConcluida ? AppColors.textDimmed : AppColors.textLight,
         ),
         decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: AppColors.textMuted,
+            fontSize: 15,
+            fontWeight: FontWeight.normal,
+          ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           filled: true,
           fillColor: AppColors.background,
