@@ -40,6 +40,13 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   int _descansoFinalizadoEvento = 0;
   DateTime _dataSessao = DateTime.now();
 
+  int _duracaoTreinoSegundos = 0;
+  int _descansoTotalSegundos = 0;
+  DateTime? _inicioTreino;
+  Timer? _sessaoTimer;
+  DateTime? _ultimoCicloTreino;
+  bool _treinoPausado = false;
+
   final TextInputFormatter _pesoInputFormatter =
       TextInputFormatter.withFunction((oldValue, newValue) {
         final texto = newValue.text;
@@ -57,6 +64,24 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   bool get isTimerRodando => _isTimerRodando;
   int get descansoFinalizadoEvento => _descansoFinalizadoEvento;
   DateTime get dataSessao => _dataSessao;
+
+  int get duracaoTreinoSegundos => _duracaoTreinoSegundos;
+  int get descansoTotalSegundos => _descansoTotalSegundos;
+  bool get isTreinoEmAndamento => _inicioTreino != null;
+  bool get isTreinoPausado => _treinoPausado;
+
+  String get duracaoTreinoFormatada => formatarTempoLegivel(_duracaoTreinoSegundos);
+  String get descansoTotalFormatado => formatarTempoLegivel(_descansoTotalSegundos);
+
+  String formatarTempoLegivel(int totalSegundos) {
+    final horas = totalSegundos ~/ 3600;
+    final minutos = (totalSegundos % 3600) ~/ 60;
+    final segundos = totalSegundos % 60;
+    if (horas > 0) {
+      return '${horas.toString().padLeft(2, '0')}:${minutos.toString().padLeft(2, '0')}:${segundos.toString().padLeft(2, '0')}';
+    }
+    return '${minutos.toString().padLeft(2, '0')}:${segundos.toString().padLeft(2, '0')}';
+  }
 
   String get dataSessaoFormatada {
     if (_mesmoDia(_dataSessao, DateTime.now())) {
@@ -94,7 +119,44 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
+  void iniciarTreinoSeNecessario() {
+    if (_inicioTreino == null) {
+      _inicioTreino = DateTime.now();
+      _ultimoCicloTreino = DateTime.now();
+      _treinoPausado = false;
+      _iniciarTickerSessao();
+      notifyListeners();
+    }
+  }
+
+  void alternarPausaTreinoGeral() {
+    if (_inicioTreino == null) return;
+    _treinoPausado = !_treinoPausado;
+    if (_treinoPausado) {
+      _sessaoTimer?.cancel();
+    } else {
+      _ultimoCicloTreino = DateTime.now();
+      _iniciarTickerSessao();
+    }
+    notifyListeners();
+  }
+
+  void _iniciarTickerSessao() {
+    _sessaoTimer?.cancel();
+    _sessaoTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!_treinoPausado) {
+        _duracaoTreinoSegundos++;
+        if (_isTimerRodando) {
+          _descansoTotalSegundos++;
+        }
+        _ultimoCicloTreino = DateTime.now();
+        notifyListeners();
+      }
+    });
+  }
+
   void iniciarNovoExercicio(String nome, String grupo) {
+    iniciarTreinoSeNecessario();
     _sessaoTreino.exercicioAtual = Exercicio(
       nome: nome,
       grupo: grupo,
@@ -136,7 +198,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  Future<void> encerrarTreino({bool descartarAtual = false}) async {
+  Future<SessaoTreino?> encerrarTreino({bool descartarAtual = false}) async {
     final exercicioAtual = _sessaoTreino.exercicioAtual;
 
     if (!descartarAtual && exercicioAtual != null) {
@@ -158,10 +220,12 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       }
     }
 
-    if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return;
+    if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return null;
 
     final sessaoParaSalvar = SessaoTreino(
       data: _dataSessao,
+      duracaoSegundos: _duracaoTreinoSegundos,
+      descansoTotalSegundos: _descansoTotalSegundos,
       exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
           .map(
             (exercicio) => exercicio.copyWith(
@@ -179,11 +243,19 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     _sessaoTreino.exercicioAtual = null;
     _timer?.cancel();
     _timerEndTime = null;
+    _sessaoTimer?.cancel();
+    _inicioTreino = null;
+    _ultimoCicloTreino = null;
+    _duracaoTreinoSegundos = 0;
+    _descansoTotalSegundos = 0;
+    _treinoPausado = false;
     unawaited(_notificationService.cancelarNotificacao());
     _tempoAtual = _tempoDescansoPadrao;
     _isTimerRodando = false;
     _dataSessao = DateTime.now();
     notifyListeners();
+
+    return sessaoParaSalvar;
   }
 
   void adicionarSerie() {
@@ -406,16 +478,33 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _isTimerRodando && _timerEndTime != null) {
-      final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
-      if (remaining > 0) {
-        _tempoAtual = remaining;
-        notifyListeners();
+    if (state == AppLifecycleState.resumed) {
+      if (_inicioTreino != null && !_treinoPausado && _ultimoCicloTreino != null) {
+        final elapsed = DateTime.now().difference(_ultimoCicloTreino!).inSeconds;
+        if (elapsed > 0) {
+          _duracaoTreinoSegundos += elapsed;
+          if (_isTimerRodando && _timerEndTime != null) {
+            final secondsToTarget = _timerEndTime!.difference(_ultimoCicloTreino!).inSeconds;
+            final actualRestAdded = secondsToTarget > elapsed ? elapsed : (secondsToTarget > 0 ? secondsToTarget : 0);
+            _descansoTotalSegundos += actualRestAdded;
+          }
+        }
+        _ultimoCicloTreino = DateTime.now();
+      }
+
+      if (_isTimerRodando && _timerEndTime != null) {
+        final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
+        if (remaining > 0) {
+          _tempoAtual = remaining;
+          notifyListeners();
+        } else {
+          _tempoAtual = 0;
+          _timer?.cancel();
+          _isTimerRodando = false;
+          _descansoFinalizadoEvento++;
+          notifyListeners();
+        }
       } else {
-        _tempoAtual = 0;
-        _timer?.cancel();
-        _isTimerRodando = false;
-        _descansoFinalizadoEvento++;
         notifyListeners();
       }
     }
@@ -425,6 +514,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
+    _sessaoTimer?.cancel();
     super.dispose();
   }
 }

@@ -22,17 +22,25 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
   - Remoção intuitiva e ágil de séries individuais via gesto de **Swipe** (*deslizar para a esquerda*), com feedback tátil e prevenção de exclusão acidental.
   - Navegação acelerada de teclado com salto automático de foco (*Next*) entre Peso e Repetições.
-- **Cronômetro de Descanso Inteligente**:
-  - Visor circular com anel de progresso nítido e sincronizado com o ciclo de vida do sistema (continua marcando com precisão mesmo em segundo plano).
-  - Disparo automático de descanso ao concluir cada série.
-  - Alerta sonoro nativo e vibração háptica contínua ao término do tempo.
+- **Cronômetro de Treino & Descanso em Tempo Real**:
+  - **Tempo Total de Treino**: Iniciação automática na primeira interação, contagem precisa em segundo plano com controle de pausa/retomada.
+  - **Tempo de Descanso Total Acumulado**: Registra e consolida todo o tempo que o usuário passou descansando entre as séries ao longo de toda a sessão.
+  - **Cronômetro Regressivo Inteligente**: Visor circular com anel de progresso nítido, sincronizado com o ciclo de vida do sistema, alerta sonoro nativo e vibração háptica contínua.
   - **Modal de Ajuste de Tempo**: Visor digital integrado (`MIN : SEG`), botões satélites de ajuste fino `+/- 15s` e grade simétrica 3x2 de atalhos rápidos padronizados (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
-- **Encerramento Protegido**: Validação contra fechamento acidental com exercícios pendentes e gravação transacional segura no banco de dados.
+- **Encerramento Protegido**: Validação contra fechamento acidental com exercícios pendentes, gravação transacional segura no banco de dados e disparo automático do modal de compartilhamento.
 
-### 📜 Histórico de Sessões
+### 📜 Histórico de Sessões & Compartilhamento
 - **Efeito de Timeline Clássico**: Linha vertical contínua conectando os dias de treino com nós circulares de calendário.
-- **Métricas Consolidadas no Cabeçalho**: Resumo do dia com quantidade de exercícios, total de séries e **Volume Total Levantado** ($\sum \text{reps} \times \text{peso}$) em destaque dourado.
+- **Métricas Consolidadas no Cabeçalho**: Resumo da sessão com quantidade de exercícios, total de séries, **Volume Total Levantado** ($\sum \text{reps} \times \text{peso}$), **Duração Total** e **Tempo de Descanso Acumulado**.
 - **Cards de Exercícios Limpos**: Detalhamento expansível de cada exercício exibindo grupo muscular e histórico de séries, livre de poluição visual.
+- **Card Visual Saiyajin para Compartilhamento (PNG)**:
+  - Geração de card estilizado de alta definição (proporção ideal para Instagram Stories, WhatsApp Status e redes sociais).
+  - Personalização com foto: tire uma foto na hora pela câmera, selecione da galeria ou use o tema escuro/dourado Saiyajin nativo.
+  - Destaque das principais métricas do treino e principais exercícios com suas maiores cargas.
+  - Exportação e compartilhamento direto de imagem PNG ou texto formatado via `share_plus`.
+- **Backup & Restauração Completa (JSON)**:
+  - **Exportar Histórico**: Gera arquivo JSON estruturado com todas as sessões, exercícios, séries e exercícios customizados.
+  - **Importar Histórico**: Carregamento seguro via seletor de arquivos com opção de **Mesclar Dados** (evita duplicatas) ou **Substituir Tudo**.
 - **Empty State Motivacional**: Ilustração e mensagem temática encorajadora para novos usuários ou histórico zerado.
 - **Exclusão Segura**: Confirmação modal e exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 
@@ -49,7 +57,11 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 ## 🛠️ Stack Tecnológico
 
 - **Flutter / Dart** (Framework mobile multiplataforma)
-- **sqflite** (Banco de dados relacional offline-first com integridade referencial)
+- **sqflite** (Banco de dados relacional offline-first com integridade referencial e migrações)
+- **share_plus** (Compartilhamento nativo de cards PNG e backups JSON)
+- **image_picker** (Captura de fotos via câmera e seleção da galeria para o card)
+- **file_picker** (Seleção de arquivos de backup JSON no dispositivo)
+- **path_provider** (Armazenamento temporário para exportação de mídias e arquivos)
 - **fl_chart** (Renderização gráfica analítica de alta performance)
 - **shared_preferences** (Armazenamento de preferências e configurações chave-valor)
 - **flutter_local_notifications & timezone** (Notificações agendadas e alertas em segundo plano)
@@ -70,24 +82,27 @@ gym_saiyajin/
 │   │   ├── historico_controller.dart
 │   │   ├── progresso_controller.dart
 │   │   └── treino_controller.dart
-│   ├── database/               # Configuração e schema do SQLite
+│   ├── database/               # Configuração, migrações e schema do SQLite
 │   │   └── db_helper.dart
-│   ├── models/                 # Entidades de domínio tipadas
+│   ├── models/                 # Entidades de domínio tipadas com serialização JSON
 │   │   ├── exercicio.dart
 │   │   ├── serie.dart
 │   │   └── sessao_treino.dart
-│   ├── repositories/           # Abstração de acesso a dados e queries transacionais
+│   ├── repositories/           # Abstração de acesso a dados, backup e queries transacionais
 │   │   └── treino_repository.dart
 │   ├── screens/                # Composição visual das telas principais
 │   │   ├── historico_screen.dart
 │   │   ├── progresso_screen.dart
 │   │   └── treino_screen.dart
-│   ├── services/               # Serviços de infraestrutura
+│   ├── services/               # Serviços de infraestrutura, notificações e backups
+│   │   ├── backup_service.dart
+│   │   ├── card_share_service.dart
 │   │   ├── notification_service.dart
 │   │   └── preferences_service.dart
 │   ├── theme/                  # Design Tokens e paleta de cores centralizada
 │   │   └── app_colors.dart
 │   └── widgets/                # Componentes visuais modulares e reutilizáveis
+│       ├── compartilhar_card_modal.dart
 │       ├── config_tempo_descanso_modal.dart
 │       ├── cronometro_widget.dart
 │       ├── historico_card_widget.dart
@@ -96,7 +111,9 @@ gym_saiyajin/
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
 ├── test/                       # Suíte de testes unitários automatizados
+│   ├── backup_test.dart
 │   ├── imc_test.dart
+│   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart
 └── pubspec.yaml
 ```
@@ -105,10 +122,11 @@ gym_saiyajin/
 
 ## 💾 Banco de Dados (SQLite)
 
-* Arquivo: `gym_saiyajin.db`
+* Arquivo: `gym_saiyajin.db` (Versão do schema: `2`)
 * `PRAGMA foreign_keys = ON;` ativo via callback `onConfigure`
+* Migração transacional automática via `onUpgrade` (versão 1 -> 2)
 * Tabelas:
-  * `sessoes`: `id`, `data`, `nome_treino`
+  * `sessoes`: `id`, `data`, `nome_treino`, `duracao_segundos`, `descanso_total_segundos`
   * `exercicios`: `id`, `sessao_id`, `nome`, `grupo`
   * `series`: `id`, `exercicio_id`, `peso`, `reps`, `concluida`
 * Índices dedicados em chaves estrangeiras para otimização de consultas e exclusão em cascata.

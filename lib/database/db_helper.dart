@@ -19,12 +19,24 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
       onCreate: _createDB,
+      onUpgrade: _onUpgradeDB,
     );
+  }
+
+  Future _onUpgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        'ALTER TABLE sessoes ADD COLUMN duracao_segundos INTEGER DEFAULT 0;',
+      );
+      await db.execute(
+        'ALTER TABLE sessoes ADD COLUMN descanso_total_segundos INTEGER DEFAULT 0;',
+      );
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -32,7 +44,9 @@ class DatabaseHelper {
       CREATE TABLE sessoes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         data TEXT NOT NULL,
-        nome_treino TEXT
+        nome_treino TEXT,
+        duracao_segundos INTEGER DEFAULT 0,
+        descanso_total_segundos INTEGER DEFAULT 0
       )
     ''');
 

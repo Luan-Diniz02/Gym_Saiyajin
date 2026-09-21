@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../controllers/historico_controller.dart';
+import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
+import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/historico_card_widget.dart';
 
 class HistoricoScreen extends StatefulWidget {
@@ -26,6 +28,75 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _abrirCompartilharCard(SessaoTreino sessao) {
+    showDialog(
+      context: context,
+      builder: (context) => CompartilharCardModal(sessao: sessao),
+    );
+  }
+
+  Future<void> _exportarBackup() async {
+    final res = await _controller.exportarBackup();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(res.mensagem),
+        backgroundColor: res.sucesso ? AppColors.surface : AppColors.danger,
+      ),
+    );
+  }
+
+  Future<void> _importarBackup() async {
+    final escolha = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.cardBorder),
+        ),
+        title: const Text(
+          'Importar Backup',
+          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Como deseja importar os treinos do arquivo de backup?',
+          style: TextStyle(color: AppColors.textDimmed),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, null),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'substituir'),
+            child: const Text('Substituir Tudo', style: TextStyle(color: AppColors.danger)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, 'mesclar'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.background,
+            ),
+            child: const Text('Mesclar Dados', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    if (escolha == null) return;
+    final mesclar = escolha == 'mesclar';
+    final res = await _controller.importarBackup(mesclar: mesclar);
+    if (!mounted) return;
+    widget.onHistoricoAtualizado?.call();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(res.mensagem),
+        backgroundColor: res.sucesso ? AppColors.surface : AppColors.danger,
+      ),
+    );
   }
 
   Future<bool> _confirmarExclusaoSessao() async {
@@ -148,14 +219,76 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                const Text(
-                  'HISTÓRICO',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'TODOS OS SEUS TREINOS',
-                  style: TextStyle(fontSize: 12, color: AppColors.textDimmed, letterSpacing: 1.2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'HISTÓRICO',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'TODOS OS SEUS TREINOS',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_controller.isProcessandoBackup)
+                      const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    else
+                      PopupMenuButton<String>(
+                        icon: const Icon(Icons.more_vert, color: AppColors.primary),
+                        color: AppColors.surface,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: AppColors.cardBorder),
+                        ),
+                        onSelected: (val) {
+                          if (val == 'exportar') _exportarBackup();
+                          if (val == 'importar') _importarBackup();
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'exportar',
+                            child: Row(
+                              children: [
+                                Icon(Icons.file_upload_outlined, color: AppColors.primary, size: 20),
+                                SizedBox(width: 10),
+                                Text('Exportar Backup (JSON)', style: TextStyle(fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value: 'importar',
+                            child: Row(
+                              children: [
+                                Icon(Icons.file_download_outlined, color: AppColors.accent, size: 20),
+                                SizedBox(width: 10),
+                                Text('Importar Backup (JSON)', style: TextStyle(fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 Expanded(
@@ -229,7 +362,7 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Linha com o nó do calendário, data e botão de excluir
+            // Linha com o nó do calendário, data e botões de ação (compartilhar e excluir)
             Row(
               children: [
                 Container(
@@ -257,6 +390,12 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   ),
                 ),
                 IconButton(
+                  onPressed: () => _abrirCompartilharCard(diaTreino.sessao),
+                  icon: const Icon(Icons.share_outlined, size: 20),
+                  color: AppColors.primary,
+                  tooltip: 'Compartilhar card',
+                ),
+                IconButton(
                   onPressed: () => _onExcluirSessao(diaTreino),
                   icon: const Icon(Icons.delete_outline, size: 22),
                   color: AppColors.textDimmed,
@@ -265,7 +404,7 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
               ],
             ),
             const SizedBox(height: 4),
-            // Subtítulo com métricas resumidas do treino (exercícios, séries e volume)
+            // Subtítulo com métricas resumidas do treino (exercícios, séries, volume, duração e descanso)
             Padding(
               padding: const EdgeInsets.only(left: 50.0, bottom: 12.0),
               child: Wrap(
@@ -302,6 +441,44 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                       letterSpacing: 0.8,
                     ),
                   ),
+                  if (diaTreino.sessao.duracaoSegundos > 0) ...[
+                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.timer_outlined, size: 14, color: AppColors.textDimmed),
+                        const SizedBox(width: 3),
+                        Text(
+                          diaTreino.sessao.duracaoFormatada,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
+                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.textDimmed),
+                        const SizedBox(width: 3),
+                        Text(
+                          diaTreino.sessao.descansoFormatado,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

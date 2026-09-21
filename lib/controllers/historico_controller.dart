@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
+import '../services/backup_service.dart';
 
 class HistoricoDia {
   final String dataLabel;
@@ -17,9 +18,17 @@ class HistoricoDia {
 
 class HistoricoController extends ChangeNotifier {
   final TreinoRepository _repository;
+  final BackupService _backupService;
   final List<SessaoTreino> _sessoesTreino = [];
+  bool _isProcessandoBackup = false;
 
-  HistoricoController({required TreinoRepository repository}) : _repository = repository;
+  HistoricoController({
+    required TreinoRepository repository,
+    BackupService? backupService,
+  })  : _repository = repository,
+        _backupService = backupService ?? BackupService(repository: repository);
+
+  bool get isProcessandoBackup => _isProcessandoBackup;
 
   Future<void> carregarHistorico() async {
     final sessoes = await _repository.buscarHistoricoTreinos();
@@ -33,6 +42,32 @@ class HistoricoController extends ChangeNotifier {
     await _repository.excluirSessaoTreino(sessaoId);
     _sessoesTreino.removeWhere((sessao) => sessao.id == sessaoId);
     notifyListeners();
+  }
+
+  Future<BackupResult> exportarBackup() async {
+    _isProcessandoBackup = true;
+    notifyListeners();
+    try {
+      return await _backupService.exportarBackup();
+    } finally {
+      _isProcessandoBackup = false;
+      notifyListeners();
+    }
+  }
+
+  Future<BackupResult> importarBackup({required bool mesclar}) async {
+    _isProcessandoBackup = true;
+    notifyListeners();
+    try {
+      final resultado = await _backupService.importarBackup(mesclar: mesclar);
+      if (resultado.sucesso) {
+        await carregarHistorico();
+      }
+      return resultado;
+    } finally {
+      _isProcessandoBackup = false;
+      notifyListeners();
+    }
   }
 
   String _formatarData(DateTime? data) {

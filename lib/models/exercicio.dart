@@ -22,4 +22,23 @@ class Exercicio {
       seriesDetalhes: seriesDetalhes ?? this.seriesDetalhes.map((serie) => serie.copy()).toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nome': nome,
+      'grupo': grupo,
+      'seriesDetalhes': seriesDetalhes.map((s) => s.toJson()).toList(),
+    };
+  }
+
+  factory Exercicio.fromJson(Map<String, dynamic> json) {
+    final seriesList = (json['seriesDetalhes'] as List<dynamic>?) ?? [];
+    return Exercicio(
+      nome: json['nome'] as String? ?? '',
+      grupo: json['grupo'] as String? ?? '',
+      seriesDetalhes: seriesList
+          .map((s) => Serie.fromJson(s as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 }

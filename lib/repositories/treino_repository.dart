@@ -16,7 +16,9 @@ class TreinoRepository {
       await db.transaction((txn) async {
         final int sessaoId = await txn.insert('sessoes', {
           'data': (sessao.data ?? DateTime.now()).toIso8601String(),
-          'nome_treino': null,
+          'nome_treino': sessao.nomeTreino,
+          'duracao_segundos': sessao.duracaoSegundos,
+          'descanso_total_segundos': sessao.descansoTotalSegundos,
         });
 
         for (final exercicio in sessao.exerciciosConcluidosHoje) {
@@ -114,6 +116,10 @@ class TreinoRepository {
           SessaoTreino(
             id: sessaoId,
             data: DateTime.parse(row['data'] as String),
+            nomeTreino: row['nome_treino'] as String?,
+            duracaoSegundos: (row['duracao_segundos'] as num?)?.toInt() ?? 0,
+            descansoTotalSegundos:
+                (row['descanso_total_segundos'] as num?)?.toInt() ?? 0,
             exerciciosConcluidosHoje: exerciciosMap[sessaoId] ?? [],
           ),
         );
@@ -139,6 +145,81 @@ class TreinoRepository {
       });
     } catch (e) {
       throw Exception('Erro ao excluir sessao de treino: $e');
+    }
+  }
+
+  Future<void> limparTodoHistorico() async {
+    try {
+      final db = await _databaseHelper.database;
+      await db.transaction((txn) async {
+        await txn.delete('series');
+        await txn.delete('exercicios');
+        await txn.delete('sessoes');
+      });
+    } catch (e) {
+      throw Exception('Erro ao limpar histórico: $e');
+    }
+  }
+
+  Future<int> importarSessoes(List<SessaoTreino> sessoesNovas, {bool mesclar = true}) async {
+    try {
+      final db = await _databaseHelper.database;
+
+      return await db.transaction<int>((txn) async {
+        if (!mesclar) {
+          await txn.delete('series');
+          await txn.delete('exercicios');
+          await txn.delete('sessoes');
+        }
+
+        final List<Map<String, Object?>> sessoesExistentes = mesclar
+            ? await txn.query('sessoes', columns: ['data'])
+            : [];
+        final Set<String> datasExistentes = sessoesExistentes
+            .map((r) => r['data'] as String? ?? '')
+            .where((d) => d.isNotEmpty)
+            .toSet();
+
+        int importadas = 0;
+        for (final sessao in sessoesNovas) {
+          final dataIso = (sessao.data ?? DateTime.now()).toIso8601String();
+          if (mesclar && datasExistentes.contains(dataIso)) {
+            // Sessão já existe com mesma data ISO, pula para não duplicar
+            continue;
+          }
+
+          final int sessaoId = await txn.insert('sessoes', {
+            'data': dataIso,
+            'nome_treino': sessao.nomeTreino,
+            'duracao_segundos': sessao.duracaoSegundos,
+            'descanso_total_segundos': sessao.descansoTotalSegundos,
+          });
+
+          for (final exercicio in sessao.exerciciosConcluidosHoje) {
+            final int exercicioId = await txn.insert('exercicios', {
+              'sessao_id': sessaoId,
+              'nome': exercicio.nome,
+              'grupo': exercicio.grupo,
+            });
+
+            for (final serie in exercicio.seriesDetalhes) {
+              await txn.insert('series', {
+                'exercicio_id': exercicioId,
+                'peso': serie.peso ?? 0.0,
+                'reps': serie.reps ?? 0,
+                'concluida': serie.concluida ? 1 : 0,
+              });
+            }
+          }
+
+          datasExistentes.add(dataIso);
+          importadas++;
+        }
+
+        return importadas;
+      });
+    } catch (e) {
+      throw Exception('Erro ao importar sessões de treino: $e');
     }
   }
 }

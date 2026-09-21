@@ -8,6 +8,7 @@ import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
+import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/selecao_exercicio_modal.dart';
 import '../widgets/serie_row_widget.dart';
 
@@ -245,17 +246,22 @@ class _TreinoScreenState extends State<TreinoScreen> {
     if (acaoSalvarAtual == null) return;
 
     try {
-      if (acaoSalvarAtual) {
-        await _controller.encerrarTreino(descartarAtual: false);
-      } else {
-        await _controller.encerrarTreino(descartarAtual: true);
-      }
+      final sessaoSalva = acaoSalvarAtual
+          ? await _controller.encerrarTreino(descartarAtual: false)
+          : await _controller.encerrarTreino(descartarAtual: true);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Treino salvo com sucesso!')),
       );
       widget.onEncerrarTreino();
+
+      if (sessaoSalva != null && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => CompartilharCardModal(sessao: sessaoSalva),
+        );
+      }
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -265,6 +271,102 @@ class _TreinoScreenState extends State<TreinoScreen> {
         ),
       );
     }
+  }
+
+  Widget _buildBarraTempoTreino() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.cardBorder),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Duração do Treino
+          Expanded(
+            child: Row(
+              children: [
+                const Icon(Icons.timer_outlined, size: 20, color: AppColors.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'TEMPO TOTAL',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDimmed,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      Text(
+                        _controller.duracaoTreinoFormatada,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_controller.isTreinoEmAndamento)
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: Icon(
+                      _controller.isTreinoPausado ? Icons.play_arrow : Icons.pause,
+                      size: 20,
+                      color: _controller.isTreinoPausado ? AppColors.accent : AppColors.textDimmed,
+                    ),
+                    onPressed: _controller.alternarPausaTreinoGeral,
+                    tooltip: _controller.isTreinoPausado ? 'Retomar treino' : 'Pausar treino',
+                  ),
+              ],
+            ),
+          ),
+          Container(width: 1, height: 28, color: AppColors.cardBorder, margin: const EdgeInsets.symmetric(horizontal: 12)),
+          // Descanso Acumulado
+          Expanded(
+            child: Row(
+              children: [
+                const Icon(Icons.pause_circle_outline, size: 20, color: AppColors.accent),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'DESCANSO TOTAL',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDimmed,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      Text(
+                        _controller.descansoTotalFormatado,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -298,6 +400,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
                   onReiniciar: _controller.reiniciarTimer,
                   onIniciarOuContinuar: _controller.continuarTimer,
                 ),
+                const SizedBox(height: 16),
+                _buildBarraTempoTreino(),
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
