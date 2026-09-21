@@ -36,7 +36,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     try {
       final foto = await _imagePicker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 92,
+        imageQuality: 100,
       );
       if (foto != null) {
         setState(() {
@@ -52,7 +52,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     try {
       final foto = await _imagePicker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 92,
+        imageQuality: 100,
       );
       if (foto != null) {
         setState(() {
@@ -411,17 +411,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.fitness_center,
-                          color: Colors.white,
-                          size: 18,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 6,
-                              offset: Offset(1, 1),
-                            ),
-                          ],
+                        Image.asset(
+                          'assets/images/shenlong_logo.png',
+                          width: 26,
+                          height: 26,
+                          fit: BoxFit.contain,
                         ),
                         const SizedBox(width: 7),
                         Text(
@@ -548,18 +542,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primary, width: 1.5),
-                    ),
-                    child: const Icon(
-                      Icons.fitness_center,
-                      color: AppColors.primary,
-                      size: 18,
-                    ),
+                  Image.asset(
+                    'assets/images/shenlong_logo.png',
+                    width: 34,
+                    height: 34,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 8),
                   const Text(
@@ -697,8 +684,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         ? (maxCarga % 1 == 0 ? '${maxCarga.toInt()} kg' : '${maxCarga.toStringAsFixed(1)} kg')
                         : '';
 
+                    final numSeries = ex.seriesDetalhes.length;
+                    final seriesText = '$numSeries ${numSeries == 1 ? "série" : "séries"}';
+
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
                       child: Row(
                         children: [
                           const Icon(Icons.arrow_right, color: AppColors.primary, size: 16),
@@ -714,15 +704,26 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (cargaStr.isNotEmpty)
+                          const SizedBox(width: 8),
+                          Text(
+                            seriesText,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.textDimmed,
+                            ),
+                          ),
+                          if (cargaStr.isNotEmpty) ...[
+                            const SizedBox(width: 8),
                             Text(
                               cargaStr,
                               style: const TextStyle(
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.accent,
                               ),
                             ),
+                          ],
                         ],
                       ),
                     );
