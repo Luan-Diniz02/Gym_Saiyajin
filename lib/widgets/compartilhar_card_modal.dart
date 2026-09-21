@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -406,18 +407,13 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Marca Gym Saiyajin (slim e moderna, sem círculos pesados)
+                    // Marca Gym Saiyajin (slim e moderna, com sombra flutuante orgânica)
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/shenlong_logo.png',
-                          width: 26,
-                          height: 26,
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(width: 7),
+                        _buildLogoComSombra(tamanho: 34),
+                        const SizedBox(width: 8),
                         Text(
                           'GYM SAIYAJIN',
                           style: TextStyle(
@@ -510,6 +506,45 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Logo oficial do Shenlong com silhueta de sombra projetada para fotos
+  Widget _buildLogoComSombra({double tamanho = 34}) {
+    return SizedBox(
+      width: tamanho,
+      height: tamanho,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Sombra projetada no contorno exato da logo (alpha silhouette)
+          Transform.translate(
+            offset: const Offset(1.5, 1.5),
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.85),
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  'assets/images/shenlong_logo.png',
+                  width: tamanho,
+                  height: tamanho,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+          // Logo original nítida transparente
+          Image.asset(
+            'assets/images/shenlong_logo.png',
+            width: tamanho,
+            height: tamanho,
+            fit: BoxFit.contain,
+          ),
+        ],
+      ),
     );
   }
 
