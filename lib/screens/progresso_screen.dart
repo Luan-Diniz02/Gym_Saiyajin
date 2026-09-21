@@ -175,6 +175,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 MetricasDashboardWidget(
                   controller: _controller,
                   onEditarMeta: _abrirModalAtualizarMeta,
+                  onEditarMedidas: _abrirModalAtualizarMedidas,
                 ),
                 const SizedBox(height: 24),
                 ProgressoGraficoWidget(controller: _controller),
@@ -198,22 +199,48 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('PESO ATUAL', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              const Text('PESO ATUAL', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               Text(
                 'Última atualização: ${_controller.dataUltimaAtualizacaoFormatada}',
-                style: TextStyle(fontSize: 12, color: AppColors.textDimmed),
+                style: const TextStyle(fontSize: 12, color: AppColors.textDimmed),
               ),
             ],
           ),
           Row(
             children: [
-              Text('${_controller.pesoAtual.toStringAsFixed(1)} kg', 
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent)),
-              const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.edit, color: AppColors.textDimmed, size: 20),
-                onPressed: _abrirModalAtualizarMedidas,
-              )
+              Text(
+                '${_controller.pesoAtual.toStringAsFixed(1)} kg',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
+              ),
+              const SizedBox(width: 12),
+              InkWell(
+                onTap: _abrirModalAtualizarMedidas,
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit, color: AppColors.primary, size: 14),
+                      SizedBox(width: 4),
+                      Text(
+                        'EDITAR',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ],

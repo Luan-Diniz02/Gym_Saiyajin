@@ -19,6 +19,18 @@ class SelecaoExercicioModal extends StatefulWidget {
 
 class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
   String _termoBusca = '';
+  String _grupoSelecionado = 'TODOS';
+
+  static const List<String> _gruposFiltro = [
+    'TODOS',
+    'PEITO',
+    'COSTAS',
+    'PERNAS',
+    'OMBROS',
+    'BÍCEPS',
+    'TRÍCEPS',
+    'ABDÔMEN',
+  ];
 
   final List<Map<String, String>> _exerciciosPadrao = [
     // PEITO
@@ -57,6 +69,16 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
     {'nome': 'Prancha', 'grupo': 'ABDÔMEN'},
   ];
 
+  String _normalizarGrupo(String valor) {
+    return valor
+        .trim()
+        .toUpperCase()
+        .replaceAll('Í', 'I')
+        .replaceAll('Ô', 'O')
+        .replaceAll('Ã', 'A')
+        .replaceAll('É', 'E');
+  }
+
   List<Map<String, String>> get _exerciciosFiltrados {
     final termo = _termoBusca.trim().toLowerCase();
 
@@ -75,12 +97,17 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
     }
 
     final todosExercicios = merged.values.toList();
-    if (termo.isEmpty) return todosExercicios;
 
     return todosExercicios.where((exercicio) {
+      final grupo = (exercicio['grupo'] ?? '').trim().toUpperCase();
+
+      final atendeGrupo = _grupoSelecionado == 'TODOS' ||
+          _normalizarGrupo(grupo) == _normalizarGrupo(_grupoSelecionado);
+      if (!atendeGrupo) return false;
+
+      if (termo.isEmpty) return true;
       final nome = (exercicio['nome'] ?? '').toLowerCase();
-      final grupo = (exercicio['grupo'] ?? '').toLowerCase();
-      return nome.contains(termo) || grupo.contains(termo);
+      return nome.contains(termo) || grupo.toLowerCase().contains(termo);
     }).toList();
   }
 
@@ -89,9 +116,12 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
     if (termo.isEmpty) return false;
 
     final termoNormalizado = termo.toLowerCase();
-    final temResultadoExato = _exerciciosFiltrados.any(
-      (exercicio) => (exercicio['nome'] ?? '').toLowerCase() == termoNormalizado,
-    );
+    final temResultadoExato = _exerciciosPadrao.any(
+          (ex) => (ex['nome'] ?? '').toLowerCase() == termoNormalizado,
+        ) ||
+        widget.controller.exerciciosCustomizados.any(
+          (ex) => (ex['nome'] ?? '').toLowerCase() == termoNormalizado,
+        );
 
     return !temResultadoExato;
   }
@@ -116,7 +146,10 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
       builder: (dialogContext) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: AppColors.cardBorder, width: 1),
+          ),
           title: const Text(
             'Qual o grupo muscular?',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -133,7 +166,7 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                   decoration: BoxDecoration(
                     color: AppColors.background,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                    border: Border.all(color: AppColors.cardBorder),
                   ),
                   child: Text(
                     grupo,
@@ -170,7 +203,10 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: AppColors.cardBorder, width: 1),
+      ),
       insetPadding: const EdgeInsets.all(20),
       child: ListenableBuilder(
         listenable: widget.controller,
@@ -180,78 +216,145 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
             padding: const EdgeInsets.all(20),
             child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('SELECIONE O EXERCÍCIO', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                IconButton(
-                  icon: const Icon(Icons.close, color: AppColors.textDimmed),
-                  onPressed: () => Navigator.pop(context),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'SELECIONE O EXERCÍCIO',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: AppColors.textDimmed),
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  onChanged: (valor) {
+                    setState(() {
+                      _termoBusca = valor;
+                    });
+                  },
+                  style: const TextStyle(color: AppColors.textLight),
+                  decoration: InputDecoration(
+                    hintText: 'Buscar exercício...',
+                    hintStyle: const TextStyle(color: AppColors.textDimmed),
+                    prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+                    filled: true,
+                    fillColor: AppColors.background,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.cardBorder, width: 1),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.cardBorder),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: Row(
+                    children: _gruposFiltro.map((grupo) {
+                      final bool isSelecionado = _grupoSelecionado == grupo;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _grupoSelecionado = grupo;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelecionado ? AppColors.primary : AppColors.background,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelecionado ? AppColors.primary : AppColors.cardBorder,
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              grupo,
+                              style: TextStyle(
+                                color: isSelecionado ? AppColors.background : AppColors.textLight,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: _exerciciosFiltrados.isEmpty && !_deveExibirCriarNovo
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32),
+                          child: Center(
+                            child: Text(
+                              'Nenhum exercício encontrado',
+                              style: TextStyle(color: AppColors.textDimmed),
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: _exerciciosFiltrados.length + (_deveExibirCriarNovo ? 1 : 0),
+                          separatorBuilder: (context, index) => const Divider(color: AppColors.background),
+                          itemBuilder: (context, index) {
+                            if (_deveExibirCriarNovo && index == _exerciciosFiltrados.length) {
+                              return ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: const Icon(Icons.add_circle, color: AppColors.accent),
+                                title: Text(
+                                  "Criar novo exercício: '${_termoBusca.trim()}'",
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent),
+                                ),
+                                onTap: _abrirDialogGrupoMuscular,
+                              );
+                            }
+
+                            final ex = _exerciciosFiltrados[index];
+                            final nome = ex['nome'] ?? '';
+                            final grupo = ex['grupo'] ?? '';
+                            return ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Text(grupo, style: const TextStyle(color: AppColors.primary, fontSize: 12)),
+                              trailing: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+                              onTap: () {
+                                Navigator.pop(context);
+                                widget.onSelecionarExercicio(nome, grupo);
+                              },
+                            );
+                          },
+                        ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            TextField(
-              onChanged: (valor) {
-                setState(() {
-                  _termoBusca = valor;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Buscar exercício...',
-                hintStyle: const TextStyle(color: AppColors.textDimmed),
-                prefixIcon: const Icon(Icons.search, color: AppColors.primary),
-                filled: true,
-                fillColor: AppColors.background,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Flexible(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: _exerciciosFiltrados.length + (_deveExibirCriarNovo ? 1 : 0),
-                separatorBuilder: (context, index) => const Divider(color: AppColors.background),
-                itemBuilder: (context, index) {
-                  if (_deveExibirCriarNovo && index == _exerciciosFiltrados.length) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.add_circle, color: AppColors.accent),
-                      title: Text(
-                        "Criar novo exercício: '${_termoBusca.trim()}'",
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent),
-                      ),
-                      onTap: _abrirDialogGrupoMuscular,
-                    );
-                  }
-
-                  final ex = _exerciciosFiltrados[index];
-                  final nome = ex['nome'] ?? '';
-                  final grupo = ex['grupo'] ?? '';
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(grupo, style: const TextStyle(color: AppColors.primary, fontSize: 12)),
-                    trailing: const Icon(Icons.add_circle_outline, color: AppColors.primary),
-                    onTap: () {
-                      Navigator.pop(context);
-                      widget.onSelecionarExercicio(nome, grupo);
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  ),
-);
+          );
+        },
+      ),
+    );
   }
 }

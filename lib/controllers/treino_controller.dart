@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -193,6 +192,16 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     atual.seriesDetalhes.add(Serie());
     notifyListeners();
+  }
+
+  void removerSerie(int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null) return;
+
+    if (atual.seriesDetalhes.length > 1 && index >= 0 && index < atual.seriesDetalhes.length) {
+      atual.seriesDetalhes.removeAt(index);
+      notifyListeners();
+    }
   }
 
   void atualizarPesoSerie(int index, String valor) {

@@ -170,7 +170,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
               onPressed: () => Navigator.pop(context, true),
               child: const Text(
                 'Remover',
-                style: TextStyle(color: Color(0xFFB71C1C)),
+                style: TextStyle(color: AppColors.danger),
               ),
             ),
           ],
@@ -210,7 +210,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 onPressed: () => Navigator.pop(context, false),
                 child: const Text(
                   'Descartar',
-                  style: TextStyle(color: Color(0xFFB71C1C)),
+                  style: TextStyle(color: AppColors.danger),
                 ),
               ),
               TextButton(
@@ -261,7 +261,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro ao salvar treino. Tente novamente.'),
-          backgroundColor: Color(0xFFB71C1C),
+          backgroundColor: AppColors.danger,
         ),
       );
     }
@@ -301,18 +301,53 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: _selecionarDataSessao,
-                    icon: const Icon(Icons.calendar_today, size: 18),
-                    label: Text(
-                      _controller.dataSessaoFormatada,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.primary,
+                  child: InkWell(
+                    onTap: _selecionarDataSessao,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 6,
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.5),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.calendar_today,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _controller.dataSessaoFormatada,
+                            style: const TextStyle(
+                              color: AppColors.textLight,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -331,8 +366,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ..._controller.exerciciosConcluidosHoje.map(
-                    (ex) => _buildCardLogExercicio(ex),
+                  ..._controller.exerciciosConcluidosHoje.asMap().entries.map(
+                    (entry) => _buildCardLogExercicio(entry.value, entry.key),
                   ),
                   const SizedBox(height: 32),
                 ],
@@ -358,7 +393,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFB71C1C),
+                        backgroundColor: AppColors.danger,
                         foregroundColor: AppColors.textLight,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -443,12 +478,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Text(
+        Row(
+          children: [
+            Expanded(
+              child: Text(
                 exercicioAtual.nome,
                 style: const TextStyle(
                   fontSize: 28,
@@ -457,17 +490,14 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: () => _confirmarRemocaoExercicio(exercicioAtual),
-                  icon: const Icon(Icons.delete_outline, size: 24),
-                  color: Colors.grey[600],
-                  tooltip: 'Remover exercício',
-                ),
-              ),
-            ],
-          ),
+            ),
+            IconButton(
+              onPressed: () => _confirmarRemocaoExercicio(exercicioAtual),
+              icon: const Icon(Icons.delete_outline, size: 24),
+              color: Colors.grey[600],
+              tooltip: 'Remover exercício',
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         Container(
@@ -541,7 +571,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                       erro,
                       style: const TextStyle(color: Colors.white),
                     ),
-                    backgroundColor: const Color(0xFFB71C1C),
+                    backgroundColor: AppColors.danger,
                   ),
                 );
               }
@@ -564,17 +594,17 @@ class _TreinoScreenState extends State<TreinoScreen> {
     );
   }
 
-  Widget _buildCardLogExercicio(Exercicio exercicio) {
+  Widget _buildCardLogExercicio(Exercicio exercicio, int index) {
     final List<Serie> detalhes = exercicio.seriesDetalhes;
 
     return Dismissible(
-      key: ValueKey(exercicio.nome),
+      key: ValueKey('${exercicio.nome}_$index'),
       direction: DismissDirection.endToStart,
       background: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFFB71C1C),
+          color: AppColors.danger,
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.centerRight,

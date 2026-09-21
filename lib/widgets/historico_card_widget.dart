@@ -21,6 +21,7 @@ class HistoricoCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -32,9 +33,15 @@ class HistoricoCardWidget extends StatelessWidget {
             children: [
               const Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
               const SizedBox(width: 8),
-              Text(
-                exercicio.nome,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textLight),
+              Expanded(
+                child: Text(
+                  exercicio.nome,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textLight,
+                  ),
+                ),
               ),
             ],
           ),
@@ -45,16 +52,28 @@ class HistoricoCardWidget extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                   ),
                   child: Text(
                     exercicio.grupo,
-                    style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Text('${detalhes.length} SÉRIES', style: const TextStyle(color: AppColors.textDimmed, fontSize: 12)),
+                const SizedBox(width: 10),
+                Text(
+                  '${detalhes.length} SÉRIES',
+                  style: const TextStyle(
+                    color: AppColors.textDimmed,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
           ),
@@ -77,20 +96,35 @@ class HistoricoCardWidget extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Série $serieIndex', style: const TextStyle(color: AppColors.textDimmed, fontSize: 14)),
+                        Text(
+                          'Série $serieIndex',
+                          style: const TextStyle(color: AppColors.textDimmed, fontSize: 14),
+                        ),
                         Row(
                           children: [
-                            Text('${serieData.reps} reps', style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold)),
+                            Text(
+                              '${serieData.reps ?? '-'} reps',
+                              style: const TextStyle(
+                                color: AppColors.textLight,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             const SizedBox(width: 16),
-                            Text('${serieData.peso} kg', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                            Text(
+                              '${serieData.peso ?? '-'} kg',
+                              style: const TextStyle(
+                                color: AppColors.accent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   );
                 }).toList(),
               ),
-            )
+            ),
           ],
         ),
       ),

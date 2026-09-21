@@ -48,8 +48,8 @@ class CronometroWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 180,
-                height: 180,
+                width: 152,
+                height: 152,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.surface,
@@ -91,7 +91,7 @@ class CronometroWidget extends StatelessWidget {
         const SizedBox(height: 24),
         Wrap(
           alignment: WrapAlignment.center,
-          spacing: 8,
+          spacing: 12,
           runSpacing: 8,
           children: [
             OutlinedButton(
@@ -99,20 +99,30 @@ class CronometroWidget extends StatelessWidget {
                   ? onReiniciar
                   : null,
               style: OutlinedButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-              child: const Icon(Icons.restart_alt, size: 18),
+              child: const Icon(Icons.restart_alt, size: 22),
             ),
             ElevatedButton(
               onPressed: isTimerRodando ? onPausar : onIniciarOuContinuar,
               style: ElevatedButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: Icon(
                 isTimerRodando ? Icons.pause : Icons.play_arrow,
-                size: 18,
+                size: 22,
               ),
             ),
           ],

@@ -64,7 +64,15 @@ class ProgressoController extends ChangeNotifier {
 
   double get imc => calcularIMC();
 
-  String get classificacaoImc => imc < 25 ? 'PESO NORMAL' : 'SOBREPESO';
+  String get classificacaoImc {
+    final valorImc = imc;
+    if (valorImc < 18.5) return 'ABAIXO DO PESO';
+    if (valorImc < 25.0) return 'PESO NORMAL';
+    if (valorImc < 30.0) return 'SOBREPESO';
+    if (valorImc < 35.0) return 'OBESIDADE GRAU I';
+    if (valorImc < 40.0) return 'OBESIDADE GRAU II';
+    return 'OBESIDADE GRAU III';
+  }
 
   Future<void> carregarDados() async {
     await _carregarPreferencias();
@@ -101,12 +109,20 @@ class ProgressoController extends ChangeNotifier {
     _diasTreinadosNaSemana = diasUnicos.length;
   }
 
+  final Map<String, String> _gruposExercicios = {};
+  Map<String, String> get gruposExercicios => _gruposExercicios;
+
   void _atualizarListaExercicios(List<SessaoTreino> historico) {
     final Set<String> unicos = {};
+    _gruposExercicios.clear();
     for (final sessao in historico) {
       for (final exercicio in sessao.exerciciosConcluidosHoje) {
-        if (exercicio.nome.trim().isNotEmpty) {
-          unicos.add(exercicio.nome);
+        final nome = exercicio.nome.trim();
+        if (nome.isNotEmpty) {
+          unicos.add(nome);
+          if (exercicio.grupo.trim().isNotEmpty) {
+            _gruposExercicios[nome] = exercicio.grupo.trim();
+          }
         }
       }
     }

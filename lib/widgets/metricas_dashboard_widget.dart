@@ -6,11 +6,13 @@ import '../theme/app_colors.dart';
 class MetricasDashboardWidget extends StatelessWidget {
   final ProgressoController controller;
   final VoidCallback onEditarMeta;
+  final VoidCallback onEditarMedidas;
 
   const MetricasDashboardWidget({
     super.key,
     required this.controller,
     required this.onEditarMeta,
+    required this.onEditarMedidas,
   });
 
   @override
@@ -25,27 +27,44 @@ class MetricasDashboardWidget extends StatelessWidget {
                 onTap: onEditarMeta,
                 child: Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.cardBorder),
+                  ),
                   child: Stack(
                     children: [
-                      const Align(
-                        alignment: Alignment.topRight,
+                      const Positioned(
+                        top: 0,
+                        right: 0,
                         child: Icon(Icons.edit, color: AppColors.textDimmed, size: 16),
                       ),
-                      Column(
-                        children: [
-                          const Align(
-                            alignment: Alignment.topCenter,
-                          ),  
-                          const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
-                          const SizedBox(height: 12),
-                          const Text('META SEMANAL', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-                          Text(
-                            '${controller.diasTreinadosNaSemana} / ${controller.metaDiasSemana}',
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
-                          ),
-                          const Text('DIAS ATIVOS', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-                        ],
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'META SEMANAL',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDimmed),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${controller.diasTreinadosNaSemana} / ${controller.metaDiasSemana}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'DIAS ATIVOS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDimmed),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -54,23 +73,51 @@ class MetricasDashboardWidget extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
-                child: Column(
-                  children: [
-                    const Icon(Icons.monitor_weight_outlined, color: AppColors.primary, size: 30),
-                    const SizedBox(height: 12),
-                    const Text('MEU IMC', style: TextStyle(fontSize: 10, color: AppColors.textDimmed)),
-                    Text(
-                      controller.imc.toStringAsFixed(1),
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
-                    ),
-                    Text(
-                      controller.classificacaoImc,
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
-                    ),
-                  ],
+              child: GestureDetector(
+                onTap: onEditarMedidas,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.cardBorder),
+                  ),
+                  child: Stack(
+                    children: [
+                      const Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Icon(Icons.edit, color: AppColors.textDimmed, size: 16),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.monitor_weight_outlined, color: AppColors.primary, size: 30),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'MEU IMC',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDimmed),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              controller.imc.toStringAsFixed(1),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              controller.classificacaoImc,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -7,4 +7,8 @@ class AppColors {
   static const Color accent = Color(0xFFFFD700);     // Dourado
   static const Color textLight = Color(0xFFFFFFFF);  // Texto branco
   static const Color textDimmed = Color(0xFFAAAAAA); // Texto secundário
+  static const Color textMuted = Color(0xFF757575);  // Texto terciário
+  static const Color danger = Color(0xFFFF4444);     // Vermelho vivo de perigo/exclusão com alto contraste
+  static const Color success = Color(0xFF00E676);    // Verde de sucesso/conclusão
+  static const Color cardBorder = Color(0xFF2C2C2C); // Borda suave de cards
 }
