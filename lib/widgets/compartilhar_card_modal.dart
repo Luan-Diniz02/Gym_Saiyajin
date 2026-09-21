@@ -36,7 +36,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     try {
       final foto = await _imagePicker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 90,
+        imageQuality: 92,
       );
       if (foto != null) {
         setState(() {
@@ -52,7 +52,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     try {
       final foto = await _imagePicker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 90,
+        imageQuality: 92,
       );
       if (foto != null) {
         setState(() {
@@ -97,6 +97,22 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     return total;
   }
 
+  String _formatarVolume(double volume) {
+    final intVal = volume.round();
+    final str = intVal.toString();
+    final buffer = StringBuffer();
+    int count = 0;
+    for (int i = str.length - 1; i >= 0; i--) {
+      buffer.write(str[i]);
+      count++;
+      if (count % 3 == 0 && i > 0) {
+        buffer.write('.');
+      }
+    }
+    final formatted = buffer.toString().split('').reversed.join('');
+    return '$formatted kg';
+  }
+
   int _calcularTotalSeries() {
     int total = 0;
     for (final ex in widget.sessao.exerciciosConcluidosHoje) {
@@ -114,10 +130,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
       final dataStr = _formatarData(widget.sessao.data).replaceAll('/', '-');
       final nomeArquivo = 'treino_saiyajin_$dataStr';
 
+      // Compartilha exclusivamente a imagem PNG, sem texto acompanhando
       final sucesso = await CardShareService.compartilharWidgetComoImagem(
         boundaryKey: _cardKey,
         nomeArquivo: nomeArquivo,
-        textoCompartilhamento: '🔥 Treino Concluído no Gym Saiyajin! 💪⚡ #GymSaiyajin',
+        textoCompartilhamento: null,
       );
 
       if (!sucesso && mounted) {
@@ -141,7 +158,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Preview do Card estilizado 9:16
+            // Preview do Card estilizado 9:16 (Borda sutil apenas na pré-visualização)
             _buildCardVisual(),
             const SizedBox(height: 14),
 
@@ -264,34 +281,35 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }
 
   Widget _buildCardVisual() {
-    return RepaintBoundary(
-      key: _cardKey,
-      child: Container(
-        width: 320,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.primary, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.25),
-              blurRadius: 18,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: AspectRatio(
-          aspectRatio: 9 / 16,
-          child: _imagemSelecionada != null ? _buildModoFoto() : _buildModoEstatisticas(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.6),
+            blurRadius: 16,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: RepaintBoundary(
+        key: _cardKey,
+        child: SizedBox(
+          width: 320,
+          child: AspectRatio(
+            aspectRatio: 9 / 16,
+            child: _imagemSelecionada != null ? _buildModoFoto() : _buildModoEstatisticas(),
+          ),
         ),
       ),
     );
   }
 
-  /// Estilo inspirado no Hevy: A foto é o destaque absoluto, com overlay limpo no topo e rodapé
+  /// Estilo inspirado no Hevy: A foto é 100% edge-to-edge sem bordas, com overlay limpo no topo e rodapé perfeitamente alinhado
   Widget _buildModoFoto() {
     final volume = _calcularVolumeTotal();
-    final volumeStr = volume % 1 == 0 ? '${volume.toInt()} kg' : '${volume.toStringAsFixed(1)} kg';
+    final volumeStr = _formatarVolume(volume);
     final totalSeries = _calcularTotalSeries();
     final handleText = _handleController.text.trim().isNotEmpty
         ? (_handleController.text.trim().startsWith('@')
@@ -300,8 +318,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
         : _formatarData(widget.sessao.data);
 
     return Stack(
+      fit: StackFit.expand,
       children: [
-        // Foto do usuário em tela cheia 9:16
+        // Foto do usuário em tela cheia 9:16 (sem bordas, preenchimento total)
         Positioned.fill(
           child: Image.file(
             File(_imagemSelecionada!.path),
@@ -314,13 +333,13 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           top: 0,
           left: 0,
           right: 0,
-          height: 160,
+          height: 180,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.black.withValues(alpha: 0.75),
-                  Colors.black.withValues(alpha: 0.35),
+                  Colors.black.withValues(alpha: 0.70),
+                  Colors.black.withValues(alpha: 0.25),
                   Colors.transparent,
                 ],
                 begin: Alignment.topCenter,
@@ -335,14 +354,14 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 120,
+          height: 130,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.transparent,
-                  Colors.black.withValues(alpha: 0.4),
-                  Colors.black.withValues(alpha: 0.8),
+                  Colors.black.withValues(alpha: 0.35),
+                  Colors.black.withValues(alpha: 0.75),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -351,10 +370,15 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           ),
         ),
 
-        // Conteúdo: Topo e Rodapé
+        // Conteúdo: Topo (com respiro para Stories) e Rodapé perfeitamente nivelado
         Positioned.fill(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+            padding: const EdgeInsets.only(
+              top: 48.0,
+              bottom: 30.0,
+              left: 22.0,
+              right: 22.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -377,36 +401,36 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   ],
                 ),
 
-                // Rodapé com logo e @ / data
+                // Rodapé com logo e @ / data rigorosamente alinhados no mesmo centro vertical
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Logo Gym Saiyajin
+                    // Marca Gym Saiyajin (slim e moderna, sem círculos pesados)
                     Row(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.5),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary, width: 1.5),
-                          ),
-                          child: const Icon(
-                            Icons.fitness_center,
-                            color: AppColors.primary,
-                            size: 16,
-                          ),
+                        const Icon(
+                          Icons.fitness_center,
+                          color: Colors.white,
+                          size: 18,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 6,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 7),
                         Text(
                           'GYM SAIYAJIN',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 15,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
-                            color: AppColors.primary,
+                            color: Colors.white,
                             shadows: [
                               Shadow(
                                 color: Colors.black.withValues(alpha: 0.9),
@@ -425,7 +449,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         handleText,
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                           shadows: [
                             Shadow(
@@ -437,6 +461,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
                       ),
                     ),
                   ],
@@ -460,30 +485,32 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
         Text(
           rotulo,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.9),
+            color: Colors.white.withValues(alpha: 0.92),
+            letterSpacing: 0.2,
             shadows: [
               Shadow(
-                color: Colors.black.withValues(alpha: 0.9),
+                color: Colors.black.withValues(alpha: 0.8),
                 blurRadius: 6,
                 offset: const Offset(1, 1),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 3),
         Text(
           valor,
-          style: TextStyle(
-            fontSize: 18,
+          style: const TextStyle(
+            fontSize: 21,
             fontWeight: FontWeight.w900,
             color: Colors.white,
+            letterSpacing: 0.3,
             shadows: [
               Shadow(
-                color: Colors.black.withValues(alpha: 0.9),
-                blurRadius: 6,
-                offset: const Offset(1, 1),
+                color: Colors.black,
+                blurRadius: 8,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -495,7 +522,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   /// Estilo Card Saiyajin completo (quando não há foto)
   Widget _buildModoEstatisticas() {
     final volume = _calcularVolumeTotal();
-    final volumeStr = volume % 1 == 0 ? '${volume.toInt()} kg' : '${volume.toStringAsFixed(1)} kg';
+    final volumeStr = _formatarVolume(volume);
     final totalSeries = _calcularTotalSeries();
     final totalExercicios = widget.sessao.exerciciosConcluidosHoje.length;
 
@@ -511,7 +538,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           end: Alignment.bottomCenter,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 22.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

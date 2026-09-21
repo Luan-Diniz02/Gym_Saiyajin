@@ -37,8 +37,7 @@ class CardShareService {
       final result = await SharePlus.instance.share(
         ShareParams(
           files: [xFile],
-          text: textoCompartilhamento ?? '🔥 Treino concluído no Gym Saiyajin! 💪⚡',
-          subject: 'Card de Treino - Gym Saiyajin',
+          text: textoCompartilhamento,
         ),
       );
 
