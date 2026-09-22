@@ -5,6 +5,7 @@ import '../controllers/treino_controller.dart';
 import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
+import 'dragon_ball_icon.dart';
 import 'scouter_icon.dart';
 
 class ResultadoEncerrarTreino {
@@ -195,7 +196,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
-                                Icons.electric_bolt_rounded,
+                                Icons.trending_up_rounded,
                                 size: 16,
                                 color: AppColors.primary,
                               ),
@@ -352,13 +353,14 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                               Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withValues(alpha: 0.2),
+                                  color: AppColors.primary.withValues(alpha: 0.12),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
-                                  Icons.bolt_rounded,
-                                  size: 20,
-                                  color: AppColors.accent,
+                                child: const Center(
+                                  child: DragonBallIcon(
+                                    size: 20,
+                                    stars: 4,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -367,7 +369,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      '⚡ LIMITES SUPERADOS HOJE!',
+                                      'LIMITES SUPERADOS HOJE!',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w900,

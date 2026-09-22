@@ -33,8 +33,8 @@ class ProgressoController extends ChangeNotifier {
   String? get classificacaoGordura {
     final bf = _percentualGordura;
     if (bf == null) return null;
-    if (bf < 10.0) return 'MUITO DEFINIDO ⚡';
-    if (bf < 15.0) return 'FÍSICO ATLÉTICO 💪';
+    if (bf < 10.0) return 'MUITO DEFINIDO';
+    if (bf < 15.0) return 'FÍSICO ATLÉTICO';
     if (bf < 20.0) return 'MODERADO / EM FORMA';
     if (bf < 25.0) return 'ELEVADO';
     return 'ALTO';

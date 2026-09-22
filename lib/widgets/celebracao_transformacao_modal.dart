@@ -173,14 +173,14 @@ class _CelebracaoTransformacaoModalState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
-                        Icons.electric_bolt_rounded,
-                        size: 16,
-                        color: AppColors.primary,
+                      Icon(
+                        Icons.military_tech_rounded,
+                        size: 18,
+                        color: transformacao.corBadge,
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Limiar de Combate: ${PoderLuta.formatarPoder(transformacao.poderMinimo)} Ki',
+                        'Patamar de Poder: ${PoderLuta.formatarPoder(transformacao.poderMinimo)} Ki',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

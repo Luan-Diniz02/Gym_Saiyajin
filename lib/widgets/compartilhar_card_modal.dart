@@ -848,7 +848,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
           // Frase de encerramento Saiyajin
           const Text(
-            '⚡ SUPERE SEUS LIMITES! ⚡',
+            'SUPERE SEUS LIMITES',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w900,

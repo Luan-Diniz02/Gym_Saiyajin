@@ -86,10 +86,10 @@ void main() {
     test('Deve classificar corretamente as faixas esportivas de BF %', () {
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 8.5);
       expect(controller.percentualGordura, 8.5);
-      expect(controller.classificacaoGordura, 'MUITO DEFINIDO ⚡');
+      expect(controller.classificacaoGordura, 'MUITO DEFINIDO');
 
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 12.0);
-      expect(controller.classificacaoGordura, 'FÍSICO ATLÉTICO 💪');
+      expect(controller.classificacaoGordura, 'FÍSICO ATLÉTICO');
 
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 18.0);
       expect(controller.classificacaoGordura, 'MODERADO / EM FORMA');

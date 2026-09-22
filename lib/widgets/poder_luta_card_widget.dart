@@ -28,7 +28,6 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
     final corAura = transformacao.corAura;
     final corSecundaria = transformacao.corSecundaria;
     final isSSJ2 = transformacao == TransformacaoSaiyajin.superSaiyajin2;
-    final isSSJ3 = transformacao == TransformacaoSaiyajin.superSaiyajin3;
 
     return Container(
       decoration: BoxDecoration(
@@ -106,50 +105,21 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                corAura.withValues(alpha: 0.20),
-                                corSecundaria.withValues(alpha: isSSJ2 ? 0.40 : 0.20),
-                              ],
-                            ),
+                            color: transformacao.corBadge.withValues(alpha: 0.16),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isSSJ2
-                                  ? corSecundaria.withValues(alpha: 0.9)
-                                  : corAura.withValues(alpha: 0.5),
+                              color: transformacao.corBadge.withValues(alpha: 0.65),
                               width: 1.2,
                             ),
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (isSSJ2) ...[
-                                const Icon(
-                                  Icons.flash_on_rounded,
-                                  size: 13,
-                                  color: Color(0xFF00E5FF),
-                                ),
-                                const SizedBox(width: 3),
-                              ] else if (isSSJ3) ...[
-                                const Icon(
-                                  Icons.local_fire_department_rounded,
-                                  size: 13,
-                                  color: Color(0xFFFF6D00),
-                                ),
-                                const SizedBox(width: 3),
-                              ],
-                              Text(
-                                transformacao.titulo.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: isSSJ2
-                                      ? const Color(0xFF00E5FF)
-                                      : (isSSJ3 ? const Color(0xFFFFAB00) : corAura),
-                                  letterSpacing: 0.6,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            transformacao.titulo.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              color: transformacao.corBadge,
+                              letterSpacing: 0.6,
+                            ),
                           ),
                         ),
                       ],
@@ -359,7 +329,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
 
                   // Pilar 3: Bônus de PRs
                   _buildLinhaPilar(
-                    icone: Icons.bolt_rounded,
+                    icone: Icons.military_tech_rounded,
                     titulo: 'Limites Superados (PRs)',
                     subtitulo: '${widget.controller.totalRecordes} recordes registrados × 150',
                     valor: '${PoderLuta.formatarPoder(poder.bonusPRs)} Ki',
