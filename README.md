@@ -1,84 +1,77 @@
-# Gym Saiyajin
+# 🐉 Gym Saiyajin
 
-Aplicativo mobile offline-first para rastreamento de treinos de musculação, construído com Flutter, SQLite e arquitetura limpa com foco em ergonomia esportiva, robustez visual e temática Saiyajin.
+<p align="center">
+  <strong>Aplicativo mobile offline-first para rastreamento de treinos de musculação, construído com Flutter, SQLite e arquitetura limpa com foco em ergonomia esportiva, robustez visual e temática Saiyajin.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
+  <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/Tests-56%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
+</p>
 
 ---
 
 ## 📸 Demonstração Visual
 
 <p align="center">
-  <img src="docs/images/treino.png" width="30%" />
-  <img src="docs/images/historico.png" width="30%" />
-  <img src="docs/images/progresso.png" width="30%" />
+  <img src="docs/images/treino.png" width="30%" alt="Tela de Treino" />
+  <img src="docs/images/historico.png" width="30%" alt="Histórico" />
+  <img src="docs/images/progresso.png" width="30%" alt="Progresso & Ki" />
 </p>
+
+---
+
+## 📚 Documentação Especializada
+
+Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
+
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes.
+- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Bagagem de Batalha e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon` e `ScouterIcon`) e fórmula de Epley refinada para estimativa de 1RM.
+- 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
 
 ---
 
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
-- **Nome & Divisão do Treino**:
-  - Barra superior de chips rápidos padronizados (`Treino A`, `Treino B`, `Treino C`, `Push`, `Pull`, `Legs`, `Superiores`, `Inferiores`) e botão para digitação de nomes customizados.
-  - O nome é registrado na sessão, exibido com badge dourado na timeline do histórico e estampado no card de compartilhamento para redes sociais.
-- **📋 Fichas / Templates de Treino Pré-configurados**:
-  - **Criação & Edição Completa**: Crie novas fichas ou edite rotinas existentes (alteração do nome, adição/remoção de exercícios e personalização da quantidade de séries padrão por exercício através de seletores ergonômicos `[-] X [+]`).
-  - **Visualização Adaptativa e Sem Truncamento**: Modo recolhido exibe 2 exercícios com suas respectivas séries e badge de excedentes (`+X`), além de alternância para modo expandido exibindo a lista completa sem cortes de nomes longos.
-  - **Proteção de Interface (SafeArea)**: Layout com tratamento de margens inferiores e insets dinâmicos, impedindo qualquer sobreposição da barra de navegação do sistema Android.
-  - **Carregamento em 1 Toque**: Escolha uma rotina pré-configurada na gaveta de fichas e inicie o treino com todos os exercícios já enfileirados.
-  - **Aparelho Ocupado? Substituição Ágil**: Se uma máquina estiver em uso, toque no botão de troca (`Swap`) para substituir o exercício (atual ou pendente na fila) por outro do mesmo grupo muscular sem alterar a ficha base.
-  - **Salvar Treino como Ficha**: Transforme a sessão do dia em um template permanente com um único toque.
-  - **Liberdade Total**: Adicione novos exercícios extras a qualquer momento ou exclua exercícios do dia mantendo a ficha original intacta.
-- **👻 "Carga Anterior" de Referência (Sobrecarga Progressiva)**:
-  - Ao iniciar qualquer exercício, o app busca automaticamente o histórico da última sessão concluída.
-  - Carga e repetições aparecem como sugestão suave nos inputs (`hintText`) e em uma linha discreta de apoio (`Anterior: X kg × Y reps`), facilitando a progressão contínua de carga (*Progressive Overload*).
-  - **Preenchimento Inteligente em 1 Toque**: Ao tocar no botão de check com os inputs vazios, o app preenche automaticamente a série com os valores da carga anterior.
-- **Catálogo & Criação de Exercícios**: Modal de busca instantânea com barra de pesquisa por texto e chips de filtragem por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, etc.). Suporte a criação dinâmica de novos exercícios personalizados.
-- **Séries com Ergonomia Avançada & Recordes Pessoais (PRs)**: 
-  - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
-  - **Detecção de PRs em Tempo Real**: Micro-badge dinâmico `PR ⚡` e destaque dourado no container ao superar a maior carga histórica ou o 1RM estimado anterior.
-  - **Fluxo Contínuo de Teclado**: Foco no campo de Peso com tecla de ação `Next` pula diretamente para Reps; tecla `Done` (Enter) em Reps valida e conclui a série imediatamente sem fechar o teclado.
-  - **Estabilidade Total de Foco**: Ciclo de digitação blindado contra fechamentos involuntários do teclado causados por rebuilds ou ticks do cronômetro.
-  - Remoção intuitiva e ágil de séries individuais via gesto de **Swipe** (*deslizar para a esquerda*), com feedback tátil e prevenção de exclusão acidental.
-- **Cronômetro de Treino & Descanso em Tempo Real**:
-  - **Tempo Total de Treino**: Iniciação automática na primeira interação, contagem precisa em segundo plano com controle de pausa/retomada.
-  - **Tempo de Descanso Total Acumulado**: Registra e consolida todo o tempo que o usuário passou descansando entre as séries ao longo de toda a sessão.
-  - **Cronômetro Regressivo Inteligente**: Visor circular com anel de progresso nítido, sincronizado com o ciclo de vida do sistema, alerta sonoro nativo, vibração háptica contínua e blindagem contra notificações duplicadas com cancelamento atômico de alarmes e controle de concorrência sequencial.
-  - **Modal de Ajuste de Tempo**: Visor digital integrado (`MIN : SEG`), botões satélites de ajuste fino `+/- 15s` e grade simétrica 3x2 de atalhos rápidos padronizados (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
-- **Encerramento Protegido & Celebração de Conquistas**: 
-  - Validação contra fechamento acidental com exercícios pendentes, gravação transacional segura no banco de dados e disparo automático do modal de compartilhamento.
-  - **Banner Comemorativo de PRs**: Exibição destacada no modal de encerramento celebrando todos os recordes superados na sessão com chips das marcas conquistadas.
+- **Nome & Divisão do Treino**: Chips de seleção rápida padronizados (`Treino A`, `Treino B`, `Push`, `Pull`, `Legs`, etc.) ou nome customizado digitado pelo usuário. Registrado na sessão e estampado na timeline e no card social.
+- **Fichas / Templates Permanentes**: Crie, edite e configure rotinas completas com quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
+- **Aparelho Ocupado? Substituição Ágil**: Toque no botão de troca (`Swap`) para substituir um exercício da fila por outro do mesmo grupo muscular sem alterar a ficha base.
+- **Carga Anterior Inteligente (Sobrecarga Progressiva)**: O app busca o histórico do exercício e sugere a última carga e reps nos campos (`hintText`) e na linha de apoio. Tocar no check com campos vazios auto-preenche a série com os valores anteriores.
+- **Séries com Ergonomia Avançada**: Alinhamento simétrico, fluxo contínuo de teclado (`Next` pula para reps, `Done` conclui a série), micro-badge dinâmico `PR ⚡` em tempo real e remoção rápida de séries via gesto de deslizar (*Swipe*).
+- **Cronômetro de Treino & Descanso em Background**:
+  - Duração total da sessão com controle de pausa e retomada.
+  - Registro do tempo total de descanso acumulado.
+  - Cronômetro regressivo com visor circular, alerta sonoro nativo, vibração háptica contínua e cancelamento atômico de notificações para prevenir duplicidades.
+- **Encerramento Protegido & Celebração de Conquistas**: Confirmação segura, cálculo imediato do Ki ganho na sessão com bônus de $+150$ Ki por PR conquistado e disparo do modal de compartilhamento.
 
-### 📜 Histórico de Sessões & Compartilhamento
-- **Efeito de Timeline Clássico**: Linha vertical contínua conectando os dias de treino com nós circulares de calendário.
-- **Métricas Consolidadas no Cabeçalho**: Resumo da sessão com quantidade de exercícios, total de séries, **Volume Total Levantado** ($\sum \text{reps} \times \text{peso}$), **Duração Total** e **Tempo de Descanso Acumulado**.
-- **Cards de Exercícios Limpos**: Detalhamento expansível de cada exercício exibindo grupo muscular e histórico de séries, livre de poluição visual.
-- **Card Visual Saiyajin para Compartilhamento (PNG)**:
-  - Geração de card estilizado de alta definição (proporção ideal para Instagram Stories, WhatsApp Status e redes sociais).
-  - Personalização com foto: tire uma foto na hora pela câmera, selecione da galeria ou use o tema escuro/dourado Saiyajin nativo.
-  - Destaque das principais métricas do treino e principais exercícios com suas maiores cargas.
-  - Exportação e compartilhamento direto de imagem PNG ou texto formatado via `share_plus`.
-- **Backup & Restauração Completa (JSON)**:
-  - **Exportar Histórico**: Gera arquivo JSON estruturado com todas as sessões, exercícios, séries e exercícios customizados.
-  - **Importar Histórico**: Modal customizado no padrão premium Saiyajin com opções claras de **Mesclar Dados** (recomendado) ou **Substituir Tudo**.
-- **Empty State Motivacional**: Ilustração e mensagem temática encorajadora para novos usuários ou histórico zerado.
-- **Exclusão Segura**: Confirmação modal e exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
+### 📜 Histórico de Sessões & Backup
+- **Timeline Contínua**: Linha vertical com nós de calendário conectando as sessões concluídas.
+- **Métricas Consolidadas no Cabeçalho**: Resumo com total de exercícios, séries concluídas, **Volume Total Levantado** ($\sum \text{reps} \times \text{peso}$), **Duração** e **Tempo de Descanso Acumulado**.
+- **Backup & Restauração Completa (JSON)**: Exportação de todo o banco para arquivo JSON e importação segura com opções de **Mesclar Dados** ou **Substituir Tudo**.
+- **Exclusão Segura**: Confirmação modal com exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 
 ### 📈 Dashboard de Progresso & Métricas
-- **⚡ Medidor de Poder de Luta (Ki) & Transformações Saiyajin**:
-  - **Fórmula Híbrida de Força e Dedicação**:
-    $$\text{Poder de Luta} = \left(\sum \text{Maior 1RM por Grupo} \times 10\right) + \left(\frac{\text{Volume Total Histórico}}{100}\right) + (\text{PRs} \times 150)$$
-  - **Card Interativo de Ki**: Exibição da pontuação total com separadores de milhar, badge da transformação atual e barra de progresso em tempo real rumo à próxima forma Saiyajin.
-  - **Detalhamento Expansível**: Toque no card revela a decomposição exata do poder em 3 pilares (*Força Base*, *Bagagem de Batalha* e *Limites Superados*), além de listar os melhores 1RMs considerados por grupo muscular.
-  - **Escala de Patamares Canônica**: *Classe Baixa* (0-1.000) $\to$ *Guerreiro Z* (1.000-4.000) $\to$ *Elite Saiyajin* (4.000-8.000) $\to$ *Super Saiyajin ⚡* (8.000-15.000) $\to$ *Super Saiyajin 2 ⚡⚡* (15.000-30.000) $\to$ *Super Saiyajin 3 ⚡🔥* (30.000-50.000) $\to$ *Instinto Superior 🌌* (50.000+).
-- **Quadro de Recordes Pessoais (Registro de Poder ⚡)**:
-  - Painel consolidado temático Saiyajin com a maior carga histórica e o maior 1RM Estimado (fórmula refinada de Epley) de cada exercício.
-  - Barra de pesquisa instantânea e filtros por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BRAÇOS`, `ABDÔMEN`).
-- **Cálculo de IMC Completo (Padrão OMS)**: Classificação oficial em 6 faixas (*Abaixo do peso, Peso normal, Sobrepeso, Obesidade I, II e III*).
-- **Consistência de Interação**: Cards superiores centralizados com atalho rápido de edição tanto para Meta Semanal quanto para Medidas Corporais.
-- **Gráfico de Progressão de Cargas (`fl_chart`)**:
-  - Curva de sobrecarga progressiva (*Progressive Overload*) por exercício ao longo das datas.
-  - Seletor moderno de exercício integrado com lupa, campo de busca e chips de grupos musculares.
-  - *Empty State* inteligente orientando o usuário caso o exercício possua menos de 2 registros para traçar a evolução.
+- **Medidor de Poder de Luta (Ki) & Transformações**:
+  - Pontuação híbrida unindo força máxima nos 6 grupos musculares, quilometragem de volume histórico e bônus de recordes.
+  - Escala canônica de patamares: *Classe Baixa* $\to$ *Guerreiro Z* $\to$ *Elite Saiyajin* $\to$ *Super Saiyajin* $\to$ *Super Saiyajin 2* $\to$ *Super Saiyajin 3* $\to$ *Instinto Superior*.
+  - Subtítulos épicos oficiais e badge com gradiente e sombras temáticas.
+- **Registro de Poder (Quadro de Recordes)**:
+  - Marcado com o ícone oficial da Esfera do Dragão de 4 estrelas (`DragonBallIcon`).
+  - Lista detalhada de maiores cargas e 1RMs estimados com busca instantânea e filtros musculares.
+- **Gráfico de Evolução de Cargas (`fl_chart`)**: Curva analítica de sobrecarga progressiva com filtro por exercício.
+- **Cálculo de IMC & Metas Corporais**: Padrão OMS em 6 faixas com atalhos de atualização rápida.
+
+### 📱 Compartilhamento Social de Alta Performance
+- **Proporções Flexíveis**: Alternância entre `STORIES (9:16)` (Instagram Stories / WhatsApp Status) e `FEED (1:1)` (Instagram Feed / WhatsApp Chat).
+- **Presets de Overlay**:
+  - **Slim Clássico**: Minimalista, treino no topo e métricas na base, valorizando 100% da foto.
+  - **Scouter HUD**: Estilo telemetria esportiva com visor holográfico (`ScouterIcon`), ganho de Ki e contador de PRs com `DragonBallIcon`.
+  - **Rodapé Minimalista**: Topo totalmente limpo e painel translúcido inferior (*frosted glass*).
+- **Customização Total**: Alternância de cor (Branco vs Dourado), campo para `@handle` do atleta e fallback texturizado premium caso não deseje usar foto.
 
 ---
 
@@ -86,88 +79,86 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 
 - **Flutter / Dart** (Framework mobile multiplataforma)
 - **sqflite** (Banco de dados relacional offline-first com integridade referencial e migrações)
-- **share_plus** (Compartilhamento nativo de cards PNG e backups JSON)
-- **image_picker** (Captura de fotos via câmera e seleção da galeria para o card)
-- **file_picker** (Seleção de arquivos de backup JSON no dispositivo)
-- **path_provider** (Armazenamento temporário para exportação de mídias e arquivos)
-- **fl_chart** (Renderização gráfica analítica de alta performance)
+- **share_plus** (Compartilhamento nativo de cards de imagem PNG e backups JSON)
+- **image_picker** (Captura de fotos via câmera e seleção da galeria para o card de treino)
+- **file_picker** (Seleção de arquivos de backup JSON no armazenamento local)
+- **path_provider** (Gerenciamento de caminhos temporários e de documentos)
+- **fl_chart** (Renderização gráfica analítica de curvas de progressão de carga)
 - **shared_preferences** (Armazenamento de preferências e configurações chave-valor)
-- **flutter_local_notifications & timezone** (Notificações agendadas e alertas em segundo plano)
-- **flutter_ringtone_player** (Alerta sonoro nativo de alarme)
-- **vibration** (Feedback háptico nativo de hardware)
-- **flutter_test** (Testes unitários e de integração de regras de negócio)
+- **flutter_local_notifications & timezone** (Notificações locais agendadas e resiliência de alarmes)
+- **flutter_ringtone_player** (Alerta sonoro nativo de alarme para encerramento de descansos)
+- **vibration** (Feedback háptico de hardware)
+- **flutter_test** (Suíte robusta de testes unitários e de integração)
 
 ---
 
-## 🏛️ Arquitetura do Código
-
-O projeto adota uma arquitetura em camadas orientada a responsabilidade única:
+## 🏛️ Estrutura de Arquivos
 
 ```text
 gym_saiyajin/
+├── docs/                               # Documentação técnica especializada
+│   ├── ARQUITETURA.md                  # Camadas, SQLite, migrações e testes
+│   ├── SISTEMA_SAIYAJIN.md             # Matemática do Ki, patamares e ícones vetoriais
+│   ├── COMPARTILHAMENTO_SOCIAL.md      # Presets, proporções 9:16/1:1 e exportação
+│   └── images/                         # Assets visuais da documentação
 ├── lib/
-│   ├── controllers/            # Gerenciamento de estado e regras de negócio (ChangeNotifier)
+│   ├── controllers/                    # Gerenciamento de estado reativo (ChangeNotifier)
 │   │   ├── historico_controller.dart
 │   │   ├── progresso_controller.dart
 │   │   └── treino_controller.dart
-│   ├── database/               # Configuração, migrações e schema do SQLite
+│   ├── database/                       # Helper do SQLite, PRAGMAs e migrações (v1 -> v3)
 │   │   └── db_helper.dart
-│   ├── models/                 # Entidades de domínio tipadas com serialização JSON
+│   ├── models/                         # Entidades de domínio imutáveis com serialização
 │   │   ├── exercicio.dart
+│   │   ├── ficha_treino.dart
+│   │   ├── poder_luta.dart
 │   │   ├── recorde_pessoal.dart
 │   │   ├── serie.dart
 │   │   └── sessao_treino.dart
-│   ├── repositories/           # Abstração de acesso a dados, backup e queries transacionais
+│   ├── repositories/                   # Acesso a dados transacionais e queries preparadas
 │   │   └── treino_repository.dart
-│   ├── screens/                # Composição visual das telas principais
+│   ├── screens/                        # Telas principais (Treino, Histórico, Progresso)
 │   │   ├── historico_screen.dart
 │   │   ├── progresso_screen.dart
 │   │   └── treino_screen.dart
-│   ├── services/               # Serviços de infraestrutura, notificações e backups
+│   ├── services/                       # Infraestrutura, Hardware e Compartilhamento
 │   │   ├── backup_service.dart
 │   │   ├── card_share_service.dart
 │   │   ├── notification_service.dart
 │   │   └── preferences_service.dart
-│   ├── theme/                  # Design Tokens e paleta de cores centralizada
+│   ├── theme/                          # Design Tokens e paleta de cores centralizada
 │   │   └── app_colors.dart
-│   └── widgets/                # Componentes visuais modulares e reutilizáveis
+│   └── widgets/                        # Componentes visuais atômicos e CustomPainters
+│       ├── celebracao_transformacao_modal.dart
 │       ├── compartilhar_card_modal.dart
 │       ├── config_tempo_descanso_modal.dart
 │       ├── cronometro_widget.dart
+│       ├── dragon_ball_icon.dart       # CustomPainter das Esferas do Dragão (1-7 estrelas)
 │       ├── gerenciar_fichas_modal.dart
 │       ├── historico_card_widget.dart
 │       ├── metricas_dashboard_widget.dart
 │       ├── modal_encerrar_treino.dart
 │       ├── modal_importar_backup.dart
+│       ├── poder_luta_card_widget.dart
 │       ├── progresso_grafico_widget.dart
 │       ├── quadro_recordes_modal.dart
+│       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                       # Suíte de testes unitários automatizados
+├── test/                               # Suíte de 56 testes automatizados
 │   ├── backup_test.dart
+│   ├── compartilhar_card_test.dart
+│   ├── dragon_ball_icon_test.dart
 │   ├── ficha_test.dart
 │   ├── imc_test.dart
 │   ├── notification_service_test.dart
+│   ├── poder_luta_test.dart
 │   ├── pr_test.dart
 │   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart
-└── pubspec.yaml
+├── pubspec.yaml
+└── README.md
 ```
-
----
-
-## 💾 Banco de Dados (SQLite)
-
-* Arquivo: `gym_saiyajin.db` (Versão do schema: `3`)
-* `PRAGMA foreign_keys = ON;` ativo via callback `onConfigure`
-* Migrações transacionais automáticas via `onUpgrade` (versão 1 -> 2 -> 3)
-* Tabelas:
-  * `sessoes`: `id`, `data`, `nome_treino`, `duracao_segundos`, `descanso_total_segundos`
-  * `exercicios`: `id`, `sessao_id`, `nome`, `grupo`
-  * `series`: `id`, `exercicio_id`, `peso`, `reps`, `concluida`
-  * `fichas`: `id`, `nome`, `descricao`
-  * `ficha_exercicios`: `id`, `ficha_id`, `nome`, `grupo`, `ordem`, `series_padrao`
-* Índices dedicados em chaves estrangeiras para otimização de consultas e exclusão em cascata.
 
 ---
 
@@ -175,27 +166,24 @@ gym_saiyajin/
 
 ### Pré-requisitos
 - Flutter SDK instalado (`>= 3.11.4`)
-- Dispositivo Android conectado ou emulador
+- Dispositivo Android conectado via USB (com depuração ativada) ou emulador
 
-### Comandos Úteis
+### Comandos
 ```bash
-# Instalar dependências
+# Obter dependências do projeto
 flutter pub get
 
-# Executar testes unitários
+# Executar a suíte completa de testes automatizados (56 testes)
 flutter test
 
-# Análise estática de código (Linter)
+# Verificar análise estática de código (Linter)
 dart analyze
 
-# Executar no dispositivo em modo desenvolvimento
+# Executar a aplicação em modo debug
 flutter run
 
-# Compilar APK de Release (Otimizado)
+# Compilar pacote de produção otimizado (Release APK)
 flutter build apk
-
-# Compilar APK de Debug
-flutter build apk --debug
 ```
 
 ---
