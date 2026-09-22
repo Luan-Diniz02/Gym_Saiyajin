@@ -11,6 +11,8 @@ enum TransformacaoSaiyajin {
     poderMinimo: 0,
     poderMaximo: 1000,
     corAura: Color(0xFF9E9E9E),
+    corSecundaria: Color(0xFF616161),
+    gradiente: [Color(0xFFBDBDBD), Color(0xFF757575)],
   ),
   guerreiroZ(
     titulo: 'Guerreiro Z',
@@ -18,6 +20,8 @@ enum TransformacaoSaiyajin {
     poderMinimo: 1000,
     poderMaximo: 4000,
     corAura: Color(0xFF4FC3F7),
+    corSecundaria: Color(0xFF0288D1),
+    gradiente: [Color(0xFF81D4FA), Color(0xFF0288D1)],
   ),
   eliteSaiyajin(
     titulo: 'Elite Saiyajin',
@@ -25,6 +29,8 @@ enum TransformacaoSaiyajin {
     poderMinimo: 4000,
     poderMaximo: 8000,
     corAura: Color(0xFFFF5252),
+    corSecundaria: Color(0xFFD50000),
+    gradiente: [Color(0xFFFF5252), Color(0xFFD50000), Color(0xFFFF1744)],
   ),
   superSaiyajin1(
     titulo: 'Super Saiyajin ⚡',
@@ -32,27 +38,35 @@ enum TransformacaoSaiyajin {
     poderMinimo: 8000,
     poderMaximo: 15000,
     corAura: Color(0xFFFFD700),
+    corSecundaria: Color(0xFFFFA000),
+    gradiente: [Color(0xFFFFD700), Color(0xFFFFC107), Color(0xFFFFA000)],
   ),
   superSaiyajin2(
     titulo: 'Super Saiyajin 2 ⚡⚡',
     subtituloLore: 'Faíscas elétricas de fúria e intensidade',
     poderMinimo: 15000,
     poderMaximo: 30000,
-    corAura: Color(0xFFFFC107),
+    corAura: Color(0xFFFFD700),
+    corSecundaria: Color(0xFF00E5FF),
+    gradiente: [Color(0xFFFFD700), Color(0xFF00E5FF), Color(0xFFFFD700)],
   ),
   superSaiyajin3(
     titulo: 'Super Saiyajin 3 ⚡🔥',
     subtituloLore: 'Potencial cósmico levado ao extremo',
     poderMinimo: 30000,
     poderMaximo: 50000,
-    corAura: Color(0xFFFF9800),
+    corAura: Color(0xFFFF6D00),
+    corSecundaria: Color(0xFFFFD600),
+    gradiente: [Color(0xFFFF6D00), Color(0xFFFF3D00), Color(0xFFFFAB00)],
   ),
   instintoSuperior(
     titulo: 'Instinto Superior 🌌',
     subtituloLore: 'Movimento fluído além de todos os limites',
     poderMinimo: 50000,
     poderMaximo: 100000,
-    corAura: Color(0xFFE0E0E0),
+    corAura: Color(0xFFFFFFFF),
+    corSecundaria: Color(0xFF80D8FF),
+    gradiente: [Color(0xFFFFFFFF), Color(0xFF80D8FF), Color(0xFFB0BEC5)],
   );
 
   final String titulo;
@@ -60,6 +74,8 @@ enum TransformacaoSaiyajin {
   final int poderMinimo;
   final int poderMaximo;
   final Color corAura;
+  final Color corSecundaria;
+  final List<Color> gradiente;
 
   const TransformacaoSaiyajin({
     required this.titulo,
@@ -67,6 +83,8 @@ enum TransformacaoSaiyajin {
     required this.poderMinimo,
     required this.poderMaximo,
     required this.corAura,
+    required this.corSecundaria,
+    required this.gradiente,
   });
 
   /// Determina a transformação correspondente a partir do poder de luta numérico.

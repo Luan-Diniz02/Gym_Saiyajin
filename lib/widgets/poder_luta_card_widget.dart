@@ -26,238 +26,287 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
     final transformacao = poder.transformacao;
     final proxima = transformacao.proxima;
     final corAura = transformacao.corAura;
+    final corSecundaria = transformacao.corSecundaria;
+    final isSSJ2 = transformacao == TransformacaoSaiyajin.superSaiyajin2;
+    final isSSJ3 = transformacao == TransformacaoSaiyajin.superSaiyajin3;
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: corAura.withValues(alpha: 0.45),
-          width: 1.5,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: transformacao.gradiente
+              .map((c) => c.withValues(alpha: isSSJ2 ? 0.95 : 0.70))
+              .toList(),
         ),
         boxShadow: [
           BoxShadow(
-            color: corAura.withValues(alpha: 0.12),
-            blurRadius: 16,
-            spreadRadius: 1,
-            offset: const Offset(0, 4),
+            color: corSecundaria.withValues(alpha: isSSJ2 ? 0.35 : 0.18),
+            blurRadius: isSSJ2 ? 22 : 16,
+            spreadRadius: isSSJ2 ? 2 : 1,
+            offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: corAura.withValues(alpha: 0.16),
+            blurRadius: 26,
+            spreadRadius: 2,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Área Superior Principal (Clicável para expandir)
-          InkWell(
-            onTap: () {
-              HapticFeedback.selectionClick();
-              setState(() {
-                _detalhesExpandidos = !_detalhesExpandidos;
-              });
-            },
-            borderRadius: BorderRadius.circular(20),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Cabeçalho: Título + Badge de Patente
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          ScouterIcon(
-                            size: 22,
-                            lensColor: corAura,
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'PODER DE LUTA',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.2,
-                              color: AppColors.textDimmed,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: corAura.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: corAura.withValues(alpha: 0.4),
-                          ),
-                        ),
-                        child: Text(
-                          transformacao.titulo.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w900,
-                            color: corAura,
-                            letterSpacing: 0.6,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-
-                  // Leitura Numérica de Poder
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        PoderLuta.formatarPoder(poder.poderTotal),
-                        style: const TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.textLight,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Ki',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: corAura,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    transformacao.subtituloLore,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textDimmed,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Barra de Progresso da Próxima Transformação
-                  if (proxima != null) ...[
+      padding: const EdgeInsets.all(1.8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(18.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Área Superior Principal (Clicável para expandir)
+            InkWell(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                setState(() {
+                  _detalhesExpandidos = !_detalhesExpandidos;
+                });
+              },
+              borderRadius: BorderRadius.circular(18.2),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Cabeçalho: Título + Badge de Patente
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'RUMO A ${proxima.titulo.toUpperCase()}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.8,
-                            color: AppColors.textDimmed,
-                          ),
+                        Row(
+                          children: [
+                            ScouterIcon(
+                              size: 22,
+                              lensColor: isSSJ2 ? corSecundaria : corAura,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'PODER DE LUTA',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.2,
+                                color: AppColors.textDimmed,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          '${(poder.progressoProxima * 100).toInt()}%',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w900,
-                            color: corAura,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                corAura.withValues(alpha: 0.20),
+                                corSecundaria.withValues(alpha: isSSJ2 ? 0.40 : 0.20),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isSSJ2
+                                  ? corSecundaria.withValues(alpha: 0.9)
+                                  : corAura.withValues(alpha: 0.5),
+                              width: 1.2,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isSSJ2) ...[
+                                const Icon(
+                                  Icons.flash_on_rounded,
+                                  size: 13,
+                                  color: Color(0xFF00E5FF),
+                                ),
+                                const SizedBox(width: 3),
+                              ] else if (isSSJ3) ...[
+                                const Icon(
+                                  Icons.local_fire_department_rounded,
+                                  size: 13,
+                                  color: Color(0xFFFF6D00),
+                                ),
+                                const SizedBox(width: 3),
+                              ],
+                              Text(
+                                transformacao.titulo.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  color: isSSJ2
+                                      ? const Color(0xFF00E5FF)
+                                      : (isSSJ3 ? const Color(0xFFFFAB00) : corAura),
+                                  letterSpacing: 0.6,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        height: 8,
-                        color: AppColors.cardBorder,
-                        child: FractionallySizedBox(
-                          alignment: Alignment.centerLeft,
-                          widthFactor: poder.progressoProxima,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  corAura.withValues(alpha: 0.7),
-                                  corAura,
-                                ],
-                              ),
-                            ),
+                    const SizedBox(height: 14),
+
+                    // Leitura Numérica de Poder
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          PoderLuta.formatarPoder(poder.poderTotal),
+                          style: const TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.textLight,
+                            letterSpacing: 1.0,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Faltam ${PoderLuta.formatarPoder(poder.pontosFaltantes)} Ki para a próxima evolução',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.textDimmed,
-                      ),
-                    ),
-                  ] else ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: corAura.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: corAura.withValues(alpha: 0.3),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Ki',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            color: isSSJ2 ? corSecundaria : corAura,
+                          ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      transformacao.subtituloLore,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isSSJ2
+                            ? corSecundaria.withValues(alpha: 0.85)
+                            : AppColors.textDimmed,
                       ),
-                      child: Row(
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Barra de Progresso da Próxima Transformação
+                    if (proxima != null) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.stars_rounded, size: 16, color: corAura),
-                          const SizedBox(width: 8),
-                          const Expanded(
-                            child: Text(
-                              'Patamar supremo conquistado! Seu poder é lendário.',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textLight,
-                              ),
+                          Text(
+                            'RUMO A ${proxima.titulo.toUpperCase()}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                              color: AppColors.textDimmed,
+                            ),
+                          ),
+                          Text(
+                            '${(poder.progressoProxima * 100).toInt()}%',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              color: isSSJ2 ? corSecundaria : corAura,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-
-                  const SizedBox(height: 10),
-                  // Botão de Alternância de Detalhes
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _detalhesExpandidos
-                            ? 'Ocultar Origem do Ki'
-                            : 'Ver Origem do Ki',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: corAura,
+                      const SizedBox(height: 6),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          height: 8,
+                          color: AppColors.cardBorder,
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor: poder.progressoProxima,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    corAura,
+                                    corSecundaria,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      Icon(
-                        _detalhesExpandidos
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        size: 16,
-                        color: corAura,
+                      const SizedBox(height: 6),
+                      Text(
+                        'Faltam ${PoderLuta.formatarPoder(poder.pontosFaltantes)} Ki para a próxima evolução',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textDimmed,
+                        ),
+                      ),
+                    ] else ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: corAura.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: corAura.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.stars_rounded, size: 16, color: corAura),
+                            const SizedBox(width: 8),
+                            const Expanded(
+                              child: Text(
+                                'Patamar supremo conquistado! Seu poder é lendário.',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textLight,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                ],
+
+                    const SizedBox(height: 10),
+                    // Botão de Alternância de Detalhes
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _detalhesExpandidos
+                              ? 'Ocultar Origem do Ki'
+                              : 'Ver Origem do Ki',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: isSSJ2 ? corSecundaria : corAura,
+                          ),
+                        ),
+                        Icon(
+                          _detalhesExpandidos
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          size: 16,
+                          color: isSSJ2 ? corSecundaria : corAura,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
 
           // Seção Expansível com o Detalhamento dos 3 Pilares
           AnimatedCrossFade(
@@ -362,8 +411,9 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildLinhaPilar({
     required IconData icone,
