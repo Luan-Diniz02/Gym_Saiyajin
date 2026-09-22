@@ -179,7 +179,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                 ),
                                 child: Icon(
                                   isSaiyajin
-                                      ? Icons.military_tech_rounded
+                                      ? Icons.bolt_rounded
                                       : Icons.emoji_events_rounded,
                                   size: 20,
                                   color: AppColors.accent,

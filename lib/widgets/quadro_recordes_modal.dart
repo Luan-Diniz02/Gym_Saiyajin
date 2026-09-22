@@ -113,10 +113,10 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                     ),
                     child: Icon(
                       isSaiyajin
-                          ? Icons.military_tech_rounded
+                          ? Icons.bolt_rounded
                           : Icons.emoji_events_rounded,
                       color: AppColors.accent,
-                      size: 24,
+                      size: 26,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -125,7 +125,7 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isSaiyajin ? 'HALL DA FAMA ⚡' : 'RECORDES PESSOAIS 🏆',
+                          isSaiyajin ? 'REGISTRO DE PODER ⚡' : 'RECORDES PESSOAIS 🏆',
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w900,
@@ -249,7 +249,9 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                                 border: Border.all(color: AppColors.cardBorder),
                               ),
                               child: Icon(
-                                Icons.emoji_events_outlined,
+                                isSaiyajin
+                                    ? Icons.bolt_rounded
+                                    : Icons.emoji_events_outlined,
                                 size: 32,
                                 color: AppColors.textMuted,
                               ),
@@ -272,7 +274,7 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                               child: Text(
                                 total == 0
                                     ? (isSaiyajin
-                                        ? 'Conclua suas séries nos treinos para gravar seu poder no Hall da Fama!'
+                                        ? 'Conclua suas séries nos treinos para gravar seu poder no Registro de Poder!'
                                         : 'Conclua suas séries nos treinos para registrar seus recordes de carga e 1RM!')
                                     : 'Tente alterar os termos da busca ou selecionar outro grupo muscular.',
                                 textAlign: TextAlign.center,
@@ -426,27 +428,13 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                         ),
                       ),
                       const SizedBox(height: 3),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            '${RecordePessoal.formatarPeso(pr.umRepMaxEstimado)} kg',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '(${RecordePessoal.formatarPeso(pr.peso1RM)}×${pr.reps1RM})',
-                            style: const TextStyle(
-                              color: AppColors.textDimmed,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '${RecordePessoal.formatarPeso(pr.umRepMaxEstimado)} kg',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ],
                   ),

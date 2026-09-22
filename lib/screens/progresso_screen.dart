@@ -329,9 +329,9 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 ),
               ),
               child: Icon(
-                isSaiyajin ? Icons.military_tech_rounded : Icons.emoji_events_rounded,
+                isSaiyajin ? Icons.bolt_rounded : Icons.emoji_events_rounded,
                 color: AppColors.accent,
-                size: 24,
+                size: 26,
               ),
             ),
             const SizedBox(width: 14),
@@ -342,7 +342,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   Row(
                     children: [
                       Text(
-                        isSaiyajin ? 'HALL DA FAMA ⚡' : 'RECORDES PESSOAIS 🏆',
+                        isSaiyajin ? 'REGISTRO DE PODER ⚡' : 'RECORDES PESSOAIS 🏆',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,

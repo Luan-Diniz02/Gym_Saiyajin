@@ -157,23 +157,44 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                     Positioned(
                       top: -8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                         decoration: BoxDecoration(
-                          color: isConcluida ? AppColors.primary : AppColors.surface,
+                          color: AppColors.surface,
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(
-                            color: isConcluida ? AppColors.primary : AppColors.accent,
+                            color: AppColors.accent,
                             width: 1,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.6),
+                              blurRadius: 3,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          isSaiyajin ? 'PR ⚡' : 'PR 🏆',
-                          style: TextStyle(
-                            color: isConcluida ? AppColors.background : AppColors.accent,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.4,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'PR',
+                              style: TextStyle(
+                                color: AppColors.accent,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(width: 2),
+                            Icon(
+                              isSaiyajin
+                                  ? Icons.bolt_rounded
+                                  : Icons.emoji_events_rounded,
+                              size: 11,
+                              color: AppColors.accent,
+                            ),
+                          ],
                         ),
                       ),
                     ),

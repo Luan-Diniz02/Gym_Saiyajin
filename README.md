@@ -66,9 +66,9 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 ### 📈 Dashboard de Progresso & Métricas
 - **Modos do App (Modo Saiyajin vs. Modo Atleta)**:
   - Seletor segmentado no topo da tela com alternância reativa em 1 toque:
-    - *Modo Saiyajin*: Temática épica anime, energia e vocabulário Saiyajin (*"HALL DA FAMA ⚡"*, *"PR ⚡"*).
+    - *Modo Saiyajin*: Temática épica anime, energia e vocabulário Saiyajin (*"REGISTRO DE PODER ⚡"*, *"PR ⚡"*).
     - *Modo Atleta*: Interface limpa, sóbria e profissional focada em rastreamento esportivo (*"RECORDES PESSOAIS 🏆"*, *"PR 🏆"*).
-- **Quadro de Recordes Pessoais (Hall da Fama)**:
+- **Quadro de Recordes Pessoais (Registro de Poder)**:
   - Painel consolidado com a maior carga histórica e o maior 1RM Estimado (fórmula refinada de Epley) de cada exercício.
   - Barra de pesquisa instantânea e filtros por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BRAÇOS`, `ABDÔMEN`).
 - **Cálculo de IMC Completo (Padrão OMS)**: Classificação oficial em 6 faixas (*Abaixo do peso, Peso normal, Sobrepeso, Obesidade I, II e III*).
