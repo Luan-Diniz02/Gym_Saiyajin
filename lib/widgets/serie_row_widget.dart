@@ -109,8 +109,6 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
             : null;
 
         final isPR = widget.controller.isSerieRecorde(nomeExercicioAtual, widget.index);
-        final modoApp = widget.controller.modoApp;
-        final isSaiyajin = modoApp == 'saiyajin';
 
         final cardConteudo = Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -187,10 +185,8 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                               ),
                             ),
                             const SizedBox(width: 2),
-                            Icon(
-                              isSaiyajin
-                                  ? Icons.bolt_rounded
-                                  : Icons.emoji_events_rounded,
+                            const Icon(
+                              Icons.bolt_rounded,
                               size: 11,
                               color: AppColors.accent,
                             ),

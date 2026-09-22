@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/exercicio.dart';
+import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../models/sessao_treino.dart';
 import '../models/serie.dart';
@@ -18,21 +19,34 @@ class ProgressoController extends ChangeNotifier {
     required TreinoRepository repository,
     required PreferencesService preferencesService,
   }) : _repository = repository,
-       _preferencesService = preferencesService {
-    PreferencesService.modoAppNotifier.addListener(notifyListeners);
-  }
+       _preferencesService = preferencesService;
 
   double _pesoAtual = 69.0;
   double _altura = 1.70;
+  double? _percentualGordura;
   int _diasTreinadosNaSemana = 0;
   int _metaDiasSemana = 3;
   DateTime? _dataUltimaAtualizacaoPeso;
+
+  double? get percentualGordura => _percentualGordura;
+
+  String? get classificacaoGordura {
+    final bf = _percentualGordura;
+    if (bf == null) return null;
+    if (bf < 10.0) return 'MUITO DEFINIDO ⚡';
+    if (bf < 15.0) return 'FÍSICO ATLÉTICO 💪';
+    if (bf < 20.0) return 'MODERADO / EM FORMA';
+    if (bf < 25.0) return 'ELEVADO';
+    return 'ALTO';
+  }
+
+  PoderLuta _poderLuta = PoderLuta.zero();
+  PoderLuta get poderLuta => _poderLuta;
 
   List<RecordePessoal> _recordesPessoais = [];
   List<RecordePessoal> get recordesPessoais =>
       UnmodifiableListView(_recordesPessoais);
   int get totalRecordes => _recordesPessoais.length;
-  String get modoApp => PreferencesService.modoAppNotifier.value;
 
   String _exercicioFiltro = 'Nenhum exercício';
   final List<String> _exerciciosDisponiveis = ['Nenhum exercício'];
@@ -94,6 +108,10 @@ class ProgressoController extends ChangeNotifier {
     _recalcularDadosGrafico();
 
     _recordesPessoais = await _repository.buscarRecordesPessoais();
+    _poderLuta = PoderLuta.calcular(
+      recordes: _recordesPessoais,
+      historico: _historicoCache,
+    );
 
     notifyListeners();
   }
@@ -227,9 +245,14 @@ class ProgressoController extends ChangeNotifier {
     mudarExercicioFiltro(novoExercicio);
   }
 
-  void atualizarMedidas({required double peso, required double altura}) {
+  void atualizarMedidas({
+    required double peso,
+    required double altura,
+    double? percentualGordura,
+  }) {
     _pesoAtual = peso;
     _altura = altura;
+    _percentualGordura = percentualGordura;
     _dataUltimaAtualizacaoPeso = DateTime.now();
     _salvarPreferencias();
     notifyListeners();
@@ -255,6 +278,18 @@ class ProgressoController extends ChangeNotifier {
       PreferencesService.keyMetaDiasSemana,
       _metaDiasSemana,
     );
+
+    final gordura = _percentualGordura;
+    if (gordura != null) {
+      await _preferencesService.salvarDouble(
+        PreferencesService.keyPercentualGordura,
+        gordura,
+      );
+    } else {
+      await _preferencesService.remover(
+        PreferencesService.keyPercentualGordura,
+      );
+    }
 
     final data = _dataUltimaAtualizacaoPeso;
     if (data != null) {
@@ -284,6 +319,11 @@ class ProgressoController extends ChangeNotifier {
       _altura = alturaSalva;
     }
 
+    final gorduraSalva = await _preferencesService.lerDouble(
+      PreferencesService.keyPercentualGordura,
+    );
+    _percentualGordura = gorduraSalva;
+
     final metaSalva = await _preferencesService.lerInt(
       PreferencesService.keyMetaDiasSemana,
     );
@@ -299,15 +339,5 @@ class ProgressoController extends ChangeNotifier {
         : null;
 
     notifyListeners();
-  }
-
-  Future<void> alternarModoApp(String novoModo) async {
-    await _preferencesService.salvarModoApp(novoModo);
-  }
-
-  @override
-  void dispose() {
-    PreferencesService.modoAppNotifier.removeListener(notifyListeners);
-    super.dispose();
   }
 }

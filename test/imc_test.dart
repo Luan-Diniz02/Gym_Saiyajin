@@ -20,7 +20,10 @@ class FakePreferencesService extends Fake implements PreferencesService {
   @override
   Future<void> salvarInt(String key, int valor) async {}
   @override
+  @override
   Future<void> salvarString(String key, String valor) async {}
+  @override
+  Future<void> remover(String key) async {}
 }
 
 void main() {
@@ -62,6 +65,40 @@ void main() {
     test('Deve classificar como OBESIDADE GRAU III quando IMC >= 40.0', () {
       controller.atualizarMedidas(peso: 130.0, altura: 1.75); // IMC ~ 42.45
       expect(controller.classificacaoImc, equals('OBESIDADE GRAU III'));
+    });
+  });
+
+  group('ProgressoController - Composição Corporal e Gordura (% BF)', () {
+    late ProgressoController controller;
+
+    setUp(() {
+      controller = ProgressoController(
+        repository: FakeTreinoRepository(),
+        preferencesService: FakePreferencesService(),
+      );
+    });
+
+    test('Sem percentual de gordura informado, deve retornar null', () {
+      expect(controller.percentualGordura, isNull);
+      expect(controller.classificacaoGordura, isNull);
+    });
+
+    test('Deve classificar corretamente as faixas esportivas de BF %', () {
+      controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 8.5);
+      expect(controller.percentualGordura, 8.5);
+      expect(controller.classificacaoGordura, 'MUITO DEFINIDO ⚡');
+
+      controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 12.0);
+      expect(controller.classificacaoGordura, 'FÍSICO ATLÉTICO 💪');
+
+      controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 18.0);
+      expect(controller.classificacaoGordura, 'MODERADO / EM FORMA');
+
+      controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 22.0);
+      expect(controller.classificacaoGordura, 'ELEVADO');
+
+      controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 28.0);
+      expect(controller.classificacaoGordura, 'ALTO');
     });
   });
 }

@@ -35,7 +35,7 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 - **Catálogo & Criação de Exercícios**: Modal de busca instantânea com barra de pesquisa por texto e chips de filtragem por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, etc.). Suporte a criação dinâmica de novos exercícios personalizados.
 - **Séries com Ergonomia Avançada & Recordes Pessoais (PRs)**: 
   - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
-  - **Detecção de PRs em Tempo Real**: Micro-badge dinâmico `PR ⚡` (Modo Saiyajin) ou `PR 🏆` (Modo Atleta) e destaque dourado no container ao superar a maior carga histórica ou o 1RM estimado anterior.
+  - **Detecção de PRs em Tempo Real**: Micro-badge dinâmico `PR ⚡` e destaque dourado no container ao superar a maior carga histórica ou o 1RM estimado anterior.
   - **Fluxo Contínuo de Teclado**: Foco no campo de Peso com tecla de ação `Next` pula diretamente para Reps; tecla `Done` (Enter) em Reps valida e conclui a série imediatamente sem fechar o teclado.
   - **Estabilidade Total de Foco**: Ciclo de digitação blindado contra fechamentos involuntários do teclado causados por rebuilds ou ticks do cronômetro.
   - Remoção intuitiva e ágil de séries individuais via gesto de **Swipe** (*deslizar para a esquerda*), com feedback tátil e prevenção de exclusão acidental.
@@ -64,12 +64,14 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 - **Exclusão Segura**: Confirmação modal e exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 
 ### 📈 Dashboard de Progresso & Métricas
-- **Modos do App (Modo Saiyajin vs. Modo Atleta)**:
-  - Seletor segmentado no topo da tela com alternância reativa em 1 toque:
-    - *Modo Saiyajin*: Temática épica anime, energia e vocabulário Saiyajin (*"REGISTRO DE PODER ⚡"*, *"PR ⚡"*).
-    - *Modo Atleta*: Interface limpa, sóbria e profissional focada em rastreamento esportivo (*"RECORDES PESSOAIS 🏆"*, *"PR 🏆"*).
-- **Quadro de Recordes Pessoais (Registro de Poder)**:
-  - Painel consolidado com a maior carga histórica e o maior 1RM Estimado (fórmula refinada de Epley) de cada exercício.
+- **⚡ Medidor de Poder de Luta (Ki) & Transformações Saiyajin**:
+  - **Fórmula Híbrida de Força e Dedicação**:
+    $$\text{Poder de Luta} = \left(\sum \text{Maior 1RM por Grupo} \times 10\right) + \left(\frac{\text{Volume Total Histórico}}{100}\right) + (\text{PRs} \times 150)$$
+  - **Card Interativo de Ki**: Exibição da pontuação total com separadores de milhar, badge da transformação atual e barra de progresso em tempo real rumo à próxima forma Saiyajin.
+  - **Detalhamento Expansível**: Toque no card revela a decomposição exata do poder em 3 pilares (*Força Base*, *Bagagem de Batalha* e *Limites Superados*), além de listar os melhores 1RMs considerados por grupo muscular.
+  - **Escala de Patamares Canônica**: *Classe Baixa* (0-1.000) $\to$ *Guerreiro Z* (1.000-4.000) $\to$ *Elite Saiyajin* (4.000-8.000) $\to$ *Super Saiyajin ⚡* (8.000-15.000) $\to$ *Super Saiyajin 2 ⚡⚡* (15.000-30.000) $\to$ *Super Saiyajin 3 ⚡🔥* (30.000-50.000) $\to$ *Instinto Superior 🌌* (50.000+).
+- **Quadro de Recordes Pessoais (Registro de Poder ⚡)**:
+  - Painel consolidado temático Saiyajin com a maior carga histórica e o maior 1RM Estimado (fórmula refinada de Epley) de cada exercício.
   - Barra de pesquisa instantânea e filtros por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BRAÇOS`, `ABDÔMEN`).
 - **Cálculo de IMC Completo (Padrão OMS)**: Classificação oficial em 6 faixas (*Abaixo do peso, Peso normal, Sobrepeso, Obesidade I, II e III*).
 - **Consistência de Interação**: Cards superiores centralizados com atalho rápido de edição tanto para Meta Semanal quanto para Medidas Corporais.

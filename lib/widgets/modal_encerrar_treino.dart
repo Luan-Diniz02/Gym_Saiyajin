@@ -154,7 +154,6 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                 Builder(
                   builder: (context) {
                     final recordes = widget.controller.recordesBatidosHoje;
-                    final isSaiyajin = widget.controller.modoApp == 'saiyajin';
 
                     return Container(
                       padding: const EdgeInsets.all(14),
@@ -177,10 +176,8 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                   color: AppColors.primary.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(
-                                  isSaiyajin
-                                      ? Icons.bolt_rounded
-                                      : Icons.emoji_events_rounded,
+                                child: const Icon(
+                                  Icons.bolt_rounded,
                                   size: 20,
                                   color: AppColors.accent,
                                 ),
@@ -190,11 +187,9 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      isSaiyajin
-                                          ? '⚡ LIMITES SUPERADOS HOJE!'
-                                          : '🏆 NOVOS RECORDES PESSOAIS!',
-                                      style: const TextStyle(
+                                    const Text(
+                                      '⚡ LIMITES SUPERADOS HOJE!',
+                                      style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w900,
                                         color: AppColors.accent,

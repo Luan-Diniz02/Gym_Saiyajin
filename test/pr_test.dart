@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/models/recorde_pessoal.dart';
-import 'package:gym_saiyajin/services/preferences_service.dart';
 
 void main() {
   group('RecordePessoal - Cálculo de 1RM (Fórmula de Epley Refinada)', () {
@@ -66,19 +65,6 @@ void main() {
       expect(reconstruido.reps1RM, 5);
       expect(reconstruido.dataRecorde, data);
       expect(reconstruido.sessaoId, 42);
-    });
-  });
-
-  group('PreferencesService - Modos do App (Saiyajin vs Atleta)', () {
-    test('Valores padrão e alternância reativa do modo', () async {
-      expect(PreferencesService.modoAppSaiyajin, 'saiyajin');
-      expect(PreferencesService.modoAppAtleta, 'atleta');
-
-      PreferencesService.modoAppNotifier.value = PreferencesService.modoAppSaiyajin;
-      expect(PreferencesService.modoAppNotifier.value, 'saiyajin');
-
-      PreferencesService.modoAppNotifier.value = PreferencesService.modoAppAtleta;
-      expect(PreferencesService.modoAppNotifier.value, 'atleta');
     });
   });
 }

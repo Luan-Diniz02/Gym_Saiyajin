@@ -96,22 +96,30 @@ class MetricasDashboardWidget extends StatelessWidget {
                           children: [
                             const Icon(Icons.monitor_weight_outlined, color: AppColors.primary, size: 30),
                             const SizedBox(height: 12),
-                            const Text(
-                              'MEU IMC',
+                            Text(
+                              controller.percentualGordura != null
+                                  ? 'GORDURA (BF)'
+                                  : 'MEU IMC',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDimmed),
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDimmed),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              controller.imc.toStringAsFixed(1),
+                              controller.percentualGordura != null
+                                  ? '${controller.percentualGordura!.toStringAsFixed(1)}%'
+                                  : controller.imc.toStringAsFixed(1),
                               textAlign: TextAlign.center,
                               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.accent),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              controller.classificacaoImc,
+                              controller.percentualGordura != null
+                                  ? (controller.classificacaoGordura ?? '')
+                                  : controller.classificacaoImc,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
                             ),
                           ],
                         ),

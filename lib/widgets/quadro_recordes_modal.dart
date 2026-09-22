@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/recorde_pessoal.dart';
-import '../services/preferences_service.dart';
 import '../theme/app_colors.dart';
 
 /// Modal estilizado para visualização dos Recordes Pessoais (PRs) / Hall da Fama.
@@ -75,8 +74,6 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
 
   @override
   Widget build(BuildContext context) {
-    final modoApp = PreferencesService.modoAppNotifier.value;
-    final isSaiyajin = modoApp == PreferencesService.modoAppSaiyajin;
     final total = widget.recordes.length;
     final filtrados = _recordesFiltrados;
 
@@ -111,10 +108,8 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                         width: 1,
                       ),
                     ),
-                    child: Icon(
-                      isSaiyajin
-                          ? Icons.bolt_rounded
-                          : Icons.emoji_events_rounded,
+                    child: const Icon(
+                      Icons.bolt_rounded,
                       color: AppColors.accent,
                       size: 26,
                     ),
@@ -124,9 +119,9 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          isSaiyajin ? 'REGISTRO DE PODER ⚡' : 'RECORDES PESSOAIS 🏆',
-                          style: const TextStyle(
+                        const Text(
+                          'REGISTRO DE PODER ⚡',
+                          style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.8,
@@ -248,10 +243,8 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                                 shape: BoxShape.circle,
                                 border: Border.all(color: AppColors.cardBorder),
                               ),
-                              child: Icon(
-                                isSaiyajin
-                                    ? Icons.bolt_rounded
-                                    : Icons.emoji_events_outlined,
+                              child: const Icon(
+                                Icons.bolt_rounded,
                                 size: 32,
                                 color: AppColors.textMuted,
                               ),
@@ -273,9 +266,7 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: Text(
                                 total == 0
-                                    ? (isSaiyajin
-                                        ? 'Conclua suas séries nos treinos para gravar seu poder no Registro de Poder!'
-                                        : 'Conclua suas séries nos treinos para registrar seus recordes de carga e 1RM!')
+                                    ? 'Conclua suas séries nos treinos para gravar seu poder no Registro de Poder!'
                                     : 'Tente alterar os termos da busca ou selecionar outro grupo muscular.',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(

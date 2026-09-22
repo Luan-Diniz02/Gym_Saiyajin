@@ -30,7 +30,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   Map<String, RecordePessoal> get recordesBatidosHoje =>
       UnmodifiableMapView(_recordesBatidosHoje);
   int get totalRecordesBatidosHoje => _recordesBatidosHoje.length;
-  String get modoApp => PreferencesService.modoAppNotifier.value;
   RecordePessoal? obterRecordeBase(String nomeExercicio) =>
       _recordesBaseCache[nomeExercicio.toLowerCase().trim()];
 
@@ -52,7 +51,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
         _preferencesService = preferencesService,
         _notificationService = notificationService {
     WidgetsBinding.instance.addObserver(this);
-    PreferencesService.modoAppNotifier.addListener(notifyListeners);
     _carregarPreferencias();
     carregarFichas();
   }
@@ -723,10 +721,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  Future<void> alternarModoApp(String novoModo) async {
-    await _preferencesService.salvarModoApp(novoModo);
-  }
-
   void atualizarTempoDescanso(int tempoSelecionado) {
     if (tempoSelecionado <= 0) return;
 
@@ -978,7 +972,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    PreferencesService.modoAppNotifier.removeListener(notifyListeners);
     _timer?.cancel();
     _sessaoTimer?.cancel();
     super.dispose();

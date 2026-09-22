@@ -14,7 +14,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final notificationService = NotificationService();
   await notificationService.init();
-  await PreferencesService().inicializarModoApp();
   runApp(GymSaiyajinApp(notificationService: notificationService));
 }
 

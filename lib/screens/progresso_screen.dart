@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../controllers/progresso_controller.dart';
-import '../services/preferences_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/metricas_dashboard_widget.dart';
+import '../widgets/poder_luta_card_widget.dart';
 import '../widgets/progresso_grafico_widget.dart';
 import '../widgets/quadro_recordes_modal.dart';
 
@@ -30,38 +30,63 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
   void _abrirModalAtualizarMedidas() {
     final pesoController = TextEditingController(text: _controller.pesoAtual.toString());
     final alturaController = TextEditingController(text: _controller.altura.toString());
+    final gorduraController = TextEditingController(
+      text: _controller.percentualGordura != null
+          ? _controller.percentualGordura.toString()
+          : '',
+    );
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('ATUALIZAR MEDIDAS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: pesoController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  labelText: 'Peso (kg)',
-                  filled: true,
-                  fillColor: AppColors.background,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+          title: const Text('COMPOSIÇÃO & MEDIDAS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: pesoController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Peso (kg)',
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: alturaController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  labelText: 'Altura (m)',
-                  filled: true,
-                  fillColor: AppColors.background,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                const SizedBox(height: 14),
+                TextField(
+                  controller: alturaController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Altura (m)',
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 14),
+                TextField(
+                  controller: gorduraController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Gordura Corporal (% BF) - Opcional',
+                    hintText: 'Ex: 12.5',
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Recomendado para praticantes de musculação: substitui a estimativa crua de IMC por classificação atlética real.',
+                  style: TextStyle(fontSize: 10, color: AppColors.textDimmed),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
@@ -72,7 +97,13 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
               onPressed: () {
                 final novoPeso = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? _controller.pesoAtual;
                 final novaAltura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? _controller.altura;
-                _controller.atualizarMedidas(peso: novoPeso, altura: novaAltura);
+                final textoGordura = gorduraController.text.trim().replaceAll(',', '.');
+                final novaGordura = textoGordura.isNotEmpty ? double.tryParse(textoGordura) : null;
+                _controller.atualizarMedidas(
+                  peso: novoPeso,
+                  altura: novaAltura,
+                  percentualGordura: novaGordura,
+                );
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: AppColors.background),
@@ -174,9 +205,9 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   'SEU PROGRESSO',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
                 ),
-                const SizedBox(height: 16),
-                _buildSeletorModoApp(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                PoderLutaCardWidget(controller: _controller),
+                const SizedBox(height: 18),
                 MetricasDashboardWidget(
                   controller: _controller,
                   onEditarMeta: _abrirModalAtualizarMeta,
@@ -196,107 +227,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
     );
   }
 
-  Widget _buildSeletorModoApp() {
-    final modoAtual = _controller.modoApp;
-    final isSaiyajin = modoAtual == PreferencesService.modoAppSaiyajin;
-
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.cardBorder),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                if (!isSaiyajin) {
-                  HapticFeedback.selectionClick();
-                  _controller.alternarModoApp(PreferencesService.modoAppSaiyajin);
-                }
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSaiyajin ? AppColors.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.bolt_rounded,
-                      size: 16,
-                      color: isSaiyajin ? AppColors.background : AppColors.textDimmed,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'MODO SAIYAJIN',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: isSaiyajin ? FontWeight.w900 : FontWeight.w600,
-                        color: isSaiyajin ? AppColors.background : AppColors.textDimmed,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                if (isSaiyajin) {
-                  HapticFeedback.selectionClick();
-                  _controller.alternarModoApp(PreferencesService.modoAppAtleta);
-                }
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: !isSaiyajin ? AppColors.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.emoji_events_outlined,
-                      size: 16,
-                      color: !isSaiyajin ? AppColors.background : AppColors.textDimmed,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'MODO ATLETA',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: !isSaiyajin ? FontWeight.w900 : FontWeight.w600,
-                        color: !isSaiyajin ? AppColors.background : AppColors.textDimmed,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildQuadroRecordesCard() {
-    final modoAtual = _controller.modoApp;
-    final isSaiyajin = modoAtual == PreferencesService.modoAppSaiyajin;
     final total = _controller.totalRecordes;
 
     return InkWell(
@@ -328,8 +259,8 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   color: AppColors.primary.withValues(alpha: 0.25),
                 ),
               ),
-              child: Icon(
-                isSaiyajin ? Icons.bolt_rounded : Icons.emoji_events_rounded,
+              child: const Icon(
+                Icons.bolt_rounded,
                 color: AppColors.accent,
                 size: 26,
               ),
@@ -341,9 +272,9 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        isSaiyajin ? 'REGISTRO DE PODER ⚡' : 'RECORDES PESSOAIS 🏆',
-                        style: const TextStyle(
+                      const Text(
+                        'REGISTRO DE PODER ⚡',
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textLight,
