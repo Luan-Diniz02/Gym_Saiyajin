@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/exercicio.dart';
+import '../models/recorde_pessoal.dart';
 import '../models/sessao_treino.dart';
 import '../models/serie.dart';
 import '../repositories/treino_repository.dart';
@@ -17,13 +18,21 @@ class ProgressoController extends ChangeNotifier {
     required TreinoRepository repository,
     required PreferencesService preferencesService,
   }) : _repository = repository,
-       _preferencesService = preferencesService;
+       _preferencesService = preferencesService {
+    PreferencesService.modoAppNotifier.addListener(notifyListeners);
+  }
 
   double _pesoAtual = 69.0;
   double _altura = 1.70;
   int _diasTreinadosNaSemana = 0;
   int _metaDiasSemana = 3;
   DateTime? _dataUltimaAtualizacaoPeso;
+
+  List<RecordePessoal> _recordesPessoais = [];
+  List<RecordePessoal> get recordesPessoais =>
+      UnmodifiableListView(_recordesPessoais);
+  int get totalRecordes => _recordesPessoais.length;
+  String get modoApp => PreferencesService.modoAppNotifier.value;
 
   String _exercicioFiltro = 'Nenhum exercício';
   final List<String> _exerciciosDisponiveis = ['Nenhum exercício'];
@@ -83,6 +92,8 @@ class ProgressoController extends ChangeNotifier {
     _calcularDiasAtivos(historico);
     _atualizarListaExercicios(historico);
     _recalcularDadosGrafico();
+
+    _recordesPessoais = await _repository.buscarRecordesPessoais();
 
     notifyListeners();
   }
@@ -288,5 +299,15 @@ class ProgressoController extends ChangeNotifier {
         : null;
 
     notifyListeners();
+  }
+
+  Future<void> alternarModoApp(String novoModo) async {
+    await _preferencesService.salvarModoApp(novoModo);
+  }
+
+  @override
+  void dispose() {
+    PreferencesService.modoAppNotifier.removeListener(notifyListeners);
+    super.dispose();
   }
 }

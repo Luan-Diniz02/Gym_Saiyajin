@@ -108,37 +108,76 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
             ? serieAnterior!.reps.toString()
             : null;
 
+        final isPR = widget.controller.isSerieRecorde(nomeExercicioAtual, widget.index);
+        final modoApp = widget.controller.modoApp;
+        final isSaiyajin = modoApp == 'saiyajin';
+
         final cardConteudo = Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.cardBorder),
+            border: Border.all(
+              color: isPR
+                  ? (isConcluida ? AppColors.primary : AppColors.accent.withValues(alpha: 0.6))
+                  : AppColors.cardBorder,
+              width: isPR ? 1.5 : 1.0,
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: isConcluida ? AppColors.accent : Colors.transparent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.accent, width: 2),
-                ),
-                child: Center(
-                  child: Text(
-                    '${widget.index + 1}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                      color: isConcluida
-                          ? AppColors.background
-                          : AppColors.accent,
+              Stack(
+                alignment: Alignment.topCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isConcluida ? AppColors.accent : Colors.transparent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.accent, width: 2),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${widget.index + 1}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          color: isConcluida
+                              ? AppColors.background
+                              : AppColors.accent,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  if (isPR)
+                    Positioned(
+                      top: -8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: isConcluida ? AppColors.primary : AppColors.surface,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: isConcluida ? AppColors.primary : AppColors.accent,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          isSaiyajin ? 'PR ⚡' : 'PR 🏆',
+                          style: TextStyle(
+                            color: isConcluida ? AppColors.background : AppColors.accent,
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(width: 14),
               Expanded(

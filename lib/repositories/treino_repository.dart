@@ -1,6 +1,7 @@
 import '../database/db_helper.dart';
 import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
+import '../models/recorde_pessoal.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 
@@ -350,5 +351,194 @@ class TreinoRepository {
     } catch (e) {
       throw Exception('Erro ao excluir ficha de treino: $e');
     }
+  }
+
+  /// Busca todos os recordes pessoais (PRs) consolidados no histórico de treinos.
+  Future<List<RecordePessoal>> buscarRecordesPessoais() async {
+    try {
+      final db = await _databaseHelper.database;
+      final List<Map<String, Object?>> rows = await db.rawQuery('''
+        SELECT 
+          e.nome as ex_nome,
+          e.grupo as ex_grupo,
+          s.peso as peso,
+          s.reps as reps,
+          sess.data as sessao_data,
+          sess.id as sessao_id
+        FROM series s
+        JOIN exercicios e ON s.exercicio_id = e.id
+        JOIN sessoes sess ON e.sessao_id = sess.id
+        WHERE s.concluida = 1 
+          AND s.peso IS NOT NULL 
+          AND s.peso > 0 
+          AND s.reps IS NOT NULL 
+          AND s.reps > 0
+        ORDER BY sess.data ASC, s.id ASC
+      ''');
+
+      if (rows.isEmpty) return [];
+
+      final Map<String, _RecordeAcumulador> mapaRecordes = {};
+
+      for (final row in rows) {
+        final nome = (row['ex_nome'] as String? ?? '').trim();
+        if (nome.isEmpty) continue;
+        final chave = nome.toLowerCase();
+        final grupo = (row['ex_grupo'] as String? ?? '').trim();
+        final peso = (row['peso'] as num).toDouble();
+        final reps = (row['reps'] as num).toInt();
+        final sessaoId = (row['sessao_id'] as num?)?.toInt();
+        final dataStr = row['sessao_data'] as String?;
+        final data = dataStr != null ? DateTime.tryParse(dataStr) : null;
+
+        final umRM = RecordePessoal.calcular1RM(peso, reps);
+
+        final acumulador = mapaRecordes.putIfAbsent(
+          chave,
+          () => _RecordeAcumulador(nomeOriginal: nome, grupo: grupo),
+        );
+
+        acumulador.atualizar(
+          peso: peso,
+          reps: reps,
+          umRM: umRM,
+          data: data,
+          sessaoId: sessaoId,
+          grupo: grupo.isNotEmpty ? grupo : null,
+        );
+      }
+
+      final List<RecordePessoal> recordes = mapaRecordes.values.map((ac) {
+        return ac.construir();
+      }).toList();
+
+      recordes.sort((a, b) => a.exercicioNome.toLowerCase().compareTo(b.exercicioNome.toLowerCase()));
+      return recordes;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// Busca o recorde pessoal histórico de um exercício antes da sessão ativa.
+  Future<RecordePessoal?> buscarRecordeHistoricoExercicio(String nomeExercicio) async {
+    final nomeTrimmed = nomeExercicio.trim();
+    if (nomeTrimmed.isEmpty) return null;
+
+    try {
+      final db = await _databaseHelper.database;
+      final List<Map<String, Object?>> rows = await db.rawQuery('''
+        SELECT 
+          e.nome as ex_nome,
+          e.grupo as ex_grupo,
+          s.peso as peso,
+          s.reps as reps,
+          sess.data as sessao_data,
+          sess.id as sessao_id
+        FROM series s
+        JOIN exercicios e ON s.exercicio_id = e.id
+        JOIN sessoes sess ON e.sessao_id = sess.id
+        WHERE LOWER(TRIM(e.nome)) = LOWER(TRIM(?))
+          AND s.concluida = 1 
+          AND s.peso IS NOT NULL 
+          AND s.peso > 0 
+          AND s.reps IS NOT NULL 
+          AND s.reps > 0
+        ORDER BY sess.data ASC, s.id ASC
+      ''', [nomeTrimmed]);
+
+      if (rows.isEmpty) return null;
+
+      final acumulador = _RecordeAcumulador(
+        nomeOriginal: nomeTrimmed,
+        grupo: (rows.first['ex_grupo'] as String? ?? '').trim(),
+      );
+
+      for (final row in rows) {
+        final peso = (row['peso'] as num).toDouble();
+        final reps = (row['reps'] as num).toInt();
+        final sessaoId = (row['sessao_id'] as num?)?.toInt();
+        final dataStr = row['sessao_data'] as String?;
+        final data = dataStr != null ? DateTime.tryParse(dataStr) : null;
+        final grupo = (row['ex_grupo'] as String? ?? '').trim();
+
+        final umRM = RecordePessoal.calcular1RM(peso, reps);
+        acumulador.atualizar(
+          peso: peso,
+          reps: reps,
+          umRM: umRM,
+          data: data,
+          sessaoId: sessaoId,
+          grupo: grupo.isNotEmpty ? grupo : null,
+        );
+      }
+
+      return acumulador.construir();
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+class _RecordeAcumulador {
+  String nomeOriginal;
+  String grupo;
+  double cargaMaxima = 0.0;
+  int repsCargaMaxima = 0;
+  DateTime? dataCargaMaxima;
+
+  double umRepMaxEstimado = 0.0;
+  double peso1RM = 0.0;
+  int reps1RM = 0;
+  DateTime? data1RM;
+  int? sessaoId;
+
+  _RecordeAcumulador({required this.nomeOriginal, required this.grupo});
+
+  void atualizar({
+    required double peso,
+    required int reps,
+    required double umRM,
+    DateTime? data,
+    int? sessaoId,
+    String? grupo,
+  }) {
+    if (grupo != null && grupo.isNotEmpty) {
+      this.grupo = grupo;
+    }
+    if (sessaoId != null) {
+      this.sessaoId = sessaoId;
+    }
+
+    if (peso > cargaMaxima || (peso == cargaMaxima && reps > repsCargaMaxima)) {
+      cargaMaxima = peso;
+      repsCargaMaxima = reps;
+      dataCargaMaxima = data;
+    }
+
+    if (umRM > umRepMaxEstimado) {
+      umRepMaxEstimado = umRM;
+      peso1RM = peso;
+      reps1RM = reps;
+      data1RM = data;
+    }
+  }
+
+  RecordePessoal construir() {
+    DateTime? dataFinal = data1RM ?? dataCargaMaxima;
+    if (dataCargaMaxima != null && data1RM != null) {
+      dataFinal = dataCargaMaxima!.isAfter(data1RM!) ? dataCargaMaxima : data1RM;
+    }
+
+    return RecordePessoal(
+      exercicioNome: nomeOriginal,
+      grupo: grupo,
+      cargaMaxima: cargaMaxima,
+      repsCargaMaxima: repsCargaMaxima,
+      umRepMaxEstimado: umRepMaxEstimado,
+      peso1RM: peso1RM,
+      reps1RM: reps1RM,
+      dataRecorde: dataFinal,
+      sessaoId: sessaoId,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesService {
@@ -7,6 +8,34 @@ class PreferencesService {
   static const String keyMetaDiasSemana = 'progresso_meta_dias_semana';
   static const String keyDataUltimaAtualizacaoPeso = 'progresso_data_ultima_atualizacao_peso';
   static const String keyExerciciosCustomizados = 'exercicios_customizados';
+  static const String keyModoApp = 'app_modo';
+
+  static const String modoAppSaiyajin = 'saiyajin';
+  static const String modoAppAtleta = 'atleta';
+
+  /// Notificador reativo global do modo ativo do aplicativo.
+  static final ValueNotifier<String> modoAppNotifier =
+      ValueNotifier<String>(modoAppSaiyajin);
+
+  Future<void> inicializarModoApp() async {
+    final modoSalvo = await lerString(keyModoApp);
+    if (modoSalvo != null &&
+        (modoSalvo == modoAppSaiyajin || modoSalvo == modoAppAtleta)) {
+      modoAppNotifier.value = modoSalvo;
+    }
+  }
+
+  Future<void> salvarModoApp(String modo) async {
+    final modoValido = (modo == modoAppAtleta) ? modoAppAtleta : modoAppSaiyajin;
+    await salvarString(keyModoApp, modoValido);
+    modoAppNotifier.value = modoValido;
+  }
+
+  Future<String> obterModoApp() async {
+    final salvo = await lerString(keyModoApp);
+    if (salvo == modoAppAtleta) return modoAppAtleta;
+    return modoAppSaiyajin;
+  }
 
   Future<void> salvarInt(String chave, int valor) async {
     final prefs = await SharedPreferences.getInstance();

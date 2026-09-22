@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 
 import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
+import '../models/recorde_pessoal.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
@@ -23,6 +24,16 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   String? get nomeTreino => _nomeTreino;
 
   final Map<String, List<Serie>> _ultimasSeriesCache = {};
+  final Map<String, RecordePessoal> _recordesBaseCache = {};
+  final Map<String, RecordePessoal> _recordesBatidosHoje = {};
+
+  Map<String, RecordePessoal> get recordesBatidosHoje =>
+      UnmodifiableMapView(_recordesBatidosHoje);
+  int get totalRecordesBatidosHoje => _recordesBatidosHoje.length;
+  String get modoApp => PreferencesService.modoAppNotifier.value;
+  RecordePessoal? obterRecordeBase(String nomeExercicio) =>
+      _recordesBaseCache[nomeExercicio.toLowerCase().trim()];
+
   List<FichaTreino> _fichas = [];
   List<FichaTreino> get fichas => UnmodifiableListView(_fichas);
   List<FichaExercicioItem> _exerciciosFichaPendentes = [];
@@ -37,10 +48,11 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     required TreinoRepository repository,
     required PreferencesService preferencesService,
     required NotificationService notificationService,
-  }) : _repository = repository,
-       _preferencesService = preferencesService,
-       _notificationService = notificationService {
+  })  : _repository = repository,
+        _preferencesService = preferencesService,
+        _notificationService = notificationService {
     WidgetsBinding.instance.addObserver(this);
+    PreferencesService.modoAppNotifier.addListener(notifyListeners);
     _carregarPreferencias();
     carregarFichas();
   }
@@ -208,6 +220,14 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
         nomeExercicio,
       );
       _ultimasSeriesCache[chave] = series;
+
+      final pr = await _repository.buscarRecordeHistoricoExercicio(
+        nomeExercicio,
+      );
+      if (pr != null) {
+        _recordesBaseCache[chave] = pr;
+      }
+
       notifyListeners();
     } catch (_) {}
   }
@@ -487,6 +507,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     _sessaoTreino.exerciciosConcluidosHoje.clear();
     _sessaoTreino.exercicioAtual = null;
     _nomeTreino = null;
+    _recordesBatidosHoje.clear();
+    _recordesBaseCache.clear();
     _exerciciosFichaPendentes.clear();
     _timer?.cancel();
     _timerEndTime = null;
@@ -522,6 +544,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
         index >= 0 &&
         index < atual.seriesDetalhes.length) {
       atual.seriesDetalhes.removeAt(index);
+      _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
       notifyListeners();
     }
   }
@@ -534,6 +557,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     final v = valor.replaceAll(',', '.').trim();
     atual.seriesDetalhes[index].peso = v.isEmpty ? null : double.tryParse(v);
+    if (atual.seriesDetalhes[index].concluida) {
+      _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
+    }
   }
 
   void atualizarRepsSerie(int index, String valor) {
@@ -544,6 +570,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     final v = valor.trim();
     atual.seriesDetalhes[index].reps = v.isEmpty ? null : int.tryParse(v);
+    if (atual.seriesDetalhes[index].concluida) {
+      _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
+    }
   }
 
   bool preencherSerieComAnterior(int index) {
@@ -563,6 +592,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
     if (serieAnterior.reps != null) {
       atual.seriesDetalhes[index].reps = serieAnterior.reps;
+    }
+    if (atual.seriesDetalhes[index].concluida) {
+      _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
     }
     notifyListeners();
     return true;
@@ -587,6 +619,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     serie.concluida = agoraConcluida;
+    _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
 
     if (agoraConcluida) {
       iniciarTimer();
@@ -594,6 +627,104 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     notifyListeners();
+  }
+
+  /// Verifica se uma série do exercício atual supera a marca histórica anterior.
+  bool isSerieRecorde(String nomeExercicio, int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || atual.nome != nomeExercicio) return false;
+    if (index < 0 || index >= atual.seriesDetalhes.length) return false;
+
+    final serie = atual.seriesDetalhes[index];
+    if (serie.peso == null ||
+        serie.reps == null ||
+        serie.peso! <= 0 ||
+        serie.reps! <= 0) {
+      return false;
+    }
+
+    final chave = nomeExercicio.toLowerCase().trim();
+    final base = _recordesBaseCache[chave];
+    if (base == null || (base.cargaMaxima <= 0 && base.umRepMaxEstimado <= 0)) {
+      return false;
+    }
+
+    final p = serie.peso!;
+    final r = serie.reps!;
+    final c1RM = RecordePessoal.calcular1RM(p, r);
+
+    final bateuCarga = p > base.cargaMaxima || (p == base.cargaMaxima && r > base.repsCargaMaxima);
+    final bateu1RM = c1RM > base.umRepMaxEstimado;
+
+    return bateuCarga || bateu1RM;
+  }
+
+  void _reavaliarRecordesExercicio(
+    String nomeExercicio,
+    String grupo,
+    List<Serie> series,
+  ) {
+    final chave = nomeExercicio.toLowerCase().trim();
+    final base = _recordesBaseCache[chave];
+
+    double melhorPeso = 0;
+    int repsMelhorPeso = 0;
+    double melhor1RM = 0;
+    double pesoMelhor1RM = 0;
+    int repsMelhor1RM = 0;
+    bool bateuAlgum = false;
+
+    for (final s in series) {
+      if (!s.concluida ||
+          s.peso == null ||
+          s.reps == null ||
+          s.peso! <= 0 ||
+          s.reps! <= 0) {
+        continue;
+      }
+
+      final p = s.peso!;
+      final r = s.reps!;
+      final c1RM = RecordePessoal.calcular1RM(p, r);
+
+      if (base != null) {
+        if (p > base.cargaMaxima || (p == base.cargaMaxima && r > base.repsCargaMaxima)) {
+          bateuAlgum = true;
+        }
+        if (c1RM > base.umRepMaxEstimado) {
+          bateuAlgum = true;
+        }
+      }
+
+      if (p > melhorPeso || (p == melhorPeso && r > repsMelhorPeso)) {
+        melhorPeso = p;
+        repsMelhorPeso = r;
+      }
+      if (c1RM > melhor1RM) {
+        melhor1RM = c1RM;
+        pesoMelhor1RM = p;
+        repsMelhor1RM = r;
+      }
+    }
+
+    if (bateuAlgum) {
+      _recordesBatidosHoje[nomeExercicio] = RecordePessoal(
+        exercicioNome: nomeExercicio,
+        grupo: grupo,
+        cargaMaxima: melhorPeso,
+        repsCargaMaxima: repsMelhorPeso,
+        umRepMaxEstimado: melhor1RM,
+        peso1RM: pesoMelhor1RM,
+        reps1RM: repsMelhor1RM,
+        dataRecorde: DateTime.now(),
+      );
+    } else {
+      _recordesBatidosHoje.remove(nomeExercicio);
+    }
+  }
+
+  Future<void> alternarModoApp(String novoModo) async {
+    await _preferencesService.salvarModoApp(novoModo);
   }
 
   void atualizarTempoDescanso(int tempoSelecionado) {
@@ -847,6 +978,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    PreferencesService.modoAppNotifier.removeListener(notifyListeners);
     _timer?.cancel();
     _sessaoTimer?.cancel();
     super.dispose();

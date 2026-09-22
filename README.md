@@ -33,8 +33,9 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - Carga e repetições aparecem como sugestão suave nos inputs (`hintText`) e em uma linha discreta de apoio (`Anterior: X kg × Y reps`), facilitando a progressão contínua de carga (*Progressive Overload*).
   - **Preenchimento Inteligente em 1 Toque**: Ao tocar no botão de check com os inputs vazios, o app preenche automaticamente a série com os valores da carga anterior.
 - **Catálogo & Criação de Exercícios**: Modal de busca instantânea com barra de pesquisa por texto e chips de filtragem por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, etc.). Suporte a criação dinâmica de novos exercícios personalizados.
-- **Séries com Ergonomia Avançada**: 
+- **Séries com Ergonomia Avançada & Recordes Pessoais (PRs)**: 
   - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
+  - **Detecção de PRs em Tempo Real**: Micro-badge dinâmico `PR ⚡` (Modo Saiyajin) ou `PR 🏆` (Modo Atleta) e destaque dourado no container ao superar a maior carga histórica ou o 1RM estimado anterior.
   - **Fluxo Contínuo de Teclado**: Foco no campo de Peso com tecla de ação `Next` pula diretamente para Reps; tecla `Done` (Enter) em Reps valida e conclui a série imediatamente sem fechar o teclado.
   - **Estabilidade Total de Foco**: Ciclo de digitação blindado contra fechamentos involuntários do teclado causados por rebuilds ou ticks do cronômetro.
   - Remoção intuitiva e ágil de séries individuais via gesto de **Swipe** (*deslizar para a esquerda*), com feedback tátil e prevenção de exclusão acidental.
@@ -43,7 +44,9 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - **Tempo de Descanso Total Acumulado**: Registra e consolida todo o tempo que o usuário passou descansando entre as séries ao longo de toda a sessão.
   - **Cronômetro Regressivo Inteligente**: Visor circular com anel de progresso nítido, sincronizado com o ciclo de vida do sistema, alerta sonoro nativo, vibração háptica contínua e blindagem contra notificações duplicadas com cancelamento atômico de alarmes e controle de concorrência sequencial.
   - **Modal de Ajuste de Tempo**: Visor digital integrado (`MIN : SEG`), botões satélites de ajuste fino `+/- 15s` e grade simétrica 3x2 de atalhos rápidos padronizados (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
-- **Encerramento Protegido**: Validação contra fechamento acidental com exercícios pendentes, gravação transacional segura no banco de dados e disparo automático do modal de compartilhamento.
+- **Encerramento Protegido & Celebração de Conquistas**: 
+  - Validação contra fechamento acidental com exercícios pendentes, gravação transacional segura no banco de dados e disparo automático do modal de compartilhamento.
+  - **Banner Comemorativo de PRs**: Exibição destacada no modal de encerramento celebrando todos os recordes superados na sessão com chips das marcas conquistadas.
 
 ### 📜 Histórico de Sessões & Compartilhamento
 - **Efeito de Timeline Clássico**: Linha vertical contínua conectando os dias de treino com nós circulares de calendário.
@@ -56,11 +59,18 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - Exportação e compartilhamento direto de imagem PNG ou texto formatado via `share_plus`.
 - **Backup & Restauração Completa (JSON)**:
   - **Exportar Histórico**: Gera arquivo JSON estruturado com todas as sessões, exercícios, séries e exercícios customizados.
-  - **Importar Histórico**: Carregamento seguro via seletor de arquivos com opção de **Mesclar Dados** (evita duplicatas) ou **Substituir Tudo**.
+  - **Importar Histórico**: Modal customizado no padrão premium Saiyajin com opções claras de **Mesclar Dados** (recomendado) ou **Substituir Tudo**.
 - **Empty State Motivacional**: Ilustração e mensagem temática encorajadora para novos usuários ou histórico zerado.
 - **Exclusão Segura**: Confirmação modal e exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 
 ### 📈 Dashboard de Progresso & Métricas
+- **Modos do App (Modo Saiyajin vs. Modo Atleta)**:
+  - Seletor segmentado no topo da tela com alternância reativa em 1 toque:
+    - *Modo Saiyajin*: Temática épica anime, energia e vocabulário Saiyajin (*"HALL DA FAMA ⚡"*, *"PR ⚡"*).
+    - *Modo Atleta*: Interface limpa, sóbria e profissional focada em rastreamento esportivo (*"RECORDES PESSOAIS 🏆"*, *"PR 🏆"*).
+- **Quadro de Recordes Pessoais (Hall da Fama)**:
+  - Painel consolidado com a maior carga histórica e o maior 1RM Estimado (fórmula refinada de Epley) de cada exercício.
+  - Barra de pesquisa instantânea e filtros por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BRAÇOS`, `ABDÔMEN`).
 - **Cálculo de IMC Completo (Padrão OMS)**: Classificação oficial em 6 faixas (*Abaixo do peso, Peso normal, Sobrepeso, Obesidade I, II e III*).
 - **Consistência de Interação**: Cards superiores centralizados com atalho rápido de edição tanto para Meta Semanal quanto para Medidas Corporais.
 - **Gráfico de Progressão de Cargas (`fl_chart`)**:
@@ -102,6 +112,7 @@ gym_saiyajin/
 │   │   └── db_helper.dart
 │   ├── models/                 # Entidades de domínio tipadas com serialização JSON
 │   │   ├── exercicio.dart
+│   │   ├── recorde_pessoal.dart
 │   │   ├── serie.dart
 │   │   └── sessao_treino.dart
 │   ├── repositories/           # Abstração de acesso a dados, backup e queries transacionais
@@ -127,6 +138,7 @@ gym_saiyajin/
 │       ├── modal_encerrar_treino.dart
 │       ├── modal_importar_backup.dart
 │       ├── progresso_grafico_widget.dart
+│       ├── quadro_recordes_modal.dart
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
 ├── test/                       # Suíte de testes unitários automatizados
@@ -134,6 +146,7 @@ gym_saiyajin/
 │   ├── ficha_test.dart
 │   ├── imc_test.dart
 │   ├── notification_service_test.dart
+│   ├── pr_test.dart
 │   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart
 └── pubspec.yaml

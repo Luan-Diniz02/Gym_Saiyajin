@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/treino_controller.dart';
+import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
 
 class ResultadoEncerrarTreino {
@@ -147,6 +148,116 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
               const SizedBox(height: 16),
               const Divider(color: AppColors.cardBorder, height: 1),
               const SizedBox(height: 16),
+
+              // Banner Comemorativo de Recordes Batidos (PRs)
+              if (widget.controller.recordesBatidosHoje.isNotEmpty) ...[
+                Builder(
+                  builder: (context) {
+                    final recordes = widget.controller.recordesBatidosHoje;
+                    final isSaiyajin = widget.controller.modoApp == 'saiyajin';
+
+                    return Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.35),
+                          width: 1.2,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  isSaiyajin
+                                      ? Icons.military_tech_rounded
+                                      : Icons.emoji_events_rounded,
+                                  size: 20,
+                                  color: AppColors.accent,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      isSaiyajin
+                                          ? '⚡ LIMITES SUPERADOS HOJE!'
+                                          : '🏆 NOVOS RECORDES PESSOAIS!',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w900,
+                                        color: AppColors.accent,
+                                        letterSpacing: 0.6,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      '${recordes.length} ${recordes.length == 1 ? 'exercício superou' : 'exercícios superaram'} a melhor marca histórica',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: AppColors.textDimmed,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: recordes.values.map((pr) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: AppColors.cardBorder),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      pr.exercicioNome,
+                                      style: const TextStyle(
+                                        color: AppColors.textLight,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      '${RecordePessoal.formatarPeso(pr.cargaMaxima)} kg',
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 14),
+              ],
 
               // Alerta Premium de Exercício em Andamento
               if (temExercicioEmAndamento && exercicioAtual != null) ...[

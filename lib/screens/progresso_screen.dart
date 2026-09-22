@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../controllers/progresso_controller.dart';
+import '../services/preferences_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/metricas_dashboard_widget.dart';
 import '../widgets/progresso_grafico_widget.dart';
+import '../widgets/quadro_recordes_modal.dart';
 
 class ProgressoScreen extends StatefulWidget {
   final ProgressoController controller;
@@ -171,12 +174,16 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   'SEU PROGRESSO',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1.5),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 16),
+                _buildSeletorModoApp(),
+                const SizedBox(height: 24),
                 MetricasDashboardWidget(
                   controller: _controller,
                   onEditarMeta: _abrirModalAtualizarMeta,
                   onEditarMedidas: _abrirModalAtualizarMedidas,
                 ),
+                const SizedBox(height: 18),
+                _buildQuadroRecordesCard(),
                 const SizedBox(height: 24),
                 ProgressoGraficoWidget(controller: _controller),
                 const SizedBox(height: 24),
@@ -186,6 +193,204 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSeletorModoApp() {
+    final modoAtual = _controller.modoApp;
+    final isSaiyajin = modoAtual == PreferencesService.modoAppSaiyajin;
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.cardBorder),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                if (!isSaiyajin) {
+                  HapticFeedback.selectionClick();
+                  _controller.alternarModoApp(PreferencesService.modoAppSaiyajin);
+                }
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSaiyajin ? AppColors.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.bolt_rounded,
+                      size: 16,
+                      color: isSaiyajin ? AppColors.background : AppColors.textDimmed,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'MODO SAIYAJIN',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: isSaiyajin ? FontWeight.w900 : FontWeight.w600,
+                        color: isSaiyajin ? AppColors.background : AppColors.textDimmed,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                if (isSaiyajin) {
+                  HapticFeedback.selectionClick();
+                  _controller.alternarModoApp(PreferencesService.modoAppAtleta);
+                }
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: !isSaiyajin ? AppColors.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.emoji_events_outlined,
+                      size: 16,
+                      color: !isSaiyajin ? AppColors.background : AppColors.textDimmed,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'MODO ATLETA',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: !isSaiyajin ? FontWeight.w900 : FontWeight.w600,
+                        color: !isSaiyajin ? AppColors.background : AppColors.textDimmed,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuadroRecordesCard() {
+    final modoAtual = _controller.modoApp;
+    final isSaiyajin = modoAtual == PreferencesService.modoAppSaiyajin;
+    final total = _controller.totalRecordes;
+
+    return InkWell(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        QuadroRecordesModal.show(context, _controller.recordesPessoais);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: total > 0
+                ? AppColors.primary.withValues(alpha: 0.35)
+                : AppColors.cardBorder,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                ),
+              ),
+              child: Icon(
+                isSaiyajin ? Icons.military_tech_rounded : Icons.emoji_events_rounded,
+                color: AppColors.accent,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        isSaiyajin ? 'HALL DA FAMA ⚡' : 'RECORDES PESSOAIS 🏆',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textLight,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      if (total > 0) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.accent.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '$total PRs',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.accent,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    total > 0
+                        ? 'Ver maiores cargas e 1RM por exercício'
+                        : 'Nenhum recorde registrado ainda',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textDimmed,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: AppColors.textDimmed,
+              size: 16,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
