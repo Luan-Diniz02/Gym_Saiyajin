@@ -7,6 +7,8 @@ import '../controllers/treino_controller.dart';
 import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
 import '../models/serie.dart';
+import '../controllers/progresso_controller.dart';
+import '../widgets/celebracao_transformacao_modal.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
 import '../widgets/compartilhar_card_modal.dart';
@@ -18,11 +20,13 @@ import '../widgets/serie_row_widget.dart';
 class TreinoScreen extends StatefulWidget {
   final VoidCallback onEncerrarTreino;
   final TreinoController controller;
+  final ProgressoController? progressoController;
 
   const TreinoScreen({
     super.key,
     required this.onEncerrarTreino,
     required this.controller,
+    this.progressoController,
   });
 
   @override
@@ -301,7 +305,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
   Future<void> _confirmarEncerramentoTreino() async {
     final resultado = await showDialog<ResultadoEncerrarTreino>(
       context: context,
-      builder: (context) => ModalEncerrarTreinoDialog(controller: _controller),
+      builder: (context) => ModalEncerrarTreinoDialog(
+        controller: _controller,
+        progressoController: widget.progressoController,
+      ),
     );
 
     if (resultado == null) return;
@@ -310,6 +317,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
       if (resultado.nomeTreino != null && resultado.nomeTreino!.trim().isNotEmpty) {
         _controller.definirNomeTreino(resultado.nomeTreino!.trim());
       }
+
+      final transAntes = widget.progressoController?.poderLuta.transformacao;
 
       final sessaoSalva = await _controller.encerrarTreino(
         descartarAtual: resultado.descartarAtual,
@@ -326,6 +335,21 @@ class _TreinoScreenState extends State<TreinoScreen> {
         const SnackBar(content: Text('Treino salvo com sucesso!')),
       );
       widget.onEncerrarTreino();
+
+      if (widget.progressoController != null) {
+        await widget.progressoController!.carregarDados();
+      }
+
+      final transDepois = widget.progressoController?.poderLuta.transformacao;
+      if (transDepois != null && transAntes != null && transDepois.index > transAntes.index) {
+        if (mounted) {
+          await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => CelebracaoTransformacaoModal(novaTransformacao: transDepois),
+          );
+        }
+      }
 
       if (sessaoSalva != null && mounted) {
         showDialog(

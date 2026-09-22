@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/controllers/treino_controller.dart';
 import 'package:gym_saiyajin/models/ficha_treino.dart';
+import 'package:gym_saiyajin/models/recorde_pessoal.dart';
 import 'package:gym_saiyajin/models/serie.dart';
 import 'package:gym_saiyajin/models/sessao_treino.dart';
 import 'package:gym_saiyajin/repositories/treino_repository.dart';
@@ -10,6 +11,7 @@ import 'package:gym_saiyajin/services/preferences_service.dart';
 class FakeTreinoRepository extends Fake implements TreinoRepository {
   final List<FichaTreino> fichasCadastradas = [];
   final Map<String, List<Serie>> seriesHistoricas = {};
+  final Map<String, RecordePessoal> recordesHistoricos = {};
   SessaoTreino? ultimaSessaoSalva;
 
   @override
@@ -18,6 +20,11 @@ class FakeTreinoRepository extends Fake implements TreinoRepository {
   @override
   Future<List<Serie>> buscarUltimasSeriesExercicio(String nomeExercicio) async {
     return seriesHistoricas[nomeExercicio.toLowerCase().trim()] ?? [];
+  }
+
+  @override
+  Future<RecordePessoal?> buscarRecordeHistoricoExercicio(String nomeExercicio) async {
+    return recordesHistoricos[nomeExercicio.toLowerCase().trim()];
   }
 
   @override
@@ -214,6 +221,64 @@ void main() {
       expect(novaFicha?.exercicios.length, equals(2));
       expect(novaFicha?.exercicios[0].nome, equals('Agachamento Livre'));
       expect(novaFicha?.exercicios[1].nome, equals('Leg Press 45'));
+    });
+  });
+
+  group('TreinoController - Volume e Ki da Sessão', () {
+    test('Deve calcular volume e Ki zero para sessão sem séries', () {
+      expect(controller.calcularVolumeSessao(), equals(0.0));
+      expect(controller.calcularKiSessao(), equals(0));
+    });
+
+    test('Deve calcular volume e Ki de exercícios concluídos e em andamento', () {
+      // 1. Concluir um exercício (Agachamento: 2 séries de 100kg x 10reps = 2000kg)
+      controller.iniciarNovoExercicio('Agachamento Livre', 'PERNAS', quantidadeSeries: 2);
+      controller.atualizarPesoSerie(0, '100');
+      controller.atualizarRepsSerie(0, '10');
+      controller.atualizarPesoSerie(1, '100');
+      controller.atualizarRepsSerie(1, '10');
+      controller.finalizarExercicioAtual();
+
+      expect(controller.calcularVolumeSessao(), equals(2000.0));
+      expect(controller.calcularKiSessao(), equals(20));
+
+      // 2. Iniciar outro exercício em andamento (Supino: 1 série de 80kg x 10reps = 800kg)
+      controller.iniciarNovoExercicio('Supino Reto', 'PEITO', quantidadeSeries: 1);
+      controller.atualizarPesoSerie(0, '80');
+      controller.atualizarRepsSerie(0, '10');
+
+      // Com incluirAtual = true (padrão): 2000 + 800 = 2800 kg -> 28 Ki
+      expect(controller.calcularVolumeSessao(incluirAtual: true), equals(2800.0));
+      expect(controller.calcularKiSessao(incluirAtual: true), equals(28));
+
+      // Com incluirAtual = false (descartando atual): apenas 2000 kg -> 20 Ki
+      expect(controller.calcularVolumeSessao(incluirAtual: false), equals(2000.0));
+      expect(controller.calcularKiSessao(incluirAtual: false), equals(20));
+    });
+
+    test('Deve bonificar Ki (+150 por PR) quando recordes são batidos na sessão', () async {
+      repository.recordesHistoricos['supino reto'] = const RecordePessoal(
+        exercicioNome: 'Supino Reto',
+        grupo: 'PEITO',
+        cargaMaxima: 80.0,
+        repsCargaMaxima: 10,
+        umRepMaxEstimado: 106.7,
+        peso1RM: 80.0,
+        reps1RM: 10,
+      );
+
+      controller.iniciarNovoExercicio('Supino Reto', 'PEITO', quantidadeSeries: 1);
+      await controller.carregarSeriesAnteriores('Supino Reto');
+
+      // Supera o PR histórico com 90kg x 10reps (Volume = 900kg -> 9 Ki do volume)
+      controller.atualizarPesoSerie(0, '90');
+      controller.atualizarRepsSerie(0, '10');
+      controller.toggleConcluidaSerie(0);
+
+      expect(controller.totalRecordesBatidosHoje, equals(1));
+      expect(controller.calcularVolumeSessao(), equals(900.0));
+      // Ki = (900 / 100) + (1 * 150) = 9 + 150 = 159
+      expect(controller.calcularKiSessao(), equals(159));
     });
   });
 }

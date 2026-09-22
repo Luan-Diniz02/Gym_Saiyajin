@@ -33,6 +33,40 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   RecordePessoal? obterRecordeBase(String nomeExercicio) =>
       _recordesBaseCache[nomeExercicio.toLowerCase().trim()];
 
+  /// Calcula o volume total (kg levantados) da sessão atual.
+  double calcularVolumeSessao({bool incluirAtual = true}) {
+    double volumeTotal = 0.0;
+    for (final exercicio in _sessaoTreino.exerciciosConcluidosHoje) {
+      for (final serie in exercicio.seriesDetalhes) {
+        final peso = serie.peso ?? 0.0;
+        final reps = serie.reps ?? 0;
+        if (peso > 0 && reps > 0) {
+          volumeTotal += (peso * reps);
+        }
+      }
+    }
+
+    if (incluirAtual && _sessaoTreino.exercicioAtual != null) {
+      for (final serie in _sessaoTreino.exercicioAtual!.seriesDetalhes) {
+        final peso = serie.peso ?? 0.0;
+        final reps = serie.reps ?? 0;
+        if ((serie.concluida || (serie.peso != null && serie.reps != null)) &&
+            peso > 0 &&
+            reps > 0) {
+          volumeTotal += (peso * reps);
+        }
+      }
+    }
+
+    return volumeTotal;
+  }
+
+  /// Calcula o Ki gerado na sessão atual.
+  int calcularKiSessao({bool incluirAtual = true}) {
+    final volume = calcularVolumeSessao(incluirAtual: incluirAtual);
+    return (volume / 100.0).round() + (totalRecordesBatidosHoje * 150);
+  }
+
   List<FichaTreino> _fichas = [];
   List<FichaTreino> get fichas => UnmodifiableListView(_fichas);
   List<FichaExercicioItem> _exerciciosFichaPendentes = [];

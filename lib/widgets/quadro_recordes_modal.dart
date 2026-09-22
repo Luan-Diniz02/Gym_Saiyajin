@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
+import 'dragon_ball_icon.dart';
 
 /// Modal estilizado para visualização dos Recordes Pessoais (PRs) / Hall da Fama.
 class QuadroRecordesModal extends StatefulWidget {
@@ -108,10 +109,8 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                         width: 1,
                       ),
                     ),
-                    child: const Icon(
-                      Icons.bolt_rounded,
-                      color: AppColors.accent,
-                      size: 26,
+                    child: const Center(
+                      child: DragonBallIcon(size: 26, stars: 4),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -120,7 +119,7 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'REGISTRO DE PODER ⚡',
+                          'REGISTRO DE PODER',
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w900,

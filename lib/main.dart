@@ -96,6 +96,7 @@ class _TelaBaseState extends State<TelaBase> {
     final List<Widget> telas = [
       TreinoScreen(
         controller: _treinoController,
+        progressoController: _progressoController,
         onEncerrarTreino: () {
           _historicoController.carregarHistorico();
           _progressoController.carregarDados();

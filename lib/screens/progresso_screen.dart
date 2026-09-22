@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../controllers/progresso_controller.dart';
 import '../theme/app_colors.dart';
+import '../widgets/dragon_ball_icon.dart';
 import '../widgets/metricas_dashboard_widget.dart';
 import '../widgets/poder_luta_card_widget.dart';
 import '../widgets/progresso_grafico_widget.dart';
@@ -259,10 +260,8 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   color: AppColors.primary.withValues(alpha: 0.25),
                 ),
               ),
-              child: const Icon(
-                Icons.bolt_rounded,
-                color: AppColors.accent,
-                size: 26,
+              child: const Center(
+                child: DragonBallIcon(size: 26, stars: 4),
               ),
             ),
             const SizedBox(width: 14),
@@ -273,7 +272,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   Row(
                     children: [
                       const Text(
-                        'REGISTRO DE PODER ⚡',
+                        'REGISTRO DE PODER',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,

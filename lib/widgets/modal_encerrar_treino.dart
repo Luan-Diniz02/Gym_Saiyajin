@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/progresso_controller.dart';
 import '../controllers/treino_controller.dart';
+import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
+import 'scouter_icon.dart';
 
 class ResultadoEncerrarTreino {
   final bool descartarAtual;
@@ -20,10 +23,12 @@ class ResultadoEncerrarTreino {
 
 class ModalEncerrarTreinoDialog extends StatefulWidget {
   final TreinoController controller;
+  final ProgressoController? progressoController;
 
   const ModalEncerrarTreinoDialog({
     super.key,
     required this.controller,
+    this.progressoController,
   });
 
   @override
@@ -81,6 +86,13 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
   Widget build(BuildContext context) {
     final temExercicioEmAndamento = widget.controller.temExercicioEmAndamento;
     final exercicioAtual = widget.controller.exercicioAtual;
+    final volumeSessao = widget.controller.calcularVolumeSessao(
+      incluirAtual: !_descartarAtual,
+    );
+    final kiVolume = (volumeSessao / 100.0).round();
+    final totalPrs = widget.controller.totalRecordesBatidosHoje;
+    final kiPrs = totalPrs * 150;
+    final kiTotalSessao = kiVolume + kiPrs;
 
     return Dialog(
       backgroundColor: AppColors.surface,
@@ -97,12 +109,12 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Cabeçalho Premium
+              // Cabeçalho Premium com Scouter
               Row(
                 children: [
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
@@ -111,10 +123,11 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                         width: 1,
                       ),
                     ),
-                    child: const Icon(
-                      Icons.sports_score,
-                      color: AppColors.primary,
-                      size: 22,
+                    child: const Center(
+                      child: ScouterIcon(
+                        size: 22,
+                        lensColor: Color(0xFF00E676),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -123,7 +136,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Encerrar Treino',
+                          'Encerrar Batalha',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -133,7 +146,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Defina a divisão e conclua sua sessão',
+                          'Consolide seus ganhos e seu Ki da sessão',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.textDimmed,
@@ -148,6 +161,172 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
               const SizedBox(height: 16),
               const Divider(color: AppColors.cardBorder, height: 1),
               const SizedBox(height: 16),
+
+              // Card de Ki Conquistado na Sessão
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.primary.withValues(alpha: 0.12),
+                      AppColors.surface,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.35),
+                    width: 1.2,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.electric_bolt_rounded,
+                                size: 16,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '+ KI GERADO NA SESSÃO',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.7,
+                                color: AppColors.textDimmed,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '+${PoderLuta.formatarPoder(kiTotalSessao)} Ki',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        // Detalhe: Volume
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.background,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.fitness_center_rounded,
+                                  size: 16,
+                                  color: Color(0xFF4FC3F7),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Volume',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.textDimmed,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        '${RecordePessoal.formatarPeso(volumeSessao)} kg (+$kiVolume Ki)',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.textLight,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Detalhe: PRs
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.background,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.military_tech_rounded,
+                                  size: 18,
+                                  color: AppColors.accent,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Recordes (PRs)',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.textDimmed,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        '$totalPrs PRs (+$kiPrs Ki)',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.textLight,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
 
               // Banner Comemorativo de Recordes Batidos (PRs)
               if (widget.controller.recordesBatidosHoje.isNotEmpty) ...[
