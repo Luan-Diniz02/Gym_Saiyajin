@@ -125,6 +125,7 @@ gym_saiyajin/
 │       ├── historico_card_widget.dart
 │       ├── metricas_dashboard_widget.dart
 │       ├── modal_encerrar_treino.dart
+│       ├── modal_importar_backup.dart
 │       ├── progresso_grafico_widget.dart
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart

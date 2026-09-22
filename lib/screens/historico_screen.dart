@@ -4,6 +4,7 @@ import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
 import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/historico_card_widget.dart';
+import '../widgets/modal_importar_backup.dart';
 
 class HistoricoScreen extends StatefulWidget {
   final HistoricoController controller;
@@ -49,42 +50,7 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   }
 
   Future<void> _importarBackup() async {
-    final escolha = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.cardBorder),
-        ),
-        title: const Text(
-          'Importar Backup',
-          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold),
-        ),
-        content: const Text(
-          'Como deseja importar os treinos do arquivo de backup?',
-          style: TextStyle(color: AppColors.textDimmed),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'substituir'),
-            child: const Text('Substituir Tudo', style: TextStyle(color: AppColors.danger)),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, 'mesclar'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.background,
-            ),
-            child: const Text('Mesclar Dados', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ),
-    );
+    final escolha = await ModalImportarBackupDialog.show(context);
 
     if (escolha == null) return;
     final mesclar = escolha == 'mesclar';
