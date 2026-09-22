@@ -390,20 +390,34 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
                       Container(
                         margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        constraints: const BoxConstraints(maxWidth: 260),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.6),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.8)),
+                          color: Colors.black.withValues(alpha: 0.28),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.20),
+                            width: 0.6,
+                          ),
                         ),
                         child: Text(
-                          widget.sessao.nomeTreino!.toUpperCase(),
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 12,
-                            letterSpacing: 1.2,
+                          widget.sessao.nomeTreino!.trim().toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.95),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11,
+                            letterSpacing: 1.8,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withValues(alpha: 0.85),
+                                blurRadius: 6,
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
@@ -634,20 +648,27 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Container(
+                  constraints: const BoxConstraints(maxWidth: 260),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.45),
+                      width: 0.8,
+                    ),
                   ),
                   child: Text(
-                    widget.sessao.nomeTreino!.toUpperCase(),
+                    widget.sessao.nomeTreino!.trim().toUpperCase(),
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primary,
-                      letterSpacing: 1.0,
+                      letterSpacing: 1.2,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],

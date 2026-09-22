@@ -101,15 +101,19 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Cabeçalho
+              // Cabeçalho Premium
               Row(
                 children: [
                   Container(
-                    width: 38,
-                    height: 38,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.15),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.25),
+                        width: 1,
+                      ),
                     ),
                     child: const Icon(
                       Icons.sports_score,
@@ -126,15 +130,18 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                           'Encerrar Treino',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.3,
                             color: AppColors.textLight,
                           ),
                         ),
+                        SizedBox(height: 2),
                         Text(
                           'Defina a divisão e conclua sua sessão',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.textDimmed,
+                            height: 1.2,
                           ),
                         ),
                       ],
@@ -146,63 +153,138 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
               const Divider(color: AppColors.cardBorder, height: 1),
               const SizedBox(height: 16),
 
-              // Alerta de Exercício em Andamento
+              // Alerta Premium de Exercício em Andamento
               if (temExercicioEmAndamento && exercicioAtual != null) ...[
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: AppColors.background,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: AppColors.cardBorder),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.info_outline, size: 16, color: AppColors.accent),
-                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColors.accent.withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: AppColors.accent,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
                           Expanded(
-                            child: Text(
-                              'Exercício em aberto: ${exercicioAtual.nome}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textLight,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'EXERCÍCIO EM ABERTO',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.accent,
+                                    letterSpacing: 0.6,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  exercicioAtual.nome,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textLight,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
                       Row(
                         children: [
                           Expanded(
-                            child: ChoiceChip(
-                              label: const Center(child: Text('Salvar atual')),
-                              selected: !_descartarAtual,
-                              onSelected: (_) => setState(() => _descartarAtual = false),
-                              selectedColor: AppColors.primary,
-                              backgroundColor: AppColors.surface,
-                              labelStyle: TextStyle(
-                                color: !_descartarAtual ? AppColors.background : AppColors.textLight,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                            child: InkWell(
+                              onTap: () => setState(() => _descartarAtual = false),
+                              borderRadius: BorderRadius.circular(10),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: !_descartarAtual ? AppColors.primary : AppColors.surface,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: !_descartarAtual ? AppColors.primary : AppColors.cardBorder,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      size: 16,
+                                      color: !_descartarAtual ? AppColors.background : AppColors.textDimmed,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Salvar atual',
+                                      style: TextStyle(
+                                        color: !_descartarAtual ? AppColors.background : AppColors.textLight,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: ChoiceChip(
-                              label: const Center(child: Text('Descartar')),
-                              selected: _descartarAtual,
-                              onSelected: (_) => setState(() => _descartarAtual = true),
-                              selectedColor: AppColors.danger,
-                              backgroundColor: AppColors.surface,
-                              labelStyle: TextStyle(
-                                color: _descartarAtual ? AppColors.textLight : AppColors.textDimmed,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                            child: InkWell(
+                              onTap: () => setState(() => _descartarAtual = true),
+                              borderRadius: BorderRadius.circular(10),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: _descartarAtual ? AppColors.danger : AppColors.surface,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: _descartarAtual ? AppColors.danger : AppColors.cardBorder,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.delete_outline,
+                                      size: 16,
+                                      color: _descartarAtual ? Colors.white : AppColors.textDimmed,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Descartar',
+                                      style: TextStyle(
+                                        color: _descartarAtual ? Colors.white : AppColors.textDimmed,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -224,49 +306,62 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                   letterSpacing: 0.8,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Wrap(
-                spacing: 6,
-                runSpacing: 6,
+                spacing: 8,
+                runSpacing: 8,
                 children: _divisoesPadrao.map((divisao) {
                   final isSel = _divisaoSelecionada == divisao;
-                  return ChoiceChip(
-                    label: Text(divisao),
-                    selected: isSel,
-                    onSelected: (_) => _selecionarDivisao(divisao),
-                    selectedColor: AppColors.primary,
-                    backgroundColor: AppColors.background,
-                    labelStyle: TextStyle(
-                      color: isSel ? AppColors.background : AppColors.textLight,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      side: BorderSide(
-                        color: isSel ? AppColors.primary : AppColors.cardBorder,
+                  return InkWell(
+                    onTap: () => _selecionarDivisao(divisao),
+                    borderRadius: BorderRadius.circular(12),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      constraints: const BoxConstraints(minHeight: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSel ? AppColors.primary : AppColors.background,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSel ? AppColors.primary : AppColors.cardBorder,
+                          width: 1,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        divisao,
+                        style: TextStyle(
+                          color: isSel ? AppColors.background : AppColors.textLight,
+                          fontWeight: isSel ? FontWeight.w800 : FontWeight.w500,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               TextField(
                 controller: _nomeTreinoController,
-                style: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                style: const TextStyle(color: AppColors.textLight, fontSize: 14, fontWeight: FontWeight.w500),
                 decoration: InputDecoration(
                   hintText: 'Ou digite o nome (ex: Peito e Tríceps)',
                   hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                  prefixIcon: const Icon(Icons.edit_note_rounded, color: AppColors.textDimmed, size: 20),
                   filled: true,
                   fillColor: AppColors.background,
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.cardBorder),
+                  ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: AppColors.cardBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
@@ -278,81 +373,105 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
               ),
               const SizedBox(height: 16),
 
-              // Checkbox Salvar como Ficha
+              // Card Salvar como Ficha
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.background,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: _salvarComoFicha ? AppColors.accent.withValues(alpha: 0.5) : AppColors.cardBorder,
+                    color: _salvarComoFicha ? AppColors.accent.withValues(alpha: 0.6) : AppColors.cardBorder,
                   ),
                 ),
                 child: Column(
                   children: [
-                    CheckboxListTile(
-                      value: _salvarComoFicha,
-                      onChanged: (val) => setState(() => _salvarComoFicha = val ?? false),
-                      title: const Text(
-                        'Salvar como Ficha (Template)',
-                        style: TextStyle(
-                          color: AppColors.textLight,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                       ),
-                      subtitle: const Text(
-                        'Guarda esses exercícios para carregar no futuro',
-                        style: TextStyle(
-                          color: AppColors.textDimmed,
-                          fontSize: 11,
+                      child: SwitchListTile.adaptive(
+                        value: _salvarComoFicha,
+                        onChanged: (val) => setState(() => _salvarComoFicha = val),
+                        activeThumbColor: AppColors.accent,
+                        activeTrackColor: AppColors.accent.withValues(alpha: 0.35),
+                        inactiveThumbColor: AppColors.textDimmed,
+                        inactiveTrackColor: AppColors.surface,
+                        title: const Text(
+                          'Salvar como Ficha (Template)',
+                          style: TextStyle(
+                            color: AppColors.textLight,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
                         ),
+                        subtitle: const Text(
+                          'Guarda esses exercícios para carregar no futuro',
+                          style: TextStyle(
+                            color: AppColors.textDimmed,
+                            fontSize: 11,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                        dense: true,
                       ),
-                      activeColor: AppColors.accent,
-                      checkColor: AppColors.background,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                      dense: true,
                     ),
-                    if (_salvarComoFicha)
+                    if (_salvarComoFicha) ...[
+                      const Divider(color: AppColors.cardBorder, height: 1),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                        padding: const EdgeInsets.all(12),
                         child: TextField(
                           controller: _nomeFichaController,
-                          style: const TextStyle(color: AppColors.textLight, fontSize: 13),
+                          style: const TextStyle(color: AppColors.textLight, fontSize: 13, fontWeight: FontWeight.w500),
                           decoration: InputDecoration(
                             labelText: 'Nome da Ficha',
                             labelStyle: const TextStyle(color: AppColors.accent, fontSize: 12),
+                            prefixIcon: const Icon(Icons.bookmark_outline_rounded, color: AppColors.accent, size: 18),
                             filled: true,
                             fillColor: AppColors.surface,
                             isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: AppColors.cardBorder),
+                            ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: const BorderSide(color: AppColors.cardBorder),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
                             ),
                           ),
                         ),
                       ),
+                    ],
                   ],
                 ),
               ),
               const SizedBox(height: 20),
 
-              // Botões de Ação
+              // Botões de Ação do Rodapé
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
+                  OutlinedButton(
                     onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.textDimmed,
+                      side: const BorderSide(color: AppColors.cardBorder),
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                      minimumSize: const Size(0, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                     child: const Text(
                       'Cancelar',
-                      style: TextStyle(color: AppColors.textDimmed),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   ElevatedButton.icon(
                     onPressed: () {
                       final nomeTreinoFinal = _nomeTreinoController.text.trim();
@@ -368,17 +487,19 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.check, size: 18),
+                    icon: const Icon(Icons.check_circle_outline, size: 20),
                     label: const Text(
                       'Concluir Treino',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.background,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      minimumSize: const Size(0, 48),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),

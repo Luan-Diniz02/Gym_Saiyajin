@@ -52,12 +52,13 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   int _descansoFinalizadoEvento = 0;
   DateTime _dataSessao = DateTime.now();
 
-  int _duracaoTreinoSegundos = 0;
   int _descansoTotalSegundos = 0;
   DateTime? _inicioTreino;
+  DateTime? _inicioDescansoAtual;
   Timer? _sessaoTimer;
-  DateTime? _ultimoCicloTreino;
   bool _treinoPausado = false;
+  Duration _tempoPausadoTotal = Duration.zero;
+  DateTime? _inicioPausaAtual;
 
   final TextInputFormatter _pesoInputFormatter =
       TextInputFormatter.withFunction((oldValue, newValue) {
@@ -77,13 +78,35 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   int get descansoFinalizadoEvento => _descansoFinalizadoEvento;
   DateTime get dataSessao => _dataSessao;
 
-  int get duracaoTreinoSegundos => _duracaoTreinoSegundos;
-  int get descansoTotalSegundos => _descansoTotalSegundos;
+  int get duracaoTreinoSegundos {
+    if (_inicioTreino == null) return 0;
+    if (_treinoPausado && _inicioPausaAtual != null) {
+      return (_inicioPausaAtual!.difference(_inicioTreino!) - _tempoPausadoTotal)
+          .inSeconds
+          .clamp(0, 86400 * 7);
+    }
+    return (DateTime.now().difference(_inicioTreino!) - _tempoPausadoTotal)
+        .inSeconds
+        .clamp(0, 86400 * 7);
+  }
+
+  int get descansoTotalSegundos {
+    if (_isTimerRodando && _inicioDescansoAtual != null) {
+      final agora = DateTime.now();
+      final fim = (_timerEndTime != null && agora.isAfter(_timerEndTime!))
+          ? _timerEndTime!
+          : agora;
+      final decorrido = fim.difference(_inicioDescansoAtual!).inSeconds;
+      return _descansoTotalSegundos + (decorrido > 0 ? decorrido : 0);
+    }
+    return _descansoTotalSegundos;
+  }
+
   bool get isTreinoEmAndamento => _inicioTreino != null;
   bool get isTreinoPausado => _treinoPausado;
 
-  String get duracaoTreinoFormatada => formatarTempoLegivel(_duracaoTreinoSegundos);
-  String get descansoTotalFormatado => formatarTempoLegivel(_descansoTotalSegundos);
+  String get duracaoTreinoFormatada => formatarTempoLegivel(duracaoTreinoSegundos);
+  String get descansoTotalFormatado => formatarTempoLegivel(descansoTotalSegundos);
 
   String formatarTempoLegivel(int totalSegundos) {
     final horas = totalSegundos ~/ 3600;
@@ -134,7 +157,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   void iniciarTreinoSeNecessario() {
     if (_inicioTreino == null) {
       _inicioTreino = DateTime.now();
-      _ultimoCicloTreino = DateTime.now();
+      _tempoPausadoTotal = Duration.zero;
+      _inicioPausaAtual = null;
       _treinoPausado = false;
       _iniciarTickerSessao();
       notifyListeners();
@@ -145,9 +169,13 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     if (_inicioTreino == null) return;
     _treinoPausado = !_treinoPausado;
     if (_treinoPausado) {
+      _inicioPausaAtual = DateTime.now();
       _sessaoTimer?.cancel();
     } else {
-      _ultimoCicloTreino = DateTime.now();
+      if (_inicioPausaAtual != null) {
+        _tempoPausadoTotal += DateTime.now().difference(_inicioPausaAtual!);
+        _inicioPausaAtual = null;
+      }
       _iniciarTickerSessao();
     }
     notifyListeners();
@@ -157,11 +185,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     _sessaoTimer?.cancel();
     _sessaoTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!_treinoPausado) {
-        _duracaoTreinoSegundos++;
-        if (_isTimerRodando) {
-          _descansoTotalSegundos++;
-        }
-        _ultimoCicloTreino = DateTime.now();
         notifyListeners();
       }
     });
@@ -415,11 +438,15 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return null;
 
+    _acumularDescansoAtual();
+    final duracaoFinal = duracaoTreinoSegundos;
+    final descansoFinal = descansoTotalSegundos;
+
     final sessaoParaSalvar = SessaoTreino(
       data: _dataSessao,
       nomeTreino: _nomeTreino,
-      duracaoSegundos: _duracaoTreinoSegundos,
-      descansoTotalSegundos: _descansoTotalSegundos,
+      duracaoSegundos: duracaoFinal,
+      descansoTotalSegundos: descansoFinal,
       exerciciosConcluidosHoje: _sessaoTreino.exerciciosConcluidosHoje
           .map(
             (exercicio) => exercicio.copyWith(
@@ -439,10 +466,11 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     _exerciciosFichaPendentes.clear();
     _timer?.cancel();
     _timerEndTime = null;
+    _inicioDescansoAtual = null;
     _sessaoTimer?.cancel();
     _inicioTreino = null;
-    _ultimoCicloTreino = null;
-    _duracaoTreinoSegundos = 0;
+    _inicioPausaAtual = null;
+    _tempoPausadoTotal = Duration.zero;
     _descansoTotalSegundos = 0;
     _treinoPausado = false;
     unawaited(_notificationService.cancelarNotificacao());
@@ -513,6 +541,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   void atualizarTempoDescanso(int tempoSelecionado) {
     if (tempoSelecionado <= 0) return;
 
+    _acumularDescansoAtual();
     _tempoDescansoPadrao = tempoSelecionado;
     _tempoAtual = tempoSelecionado;
     _isTimerRodando = false;
@@ -610,9 +639,25 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  void _acumularDescansoAtual() {
+    if (_isTimerRodando && _inicioDescansoAtual != null) {
+      final agora = DateTime.now();
+      final fim = (_timerEndTime != null && agora.isAfter(_timerEndTime!))
+          ? _timerEndTime!
+          : agora;
+      final decorrido = fim.difference(_inicioDescansoAtual!).inSeconds;
+      if (decorrido > 0) {
+        _descansoTotalSegundos += decorrido;
+      }
+      _inicioDescansoAtual = null;
+    }
+  }
+
   void iniciarTimer() {
+    _acumularDescansoAtual();
     _tempoAtual = _tempoDescansoPadrao;
     _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
+    _inicioDescansoAtual = DateTime.now();
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
@@ -620,6 +665,11 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void pausarTimer() {
+    _acumularDescansoAtual();
+    if (_timerEndTime != null) {
+      final restante = _timerEndTime!.difference(DateTime.now()).inSeconds;
+      _tempoAtual = restante > 0 ? restante : 0;
+    }
     _timer?.cancel();
     _timerEndTime = null;
     _isTimerRodando = false;
@@ -634,6 +684,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       _tempoAtual = _tempoDescansoPadrao;
     }
     _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
+    _inicioDescansoAtual = DateTime.now();
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
@@ -641,6 +692,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reiniciarTimer() {
+    _acumularDescansoAtual();
     _timer?.cancel();
     _timerEndTime = null;
     _tempoAtual = _tempoDescansoPadrao;
@@ -659,7 +711,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
           notifyListeners();
         } else {
           _timer?.cancel();
+          _acumularDescansoAtual();
           _isTimerRodando = false;
+          _timerEndTime = null;
           _tempoAtual = 0;
           _descansoFinalizadoEvento++;
           notifyListeners();
@@ -675,34 +729,53 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (_inicioTreino != null && !_treinoPausado && _ultimoCicloTreino != null) {
-        final elapsed = DateTime.now().difference(_ultimoCicloTreino!).inSeconds;
-        if (elapsed > 0) {
-          _duracaoTreinoSegundos += elapsed;
-          if (_isTimerRodando && _timerEndTime != null) {
-            final secondsToTarget = _timerEndTime!.difference(_ultimoCicloTreino!).inSeconds;
-            final actualRestAdded = secondsToTarget > elapsed ? elapsed : (secondsToTarget > 0 ? secondsToTarget : 0);
-            _descansoTotalSegundos += actualRestAdded;
-          }
+      if (_inicioTreino != null && !_treinoPausado) {
+        if (_sessaoTimer == null || !_sessaoTimer!.isActive) {
+          _iniciarTickerSessao();
         }
-        _ultimoCicloTreino = DateTime.now();
       }
 
       if (_isTimerRodando && _timerEndTime != null) {
         final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
         if (remaining > 0) {
           _tempoAtual = remaining;
-          notifyListeners();
+          if (_timer == null || !_timer!.isActive) {
+            _iniciarTicker();
+          }
         } else {
-          _tempoAtual = 0;
           _timer?.cancel();
+          _acumularDescansoAtual();
           _isTimerRodando = false;
+          _timerEndTime = null;
+          _tempoAtual = 0;
           _descansoFinalizadoEvento++;
-          notifyListeners();
         }
-      } else {
-        notifyListeners();
       }
+
+      notifyListeners();
+    }
+  }
+
+  @visibleForTesting
+  void setInicioTreinoParaTeste(DateTime inicio) {
+    _inicioTreino = inicio;
+  }
+
+  @visibleForTesting
+  void setInicioPausaAtualParaTeste(DateTime? inicioPausa) {
+    _inicioPausaAtual = inicioPausa;
+  }
+
+  @visibleForTesting
+  void setTempoPausadoTotalParaTeste(Duration duracao) {
+    _tempoPausadoTotal = duracao;
+  }
+
+  @visibleForTesting
+  void setInicioDescansoParaTeste(DateTime? inicio, {DateTime? endTime}) {
+    _inicioDescansoAtual = inicio;
+    if (endTime != null) {
+      _timerEndTime = endTime;
     }
   }
 

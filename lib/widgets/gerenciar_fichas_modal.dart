@@ -33,8 +33,24 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Ficha "${ficha.nome}" carregada com sucesso!'),
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Ficha "${ficha.nome}" carregada com sucesso!',
+                style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
         backgroundColor: AppColors.surface,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.cardBorder),
+        ),
       ),
     );
   }
@@ -45,25 +61,45 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: AppColors.cardBorder),
         ),
-        title: const Text(
-          'Excluir Ficha?',
-          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.danger.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 20),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Excluir Ficha?',
+              style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 17),
+            ),
+          ],
         ),
         content: Text(
           'Deseja excluir a ficha "${ficha.nome}"? Esta ação não pode ser desfeita.',
-          style: const TextStyle(color: AppColors.textDimmed),
+          style: const TextStyle(color: AppColors.textDimmed, fontSize: 14, height: 1.4),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed, fontWeight: FontWeight.w600)),
           ),
-          TextButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.danger,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 0,
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir', style: TextStyle(color: AppColors.danger, fontWeight: FontWeight.bold)),
+            child: const Text('Excluir', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -73,7 +109,26 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
       await _controller.excluirFicha(ficha.id!);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ficha "${ficha.nome}" excluída.')),
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.delete_sweep_outlined, color: AppColors.danger, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Ficha "${ficha.nome}" excluída.',
+                  style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+        ),
       );
     }
   }
@@ -106,34 +161,58 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
-                  children: [
-                    Icon(Icons.assignment, color: AppColors.primary, size: 24),
-                    SizedBox(width: 10),
-                    Text(
-                      'FICHAS DE TREINO',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        color: AppColors.textLight,
-                      ),
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.25),
+                      width: 1,
                     ),
-                  ],
+                  ),
+                  child: const Icon(Icons.assignment_outlined, color: AppColors.primary, size: 22),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'FICHAS DE TREINO',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Selecione uma rotina pré-configurada para iniciar em 1 toque.',
+                        style: TextStyle(fontSize: 12, color: AppColors.textDimmed, height: 1.2),
+                      ),
+                    ],
+                  ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: AppColors.textDimmed),
+                  icon: const Icon(Icons.close, color: AppColors.textDimmed, size: 20),
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.background,
+                    padding: const EdgeInsets.all(8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(color: AppColors.cardBorder),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 4),
-            const Text(
-              'Selecione uma rotina pré-configurada para iniciar em 1 toque.',
-              style: TextStyle(fontSize: 13, color: AppColors.textDimmed),
-            ),
+            const SizedBox(height: 16),
+            const Divider(color: AppColors.cardBorder, height: 1),
             const SizedBox(height: 16),
             Expanded(
               child: ListenableBuilder(
@@ -146,21 +225,37 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.folder_open, size: 48, color: AppColors.textDimmed.withValues(alpha: 0.5)),
-                          const SizedBox(height: 12),
+                          Container(
+                            width: 68,
+                            height: 68,
+                            decoration: BoxDecoration(
+                              color: AppColors.background,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: const Icon(
+                              Icons.folder_open_rounded,
+                              size: 36,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
                           const Text(
-                            'Nenhuma ficha criada ainda.',
+                            'Nenhuma ficha criada ainda',
                             style: TextStyle(
                               color: AppColors.textLight,
                               fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                              fontSize: 16,
                             ),
                           ),
                           const SizedBox(height: 6),
-                          const Text(
-                            'Crie sua primeira ficha de treino ou salve seu treino atual como template.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: AppColors.textDimmed, fontSize: 13),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              'Crie sua primeira ficha de treino ou salve seu treino atual como template.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: AppColors.textDimmed, fontSize: 13, height: 1.4),
+                            ),
                           ),
                         ],
                       ),
@@ -175,10 +270,10 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                       final nomesExercicios = ficha.exercicios.map((e) => e.nome).join(' • ');
 
                       return Container(
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: AppColors.background,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.cardBorder),
                         ),
                         child: Column(
@@ -192,13 +287,17 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                     ficha.nome,
                                     style: const TextStyle(
                                       color: AppColors.textLight,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w700,
                                       fontSize: 16,
+                                      letterSpacing: 0.3,
                                     ),
                                   ),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.textDimmed),
+                                  hoverColor: AppColors.danger.withValues(alpha: 0.15),
+                                  highlightColor: AppColors.danger.withValues(alpha: 0.25),
+                                  splashColor: AppColors.danger.withValues(alpha: 0.25),
                                   visualDensity: VisualDensity.compact,
                                   onPressed: () => _confirmarExclusaoFicha(ficha),
                                   tooltip: 'Excluir ficha',
@@ -206,7 +305,7 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                               ],
                             ),
                             if (nomesExercicios.isNotEmpty) ...[
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 6),
                               Text(
                                 nomesExercicios,
                                 maxLines: 2,
@@ -214,46 +313,54 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                 style: const TextStyle(
                                   color: AppColors.textDimmed,
                                   fontSize: 12,
-                                  height: 1.3,
+                                  height: 1.4,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                   decoration: BoxDecoration(
                                     color: AppColors.surface,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(color: AppColors.cardBorder),
                                   ),
-                                  child: Text(
-                                    '${ficha.exercicios.length} EXERCÍCIOS',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.primary,
-                                      letterSpacing: 0.5,
-                                    ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.fitness_center, size: 13, color: AppColors.primary),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '${ficha.exercicios.length} ${ficha.exercicios.length == 1 ? 'EXERCÍCIO' : 'EXERCÍCIOS'}',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.primary,
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () => _carregarFicha(ficha),
-                                  icon: const Icon(Icons.play_arrow, size: 18),
+                                  icon: const Icon(Icons.play_arrow_rounded, size: 18),
                                   label: const Text(
                                     'CARREGAR',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, letterSpacing: 0.5),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.accent,
+                                    backgroundColor: AppColors.primary,
                                     foregroundColor: AppColors.background,
                                     visualDensity: VisualDensity.compact,
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
+                                    elevation: 0,
                                   ),
                                 ),
                               ],
@@ -272,14 +379,15 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: _abrirCriadorNovaFicha,
-                icon: const Icon(Icons.add, size: 20),
+                icon: const Icon(Icons.add_rounded, size: 20),
                 label: const Text(
                   'CRIAR NOVA FICHA',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 0.8),
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.8),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.background,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -336,7 +444,26 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
     if (!mounted) return;
     if (historico.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum treino encontrado no histórico para importar.')),
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.info_outline, color: AppColors.accent, size: 20),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Nenhum treino encontrado no histórico para importar.',
+                  style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+        ),
       );
       return;
     }
@@ -346,19 +473,32 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: AppColors.cardBorder),
         ),
-        title: const Text(
-          'Importar do Histórico',
-          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 16),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.history_rounded, color: AppColors.primary, size: 20),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Importar do Histórico',
+              style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
         ),
         content: SizedBox(
           width: double.maxFinite,
           height: 320,
           child: ListView.separated(
             itemCount: historico.length,
-            separatorBuilder: (_, _) => const Divider(color: AppColors.cardBorder, height: 1),
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final sessao = historico[index];
               final dataFormatada = sessao.data != null
@@ -368,20 +508,30 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
                   ? '${sessao.nomeTreino} ($dataFormatada)'
                   : 'Treino de $dataFormatada';
 
-              return ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                title: Text(
-                  titulo,
-                  style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 13),
+              return Container(
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.cardBorder),
                 ),
-                subtitle: Text(
-                  '${sessao.exerciciosConcluidosHoje.length} exercícios • ${sessao.exerciciosConcluidosHoje.map((e) => e.nome).take(3).join(', ')}...',
-                  style: const TextStyle(color: AppColors.textDimmed, fontSize: 11),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  title: Text(
+                    titulo,
+                    style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      '${sessao.exerciciosConcluidosHoje.length} exercícios • ${sessao.exerciciosConcluidosHoje.map((e) => e.nome).take(3).join(', ')}...',
+                      style: const TextStyle(color: AppColors.textDimmed, fontSize: 11),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.primary),
+                  onTap: () => Navigator.pop(context, sessao),
                 ),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 12, color: AppColors.primary),
-                onTap: () => Navigator.pop(context, sessao),
               );
             },
           ),
@@ -389,7 +539,7 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -413,7 +563,26 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${sessaoSelecionada.exerciciosConcluidosHoje.length} exercícios importados do histórico!')),
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    '${sessaoSelecionada.exerciciosConcluidosHoje.length} exercícios importados do histórico!',
+                    style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppColors.surface,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
         );
       }
     }
@@ -423,13 +592,51 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
     final nome = _nomeController.text.trim();
     if (nome.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Digite o nome da ficha (ex: Ficha A).')),
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: AppColors.primary, size: 20),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Digite o nome da ficha (ex: Ficha A).',
+                  style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+        ),
       );
       return;
     }
     if (_itens.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Adicione ao menos um exercício à ficha.')),
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: AppColors.primary, size: 20),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Adicione ao menos um exercício à ficha.',
+                  style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+        ),
       );
       return;
     }
@@ -439,7 +646,26 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
     if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Ficha "$nome" criada com sucesso!')),
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Ficha "$nome" criada com sucesso!',
+                style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.surface,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.cardBorder),
+        ),
+      ),
     );
   }
 
@@ -455,6 +681,11 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
       decoration: const BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        border: Border(
+          top: BorderSide(color: AppColors.cardBorder),
+          left: BorderSide(color: AppColors.cardBorder),
+          right: BorderSide(color: AppColors.cardBorder),
+        ),
       ),
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.85,
@@ -463,34 +694,58 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'NOVA FICHA DE TREINO',
-                style: TextStyle(
-                  color: AppColors.textLight,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
-                  letterSpacing: 1.0,
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                  ),
+                ),
+                child: const Icon(Icons.note_add_outlined, color: AppColors.primary, size: 20),
+              ),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Text(
+                  'NOVA FICHA DE TREINO',
+                  style: TextStyle(
+                    color: AppColors.textLight,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                    letterSpacing: 0.8,
+                  ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: AppColors.textDimmed),
+                icon: const Icon(Icons.close, color: AppColors.textDimmed, size: 20),
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.background,
+                  padding: const EdgeInsets.all(8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                ),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           TextField(
             controller: _nomeController,
-            style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 14),
             decoration: InputDecoration(
               hintText: 'Ex: Ficha A - Peito & Tríceps',
-              hintStyle: const TextStyle(color: AppColors.textMuted),
+              hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
               labelText: 'Nome da Ficha',
-              labelStyle: const TextStyle(color: AppColors.primary),
+              labelStyle: const TextStyle(color: AppColors.primary, fontSize: 12),
+              prefixIcon: const Icon(Icons.bookmark_outline_rounded, color: AppColors.primary, size: 20),
               filled: true,
               fillColor: AppColors.background,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: AppColors.cardBorder),
@@ -520,34 +775,72 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
               ),
               Row(
                 children: [
-                  TextButton.icon(
+                  OutlinedButton.icon(
                     onPressed: _importarDoHistorico,
-                    icon: const Icon(Icons.history, size: 16, color: AppColors.primary),
+                    icon: const Icon(Icons.history_rounded, size: 15, color: AppColors.primary),
                     label: const Text(
                       'DO HISTÓRICO',
                       style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 11),
                     ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      visualDensity: VisualDensity.compact,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  TextButton.icon(
+                  const SizedBox(width: 8),
+                  OutlinedButton.icon(
                     onPressed: _adicionarExercicio,
-                    icon: const Icon(Icons.add, size: 16, color: AppColors.accent),
+                    icon: const Icon(Icons.add_rounded, size: 15, color: AppColors.accent),
                     label: const Text(
                       'MANUAL',
                       style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 11),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.accent.withValues(alpha: 0.4)),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      visualDensity: VisualDensity.compact,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                   ),
                 ],
               ),
             ],
           ),
+          const SizedBox(height: 10),
           Expanded(
             child: _itens.isEmpty
                 ? Center(
-                    child: Text(
-                      'Nenhum exercício adicionado.\nToque em "+ ADICIONAR" acima.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.textDimmed.withValues(alpha: 0.7), fontSize: 13),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.cardBorder),
+                          ),
+                          child: const Icon(
+                            Icons.fitness_center_rounded,
+                            size: 28,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Nenhum exercício adicionado',
+                          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Importe do histórico ou adicione manualmente acima.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: AppColors.textDimmed.withValues(alpha: 0.7), fontSize: 12),
+                        ),
+                      ],
                     ),
                   )
                 : ListView.builder(
@@ -556,22 +849,33 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
                       final item = _itens[index];
                       return Container(
                         margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           color: AppColors.background,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: AppColors.cardBorder),
                         ),
                         child: Row(
                           children: [
-                            Text(
-                              '${index + 1}.',
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              width: 28,
+                              height: 28,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.surface,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.cardBorder),
+                              ),
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -584,6 +888,7 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
                                       fontSize: 14,
                                     ),
                                   ),
+                                  const SizedBox(height: 2),
                                   Text(
                                     '${item.grupo} • ${item.seriesPadrao} séries',
                                     style: const TextStyle(color: AppColors.textDimmed, fontSize: 11),
@@ -592,7 +897,10 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.danger),
+                              icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.danger),
+                              hoverColor: AppColors.danger.withValues(alpha: 0.15),
+                              highlightColor: AppColors.danger.withValues(alpha: 0.25),
+                              splashColor: AppColors.danger.withValues(alpha: 0.25),
                               onPressed: () {
                                 setState(() {
                                   _itens.removeAt(index);
@@ -614,9 +922,13 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
+                elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('SALVAR FICHA', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              child: const Text(
+                'SALVAR FICHA',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.8),
+              ),
             ),
           ),
         ],
