@@ -354,7 +354,10 @@ class _TreinoScreenState extends State<TreinoScreen> {
       if (sessaoSalva != null && mounted) {
         showDialog(
           context: context,
-          builder: (context) => CompartilharCardModal(sessao: sessaoSalva),
+          builder: (context) => CompartilharCardModal(
+            sessao: sessaoSalva,
+            progressoController: widget.progressoController,
+          ),
         );
       }
     } catch (_) {
