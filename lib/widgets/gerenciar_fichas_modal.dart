@@ -20,6 +20,7 @@ class GerenciarFichasModal extends StatefulWidget {
 
 class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
   late final TreinoController _controller;
+  final Set<int> _fichasExpandidas = {};
 
   @override
   void initState() {
@@ -133,12 +134,15 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
     }
   }
 
-  void _abrirCriadorNovaFicha() {
+  void _abrirEditorFicha([FichaTreino? ficha]) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _CriarFichaBottomSheet(controller: _controller),
+      builder: (context) => _FichaEditorBottomSheet(
+        controller: _controller,
+        fichaParaEditar: ficha,
+      ),
     );
   }
 
@@ -267,7 +271,8 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                     separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final ficha = fichas[index];
-                      final nomesExercicios = ficha.exercicios.map((e) => e.nome).join(' • ');
+                      final int totalExercicios = ficha.exercicios.length;
+                      final bool isExpandida = _fichasExpandidas.contains(ficha.id ?? index);
 
                       return Container(
                         padding: const EdgeInsets.all(16),
@@ -279,8 +284,8 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Cabeçalho da Ficha com Ações
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Text(
@@ -294,30 +299,130 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                   ),
                                 ),
                                 IconButton(
+                                  icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.primary),
+                                  hoverColor: AppColors.primary.withValues(alpha: 0.15),
+                                  visualDensity: VisualDensity.compact,
+                                  onPressed: () => _abrirEditorFicha(ficha),
+                                  tooltip: 'Editar ficha',
+                                ),
+                                IconButton(
                                   icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.textDimmed),
                                   hoverColor: AppColors.danger.withValues(alpha: 0.15),
-                                  highlightColor: AppColors.danger.withValues(alpha: 0.25),
-                                  splashColor: AppColors.danger.withValues(alpha: 0.25),
                                   visualDensity: VisualDensity.compact,
                                   onPressed: () => _confirmarExclusaoFicha(ficha),
                                   tooltip: 'Excluir ficha',
                                 ),
                               ],
                             ),
-                            if (nomesExercicios.isNotEmpty) ...[
-                              const SizedBox(height: 6),
-                              Text(
-                                nomesExercicios,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: AppColors.textDimmed,
-                                  fontSize: 12,
-                                  height: 1.4,
-                                ),
+                            const SizedBox(height: 8),
+
+                            // Listagem de Exercícios (Até 4 no modo recolhido, completa no modo expandido)
+                            if (totalExercicios > 0) ...[
+                              Builder(
+                                builder: (context) {
+                                  final itensExibidos = isExpandida
+                                      ? ficha.exercicios
+                                      : ficha.exercicios.take(4).toList();
+
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ...itensExibidos.map((ex) => Padding(
+                                        padding: const EdgeInsets.only(bottom: 6),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 5,
+                                              height: 5,
+                                              decoration: const BoxDecoration(
+                                                color: AppColors.primary,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                ex.nome,
+                                                maxLines: isExpandida ? 2 : 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: AppColors.textLight,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.surface,
+                                                borderRadius: BorderRadius.circular(6),
+                                                border: Border.all(color: AppColors.cardBorder),
+                                              ),
+                                              child: Text(
+                                                '${ex.seriesPadrao}x',
+                                                style: const TextStyle(
+                                                  color: AppColors.accent,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+
+                                      // Botão de alternar expansão se houver mais de 4 exercícios
+                                      if (totalExercicios > 4) ...[
+                                        const SizedBox(height: 2),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              if (isExpandida) {
+                                                _fichasExpandidas.remove(ficha.id ?? index);
+                                              } else {
+                                                _fichasExpandidas.add(ficha.id ?? index);
+                                              }
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 4),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  isExpandida
+                                                      ? 'Recolher lista'
+                                                      : 'Ver todos os $totalExercicios exercícios (+${totalExercicios - 4})',
+                                                  style: TextStyle(
+                                                    color: isExpandida ? AppColors.textDimmed : AppColors.accent,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Icon(
+                                                  isExpandida
+                                                      ? Icons.keyboard_arrow_up_rounded
+                                                      : Icons.keyboard_arrow_down_rounded,
+                                                  size: 16,
+                                                  color: isExpandida ? AppColors.textDimmed : AppColors.accent,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  );
+                                },
                               ),
                             ],
-                            const SizedBox(height: 14),
+
+                            const SizedBox(height: 12),
+                            // Rodapé do Card com Contador e Botão Carregar
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -334,7 +439,7 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                       const Icon(Icons.fitness_center, size: 13, color: AppColors.primary),
                                       const SizedBox(width: 6),
                                       Text(
-                                        '${ficha.exercicios.length} ${ficha.exercicios.length == 1 ? 'EXERCÍCIO' : 'EXERCÍCIOS'}',
+                                        '$totalExercicios ${totalExercicios == 1 ? 'EXERCÍCIO' : 'EXERCÍCIOS'}',
                                         style: const TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w700,
@@ -350,17 +455,17 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                   icon: const Icon(Icons.play_arrow_rounded, size: 18),
                                   label: const Text(
                                     'CARREGAR',
-                                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, letterSpacing: 0.5),
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primary,
                                     foregroundColor: AppColors.background,
+                                    elevation: 0,
                                     visualDensity: VisualDensity.compact,
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    elevation: 0,
                                   ),
                                 ),
                               ],
@@ -378,8 +483,8 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton.icon(
-                onPressed: _abrirCriadorNovaFicha,
-                icon: const Icon(Icons.add_rounded, size: 20),
+                onPressed: () => _abrirEditorFicha(),
+                icon: const Icon(Icons.add_rounded, size: 22),
                 label: const Text(
                   'CRIAR NOVA FICHA',
                   style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.8),
@@ -401,18 +506,33 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
   }
 }
 
-class _CriarFichaBottomSheet extends StatefulWidget {
+class _FichaEditorBottomSheet extends StatefulWidget {
   final TreinoController controller;
+  final FichaTreino? fichaParaEditar;
 
-  const _CriarFichaBottomSheet({required this.controller});
+  const _FichaEditorBottomSheet({
+    required this.controller,
+    this.fichaParaEditar,
+  });
 
   @override
-  State<_CriarFichaBottomSheet> createState() => _CriarFichaBottomSheetState();
+  State<_FichaEditorBottomSheet> createState() => _FichaEditorBottomSheetState();
 }
 
-class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
-  final TextEditingController _nomeController = TextEditingController();
-  final List<FichaExercicioItem> _itens = [];
+class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
+  late final TextEditingController _nomeController;
+  late final List<FichaExercicioItem> _itens;
+
+  bool get isEdicao => widget.fichaParaEditar != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.fichaParaEditar?.nome ?? '');
+    _itens = widget.fichaParaEditar != null
+        ? widget.fichaParaEditar!.exercicios.map((e) => e.copyWith()).toList()
+        : [];
+  }
 
   @override
   void dispose() {
@@ -641,7 +761,11 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
       return;
     }
 
-    final nova = FichaTreino(nome: nome, exercicios: _itens);
+    final nova = FichaTreino(
+      id: widget.fichaParaEditar?.id,
+      nome: nome,
+      exercicios: _itens,
+    );
     await widget.controller.salvarFicha(nova);
     if (!mounted) return;
     Navigator.pop(context);
@@ -653,7 +777,7 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Ficha "$nome" criada com sucesso!',
+                isEdicao ? 'Ficha "$nome" atualizada com sucesso!' : 'Ficha "$nome" criada com sucesso!',
                 style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.w600, fontSize: 13),
               ),
             ),
@@ -671,267 +795,339 @@ class _CriarFichaBottomSheetState extends State<_CriarFichaBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        top: 20,
-        left: 20,
-        right: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(
-          top: BorderSide(color: AppColors.cardBorder),
-          left: BorderSide(color: AppColors.cardBorder),
-          right: BorderSide(color: AppColors.cardBorder),
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final systemBottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: bottomInset + systemBottomPadding + 16,
         ),
-      ),
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.25),
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          border: Border(
+            top: BorderSide(color: AppColors.cardBorder),
+            left: BorderSide(color: AppColors.cardBorder),
+            right: BorderSide(color: AppColors.cardBorder),
+          ),
+        ),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.88,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Icon(
+                    isEdicao ? Icons.edit_note_rounded : Icons.post_add_rounded,
+                    color: AppColors.primary,
+                    size: 22,
                   ),
                 ),
-                child: const Icon(Icons.note_add_outlined, color: AppColors.primary, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isEdicao ? 'EDITAR FICHA DE TREINO' : 'NOVA FICHA DE TREINO',
+                    style: const TextStyle(
+                      color: AppColors.textLight,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: AppColors.textDimmed, size: 20),
+                  onPressed: () => Navigator.pop(context),
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.background,
+                    padding: const EdgeInsets.all(6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: AppColors.cardBorder),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            TextField(
+              controller: _nomeController,
+              style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: 'Ex: Ficha A - Peito & Tríceps',
+                hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                labelText: 'Nome da Ficha',
+                labelStyle: const TextStyle(color: AppColors.primary, fontSize: 12),
+                filled: true,
+                fillColor: AppColors.background,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppColors.cardBorder),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppColors.cardBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
               ),
-              const SizedBox(width: 10),
-              const Expanded(
-                child: Text(
-                  'NOVA FICHA DE TREINO',
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _importarDoHistorico,
+                    icon: const Icon(Icons.history_rounded, size: 18),
+                    label: const Text('DO HISTÓRICO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.accent,
+                      side: const BorderSide(color: AppColors.accent),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _adicionarExercicio,
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: const Text('ADICIONAR', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'EXERCÍCIOS E SÉRIES',
                   style: TextStyle(
-                    color: AppColors.textLight,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textDimmed,
                     letterSpacing: 0.8,
                   ),
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.close, color: AppColors.textDimmed, size: 20),
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.background,
-                  padding: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: AppColors.cardBorder),
+                Text(
+                  '${_itens.length} selecionados',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
                   ),
                 ),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          TextField(
-            controller: _nomeController,
-            style: const TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 14),
-            decoration: InputDecoration(
-              hintText: 'Ex: Ficha A - Peito & Tríceps',
-              hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
-              labelText: 'Nome da Ficha',
-              labelStyle: const TextStyle(color: AppColors.primary, fontSize: 12),
-              prefixIcon: const Icon(Icons.bookmark_outline_rounded, color: AppColors.primary, size: 20),
-              filled: true,
-              fillColor: AppColors.background,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.cardBorder),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.cardBorder),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-              ),
+              ],
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'EXERCÍCIOS (${_itens.length})',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textDimmed,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: _importarDoHistorico,
-                    icon: const Icon(Icons.history_rounded, size: 15, color: AppColors.primary),
-                    label: const Text(
-                      'DO HISTÓRICO',
-                      style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 11),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  OutlinedButton.icon(
-                    onPressed: _adicionarExercicio,
-                    icon: const Icon(Icons.add_rounded, size: 15, color: AppColors.accent),
-                    label: const Text(
-                      'MANUAL',
-                      style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 11),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.accent.withValues(alpha: 0.4)),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: _itens.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 56,
+            const SizedBox(height: 8),
+            Expanded(
+              child: _itens.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.fitness_center_rounded, size: 36, color: AppColors.textMuted.withValues(alpha: 0.5)),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Nenhum exercício na ficha.',
+                            style: TextStyle(color: AppColors.textDimmed, fontSize: 13),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Toque em "Adicionar" ou "Do Histórico" acima.',
+                            style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      itemCount: _itens.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
+                      itemBuilder: (context, index) {
+                        final item = _itens[index];
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
                             color: AppColors.background,
-                            shape: BoxShape.circle,
+                            borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppColors.cardBorder),
                           ),
-                          child: const Icon(
-                            Icons.fitness_center_rounded,
-                            size: 28,
-                            color: AppColors.textMuted,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Nenhum exercício adicionado',
-                          style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Importe do histórico ou adicione manualmente acima.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.textDimmed.withValues(alpha: 0.7), fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: _itens.length,
-                    itemBuilder: (context, index) {
-                      final item = _itens[index];
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.cardBorder),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 28,
-                              height: 28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: AppColors.surface,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.cardBorder),
-                              ),
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 26,
+                                height: 26,
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: AppColors.cardBorder),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(
+                                    color: AppColors.accent,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.nome,
+                                      style: const TextStyle(
+                                        color: AppColors.textLight,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      item.grupo.toUpperCase(),
+                                      style: const TextStyle(color: AppColors.textDimmed, fontSize: 10, letterSpacing: 0.5),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Controles táteis de quantidade de séries [-] X [+]
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    item.nome,
-                                    style: const TextStyle(
-                                      color: AppColors.textLight,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                  IconButton(
+                                    visualDensity: VisualDensity.compact,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                    icon: Icon(
+                                      Icons.remove_circle_outline_rounded,
+                                      size: 18,
+                                      color: item.seriesPadrao > 1 ? AppColors.accent : AppColors.textMuted,
+                                    ),
+                                    onPressed: item.seriesPadrao > 1
+                                        ? () {
+                                            setState(() {
+                                              _itens[index] = item.copyWith(
+                                                seriesPadrao: item.seriesPadrao - 1,
+                                              );
+                                            });
+                                          }
+                                        : null,
+                                    tooltip: 'Diminuir séries',
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.surface,
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: AppColors.cardBorder),
+                                    ),
+                                    child: Text(
+                                      '${item.seriesPadrao}s',
+                                      style: const TextStyle(
+                                        color: AppColors.accent,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    '${item.grupo} • ${item.seriesPadrao} séries',
-                                    style: const TextStyle(color: AppColors.textDimmed, fontSize: 11),
+                                  IconButton(
+                                    visualDensity: VisualDensity.compact,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                    icon: Icon(
+                                      Icons.add_circle_outline_rounded,
+                                      size: 18,
+                                      color: item.seriesPadrao < 10 ? AppColors.accent : AppColors.textMuted,
+                                    ),
+                                    onPressed: item.seriesPadrao < 10
+                                        ? () {
+                                            setState(() {
+                                              _itens[index] = item.copyWith(
+                                                seriesPadrao: item.seriesPadrao + 1,
+                                              );
+                                            });
+                                          }
+                                        : null,
+                                    tooltip: 'Aumentar séries',
                                   ),
                                 ],
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.danger),
-                              hoverColor: AppColors.danger.withValues(alpha: 0.15),
-                              highlightColor: AppColors.danger.withValues(alpha: 0.25),
-                              splashColor: AppColors.danger.withValues(alpha: 0.25),
-                              onPressed: () {
-                                setState(() {
-                                  _itens.removeAt(index);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-          ),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: _salvarFicha,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text(
-                'SALVAR FICHA',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.8),
+                              const SizedBox(width: 4),
+
+                              // Excluir exercício da ficha
+                              IconButton(
+                                visualDensity: VisualDensity.compact,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                icon: const Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.danger),
+                                hoverColor: AppColors.danger.withValues(alpha: 0.15),
+                                onPressed: () {
+                                  setState(() {
+                                    _itens.removeAt(index);
+                                  });
+                                },
+                                tooltip: 'Remover da ficha',
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: _salvarFicha,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.background,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Text(
+                  isEdicao ? 'SALVAR ALTERAÇÕES' : 'SALVAR FICHA',
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.8),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

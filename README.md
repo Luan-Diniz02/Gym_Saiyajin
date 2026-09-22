@@ -21,6 +21,9 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - Barra superior de chips rápidos padronizados (`Treino A`, `Treino B`, `Treino C`, `Push`, `Pull`, `Legs`, `Superiores`, `Inferiores`) e botão para digitação de nomes customizados.
   - O nome é registrado na sessão, exibido com badge dourado na timeline do histórico e estampado no card de compartilhamento para redes sociais.
 - **📋 Fichas / Templates de Treino Pré-configurados**:
+  - **Criação & Edição Completa**: Crie novas fichas ou edite rotinas existentes (alteração do nome, adição/remoção de exercícios e personalização da quantidade de séries padrão por exercício através de seletores ergonômicos `[-] X [+]`).
+  - **Visualização Adaptativa e Sem Truncamento**: Modo recolhido exibe até 4 exercícios com suas respectivas séries e badge de excedentes (`+X`), além de alternância para modo expandido exibindo a lista completa sem cortes de nomes longos.
+  - **Proteção de Interface (SafeArea)**: Layout com tratamento de margens inferiores e insets dinâmicos, impedindo qualquer sobreposição da barra de navegação do sistema Android.
   - **Carregamento em 1 Toque**: Escolha uma rotina pré-configurada na gaveta de fichas e inicie o treino com todos os exercícios já enfileirados.
   - **Aparelho Ocupado? Substituição Ágil**: Se uma máquina estiver em uso, toque no botão de troca (`Swap`) para substituir o exercício (atual ou pendente na fila) por outro do mesmo grupo muscular sem alterar a ficha base.
   - **Salvar Treino como Ficha**: Transforme a sessão do dia em um template permanente com um único toque.
@@ -28,11 +31,13 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 - **👻 "Carga Anterior" de Referência (Sobrecarga Progressiva)**:
   - Ao iniciar qualquer exercício, o app busca automaticamente o histórico da última sessão concluída.
   - Carga e repetições aparecem como sugestão suave nos inputs (`hintText`) e em uma linha discreta de apoio (`Anterior: X kg × Y reps`), facilitando a progressão contínua de carga (*Progressive Overload*).
+  - **Preenchimento Inteligente em 1 Toque**: Ao tocar no botão de check com os inputs vazios, o app preenche automaticamente a série com os valores da carga anterior.
 - **Catálogo & Criação de Exercícios**: Modal de busca instantânea com barra de pesquisa por texto e chips de filtragem por grupo muscular (`TODOS`, `PEITO`, `COSTAS`, `PERNAS`, etc.). Suporte a criação dinâmica de novos exercícios personalizados.
 - **Séries com Ergonomia Avançada**: 
   - Alinhamento horizontal simétrico entre número da série, inputs numéricos e botão de conclusão (*Check*).
+  - **Fluxo Contínuo de Teclado**: Foco no campo de Peso com tecla de ação `Next` pula diretamente para Reps; tecla `Done` (Enter) em Reps valida e conclui a série imediatamente sem fechar o teclado.
+  - **Estabilidade Total de Foco**: Ciclo de digitação blindado contra fechamentos involuntários do teclado causados por rebuilds ou ticks do cronômetro.
   - Remoção intuitiva e ágil de séries individuais via gesto de **Swipe** (*deslizar para a esquerda*), com feedback tátil e prevenção de exclusão acidental.
-  - Navegação acelerada de teclado com salto automático de foco (*Next*) entre Peso e Repetições.
 - **Cronômetro de Treino & Descanso em Tempo Real**:
   - **Tempo Total de Treino**: Iniciação automática na primeira interação, contagem precisa em segundo plano com controle de pausa/retomada.
   - **Tempo de Descanso Total Acumulado**: Registra e consolida todo o tempo que o usuário passou descansando entre as séries ao longo de toda a sessão.
@@ -116,13 +121,16 @@ gym_saiyajin/
 │       ├── compartilhar_card_modal.dart
 │       ├── config_tempo_descanso_modal.dart
 │       ├── cronometro_widget.dart
+│       ├── gerenciar_fichas_modal.dart
 │       ├── historico_card_widget.dart
 │       ├── metricas_dashboard_widget.dart
+│       ├── modal_encerrar_treino.dart
 │       ├── progresso_grafico_widget.dart
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
 ├── test/                       # Suíte de testes unitários automatizados
 │   ├── backup_test.dart
+│   ├── ficha_test.dart
 │   ├── imc_test.dart
 │   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart

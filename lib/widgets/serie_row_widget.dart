@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../controllers/treino_controller.dart';
+import '../models/serie.dart';
 import '../theme/app_colors.dart';
 
-class SerieRowWidget extends StatelessWidget {
+class SerieRowWidget extends StatefulWidget {
   final int index;
   final TreinoController controller;
 
@@ -15,30 +16,97 @@ class SerieRowWidget extends StatelessWidget {
   });
 
   @override
+  State<SerieRowWidget> createState() => _SerieRowWidgetState();
+}
+
+class _SerieRowWidgetState extends State<SerieRowWidget> {
+  late final TextEditingController _pesoController;
+  late final TextEditingController _repsController;
+  late final FocusNode _pesoFocusNode;
+  late final FocusNode _repsFocusNode;
+
+  Serie? _obterSerieAtual() {
+    final exercicio = widget.controller.exercicioAtual;
+    if (exercicio != null && widget.index < exercicio.seriesDetalhes.length) {
+      return exercicio.seriesDetalhes[widget.index];
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final serie = _obterSerieAtual();
+    final pesoStr = serie?.peso != null
+        ? (serie!.peso! % 1 == 0
+            ? serie.peso!.toInt().toString()
+            : serie.peso!.toString())
+        : '';
+    final repsStr = serie?.reps != null ? serie!.reps.toString() : '';
+
+    _pesoController = TextEditingController(text: pesoStr);
+    _repsController = TextEditingController(text: repsStr);
+    _pesoFocusNode = FocusNode();
+    _repsFocusNode = FocusNode();
+  }
+
+  @override
+  void didUpdateWidget(covariant SerieRowWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final serie = _obterSerieAtual();
+    if (serie != null) {
+      final pesoStr = serie.peso != null
+          ? (serie.peso! % 1 == 0
+              ? serie.peso!.toInt().toString()
+              : serie.peso!.toString())
+          : '';
+      final repsStr = serie.reps != null ? serie.reps.toString() : '';
+
+      // Só sincroniza valores caso o campo não esteja com foco ativo de digitação
+      if (!_pesoFocusNode.hasFocus && _pesoController.text != pesoStr) {
+        _pesoController.text = pesoStr;
+      }
+      if (!_repsFocusNode.hasFocus && _repsController.text != repsStr) {
+        _repsController.text = repsStr;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _pesoController.dispose();
+    _repsController.dispose();
+    _pesoFocusNode.dispose();
+    _repsFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
+      animation: widget.controller,
       builder: (context, _) {
-        final exercicioAtual = controller.exercicioAtual;
-        if (exercicioAtual == null || index >= exercicioAtual.seriesDetalhes.length) {
+        final exercicioAtual = widget.controller.exercicioAtual;
+        if (exercicioAtual == null ||
+            widget.index >= exercicioAtual.seriesDetalhes.length) {
           return const SizedBox.shrink();
         }
 
-        final serie = exercicioAtual.seriesDetalhes[index];
+        final serie = exercicioAtual.seriesDetalhes[widget.index];
         final bool isConcluida = serie.concluida;
-        final double? peso = serie.peso;
-        final int? reps = serie.reps;
         final String nomeExercicioAtual = exercicioAtual.nome;
         final bool podeExcluir = exercicioAtual.seriesDetalhes.length > 1;
 
-        final serieAnterior = controller.obterSerieAnterior(nomeExercicioAtual, index);
+        final serieAnterior =
+            widget.controller.obterSerieAnterior(nomeExercicioAtual, widget.index);
         final String? hintPeso = serieAnterior?.peso != null
             ? (serieAnterior!.peso! % 1 == 0
                 ? serieAnterior.peso!.toInt().toString()
                 : serieAnterior.peso!.toString())
             : null;
-        final String? hintReps =
-            serieAnterior?.reps != null ? serieAnterior!.reps.toString() : null;
+        final String? hintReps = serieAnterior?.reps != null
+            ? serieAnterior!.reps.toString()
+            : null;
 
         final cardConteudo = Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -48,142 +116,128 @@ class SerieRowWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.cardBorder),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: isConcluida ? AppColors.accent : Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.accent, width: 2),
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isConcluida ? AppColors.accent : Colors.transparent,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.accent, width: 2),
+                ),
+                child: Center(
+                  child: Text(
+                    '${widget.index + 1}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                      color: isConcluida
+                          ? AppColors.background
+                          : AppColors.accent,
                     ),
-                    child: Center(
-                      child: Text(
-                        '${index + 1}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 18,
-                          color: isConcluida ? AppColors.background : AppColors.accent,
-                        ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'PESO (KG)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textDimmed,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'PESO (KG)',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textDimmed,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        _buildCustomTextField(
-                          chave: 'peso-$nomeExercicioAtual-$index',
-                          valorInicial: peso?.toStringAsFixed(peso % 1 == 0 ? 0 : 1) ?? '',
-                          hintText: hintPeso,
-                          isConcluida: isConcluida,
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          textInputAction: TextInputAction.next,
-                          inputFormatters: [controller.pesoInputFormatter],
-                          onChanged: (valor) => controller.atualizarPesoSerie(index, valor),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'REPS',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textDimmed,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        _buildCustomTextField(
-                          chave: 'reps-$nomeExercicioAtual-$index',
-                          valorInicial: reps?.toString() ?? '',
-                          hintText: hintReps,
-                          isConcluida: isConcluida,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          inputFormatters: [controller.repsInputFormatter],
-                          onChanged: (valor) => controller.atualizarRepsSerie(index, valor),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (serieAnterior != null &&
-                      (serieAnterior.peso != null || serieAnterior.reps != null)) ...[
-                    const SizedBox(width: 8),
-                    Tooltip(
-                      message:
-                          'Preencher com anterior (${hintPeso ?? '-'} kg × ${hintReps ?? '-'} reps)',
-                      child: GestureDetector(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          controller.preencherSerieComAnterior(index);
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: AppColors.background,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.cardBorder,
-                              width: 1.2,
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.history_rounded,
-                            size: 20,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
+                    const SizedBox(height: 6),
+                    _buildCustomTextField(
+                      chave: 'peso-$nomeExercicioAtual-${widget.index}',
+                      textController: _pesoController,
+                      focusNode: _pesoFocusNode,
+                      hintText: hintPeso,
+                      isConcluida: isConcluida,
+                      keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true),
+                      textInputAction: TextInputAction.next,
+                      inputFormatters: [widget.controller.pesoInputFormatter],
+                      onChanged: (valor) =>
+                          widget.controller.atualizarPesoSerie(widget.index, valor),
+                      onSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_repsFocusNode);
+                      },
                     ),
                   ],
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () => controller.toggleConcluidaSerie(index),
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: isConcluida ? AppColors.primary : AppColors.background,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isConcluida ? AppColors.primary : AppColors.cardBorder,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.check,
-                        size: 24,
-                        color: isConcluida ? AppColors.background : AppColors.textDimmed,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'REPS',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textDimmed,
+                        letterSpacing: 0.5,
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    _buildCustomTextField(
+                      chave: 'reps-$nomeExercicioAtual-${widget.index}',
+                      textController: _repsController,
+                      focusNode: _repsFocusNode,
+                      hintText: hintReps,
+                      isConcluida: isConcluida,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      inputFormatters: [widget.controller.repsInputFormatter],
+                      onChanged: (valor) =>
+                          widget.controller.atualizarRepsSerie(widget.index, valor),
+                      onSubmitted: (_) {
+                        _concluirSeriePeloTeclado();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 14),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  widget.controller.toggleConcluidaSerie(widget.index);
+                },
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isConcluida
+                        ? AppColors.primary
+                        : AppColors.background,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isConcluida
+                          ? AppColors.primary
+                          : AppColors.cardBorder,
+                      width: 1.5,
+                    ),
                   ),
-                ],
+                  child: Icon(
+                    Icons.check,
+                    size: 24,
+                    color: isConcluida
+                        ? AppColors.background
+                        : AppColors.textDimmed,
+                  ),
+                ),
               ),
             ],
           ),
@@ -194,7 +248,8 @@ class SerieRowWidget extends StatelessWidget {
         }
 
         return Dismissible(
-          key: ValueKey('serie_${nomeExercicioAtual}_${serie.hashCode}_$index'),
+          key: ValueKey(
+              'serie_${nomeExercicioAtual}_${serie.hashCode}_${widget.index}'),
           direction: DismissDirection.endToStart,
           background: Container(
             margin: const EdgeInsets.only(bottom: 12),
@@ -222,10 +277,10 @@ class SerieRowWidget extends StatelessWidget {
             ),
           ),
           onDismissed: (_) {
-            controller.removerSerie(index);
+            widget.controller.removerSerie(widget.index);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Série ${index + 1} removida.'),
+                content: Text('Série ${widget.index + 1} removida.'),
                 duration: const Duration(seconds: 2),
               ),
             );
@@ -236,26 +291,35 @@ class SerieRowWidget extends StatelessWidget {
     );
   }
 
+  void _concluirSeriePeloTeclado() {
+    HapticFeedback.selectionClick();
+    widget.controller.toggleConcluidaSerie(widget.index);
+  }
+
   Widget _buildCustomTextField({
     required String chave,
-    required String valorInicial,
+    required TextEditingController textController,
+    required FocusNode focusNode,
     String? hintText,
     required bool isConcluida,
     required TextInputType keyboardType,
     TextInputAction? textInputAction,
     required List<TextInputFormatter> inputFormatters,
     required ValueChanged<String> onChanged,
+    ValueChanged<String>? onSubmitted,
   }) {
     return SizedBox(
       height: 44,
-      child: TextFormField(
-        key: ValueKey('$chave-$valorInicial'),
-        initialValue: valorInicial,
+      child: TextField(
+        key: ValueKey(chave),
+        controller: textController,
+        focusNode: focusNode,
         readOnly: isConcluida,
         keyboardType: keyboardType,
         textInputAction: textInputAction,
         inputFormatters: isConcluida ? null : inputFormatters,
         onChanged: isConcluida ? null : onChanged,
+        onSubmitted: isConcluida ? null : onSubmitted,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -269,7 +333,8 @@ class SerieRowWidget extends StatelessWidget {
             fontSize: 15,
             fontWeight: FontWeight.normal,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           filled: true,
           fillColor: AppColors.background,
           border: OutlineInputBorder(
@@ -282,7 +347,8 @@ class SerieRowWidget extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+            borderSide:
+                const BorderSide(color: AppColors.primary, width: 1.5),
           ),
         ),
       ),
