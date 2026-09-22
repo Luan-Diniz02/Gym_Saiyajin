@@ -22,7 +22,7 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
   - O nome é registrado na sessão, exibido com badge dourado na timeline do histórico e estampado no card de compartilhamento para redes sociais.
 - **📋 Fichas / Templates de Treino Pré-configurados**:
   - **Criação & Edição Completa**: Crie novas fichas ou edite rotinas existentes (alteração do nome, adição/remoção de exercícios e personalização da quantidade de séries padrão por exercício através de seletores ergonômicos `[-] X [+]`).
-  - **Visualização Adaptativa e Sem Truncamento**: Modo recolhido exibe até 4 exercícios com suas respectivas séries e badge de excedentes (`+X`), além de alternância para modo expandido exibindo a lista completa sem cortes de nomes longos.
+  - **Visualização Adaptativa e Sem Truncamento**: Modo recolhido exibe 2 exercícios com suas respectivas séries e badge de excedentes (`+X`), além de alternância para modo expandido exibindo a lista completa sem cortes de nomes longos.
   - **Proteção de Interface (SafeArea)**: Layout com tratamento de margens inferiores e insets dinâmicos, impedindo qualquer sobreposição da barra de navegação do sistema Android.
   - **Carregamento em 1 Toque**: Escolha uma rotina pré-configurada na gaveta de fichas e inicie o treino com todos os exercícios já enfileirados.
   - **Aparelho Ocupado? Substituição Ágil**: Se uma máquina estiver em uso, toque no botão de troca (`Swap`) para substituir o exercício (atual ou pendente na fila) por outro do mesmo grupo muscular sem alterar a ficha base.

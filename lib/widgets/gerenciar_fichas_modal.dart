@@ -316,13 +316,13 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                             ),
                             const SizedBox(height: 8),
 
-                            // Listagem de Exercícios (Até 4 no modo recolhido, completa no modo expandido)
+                            // Listagem de Exercícios (Até 2 no modo recolhido, completa no modo expandido)
                             if (totalExercicios > 0) ...[
                               Builder(
                                 builder: (context) {
                                   final itensExibidos = isExpandida
                                       ? ficha.exercicios
-                                      : ficha.exercicios.take(4).toList();
+                                      : ficha.exercicios.take(2).toList();
 
                                   return Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,8 +373,8 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                         ),
                                       )),
 
-                                      // Botão de alternar expansão se houver mais de 4 exercícios
-                                      if (totalExercicios > 4) ...[
+                                      // Botão de alternar expansão se houver mais de 2 exercícios
+                                      if (totalExercicios > 2) ...[
                                         const SizedBox(height: 2),
                                         InkWell(
                                           onTap: () {
@@ -395,7 +395,7 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                                                 Text(
                                                   isExpandida
                                                       ? 'Recolher lista'
-                                                      : 'Ver todos os $totalExercicios exercícios (+${totalExercicios - 4})',
+                                                      : 'Ver todos os $totalExercicios exercícios (+${totalExercicios - 2})',
                                                   style: TextStyle(
                                                     color: isExpandida ? AppColors.textDimmed : AppColors.accent,
                                                     fontSize: 12,
@@ -1056,7 +1056,7 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
                                       border: Border.all(color: AppColors.cardBorder),
                                     ),
                                     child: Text(
-                                      '${item.seriesPadrao}s',
+                                      '${item.seriesPadrao}x',
                                       style: const TextStyle(
                                         color: AppColors.accent,
                                         fontSize: 12,

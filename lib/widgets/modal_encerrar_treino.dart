@@ -396,7 +396,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                         inactiveThumbColor: AppColors.textDimmed,
                         inactiveTrackColor: AppColors.surface,
                         title: const Text(
-                          'Salvar como Ficha (Template)',
+                          'Salvar como Ficha',
                           style: TextStyle(
                             color: AppColors.textLight,
                             fontWeight: FontWeight.bold,
