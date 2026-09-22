@@ -41,7 +41,7 @@ Aplicativo mobile offline-first para rastreamento de treinos de musculação, co
 - **Cronômetro de Treino & Descanso em Tempo Real**:
   - **Tempo Total de Treino**: Iniciação automática na primeira interação, contagem precisa em segundo plano com controle de pausa/retomada.
   - **Tempo de Descanso Total Acumulado**: Registra e consolida todo o tempo que o usuário passou descansando entre as séries ao longo de toda a sessão.
-  - **Cronômetro Regressivo Inteligente**: Visor circular com anel de progresso nítido, sincronizado com o ciclo de vida do sistema, alerta sonoro nativo e vibração háptica contínua.
+  - **Cronômetro Regressivo Inteligente**: Visor circular com anel de progresso nítido, sincronizado com o ciclo de vida do sistema, alerta sonoro nativo, vibração háptica contínua e blindagem contra notificações duplicadas com cancelamento atômico de alarmes e controle de concorrência sequencial.
   - **Modal de Ajuste de Tempo**: Visor digital integrado (`MIN : SEG`), botões satélites de ajuste fino `+/- 15s` e grade simétrica 3x2 de atalhos rápidos padronizados (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
 - **Encerramento Protegido**: Validação contra fechamento acidental com exercícios pendentes, gravação transacional segura no banco de dados e disparo automático do modal de compartilhamento.
 
@@ -132,6 +132,7 @@ gym_saiyajin/
 │   ├── backup_test.dart
 │   ├── ficha_test.dart
 │   ├── imc_test.dart
+│   ├── notification_service_test.dart
 │   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart
 └── pubspec.yaml

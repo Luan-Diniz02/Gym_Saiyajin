@@ -4,12 +4,18 @@ import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _plugin;
+  int _schedulingCounter = 0;
+
+  NotificationService({FlutterLocalNotificationsPlugin? plugin})
+    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     tz_data.initializeTimeZones();
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -25,23 +31,22 @@ class NotificationService {
     await _plugin.initialize(settings: settings);
 
     await _plugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >()
+        ?.requestPermissions(alert: true, badge: true, sound: true);
 
     await _plugin
-        .resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-    
+        .resolvePlatformSpecificImplementation<
+          MacOSFlutterLocalNotificationsPlugin
+        >()
+        ?.requestPermissions(alert: true, badge: true, sound: true);
+
     // Solicitação de permissões para Android 13+ e Alarmes Exatos (Android 12+)
-    final androidImplementation = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    final androidImplementation = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     if (androidImplementation != null) {
       await androidImplementation.requestNotificationsPermission();
       await androidImplementation.requestExactAlarmsPermission();
@@ -49,6 +54,12 @@ class NotificationService {
   }
 
   Future<void> agendarNotificacaoDescanso(int segundos) async {
+    final currentToken = ++_schedulingCounter;
+
+    // Cancela imediatamente qualquer notificação/alarme pendente no SO
+    await _plugin.cancel(id: 1);
+    if (currentToken != _schedulingCounter) return;
+
     if (segundos <= 0) return;
 
     const detalhes = NotificationDetails(
@@ -65,26 +76,42 @@ class NotificationService {
       macOS: DarwinNotificationDetails(),
     );
 
-    final dataAgendada = tz.TZDateTime.now(tz.local).add(Duration(seconds: segundos));
-    final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    _garantirTimeZones();
+    final dataAgendada = tz.TZDateTime.now(
+      tz.local,
+    ).add(Duration(seconds: segundos));
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
 
-    AndroidScheduleMode modoAgendamento = AndroidScheduleMode.exactAllowWhileIdle;
+    AndroidScheduleMode modoAgendamento =
+        AndroidScheduleMode.exactAllowWhileIdle;
 
     if (android != null) {
       final notificacoesHabilitadas = await android.areNotificationsEnabled();
+      if (currentToken != _schedulingCounter) return;
+
       if (notificacoesHabilitadas == false) {
         final concedida = await android.requestNotificationsPermission();
+        if (currentToken != _schedulingCounter) return;
         if (concedida != true) {
-          debugPrint('Notificacao nao agendada: permissao de notificacao negada.');
+          debugPrint(
+            'Notificacao nao agendada: permissao de notificacao negada.',
+          );
           return;
         }
       }
 
       final podeAgendarExato = await android.canScheduleExactNotifications();
+      if (currentToken != _schedulingCounter) return;
+
       if (podeAgendarExato != true) {
         modoAgendamento = AndroidScheduleMode.inexactAllowWhileIdle;
       }
     }
+
+    if (currentToken != _schedulingCounter) return;
 
     try {
       await _plugin.zonedSchedule(
@@ -97,6 +124,8 @@ class NotificationService {
         matchDateTimeComponents: null,
       );
     } catch (e) {
+      if (currentToken != _schedulingCounter) return;
+
       if (modoAgendamento == AndroidScheduleMode.exactAllowWhileIdle) {
         await _plugin.zonedSchedule(
           id: 1,
@@ -115,6 +144,15 @@ class NotificationService {
   }
 
   Future<void> cancelarNotificacao() async {
+    _schedulingCounter++;
     await _plugin.cancel(id: 1);
+  }
+
+  void _garantirTimeZones() {
+    try {
+      tz.local;
+    } catch (_) {
+      tz_data.initializeTimeZones();
+    }
   }
 }
