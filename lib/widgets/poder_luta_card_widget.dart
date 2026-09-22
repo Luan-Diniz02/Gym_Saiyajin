@@ -41,8 +41,8 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
         ),
         boxShadow: [
           BoxShadow(
-            color: corSecundaria.withValues(alpha: isSSJ2 ? 0.35 : 0.18),
-            blurRadius: isSSJ2 ? 22 : 16,
+            color: transformacao.corBadge.withValues(alpha: isSSJ2 ? 0.35 : 0.20),
+            blurRadius: isSSJ2 ? 20 : 16,
             spreadRadius: isSSJ2 ? 2 : 1,
             offset: const Offset(0, 3),
           ),
@@ -146,7 +146,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
-                            color: isSSJ2 ? corSecundaria : corAura,
+                            color: transformacao.corBadge,
                           ),
                         ),
                       ],
@@ -154,11 +154,9 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                     const SizedBox(height: 2),
                     Text(
                       transformacao.subtituloLore,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: isSSJ2
-                            ? corSecundaria.withValues(alpha: 0.85)
-                            : AppColors.textDimmed,
+                        color: AppColors.textDimmed,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -182,7 +180,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
-                              color: isSSJ2 ? corSecundaria : corAura,
+                              color: transformacao.corBadge,
                             ),
                           ),
                         ],
@@ -201,7 +199,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                                 gradient: LinearGradient(
                                   colors: [
                                     corAura,
-                                    corSecundaria,
+                                    proxima.corAura,
                                   ],
                                 ),
                               ),
@@ -261,7 +259,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
-                            color: isSSJ2 ? corSecundaria : corAura,
+                            color: transformacao.corBadge,
                           ),
                         ),
                         Icon(
@@ -269,7 +267,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                               ? Icons.keyboard_arrow_up_rounded
                               : Icons.keyboard_arrow_down_rounded,
                           size: 16,
-                          color: isSSJ2 ? corSecundaria : corAura,
+                          color: transformacao.corBadge,
                         ),
                       ],
                     ),
