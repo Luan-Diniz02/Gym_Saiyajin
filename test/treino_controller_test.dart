@@ -131,6 +131,37 @@ void main() {
       expect(serie2?.peso, equals(80.0));
       expect(serie2?.reps, equals(8));
     });
+
+    test('Deve preencher série com carga anterior via preencherSerieComAnterior', () async {
+      repository.seriesHistoricas['supino reto'] = [
+        Serie(peso: 75.0, reps: 10, concluida: true),
+      ];
+
+      controller.iniciarNovoExercicio('Supino Reto', 'PEITO', quantidadeSeries: 1);
+      await controller.carregarSeriesAnteriores('Supino Reto');
+
+      expect(controller.exercicioAtual?.seriesDetalhes[0].peso, isNull);
+      expect(controller.exercicioAtual?.seriesDetalhes[0].reps, isNull);
+
+      final sucesso = controller.preencherSerieComAnterior(0);
+      expect(sucesso, isTrue);
+      expect(controller.exercicioAtual?.seriesDetalhes[0].peso, equals(75.0));
+      expect(controller.exercicioAtual?.seriesDetalhes[0].reps, equals(10));
+    });
+
+    test('toggleConcluidaSerie deve auto-preencher com série anterior se campos estiverem vazios', () async {
+      repository.seriesHistoricas['supino reto'] = [
+        Serie(peso: 90.0, reps: 6, concluida: true),
+      ];
+
+      controller.iniciarNovoExercicio('Supino Reto', 'PEITO', quantidadeSeries: 1);
+      await controller.carregarSeriesAnteriores('Supino Reto');
+
+      controller.toggleConcluidaSerie(0);
+      expect(controller.exercicioAtual?.seriesDetalhes[0].concluida, isTrue);
+      expect(controller.exercicioAtual?.seriesDetalhes[0].peso, equals(90.0));
+      expect(controller.exercicioAtual?.seriesDetalhes[0].reps, equals(6));
+    });
   });
 
   group('TreinoController - Fichas e Substituição de Exercícios', () {

@@ -520,6 +520,28 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     atual.seriesDetalhes[index].reps = v.isEmpty ? null : int.tryParse(v);
   }
 
+  bool preencherSerieComAnterior(int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return false;
+    }
+
+    final serieAnterior = obterSerieAnterior(atual.nome, index);
+    if (serieAnterior == null ||
+        (serieAnterior.peso == null && serieAnterior.reps == null)) {
+      return false;
+    }
+
+    if (serieAnterior.peso != null) {
+      atual.seriesDetalhes[index].peso = serieAnterior.peso;
+    }
+    if (serieAnterior.reps != null) {
+      atual.seriesDetalhes[index].reps = serieAnterior.reps;
+    }
+    notifyListeners();
+    return true;
+  }
+
   void toggleConcluidaSerie(int index) {
     final atual = _sessaoTreino.exercicioAtual;
     if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
@@ -528,6 +550,16 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     final serie = atual.seriesDetalhes[index];
     final agoraConcluida = !serie.concluida;
+
+    // Se estiver marcando como concluída e os campos estiverem vazios, preenche com os valores da série anterior
+    if (agoraConcluida && (serie.peso == null || serie.reps == null)) {
+      final serieAnterior = obterSerieAnterior(atual.nome, index);
+      if (serieAnterior != null) {
+        serie.peso ??= serieAnterior.peso;
+        serie.reps ??= serieAnterior.reps;
+      }
+    }
+
     serie.concluida = agoraConcluida;
 
     if (agoraConcluida) {

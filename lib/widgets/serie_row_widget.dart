@@ -131,7 +131,38 @@ class SerieRowWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  if (serieAnterior != null &&
+                      (serieAnterior.peso != null || serieAnterior.reps != null)) ...[
+                    const SizedBox(width: 8),
+                    Tooltip(
+                      message:
+                          'Preencher com anterior (${hintPeso ?? '-'} kg × ${hintReps ?? '-'} reps)',
+                      child: GestureDetector(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          controller.preencherSerieComAnterior(index);
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.cardBorder,
+                              width: 1.2,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.history_rounded,
+                            size: 20,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => controller.toggleConcluidaSerie(index),
                     child: Container(
@@ -154,26 +185,6 @@ class SerieRowWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              if (serieAnterior != null && (serieAnterior.peso != null || serieAnterior.reps != null)) ...[
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.only(left: 58.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.history, size: 13, color: AppColors.primary),
-                      const SizedBox(width: 5),
-                      Text(
-                        'Anterior: ${hintPeso ?? '-'} kg × ${hintReps ?? '-'} reps',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColors.textDimmed,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ],
           ),
         );
@@ -238,7 +249,7 @@ class SerieRowWidget extends StatelessWidget {
     return SizedBox(
       height: 44,
       child: TextFormField(
-        key: ValueKey(chave),
+        key: ValueKey('$chave-$valorInicial'),
         initialValue: valorInicial,
         readOnly: isConcluida,
         keyboardType: keyboardType,

@@ -38,14 +38,9 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
   String? _divisaoSelecionada;
 
   final List<String> _divisoesPadrao = const [
-    'Treino A',
-    'Treino B',
-    'Treino C',
     'Push',
     'Pull',
     'Legs',
-    'Superiores',
-    'Inferiores',
   ];
 
   @override
@@ -307,33 +302,37 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                 ),
               ),
               const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              Row(
                 children: _divisoesPadrao.map((divisao) {
                   final isSel = _divisaoSelecionada == divisao;
-                  return InkWell(
-                    onTap: () => _selecionarDivisao(divisao),
-                    borderRadius: BorderRadius.circular(12),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      constraints: const BoxConstraints(minHeight: 40),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSel ? AppColors.primary : AppColors.background,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSel ? AppColors.primary : AppColors.cardBorder,
-                          width: 1,
-                        ),
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: divisao != _divisoesPadrao.last ? 8.0 : 0.0,
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        divisao,
-                        style: TextStyle(
-                          color: isSel ? AppColors.background : AppColors.textLight,
-                          fontWeight: isSel ? FontWeight.w800 : FontWeight.w500,
-                          fontSize: 13,
+                      child: InkWell(
+                        onTap: () => _selecionarDivisao(divisao),
+                        borderRadius: BorderRadius.circular(12),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: isSel ? AppColors.primary : AppColors.background,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSel ? AppColors.primary : AppColors.cardBorder,
+                              width: 1,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            divisao,
+                            style: TextStyle(
+                              color: isSel ? AppColors.background : AppColors.textLight,
+                              fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
                       ),
                     ),
