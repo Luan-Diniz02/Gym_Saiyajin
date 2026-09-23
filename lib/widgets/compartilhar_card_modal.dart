@@ -594,7 +594,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   if (prsCount > 0)
                     Expanded(
                       child: _buildMetricaOverlay(
-                        rotulo: 'PRs',
+                        rotulo: prsCount == 1 ? 'PR' : 'PRs',
                         valor: '$prsCount',
                       ),
                     ),
