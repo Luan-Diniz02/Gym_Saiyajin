@@ -63,10 +63,6 @@ void main() {
       expect(find.text('Scouter HUD'), findsOneWidget);
       expect(find.text('Rodapé'), findsOneWidget);
 
-      // Verifica opções de cor
-      expect(find.text('Branco'), findsOneWidget);
-      expect(find.text('Dourado'), findsOneWidget);
-
       // Verifica elementos do layout Slim Clássico padrão (sem foto)
       expect(find.text('GYM SAIYAJIN'), findsWidgets);
       expect(find.text('TREINO A - PEITO E TRÍCEPS'), findsOneWidget);

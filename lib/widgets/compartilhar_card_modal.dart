@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../controllers/progresso_controller.dart';
@@ -18,14 +19,9 @@ enum ProporcaoCard {
 }
 
 enum EstiloCardOverlay {
-  slimClassico, // Layout clássico com métricas no topo e rodapé (Foto 5)
-  scouterHud, // Carimbo Scouter HUD + métricas compactas (Foto 4 Adidas)
-  rodapeMinimalista, // Métricas 100% no rodapé com topo desobstruído (Foto 1 Adidas)
-}
-
-enum CorTextoCard {
-  branco,
-  dourado,
+  slimClassico, // Layout clássico com métricas na base e topo 100% desobstruído
+  scouterHud, // Carimbo Scouter HUD + Dock de telemetria unificada na base
+  rodapeMinimalista, // Painel de rodapé ancorado com terço superior e meio livres
 }
 
 class CompartilharCardModal extends StatefulWidget {
@@ -52,7 +48,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   ProporcaoCard _proporcao = ProporcaoCard.stories;
   EstiloCardOverlay _estilo = EstiloCardOverlay.slimClassico;
-  CorTextoCard _corTexto = CorTextoCard.branco;
 
   @override
   void dispose() {
@@ -62,6 +57,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   Future<void> _tirarFoto() async {
     try {
+      HapticFeedback.lightImpact();
       final foto = await _imagePicker.pickImage(
         source: ImageSource.camera,
         imageQuality: 100,
@@ -78,6 +74,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   Future<void> _escolherGaleria() async {
     try {
+      HapticFeedback.lightImpact();
       final foto = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 100,
@@ -93,6 +90,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }
 
   void _removerFoto() {
+    HapticFeedback.lightImpact();
     setState(() {
       _imagemSelecionada = null;
     });
@@ -101,7 +99,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   void _mostrarAviso(String msg) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: AppColors.surface,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -196,28 +198,31 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: SingleChildScrollView(
+    return Dialog.fullscreen(
+      backgroundColor: const Color(0xFF0F1015),
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0F1015),
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              // Barra Superior Estilo Adidas Running (Título, Fechar, Compartilhar)
+              // Barra Superior Estilo Studio
               _buildBarraSuperior(),
-              const SizedBox(height: 10),
 
-              // Seletor de Formato: STORIES vs QUADRADO
-              _buildSeletorProporcao(),
-              const SizedBox(height: 12),
+              // Área de Pré-Visualização Dinâmica (FittedBox responsivo sem cortes)
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: _buildCardVisual(),
+                    ),
+                  ),
+                ),
+              ),
 
-              // Card Visual RepaintBoundary
-              _buildCardVisual(),
-              const SizedBox(height: 12),
-
-              // Painel de Personalização Inferior
+              // Painel de Personalização Inferior com SafeArea
               _buildPainelControles(),
             ],
           ),
@@ -228,11 +233,12 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   Widget _buildBarraSuperior() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.cardBorder),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: const BoxDecoration(
+        color: Color(0xFF13141B),
+        border: Border(
+          bottom: BorderSide(color: AppColors.cardBorder, width: 0.8),
+        ),
       ),
       child: Row(
         children: [
@@ -240,6 +246,14 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.close, color: AppColors.textDimmed, size: 22),
             tooltip: 'Fechar',
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.surface,
+              padding: const EdgeInsets.all(8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(color: AppColors.cardBorder),
+              ),
+            ),
           ),
           const Expanded(
             child: Center(
@@ -257,19 +271,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               ),
             ),
           ),
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: _isGerandoImagem ? null : _compartilharComoImagem,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.black,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              minimumSize: const Size(0, 36),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: _isGerandoImagem
+            icon: _isGerandoImagem
                 ? const SizedBox(
                     width: 14,
                     height: 14,
@@ -278,100 +282,44 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       color: Colors.black,
                     ),
                   )
-                : const Text(
-                    'COMPARTILHAR',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.6),
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSeletorProporcao() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.cardBorder),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildBotaoProporcao(
-            rotulo: 'STORIES (9:16)',
-            proporcao: ProporcaoCard.stories,
-            icone: Icons.stay_current_portrait_rounded,
-          ),
-          const SizedBox(width: 4),
-          _buildBotaoProporcao(
-            rotulo: 'FEED (1:1)',
-            proporcao: ProporcaoCard.quadrado,
-            icone: Icons.crop_square_rounded,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBotaoProporcao({
-    required String rotulo,
-    required ProporcaoCard proporcao,
-    required IconData icone,
-  }) {
-    final isSel = _proporcao == proporcao;
-    return InkWell(
-      onTap: () => setState(() => _proporcao = proporcao),
-      borderRadius: BorderRadius.circular(8),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSel ? AppColors.surface : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSel ? AppColors.primary : Colors.transparent,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icone,
-              size: 14,
-              color: isSel ? AppColors.primary : AppColors.textDimmed,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              rotulo,
+                : const Icon(Icons.share_rounded, size: 15, color: Colors.black),
+            label: const Text(
+              'COMPARTILHAR',
               style: TextStyle(
-                fontSize: 10,
-                fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
-                color: isSel ? AppColors.textLight : AppColors.textDimmed,
-                letterSpacing: 0.5,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.6,
+                color: Colors.black,
               ),
             ),
-          ],
-        ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              minimumSize: const Size(0, 36),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildCardVisual() {
-    final double largura = 300;
-    final double aspectRatio = _proporcao == ProporcaoCard.stories ? (9 / 16) : (1 / 1);
+    const double larguraLogica = 300.0;
+    final double aspectRatio = _proporcao == ProporcaoCard.stories ? (9 / 16) : 1.0;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.75),
-            blurRadius: 20,
-            spreadRadius: 3,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.8),
+            blurRadius: 24,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -379,7 +327,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
       child: RepaintBoundary(
         key: _cardKey,
         child: SizedBox(
-          width: largura,
+          width: larguraLogica,
           child: AspectRatio(
             aspectRatio: aspectRatio,
             child: _buildModoFoto(),
@@ -395,18 +343,10 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     final kiSessao = _calcularKiSessao();
     final prsCount = _obterTotalPRs();
 
-    final Color corPrimaria = _corTexto == CorTextoCard.branco
-        ? Colors.white
-        : const Color(0xFFFFD700);
-
-    final Color corSecundaria = _corTexto == CorTextoCard.branco
-        ? AppColors.primary
-        : const Color(0xFFFF9E00);
-
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Foto do guerreiro em tela cheia OU gradiente Saiyajin se nenhuma foto selecionada
+        // 1. Foto do guerreiro em tela cheia OU gradiente Saiyajin padrão
         Positioned.fill(
           child: _imagemSelecionada != null
               ? Image.file(
@@ -442,19 +382,19 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                 ),
         ),
 
-        // Gradiente superior sutil
+        // 2. Gradiente superior sutil de proteção de contraste
         if (_estilo != EstiloCardOverlay.rodapeMinimalista)
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            height: _proporcao == ProporcaoCard.stories ? 180 : 120,
+            height: _proporcao == ProporcaoCard.stories ? 140 : 100,
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.black.withValues(alpha: 0.70),
-                    Colors.black.withValues(alpha: 0.25),
+                    Colors.black.withValues(alpha: 0.65),
+                    Colors.black.withValues(alpha: 0.20),
                     Colors.transparent,
                   ],
                   begin: Alignment.topCenter,
@@ -464,21 +404,21 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             ),
           ),
 
-        // Gradiente inferior sutil
+        // 3. Gradiente inferior suave para acomodar as métricas
         Positioned(
           bottom: 0,
           left: 0,
           right: 0,
           height: _estilo == EstiloCardOverlay.rodapeMinimalista
-              ? (_proporcao == ProporcaoCard.stories ? 220 : 170)
-              : 140,
+              ? (_proporcao == ProporcaoCard.stories ? 200 : 150)
+              : 170,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.transparent,
-                  Colors.black.withValues(alpha: 0.40),
-                  Colors.black.withValues(alpha: 0.85),
+                  Colors.black.withValues(alpha: 0.45),
+                  Colors.black.withValues(alpha: 0.88),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -487,11 +427,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           ),
         ),
 
-        // Camada do Layout Selecionado
+        // 4. Camada de Overlay Gráfico Selecionado
         Positioned.fill(
           child: _renderizarOverlay(
-            corPrimaria: corPrimaria,
-            corSecundaria: corSecundaria,
             transformacao: transformacao,
             kiSessao: kiSessao,
             prsCount: prsCount,
@@ -502,41 +440,31 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }
 
   Widget _renderizarOverlay({
-    required Color corPrimaria,
-    required Color corSecundaria,
     required TransformacaoSaiyajin transformacao,
     required int kiSessao,
     required int prsCount,
   }) {
     switch (_estilo) {
       case EstiloCardOverlay.slimClassico:
-        return _buildOverlaySlimClassico(
-          corPrimaria: corPrimaria,
-          corSecundaria: corSecundaria,
-        );
+        return _buildOverlaySlimClassico();
       case EstiloCardOverlay.scouterHud:
         return _buildOverlayScouterHud(
-          corPrimaria: corPrimaria,
-          corSecundaria: corSecundaria,
           transformacao: transformacao,
           kiSessao: kiSessao,
           prsCount: prsCount,
         );
       case EstiloCardOverlay.rodapeMinimalista:
         return _buildOverlayRodapeMinimalista(
-          corPrimaria: corPrimaria,
-          corSecundaria: corSecundaria,
           transformacao: transformacao,
-          kiSessao: kiSessao,
         );
     }
   }
 
-  /// 1. Preset: Slim Clássico (O estilo oficial da Foto 5)
-  Widget _buildOverlaySlimClassico({
-    required Color corPrimaria,
-    required Color corSecundaria,
-  }) {
+  /// 1. Preset: Slim Clássico Refinado
+  /// - Topo: Apenas a pílula sutil da divisão do treino.
+  /// - Centro: 100% livre para o rosto e corpo do atleta.
+  /// - Base: Métricas limpas com alto contraste e rodapé com marca/handle.
+  Widget _buildOverlaySlimClassico() {
     final volume = _calcularVolumeTotal();
     final volumeStr = _formatarVolume(volume);
     final totalSeries = _calcularTotalSeries();
@@ -545,109 +473,108 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
     return Padding(
       padding: EdgeInsets.only(
-        top: isStories ? 44.0 : 20.0,
-        bottom: isStories ? 26.0 : 18.0,
-        left: 20.0,
-        right: 20.0,
+        top: isStories ? 40.0 : 16.0,
+        bottom: isStories ? 22.0 : 14.0,
+        left: 18.0,
+        right: 18.0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Topo: Divisão + Métricas em 3 colunas
-          Column(
-            children: [
-              if (widget.sessao.nomeTreino != null &&
-                  widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  constraints: const BoxConstraints(maxWidth: 240),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3.5),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.38),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.22),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: Text(
-                    widget.sessao.nomeTreino!.trim().toUpperCase(),
-                    style: TextStyle(
-                      color: corPrimaria.withValues(alpha: 0.95),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 11,
-                      letterSpacing: 1.8,
-                      shadows: _sombraTextoForte(),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  ),
+          // Topo Desobstruído: Somente a Pílula da Divisão Centralizada
+          if (widget.sessao.nomeTreino != null &&
+              widget.sessao.nomeTreino!.trim().isNotEmpty)
+            Container(
+              constraints: const BoxConstraints(maxWidth: 240),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4.5),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.45),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.22),
+                  width: 0.8,
                 ),
-              ],
+              ),
+              child: Text(
+                widget.sessao.nomeTreino!.trim().toUpperCase(),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                  letterSpacing: 1.6,
+                  shadows: _sombraTextoForte(),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            )
+          else
+            const SizedBox.shrink(),
+
+          // Base: Métricas Esportivas Limpas + Assinatura
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Row(
                 children: [
                   Expanded(
                     child: _buildMetricaOverlay(
                       rotulo: 'Duração',
                       valor: widget.sessao.duracaoFormatada,
-                      cor: corPrimaria,
                     ),
                   ),
                   Expanded(
                     child: _buildMetricaOverlay(
                       rotulo: 'Volume',
                       valor: volumeStr,
-                      cor: corPrimaria,
                     ),
                   ),
                   Expanded(
                     child: _buildMetricaOverlay(
                       rotulo: 'Séries',
                       valor: '$totalSeries',
-                      cor: corPrimaria,
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-
-          // Rodapé: Logo Shenlong + GYM SAIYAJIN e Data/@
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+              const SizedBox(height: 12),
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildLogoComSombra(tamanho: 32),
-                  const SizedBox(width: 8),
-                  Text(
-                    'GYM SAIYAJIN',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.6,
-                      color: corPrimaria,
-                      shadows: _sombraTextoForte(),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildLogoComSombra(tamanho: 28),
+                      const SizedBox(width: 8),
+                      Text(
+                        'GYM SAIYAJIN',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.6,
+                          color: Colors.white,
+                          shadows: _sombraTextoForte(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Flexible(
+                    child: Text(
+                      handleText,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withValues(alpha: 0.90),
+                        shadows: _sombraTextoForte(),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
                     ),
                   ),
                 ],
-              ),
-              Flexible(
-                child: Text(
-                  handleText,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: corPrimaria.withValues(alpha: 0.90),
-                    shadows: _sombraTextoForte(),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                ),
               ),
             ],
           ),
@@ -656,10 +583,10 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     );
   }
 
-  /// 2. Preset: Scouter HUD (Inspirado no Adidas Running Foto 4)
+  /// 2. Preset: Scouter HUD Refinado
+  /// - Topo: Divisão à esquerda + Carimbo Scouter à direita.
+  /// - Base: Dock de telemetria unificada com métricas, logo e data integrados em uma única moldura.
   Widget _buildOverlayScouterHud({
-    required Color corPrimaria,
-    required Color corSecundaria,
     required TransformacaoSaiyajin transformacao,
     required int kiSessao,
     required int prsCount,
@@ -672,10 +599,10 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
     return Padding(
       padding: EdgeInsets.only(
-        top: isStories ? 44.0 : 18.0,
-        bottom: isStories ? 26.0 : 16.0,
-        left: 18.0,
-        right: 18.0,
+        top: isStories ? 40.0 : 16.0,
+        bottom: isStories ? 22.0 : 14.0,
+        left: 16.0,
+        right: 16.0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -686,13 +613,13 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (widget.sessao.nomeTreino != null &&
-                  widget.sessao.nomeTreino!.trim().isNotEmpty) ...[
+                  widget.sessao.nomeTreino!.trim().isNotEmpty)
                 Flexible(
                   child: Container(
                     margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.40),
+                      color: Colors.black.withValues(alpha: 0.45),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.20),
@@ -704,7 +631,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: corPrimaria,
+                        color: Colors.white,
                         fontWeight: FontWeight.w800,
                         fontSize: 9,
                         letterSpacing: 1.0,
@@ -712,15 +639,15 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       ),
                     ),
                   ),
-                ),
-              ] else
+                )
+              else
                 const SizedBox.shrink(),
 
               // Carimbo do Scouter HUD
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.45),
+                  color: Colors.black.withValues(alpha: 0.50),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: transformacao.corBadge.withValues(alpha: 0.7),
@@ -728,7 +655,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: transformacao.corBadge.withValues(alpha: 0.20),
+                      color: transformacao.corBadge.withValues(alpha: 0.22),
                       blurRadius: 10,
                       spreadRadius: 1,
                     ),
@@ -760,8 +687,8 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         ),
                         Text(
                           transformacao.titulo.toUpperCase(),
-                          style: TextStyle(
-                            color: corPrimaria.withValues(alpha: 0.9),
+                          style: const TextStyle(
+                            color: Colors.white,
                             fontSize: 8,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.8,
@@ -775,28 +702,34 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             ],
           ),
 
-          // Rodapé Compacto (Estilo Foto 4 do Adidas)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Linha de Métricas Compactas
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.40),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    width: 0.8,
-                  ),
+          // Base: Dock de Telemetria Unificada
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.52),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: transformacao.corBadge.withValues(alpha: 0.45),
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: transformacao.corBadge.withValues(alpha: 0.15),
+                  blurRadius: 12,
+                  spreadRadius: 1,
                 ),
-                child: Row(
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Métricas em Linha
+                Row(
                   children: [
                     Expanded(
                       child: _buildMetricaInline(
                         titulo: 'VOLUME',
                         valor: volumeStr,
-                        cor: corPrimaria,
                       ),
                     ),
                     _buildDivisorVertical(),
@@ -804,7 +737,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: _buildMetricaInline(
                         titulo: 'DURAÇÃO',
                         valor: widget.sessao.duracaoFormatada,
-                        cor: corPrimaria,
                       ),
                     ),
                     _buildDivisorVertical(),
@@ -812,7 +744,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: _buildMetricaInline(
                         titulo: 'SÉRIES',
                         valor: '$totalSeries',
-                        cor: corPrimaria,
                       ),
                     ),
                     if (prsCount > 0) ...[
@@ -840,68 +771,71 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                     ],
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-
-              // Linha da Marca e Data
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildLogoComSombra(tamanho: 24),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'GYM SAIYAJIN',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 1.2,
-                                color: corPrimaria,
-                                shadows: _sombraTextoForte(),
+                const SizedBox(height: 8),
+                Divider(
+                  color: Colors.white.withValues(alpha: 0.16),
+                  height: 1,
+                ),
+                const SizedBox(height: 7),
+                // Linha da Marca e Data integradas
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildLogoComSombra(tamanho: 22),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'GYM SAIYAJIN',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.2,
+                                  color: Colors.white,
+                                  shadows: _sombraTextoForte(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (handleText.isNotEmpty) ...[
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        handleText,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: corPrimaria.withValues(alpha: 0.85),
-                          shadows: _sombraTextoForte(),
-                        ),
+                        ],
                       ),
                     ),
+                    if (handleText.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          handleText,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white.withValues(alpha: 0.90),
+                            shadows: _sombraTextoForte(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  /// 3. Preset: Rodapé Minimalista (Topo 100% livre — Foto 1 do Adidas)
+  /// 3. Preset: Rodapé Minimalista Ancorado
+  /// - Topo e meio 100% desobstruídos.
+  /// - Painel translúcido elegante ancorado suavemente na base.
   Widget _buildOverlayRodapeMinimalista({
-    required Color corPrimaria,
-    required Color corSecundaria,
     required TransformacaoSaiyajin transformacao,
-    required int kiSessao,
   }) {
     final volume = _calcularVolumeTotal();
     final volumeStr = _formatarVolume(volume);
@@ -911,18 +845,17 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
     return Padding(
       padding: EdgeInsets.only(
-        bottom: isStories ? 26.0 : 16.0,
-        left: 18.0,
-        right: 18.0,
+        bottom: isStories ? 18.0 : 12.0,
+        left: 16.0,
+        right: 16.0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Card Translúcido Compacto na parte inferior
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.50),
+              color: Colors.black.withValues(alpha: 0.52),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.20),
@@ -947,7 +880,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.2,
-                          color: corSecundaria,
+                          color: AppColors.primary,
                           shadows: _sombraTextoForte(),
                         ),
                       ),
@@ -973,7 +906,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: _buildMetricaInline(
                         titulo: 'VOLUME',
                         valor: volumeStr,
-                        cor: corPrimaria,
                       ),
                     ),
                     _buildDivisorVertical(),
@@ -981,7 +913,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: _buildMetricaInline(
                         titulo: 'DURAÇÃO',
                         valor: widget.sessao.duracaoFormatada,
-                        cor: corPrimaria,
                       ),
                     ),
                     _buildDivisorVertical(),
@@ -989,14 +920,16 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: _buildMetricaInline(
                         titulo: 'SÉRIES',
                         valor: '$totalSeries',
-                        cor: corPrimaria,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                const Divider(color: Colors.white24, height: 1),
                 const SizedBox(height: 8),
+                Divider(
+                  color: Colors.white.withValues(alpha: 0.16),
+                  height: 1,
+                ),
+                const SizedBox(height: 7),
 
                 // Marca e @
                 Row(
@@ -1006,7 +939,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildLogoComSombra(tamanho: 22),
+                          _buildLogoComSombra(tamanho: 20),
                           const SizedBox(width: 6),
                           Flexible(
                             child: FittedBox(
@@ -1017,7 +950,8 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                                   fontSize: 11,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.2,
-                                  color: corPrimaria,
+                                  color: Colors.white,
+                                  shadows: _sombraTextoForte(),
                                 ),
                               ),
                             ),
@@ -1036,7 +970,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
-                            color: corPrimaria.withValues(alpha: 0.85),
+                            color: Colors.white.withValues(alpha: 0.90),
                             shadows: _sombraTextoForte(),
                           ),
                         ),
@@ -1055,7 +989,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   Widget _buildMetricaInline({
     required String titulo,
     required String valor,
-    required Color cor,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1069,7 +1002,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               fontSize: 9,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.8,
-              color: cor.withValues(alpha: 0.70),
+              color: Colors.white.withValues(alpha: 0.70),
               shadows: _sombraTextoForte(),
             ),
           ),
@@ -1082,7 +1015,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w900,
-              color: cor,
+              color: Colors.white,
               letterSpacing: 0.3,
               shadows: _sombraTextoForte(),
             ),
@@ -1095,86 +1028,55 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   Widget _buildDivisorVertical() {
     return Container(
       width: 1,
-      height: 22,
+      height: 20,
       color: Colors.white24,
     );
   }
 
-
-
-  /// Painel de Controles com Abas e Customizações
+  /// Painel de Controles com Ergonomia Premium e SafeArea
   Widget _buildPainelControles() {
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+      decoration: const BoxDecoration(
+        color: Color(0xFF14161E),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        border: Border(
+          top: BorderSide(color: AppColors.cardBorder, width: 0.8),
+        ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Ações de Foto (Câmera / Galeria)
+          // Linha 1: Seletor de Proporção (Stories vs Feed)
           Row(
             children: [
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _tirarFoto,
-                  icon: const Icon(Icons.camera_alt, color: AppColors.primary, size: 18),
-                  label: const Text(
-                    'Câmera',
-                    style: TextStyle(color: AppColors.textLight, fontSize: 12),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.cardBorder),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
+                child: _buildBotaoProporcao(
+                  rotulo: 'STORIES (9:16)',
+                  proporcao: ProporcaoCard.stories,
+                  icone: Icons.stay_current_portrait_rounded,
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _escolherGaleria,
-                  icon: const Icon(Icons.photo_library, color: AppColors.primary, size: 18),
-                  label: const Text(
-                    'Galeria',
-                    style: TextStyle(color: AppColors.textLight, fontSize: 12),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.cardBorder),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
+                child: _buildBotaoProporcao(
+                  rotulo: 'FEED (1:1)',
+                  proporcao: ProporcaoCard.quadrado,
+                  icone: Icons.crop_square_rounded,
                 ),
               ),
-              if (_imagemSelecionada != null) ...[
-                const SizedBox(width: 8),
-                IconButton(
-                  onPressed: _removerFoto,
-                  icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 20),
-                  tooltip: 'Remover foto',
-                ),
-              ],
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
-          // 2. Seletor de Estilo de Overlay
-          const Text(
-            'ESTILO DO OVERLAY',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.8,
-              color: AppColors.textDimmed,
-            ),
-          ),
-          const SizedBox(height: 6),
+          // Linha 2: Seletor Segmentado de Presets
           Row(
             children: [
               _buildChipEstilo(
                 rotulo: 'Slim Clássico',
                 estilo: EstiloCardOverlay.slimClassico,
-                icone: Icons.vertical_align_top_rounded,
+                icone: Icons.vertical_align_bottom_rounded,
               ),
               const SizedBox(width: 6),
               _buildChipEstilo(
@@ -1186,50 +1088,107 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               _buildChipEstilo(
                 rotulo: 'Rodapé',
                 estilo: EstiloCardOverlay.rodapeMinimalista,
-                icone: Icons.vertical_align_bottom_rounded,
+                icone: Icons.dock_rounded,
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
-          // 3. Cor do Texto (Branco vs Dourado)
+          // Linha 3: Ações de Foto (Câmera / Galeria / Excluir)
           Row(
             children: [
-              const Text(
-                'COR DO TEXTO: ',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.8,
-                  color: AppColors.textDimmed,
+              Expanded(
+                child: InkWell(
+                  onTap: _tirarFoto,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.cardBorder),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.camera_alt_rounded, color: AppColors.primary, size: 16),
+                        SizedBox(width: 6),
+                        Text(
+                          'Câmera',
+                          style: TextStyle(color: AppColors.textLight, fontSize: 11, fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
-              _buildChipCor(
-                rotulo: 'Branco',
-                cor: CorTextoCard.branco,
-                colorIndicator: Colors.white,
+              Expanded(
+                child: InkWell(
+                  onTap: _escolherGaleria,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.cardBorder),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.photo_library_rounded, color: AppColors.primary, size: 16),
+                        SizedBox(width: 6),
+                        Text(
+                          'Galeria',
+                          style: TextStyle(color: AppColors.textLight, fontSize: 11, fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(width: 6),
-              _buildChipCor(
-                rotulo: 'Dourado',
-                cor: CorTextoCard.dourado,
-                colorIndicator: const Color(0xFFFFD700),
-              ),
+              if (_imagemSelecionada != null) ...[
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: _removerFoto,
+                  icon: const Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 18),
+                  tooltip: 'Remover foto',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: AppColors.cardBorder),
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
-          // Campo de @handle ou legenda
+          // Linha 4: Campo de @handle ou legenda no rodapé
           TextField(
             controller: _handleController,
             style: const TextStyle(fontSize: 12, color: AppColors.textLight),
             onChanged: (_) => setState(() {}),
+            textInputAction: TextInputAction.done,
             decoration: InputDecoration(
               isDense: true,
               hintText: 'Seu @ ou legenda no rodapé (ex: @usuario)',
               hintStyle: const TextStyle(fontSize: 11, color: AppColors.textMuted),
-              prefixIcon: const Icon(Icons.alternate_email, size: 16, color: AppColors.textDimmed),
+              prefixIcon: const Icon(Icons.alternate_email, size: 15, color: AppColors.primary),
+              suffixIcon: _handleController.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.close, size: 14, color: AppColors.textDimmed),
+                      onPressed: () {
+                        _handleController.clear();
+                        setState(() {});
+                      },
+                    )
+                  : null,
               filled: true,
               fillColor: AppColors.background,
               contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -1241,9 +1200,60 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: AppColors.cardBorder),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBotaoProporcao({
+    required String rotulo,
+    required ProporcaoCard proporcao,
+    required IconData icone,
+  }) {
+    final isSel = _proporcao == proporcao;
+    return InkWell(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        setState(() => _proporcao = proporcao);
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSel ? AppColors.surface : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSel ? AppColors.primary : AppColors.cardBorder,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icone,
+              size: 14,
+              color: isSel ? AppColors.primary : AppColors.textDimmed,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              rotulo,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
+                color: isSel ? AppColors.textLight : AppColors.textDimmed,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1256,10 +1266,14 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     final isSel = _estilo == estilo;
     return Expanded(
       child: InkWell(
-        onTap: () => setState(() => _estilo = estilo),
+        onTap: () {
+          HapticFeedback.selectionClick();
+          setState(() => _estilo = estilo);
+        },
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 6),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(vertical: 7),
           decoration: BoxDecoration(
             color: isSel ? AppColors.primary.withValues(alpha: 0.15) : AppColors.background,
             borderRadius: BorderRadius.circular(10),
@@ -1297,55 +1311,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     );
   }
 
-  Widget _buildChipCor({
-    required String rotulo,
-    required CorTextoCard cor,
-    required Color colorIndicator,
-  }) {
-    final isSel = _corTexto == cor;
-    return InkWell(
-      onTap: () => setState(() => _corTexto = cor),
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: isSel ? AppColors.surface : AppColors.background,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSel ? AppColors.primary : AppColors.cardBorder,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                color: colorIndicator,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white24, width: 0.5),
-              ),
-            ),
-            const SizedBox(width: 5),
-            Text(
-              rotulo,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: isSel ? FontWeight.w800 : FontWeight.w500,
-                color: isSel ? AppColors.textLight : AppColors.textDimmed,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildMetricaOverlay({
     required String rotulo,
     required String valor,
-    required Color cor,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1358,7 +1326,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: cor.withValues(alpha: 0.92),
+              color: Colors.white.withValues(alpha: 0.92),
               letterSpacing: 0.2,
               shadows: _sombraTextoForte(),
             ),
@@ -1372,7 +1340,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
-              color: cor,
+              color: Colors.white,
               letterSpacing: 0.3,
               shadows: _sombraTextoForte(),
             ),
@@ -1417,8 +1385,6 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
       ),
     );
   }
-
-
 
   String _obterTextoHandle() {
     return _handleController.text.trim().isNotEmpty

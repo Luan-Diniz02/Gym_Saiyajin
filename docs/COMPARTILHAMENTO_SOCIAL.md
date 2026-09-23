@@ -33,23 +33,23 @@ graph TD
 ### 1. Slim Clássico (Padrão)
 - **Inspiração**: Estilo esportivo limpo em espelho de musculação.
 - **Estrutura**:
-  - **Topo Sutil**: Nome da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) e data/hora com drop shadow natural.
-  - **Centro Livre**: 100% da área fotográfica livre de qualquer elemento, destacando a postura e a musculatura do atleta.
-  - **Base Esportiva**: Três métricas essenciais alinhadas horizontalmente: **Duração**, **Volume Total** e **Séries Concluídas**.
+  - **Topo Sutil**: Apenas a pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) centralizada no topo.
+  - **Centro e Terço Superior 100% Livres**: Preserva integralmente o rosto, cabeça, fones de ouvido e o físico do atleta em fotos clássicas de espelho.
+  - **Base Esportiva**: Três métricas essenciais alinhadas horizontalmente na base (**Duração**, **Volume Total** e **Séries Concluídas**), logo acima do rodapé com o logo de Shenlong, marca e data/@handle.
 
 ### 2. Scouter HUD
 - **Inspiração**: Telemetria avançada de alto desempenho (estilo Foto 4 do Adidas Running).
 - **Estrutura**:
   - **Carimbo Scouter no Topo Direito**: Lente holográfica (`ScouterIcon`), leitura digital de Ki obtido na sessão (`+X Ki`) e Patamar Saiyajin atual.
   - **Badge de Treino no Topo Esquerdo**: Pílula translúcida com borda fosca contendo a divisão do treino.
-  - **Base com Detecção de PRs**: Grade atlética com volume, duração, séries e a esfera de 4 estrelas (`DragonBallIcon`) destacando o total de recordes conquistados (`X PRs`).
-  - **Assinatura**: Logo de Shenlong acompanhado da marca `GYM SAIYAJIN` e o handle do atleta.
+  - **Dock de Telemetria Unificada na Base**: Painel translúcido de vidro tecnológico de Scouter reunindo as métricas (`Volume`, `Duração`, `Séries`, `DragonBallIcon` com PRs), linha de corte fina e a assinatura oficial com a marca e o `@handle` em uma única moldura coesa com aura de Ki.
 
 ### 3. Rodapé Minimalista
 - **Inspiração**: Estilo de corrida com terço inferior translúcido (estilo Foto 1 do Adidas Running).
 - **Estrutura**:
-  - **Topo e Meio 100% Desimpedidos**: O enquadramento superior da foto fica totalmente limpo.
-  - **Painel Inferior Translúcido (*Frosted Glass*)**:
+  - **Topo e Meio 100% Desimpedidos**: O enquadramento superior e central da foto fica totalmente limpo.
+  - **Painel Inferior Translúcido Ancorado (*Frosted Glass*)**:
+    - Ancorado suavemente na base com gradiente de apoio e margens seguras para Instagram Stories.
     - Cabeçalho interno com a divisão do treino e o badge do patamar de poder.
     - Linha de métricas esportivas separadas por divisores verticais discretos.
     - Divisor translúcido fino com logotipo oficial e `@handle`.
@@ -58,19 +58,22 @@ graph TD
 
 ## 🎨 3. Controles & Customização
 
-No painel inferior do modal, o guerreiro tem acesso direto a:
+No painel inferior do estúdio em tela cheia (com `SafeArea` e pré-visualização adaptativa via `FittedBox`), o guerreiro tem acesso direto a:
 
-1. **Ações de Foto**:
+1. **Seletor de Formato**:
+   - Botões segmentados para alternar entre **Stories (9:16)** e **Feed (1:1)**.
+2. **Seleção de Presets**:
+   - Chips táteis para alternar instantaneamente entre **Slim Clássico**, **Scouter HUD** e **Rodapé**.
+3. **Ações de Foto**:
    - Botão **Câmera**: Aciona a câmera nativa do aparelho via `image_picker`.
    - Botão **Galeria**: Permite selecionar uma foto existente do rolo da câmera.
-   - Botão **Remover**: Retorna instantaneamente ao fundo texturizado nativo.
-2. **Seletor de Cor da Tipografia**:
-   - **Branco**: Máximo contraste e legibilidade em fotos com iluminação de academia ou contraste escuro.
-   - **Dourado (`#FFD700` / `#FF9E00`)**: Toque nobre Saiyajin que harmoniza com a paleta do aplicativo.
-3. **Campo de `@handle` / Legenda**:
-   - Input dedicado com ícone `@`. O texto digitado é estampado em tempo real no rodapé do cartão (ex: `@luan.diniz`).
-   - Se deixado em branco, o cartão exibe a data formatada como assinatura.
-4. **Fallback Texturizado Sem Foto**:
+   - Botão **Remover**: Retorna instantaneamente ao fundo texturizado nativo de Shenlong.
+4. **Tipografia de Alto Contraste Nativa**:
+   - Texto em branco puro (`Colors.white`) protegido por camadas quádruplas de drop shadow preto (`Shadow`), garantindo contraste absoluto contra qualquer fundo fotográfico (iluminação clara ou escura de academia) sem poluição visual.
+5. **Campo de `@handle` / Legenda**:
+   - Input dedicado com ícone `@`, botão para limpar texto e tecla `Done`. O texto digitado é estampado em tempo real no rodapé do cartão (ex: `@luan.diniz`).
+   - Se deixado em branco, o cartão exibe a data formatada como assinatura padrão.
+6. **Fallback Texturizado Sem Foto**:
    - Caso o atleta prefira não anexar uma foto de si mesmo, o card renderiza um gradiente escuro texturizado com a silhueta sutil de Shenlong ao fundo, permitindo compartilhar os resultados do treino imediatamente.
 
 ---
