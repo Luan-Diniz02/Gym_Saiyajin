@@ -536,33 +536,73 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Topo Desobstruído: Somente a Pílula da Divisão Centralizada
-          if (widget.sessao.nomeTreino != null &&
-              widget.sessao.nomeTreino!.trim().isNotEmpty)
-            Container(
-              constraints: const BoxConstraints(maxWidth: 240),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4.5),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.45),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.22),
-                  width: 0.8,
-                ),
-              ),
-              child: Text(
-                widget.sessao.nomeTreino!.trim().toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.95),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 11,
-                  letterSpacing: 1.6,
-                  shadows: _sombraTextoForte(),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
+          // Topo Desobstruído: Pílula da Divisão e Chip Comemorativo de PRs com DragonBallIcon
+          if ((widget.sessao.nomeTreino != null &&
+                  widget.sessao.nomeTreino!.trim().isNotEmpty) ||
+              prsCount > 0)
+            Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                if (widget.sessao.nomeTreino != null &&
+                    widget.sessao.nomeTreino!.trim().isNotEmpty)
+                  Container(
+                    constraints: BoxConstraints(maxWidth: prsCount > 0 ? 175 : 240),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4.5),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.22),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Text(
+                      widget.sessao.nomeTreino!.trim().toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.95),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11,
+                        letterSpacing: 1.6,
+                        shadows: _sombraTextoForte(),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                if (prsCount > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.22),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const DragonBallIcon(size: 13, stars: 4),
+                        const SizedBox(width: 5),
+                        Text(
+                          '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 11,
+                            letterSpacing: 0.8,
+                            shadows: _sombraTextoForte(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             )
           else
             const SizedBox.shrink(),
@@ -575,29 +615,22 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                 children: [
                   Expanded(
                     child: _buildMetricaOverlay(
-                      rotulo: 'Duração',
-                      valor: widget.sessao.duracaoFormatada,
-                    ),
-                  ),
-                  Expanded(
-                    child: _buildMetricaOverlay(
-                      rotulo: 'Volume',
+                      rotulo: 'VOLUME',
                       valor: volumeStr,
                     ),
                   ),
                   Expanded(
                     child: _buildMetricaOverlay(
-                      rotulo: 'Séries',
+                      rotulo: 'SÉRIES',
                       valor: '$totalSeries',
                     ),
                   ),
-                  if (prsCount > 0)
-                    Expanded(
-                      child: _buildMetricaOverlay(
-                        rotulo: prsCount == 1 ? 'PR' : 'PRs',
-                        valor: '$prsCount',
-                      ),
+                  Expanded(
+                    child: _buildMetricaOverlay(
+                      rotulo: 'DURAÇÃO',
+                      valor: widget.sessao.duracaoFormatada,
                     ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -795,15 +828,15 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                     _buildDivisorVertical(),
                     Expanded(
                       child: _buildMetricaInline(
-                        titulo: 'DURAÇÃO',
-                        valor: widget.sessao.duracaoFormatada,
+                        titulo: 'SÉRIES',
+                        valor: '$totalSeries',
                       ),
                     ),
                     _buildDivisorVertical(),
                     Expanded(
                       child: _buildMetricaInline(
-                        titulo: 'SÉRIES',
-                        valor: '$totalSeries',
+                        titulo: 'DURAÇÃO',
+                        valor: widget.sessao.duracaoFormatada,
                       ),
                     ),
                     if (prsCount > 0) ...[
@@ -990,15 +1023,15 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                     _buildDivisorVertical(),
                     Expanded(
                       child: _buildMetricaInline(
-                        titulo: 'DURAÇÃO',
-                        valor: widget.sessao.duracaoFormatada,
+                        titulo: 'SÉRIES',
+                        valor: '$totalSeries',
                       ),
                     ),
                     _buildDivisorVertical(),
                     Expanded(
                       child: _buildMetricaInline(
-                        titulo: 'SÉRIES',
-                        valor: '$totalSeries',
+                        titulo: 'DURAÇÃO',
+                        valor: widget.sessao.duracaoFormatada,
                       ),
                     ),
                     if (prsCount > 0) ...[

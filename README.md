@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-56%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-60%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -70,7 +70,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 ### 📱 Compartilhamento Social de Alta Performance
 - **Proporções Flexíveis**: Alternância entre `STORIES (9:16)` (Instagram Stories / WhatsApp Status) e `FEED (1:1)` (Instagram Feed / WhatsApp Chat).
 - **Presets de Overlay**:
-  - **Slim Clássico**: Minimalista, treino no topo e métricas na base, valorizando 100% da foto.
+  - **Slim Clássico**: Minimalista, divisão e troféu de PRs com DragonBallIcon no topo, e 3 métricas de impacto (Volume, Séries, Duração) na base, valorizando 100% da foto.
   - **Scouter HUD**: Estilo telemetria esportiva com visor holográfico (`ScouterIcon`), ganho de Ki e contador de PRs com `DragonBallIcon`.
   - **Rodapé Minimalista**: Topo totalmente limpo e painel translúcido inferior (*frosted glass*).
 - **Customização Total**: Alternância de cor (Branco vs Dourado), campo para `@handle` do atleta e fallback texturizado premium caso não deseje usar foto.
@@ -148,7 +148,7 @@ gym_saiyajin/
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                               # Suíte de 56 testes automatizados
+├── test/                               # Suíte de 60 testes automatizados
 │   ├── backup_test.dart
 │   ├── compartilhar_card_test.dart
 │   ├── dragon_ball_icon_test.dart
@@ -176,7 +176,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (56 testes)
+# Executar a suíte completa de testes automatizados (60 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

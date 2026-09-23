@@ -4,6 +4,7 @@ import 'package:gym_saiyajin/models/exercicio.dart';
 import 'package:gym_saiyajin/models/serie.dart';
 import 'package:gym_saiyajin/models/sessao_treino.dart';
 import 'package:gym_saiyajin/widgets/compartilhar_card_modal.dart';
+import 'package:gym_saiyajin/widgets/dragon_ball_icon.dart';
 import 'package:gym_saiyajin/widgets/scouter_icon.dart';
 
 void main() {
@@ -249,8 +250,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
-      expect(find.text('PRs'), findsWidgets);
-      expect(find.text('1'), findsWidgets);
+      expect(find.text('1 PR'), findsOneWidget);
+      expect(find.byType(DragonBallIcon), findsWidgets);
+      expect(find.text('VOLUME'), findsWidgets);
+      expect(find.text('SÉRIES'), findsWidgets);
+      expect(find.text('DURAÇÃO'), findsWidgets);
     });
 
     testWidgets('Deve exibir a contagem de PRs no preset Rodapé Minimalista', (tester) async {

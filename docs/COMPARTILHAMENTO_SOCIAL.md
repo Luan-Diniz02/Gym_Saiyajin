@@ -33,16 +33,16 @@ graph TD
 ### 1. Slim Clássico (Padrão)
 - **Inspiração**: Estilo esportivo limpo em espelho de musculação.
 - **Estrutura**:
-  - **Topo Sutil**: Apenas a pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) centralizada no topo.
+  - **Topo Sutil com Troféu**: Pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) e, quando houver recordes batidos na sessão, um chip comemorativo elegante com a Esfera do Dragão (`DragonBallIcon`) e o total em dourado Saiyajin (ex: `2 PRs`), organizados com quebra fluida (`Wrap`) e proteção contra overflow para nomes longos.
   - **Centro e Terço Superior 100% Livres**: Preserva integralmente o rosto, cabeça, fones de ouvido e o físico do atleta em fotos clássicas de espelho.
-  - **Base Esportiva**: Métricas alinhadas horizontalmente na base — **Duração**, **Volume Total** e **Séries Concluídas** — e, quando houver recordes pessoais batidos na sessão, uma 4ª coluna contextual **`PR` / `PRs`** (singular ou plural conforme o total) é exibida no mesmo estilo tipográfico das outras métricas, sem ícones ou elementos adicionais. O rodapé com logo de Shenlong, marca e data/@handle completa a composição.
+  - **Base Esportiva**: Três métricas principais com amplo respiro horizontal e sem linhas divisórias — **`VOLUME`**, **`SÉRIES`** e **`DURAÇÃO`** — em caixa alta. O rodapé com logo de Shenlong, marca e data/@handle completa a composição com máxima clareza.
 
 ### 2. Scouter HUD
 - **Inspiração**: Telemetria avançada de alto desempenho com estética *stealth* (estilo heads-up display aeronáutico/cyberpunk).
 - **Estrutura**:
   - **Carimbo Scouter no Topo Direito**: Vidro fumê fosco translúcido com borda neutra e sombra de profundidade (`0.8px` com `Colors.white18`), lente vetorial holográfica (`ScouterIcon`) reativa à transformação, leitura digital de Ki obtido na sessão (`+X Ki`) e Patamar Saiyajin.
   - **Badge de Treino no Topo Esquerdo**: Pílula translúcida com borda fosca contendo a divisão do treino.
-  - **Dock de Telemetria Unificada na Base**: Painel translúcido de vidro tecnológico de Scouter reunindo as métricas (`Volume`, `Duração`, `Séries`, `DragonBallIcon` com PRs), linha de corte fina e a assinatura oficial com a marca e o `@handle` em uma única moldura coesa com acabamento neutro, evitando bordas coloridas invasivas para que o físico do atleta seja o protagonista absoluto.
+  - **Dock de Telemetria Unificada na Base**: Painel translúcido de vidro tecnológico de Scouter reunindo as métricas na ordem hierárquica oficial (`VOLUME`, `SÉRIES`, `DURAÇÃO` e `DragonBallIcon` com PRs), linha de corte fina e a assinatura oficial com a marca e o `@handle` em uma única moldura coesa com acabamento neutro, evitando bordas coloridas invasivas para que o físico do atleta seja o protagonista absoluto.
 
 ### 3. Rodapé Minimalista
 - **Inspiração**: Estilo esportivo moderno com terço inferior translúcido (*frosted glass dock* ancorado).
@@ -51,7 +51,7 @@ graph TD
   - **Painel Inferior Translúcido Ancorado (*Frosted Glass*)**:
     - Ancorado suavemente na base com gradiente de apoio e margens seguras para Instagram Stories.
     - Cabeçalho interno com a divisão do treino em branco puro com sombra e badge de patamar em chip fosco minimalista.
-    - Linha de métricas esportivas (`Volume`, `Duração`, `Séries` e `Recordes` com `DragonBallIcon`) separadas por divisores verticais discretos.
+    - Linha de métricas esportivas padronizadas (`VOLUME`, `SÉRIES`, `DURAÇÃO` e `Recordes` com `DragonBallIcon`) separadas por divisores verticais discretos.
     - Divisor translúcido fino com logotipo oficial e `@handle`.
 
 ---
@@ -72,7 +72,7 @@ No painel inferior do estúdio em tela cheia (com `SafeArea` e pré-visualizaç�
 4. **Exibição Inteligente de PRs da Sessão Específica**:
    - O card calcula e exibe **estritamente os Recordes Pessoais (PRs) conquistados naquela sessão específica**, e não o total vitalício do app.
    - O `ProgressoController` reconstitui cronologicamente o histórico até o momento do treino compartilhado para determinar se houve quebra de recorde prévio.
-   - Quando há PRs, exibe a esfera de 4 estrelas (`DragonBallIcon`) e a formatação precisa no singular ou plural (`1 PR`, `2 PRs`, `3 PRs`...). Caso o treino não tenha tido recordes batidos, a coluna de PR é omitida, mantendo o dock limpo e harmonioso.
+   - Quando há PRs, exibe a esfera de 4 estrelas (`DragonBallIcon`) e a formatação precisa no singular ou plural (`1 PR`, `2 PRs`, `3 PRs`...). No preset *Slim Clássico*, o badge de PR é destacado como troféu no topo junto à divisão do treino; nos presets *Scouter HUD* e *Rodapé Minimalista*, a métrica integra o dock inferior de telemetria. Caso o treino não tenha tido recordes batidos, o elemento de PR é omitido, mantendo o card limpo e harmonioso.
 5. **Patamar de Transformação Saiyajin Atual**:
    - A categoria estampada no topo direito (Scouter HUD) ou no rodapé exibe o **Patamar atual de evolução do atleta** (ex: *Guerreiro Z, Super Saiyajin...*), carregado de forma unificada tanto pelo término do treino (`TreinoScreen`) quanto pela navegação no histórico (`HistoricoScreen`).
    - A telemetria exibe o ganho instantâneo daquela sessão (`+X Ki`) com a lente do Scouter (`corLenteScouter`) reativa à transformação.
