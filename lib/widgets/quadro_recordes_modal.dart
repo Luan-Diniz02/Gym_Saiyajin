@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
 import 'dragon_ball_icon.dart';
+import 'ki_aura_icon.dart';
 
 /// Modal estilizado para visualização dos Recordes Pessoais (PRs) / Hall da Fama.
 class QuadroRecordesModal extends StatefulWidget {
@@ -245,10 +246,15 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
                                 shape: BoxShape.circle,
                                 border: Border.all(color: AppColors.cardBorder),
                               ),
-                              child: const Icon(
-                                Icons.bolt_rounded,
-                                size: 32,
-                                color: AppColors.textMuted,
+                              child: const Center(
+                                child: KiAuraIcon(
+                                  size: 32,
+                                  primaryColor: AppColors.textMuted,
+                                  secondaryColor: Color(0xFF424242),
+                                  coreColor: Color(0xFF616161),
+                                  showGlow: false,
+                                  showSparks: false,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 14),

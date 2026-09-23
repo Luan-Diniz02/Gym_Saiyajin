@@ -6,6 +6,7 @@ import 'package:gym_saiyajin/widgets/capsule_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_ball_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_radar_icon.dart';
 import 'package:gym_saiyajin/widgets/escotilha_camara_painter.dart';
+import 'package:gym_saiyajin/widgets/ki_aura_icon.dart';
 import 'package:gym_saiyajin/widgets/planeta_kaioh_icon.dart';
 
 void main() {
@@ -77,6 +78,44 @@ void main() {
       ),
       'preview_escotilha_camara_repouso.png',
       size: 320,
+    );
+
+    // Renderizar KiAuraIcon (Aura Dourada SSJ, Kaio-ken Vermelha, Ciano Guerreiro Z e Púrpura)
+    await renderPainter(
+      const KiAuraPainter(
+        primaryColor: Color(0xFFFFD700),
+        secondaryColor: Color(0xFFFF8C00),
+        coreColor: Color(0xFFFFFDE7),
+      ),
+      'preview_ki_aura_gold.png',
+      size: 300,
+    );
+    await renderPainter(
+      const KiAuraPainter(
+        primaryColor: Color(0xFFFF5252),
+        secondaryColor: Color(0xFFD50000),
+        coreColor: Color(0xFFFFEBEE),
+      ),
+      'preview_ki_aura_red.png',
+      size: 300,
+    );
+    await renderPainter(
+      const KiAuraPainter(
+        primaryColor: Color(0xFF4FC3F7),
+        secondaryColor: Color(0xFF0288D1),
+        coreColor: Color(0xFFE1F5FE),
+      ),
+      'preview_ki_aura_cyan.png',
+      size: 300,
+    );
+    await renderPainter(
+      const KiAuraPainter(
+        primaryColor: Color(0xFFAB47BC),
+        secondaryColor: Color(0xFF6A1B9A),
+        coreColor: Color(0xFFF3E5F5),
+      ),
+      'preview_ki_aura_purple.png',
+      size: 300,
     );
   });
 }

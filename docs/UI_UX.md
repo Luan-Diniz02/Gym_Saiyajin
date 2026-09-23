@@ -244,6 +244,16 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Micro-bolhas procedurais de oxigênio subindo continuamente com oscilação senoidal lateral.
 - **Papel na Interface**: Renderização da escotilha da câmara de regeneração no cronômetro circular de descanso (`CronometroWidget`) na Tela de Treino.
 
+### `KiAuraIcon` & `KiAuraPainter`
+- **Renderização**:
+  - Silhueta canônica de labareda de Ki com línguas de fogo ascendentes e pontiagudas (*upward energy tongues*), com pico central proeminente e cristas laterais afiadas.
+  - Gradiente vertical de energia com contorno de realce luminoso.
+  - Núcleo interno de alta densidade luminosa (*Inner Core*) quase branco, simulando superconcentração de poder.
+  - Halo difuso externo (*Outer Glow*) em `MaskFilter.blur` para efeito de irradiação energética.
+  - Micro-centelhas e faíscas afiadas flutuantes em formato losangular ao redor da chama (*Sparks*).
+  - Suporte completo a customização dinâmica de cores por transformação Saiyajin (Ouro SSJ, Kaio-ken/Vermelho, Ciano Guerreiro Z, Roxo, etc.).
+- **Papel na Interface**: Representação oficial do pilar de Vigor Saiyajin no `PoderLutaCardWidget` e estado inerte no `QuadroRecordesModal`, eliminando o ícone genérico de raio (`Icons.bolt`).
+
 ---
 
 ## 🛡️ 6. Diretrizes de Proteção de Layout & Acessibilidade

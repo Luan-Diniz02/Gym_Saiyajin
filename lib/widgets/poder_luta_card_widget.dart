@@ -6,6 +6,7 @@ import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
 import 'dragon_ball_icon.dart';
+import 'ki_aura_icon.dart';
 import 'scouter_icon.dart';
 
 /// Card interativo do Poder de Luta e Patamar de Transformação Saiyajin.
@@ -318,11 +319,17 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
 
                   // Pilar 2: Vigor Saiyajin
                   _buildLinhaPilar(
-                    icone: Icons.bolt_rounded,
+                    iconeWidget: KiAuraIcon(
+                      size: 16,
+                      primaryColor: corAura,
+                      secondaryColor: corSecundaria,
+                      showGlow: false,
+                      showSparks: false,
+                    ),
                     titulo: 'Vigor Saiyajin (Volume)',
                     subtitulo: 'Volume histórico de repetições / 100',
                     valor: '${PoderLuta.formatarPoder(poder.vigorSaiyajin)} Ki',
-                    cor: const Color(0xFF4FC3F7),
+                    cor: corAura,
                   ),
                   const SizedBox(height: 8),
 

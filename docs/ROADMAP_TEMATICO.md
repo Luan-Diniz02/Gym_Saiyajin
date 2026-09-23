@@ -75,16 +75,18 @@ graph TD
 | :--- | :--- | :--- | :--- | :--- |
 | **🧪 Câmara de Regeneração** | `EscotilhaCamaraPainter` + Cronômetro | `TreinoScreen` (Tela de Treino) | Alta (Painter 3D + animação + sync) | **✅ CONCLUÍDO & TESTADO** |
 | **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
+| **⚡ Chamas de Ki** | `KiAuraIcon` + `KiAuraPainter` | `PoderLutaCardWidget` & `Recordes` | Média (Silhueta cel-shaded + glows) | **✅ CONCLUÍDO & TESTADO** |
 | **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **🚀 Próxima Prioridade** |
 
 ---
 
 ## 📋 Próximos Passos de Execução Recomendados
 
-1. **Fase 1 (Nuvem Voadora)**:
+1. **Chamas de Ki (`KiAuraIcon`) [✅ CONCLUÍDO]**:
+   - Labareda vetorial canônica com cristas pontiagudas voltadas para cima, gradiente dinâmico de energia, núcleo superdenso (*inner core*) e micro-faíscas/sparks.
+   - Integração no pilar de Vigor Saiyajin e substituição definitiva de `Icons.bolt_rounded`.
+2. **Nuvem Voadora (`KintoUnIcon`) [🚀 Próxima Fase]**:
    - Especificação e design do badge de séries de aquecimento (*warm-up*).
    - Não interferir nos recordes nem nos cálculos de 1RM.
-2. **Fase 2 (Chamas de Ki - `KiAuraIcon`)**:
-   - Desenho de labareda vetorial para substituir o ícone genérico de raio nos recordes e no cálculo de Ki.
 
 

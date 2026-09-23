@@ -167,3 +167,22 @@ De acordo com a fração da distância percorrida ($\frac{\text{km}}{1.000.000} 
 - **Barra Senoidal Contínua (`CaminhoSerpenteProgressBar`)**: Ondulação suave de seno ($2.5$ ciclos), drop shadows espaciais, aura de Ki que se desloca com o avanço e o `PlanetaKaiohIcon` ancorado na chegada.
 - **Interatividade & Ocultação Inteligente**: A barra permanece sempre visível para impacto estético instantâneo, enquanto os números analíticos (odômetro numérico, texto do marco e os 3 cards de carga, tempo e sessões) expandem ou recolhem suavemente ao toque.
 
+---
+
+## ⚡ 6. A Aura de Ki Saiyajin (`KiAuraIcon`)
+
+### A. Lore & Conceito Fisiológico
+Em Dragon Ball Z, o **Ki** (気) é a força vital que emana do espírito e dos músculos do lutador. Quando um guerreiro eleva seu poder ao extremo ou atinge novas transformações, o Ki transborda na forma de uma **Aura Flamejante** (*Ki Aura*) que envolve todo o corpo com labaredas verticais afiadas e faíscas elétricas.
+
+No treinamento esportivo do **Gym Saiyajin**, essa aura simboliza o **Vigor e a Capacidade de Trabalho Neuromuscular** gerados através do acúmulo contínuo de repetições e volume de carga.
+
+### B. Especificação Visual Cel-Shaded
+- **Silhueta de Fogo Ascendente**: Labaredas esguias com pontas agudas voltadas para o alto (*upward energy flames*), pico central dominante e cristas dinâmicas bilaterais.
+- **Camadas de Profundidade**:
+  1. *Halo Difuso (Glow)*: Emissão luminosa perimétrica em desfoque gaussiano suave.
+  2. *Casca Principal*: Gradiente energético da cor primária para a secundária com contorno iluminado.
+  3. *Núcleo Superdenso (Inner Core)*: Chama interna clara simulando compressão máxima de plasma e energia.
+  4. *Sparks de Alta Tensão*: Faíscas e relâmpagos pontiagudos flutuando nas laterais.
+- **Harmonização de Transformações**: Cores adaptáveis dinamicamente às transformações Saiyajin (Classe Baixa, Guerreiro Z, Elite Saiyajin, Super Saiyajin 1/2/3).
+
+
