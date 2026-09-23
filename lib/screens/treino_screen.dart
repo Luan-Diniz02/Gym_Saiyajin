@@ -323,6 +323,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
 
       final sessaoSalva = await _controller.encerrarTreino(
         descartarAtual: resultado.descartarAtual,
+        duracaoSegundosPersonalizada: resultado.duracaoSegundos,
+        descansoTotalSegundosPersonalizado: resultado.descansoTotalSegundos,
       );
 
       if (resultado.salvarComoFicha &&

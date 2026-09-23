@@ -133,6 +133,27 @@ class TreinoRepository {
     }
   }
 
+  Future<void> atualizarSessaoTreino(SessaoTreino sessao) async {
+    try {
+      final db = await _databaseHelper.database;
+      if (sessao.id == null) return;
+
+      await db.update(
+        'sessoes',
+        {
+          'data': (sessao.data ?? DateTime.now()).toIso8601String(),
+          'nome_treino': sessao.nomeTreino,
+          'duracao_segundos': sessao.duracaoSegundos,
+          'descanso_total_segundos': sessao.descansoTotalSegundos,
+        },
+        where: 'id = ?',
+        whereArgs: [sessao.id],
+      );
+    } catch (e) {
+      throw Exception('Erro ao atualizar sessao de treino: $e');
+    }
+  }
+
   Future<void> excluirSessaoTreino(int sessaoId) async {
     try {
       final db = await _databaseHelper.database;

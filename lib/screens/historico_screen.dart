@@ -4,7 +4,9 @@ import '../controllers/progresso_controller.dart';
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
 import '../widgets/compartilhar_card_modal.dart';
+import '../widgets/dragon_ball_icon.dart';
 import '../widgets/historico_card_widget.dart';
+import '../widgets/modal_editar_sessao.dart';
 import '../widgets/modal_importar_backup.dart';
 
 class HistoricoScreen extends StatefulWidget {
@@ -126,6 +128,22 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
     );
   }
 
+  Future<void> _abrirEditarSessao(HistoricoDia diaTreino) async {
+    final sessaoEditada = await showDialog<SessaoTreino>(
+      context: context,
+      builder: (context) => ModalEditarSessaoDialog(sessao: diaTreino.sessao),
+    );
+
+    if (sessaoEditada != null) {
+      await _controller.atualizarSessao(sessaoEditada);
+      widget.onHistoricoAtualizado?.call();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Treino atualizado com sucesso!')),
+      );
+    }
+  }
+
   Widget _buildEmptyState() {
     return Center(
       child: SingleChildScrollView(
@@ -179,6 +197,258 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  String _formatarKm(double km) {
+    if (km >= 1000) {
+      final partes = km.toStringAsFixed(1).split('.');
+      final intPart = partes[0].replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+        (Match m) => '${m[1]}.',
+      );
+      return '$intPart,${partes[1]}';
+    }
+    return km.toStringAsFixed(1).replaceAll('.', ',');
+  }
+
+  Widget _itemEstatisticaJornada({
+    required IconData icon,
+    required String rotulo,
+    required String valor,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: AppColors.textDimmed),
+        const SizedBox(width: 5),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              rotulo,
+              style: const TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textDimmed,
+              ),
+            ),
+            Text(
+              valor,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textLight,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCaminhoSerpenteHeader() {
+    final progresso = _controller.progressoCaminhoSerpente;
+    final kmPercorridos = _controller.distanciaCaminhoSerpenteKm;
+    final marco = _controller.marcoCaminhoSerpente;
+    final volumeTon = (_controller.volumeTotalGeral / 1000.0);
+    final tempoMin = _controller.tempoTotalMinutosGeral;
+    final totalTreinos = _controller.historicoTreinos.length;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.primary.withValues(alpha: 0.12),
+            AppColors.surface,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.35),
+          width: 1.2,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.alt_route_rounded,
+                      color: AppColors.primary,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'CAMINHO DA SERPENTE',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      Text(
+                        'Jornada rumo ao Planeta do Sr. Kaioh',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.textDimmed,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Text(
+                  '${(progresso * 100).toStringAsFixed(2)}%',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Distância e Meta
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                '${_formatarKm(kmPercorridos)} km',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.accent,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Text(
+                'percorridos',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDimmed,
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                'Meta: 1.000.000 km',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDimmed,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Barra de progresso visual
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Stack(
+              children: [
+                Container(
+                  height: 8,
+                  width: double.infinity,
+                  color: AppColors.background,
+                ),
+                FractionallySizedBox(
+                  widthFactor: progresso.clamp(0.005, 1.0),
+                  child: Container(
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.accent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Marco / Lore Dragon Ball
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.auto_awesome,
+                size: 14,
+                color: AppColors.accent,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  marco,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.textLight,
+                    fontStyle: FontStyle.italic,
+                    height: 1.25,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Divider(color: AppColors.cardBorder, height: 1),
+          const SizedBox(height: 8),
+          // Estatísticas da travessia
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _itemEstatisticaJornada(
+                icon: Icons.fitness_center_rounded,
+                rotulo: 'Carga Total',
+                valor: '${volumeTon.toStringAsFixed(1)} ton',
+              ),
+              _itemEstatisticaJornada(
+                icon: Icons.timer_outlined,
+                rotulo: 'Tempo Total',
+                valor: '${tempoMin ~/ 60}h ${tempoMin % 60}m',
+              ),
+              _itemEstatisticaJornada(
+                icon: Icons.sports_martial_arts_rounded,
+                rotulo: 'Sessões',
+                valor: '$totalTreinos',
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -266,7 +536,9 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+                _buildCaminhoSerpenteHeader(),
+                const SizedBox(height: 16),
                 Expanded(
                   child: historico.isEmpty
                       ? _buildEmptyState()
@@ -289,6 +561,8 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
 
   Widget _buildTimelineItem(HistoricoDia diaTreino, bool isUltimo) {
     final exercicios = diaTreino.sessao.exerciciosConcluidosHoje;
+    final prsSessao = widget.progressoController?.obterPRsDaSessao(diaTreino.sessao) ?? 0;
+    final bool temPR = prsSessao > 0;
 
     int totalSeries = 0;
     double volumeTotal = 0.0;
@@ -338,34 +612,96 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Linha com o nó do calendário, data e botões de ação (compartilhar e excluir)
+            // Linha com o nó do calendário/DragonBall, data e botões de ação (compartilhar, editar e excluir)
             Row(
               children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
+                if (temPR)
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFA000).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFFFFB300),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFFF9800).withValues(alpha: 0.35),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: DragonBallIcon(
+                        size: 20,
+                        stars: prsSessao.clamp(1, 7),
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.calendar_month,
+                      color: AppColors.background,
+                      size: 20,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.calendar_month,
-                    color: AppColors.background,
-                    size: 20,
-                  ),
-                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        diaTreino.dataLabel,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textLight,
-                        ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              diaTreino.dataLabel,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textLight,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (temPR) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF9800).withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  DragonBallIcon(size: 10, stars: prsSessao.clamp(1, 7)),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    prsSessao == 1 ? '1 PR' : '$prsSessao PRs',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFFFFB300),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                       if (diaTreino.sessao.nomeTreino != null &&
                           diaTreino.sessao.nomeTreino!.trim().isNotEmpty) ...[
@@ -398,6 +734,12 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   icon: const Icon(Icons.share_outlined, size: 20),
                   color: AppColors.primary,
                   tooltip: 'Compartilhar card',
+                ),
+                IconButton(
+                  onPressed: () => _abrirEditarSessao(diaTreino),
+                  icon: const Icon(Icons.edit_outlined, size: 20),
+                  color: AppColors.textLight,
+                  tooltip: 'Editar treino',
                 ),
                 IconButton(
                   onPressed: () => _onExcluirSessao(diaTreino),

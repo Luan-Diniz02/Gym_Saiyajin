@@ -490,7 +490,11 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     return novaFicha;
   }
 
-  Future<SessaoTreino?> encerrarTreino({bool descartarAtual = false}) async {
+  Future<SessaoTreino?> encerrarTreino({
+    bool descartarAtual = false,
+    int? duracaoSegundosPersonalizada,
+    int? descansoTotalSegundosPersonalizado,
+  }) async {
     final exercicioAtual = _sessaoTreino.exercicioAtual;
 
     if (!descartarAtual && exercicioAtual != null) {
@@ -515,8 +519,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     if (_sessaoTreino.exerciciosConcluidosHoje.isEmpty) return null;
 
     _acumularDescansoAtual();
-    final duracaoFinal = duracaoTreinoSegundos;
-    final descansoFinal = descansoTotalSegundos;
+    final duracaoFinal = duracaoSegundosPersonalizada ?? duracaoTreinoSegundos;
+    final descansoFinal = descansoTotalSegundosPersonalizado ?? descansoTotalSegundos;
 
     final sessaoParaSalvar = SessaoTreino(
       data: _dataSessao,

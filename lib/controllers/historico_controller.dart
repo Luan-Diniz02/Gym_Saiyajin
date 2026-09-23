@@ -44,6 +44,74 @@ class HistoricoController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> atualizarSessao(SessaoTreino sessaoAtualizada) async {
+    await _repository.atualizarSessaoTreino(sessaoAtualizada);
+    final index = _sessoesTreino.indexWhere((s) => s.id == sessaoAtualizada.id);
+    if (index != -1) {
+      _sessoesTreino[index] = sessaoAtualizada;
+    }
+    _sessoesTreino.sort((a, b) {
+      final dataA = a.data ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final dataB = b.data ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return dataB.compareTo(dataA);
+    });
+    notifyListeners();
+  }
+
+  /// Volume total consolidado de todas as sessões do histórico em kg
+  double get volumeTotalGeral {
+    double total = 0.0;
+    for (final sessao in _sessoesTreino) {
+      for (final ex in sessao.exerciciosConcluidosHoje) {
+        for (final serie in ex.seriesDetalhes) {
+          final reps = serie.reps ?? 0;
+          final peso = serie.peso ?? 0.0;
+          if (reps > 0 && peso > 0) {
+            total += reps * peso;
+          }
+        }
+      }
+    }
+    return total;
+  }
+
+  /// Tempo total de treino de todas as sessões em minutos
+  int get tempoTotalMinutosGeral {
+    int totalSegundos = 0;
+    for (final sessao in _sessoesTreino) {
+      totalSegundos += sessao.duracaoSegundos;
+    }
+    return totalSegundos ~/ 60;
+  }
+
+  /// Distância calculada em quilômetros no Caminho da Serpente (Meta: 1.000.000 km)
+  double get distanciaCaminhoSerpenteKm {
+    return (volumeTotalGeral / 10.0) + (tempoTotalMinutosGeral * 2.0);
+  }
+
+  /// Progresso percentual da travessia rumo ao planeta do Sr. Kaioh (0.0 a 1.0)
+  double get progressoCaminhoSerpente {
+    return (distanciaCaminhoSerpenteKm / 1000000.0).clamp(0.0, 1.0);
+  }
+
+  /// Marco canônico atual da jornada no Caminho da Serpente
+  String get marcoCaminhoSerpente {
+    final km = distanciaCaminhoSerpenteKm;
+    if (km >= 1000000.0) {
+      return 'Planeta do Sr. Kaioh (Travessia Concluída!)';
+    } else if (km >= 800000.0) {
+      return 'Cabeça da Serpente (Aterrissagem Iminente)';
+    } else if (km >= 500000.0) {
+      return 'Fim do Nevoeiro do Outro Mundo';
+    } else if (km >= 200000.0) {
+      return 'Palácio da Princesa Serpente';
+    } else if (km >= 50000.0) {
+      return 'Região das Nuvens Amarelas';
+    } else {
+      return 'Cauda da Serpente (Início da Jornada)';
+    }
+  }
+
   Future<BackupResult> exportarBackup() async {
     _isProcessandoBackup = true;
     notifyListeners();
