@@ -713,9 +713,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   children: [
                     ScouterIcon(
                       size: 20,
-                      lensColor: transformacao == TransformacaoSaiyajin.superSaiyajin2
-                          ? const Color(0xFF00E5FF)
-                          : transformacao.corAura,
+                      lensColor: transformacao.corLenteScouter,
                     ),
                     const SizedBox(width: 8),
                     Column(

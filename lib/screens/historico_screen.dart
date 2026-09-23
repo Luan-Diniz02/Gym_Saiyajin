@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/historico_controller.dart';
+import '../controllers/progresso_controller.dart';
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
 import '../widgets/compartilhar_card_modal.dart';
@@ -8,9 +9,15 @@ import '../widgets/modal_importar_backup.dart';
 
 class HistoricoScreen extends StatefulWidget {
   final HistoricoController controller;
+  final ProgressoController? progressoController;
   final VoidCallback? onHistoricoAtualizado;
 
-  const HistoricoScreen({super.key, required this.controller, this.onHistoricoAtualizado});
+  const HistoricoScreen({
+    super.key,
+    required this.controller,
+    this.progressoController,
+    this.onHistoricoAtualizado,
+  });
 
   @override
   State<HistoricoScreen> createState() => _HistoricoScreenState();
@@ -34,7 +41,10 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   void _abrirCompartilharCard(SessaoTreino sessao) {
     showDialog(
       context: context,
-      builder: (context) => CompartilharCardModal(sessao: sessao),
+      builder: (context) => CompartilharCardModal(
+        sessao: sessao,
+        progressoController: widget.progressoController,
+      ),
     );
   }
 

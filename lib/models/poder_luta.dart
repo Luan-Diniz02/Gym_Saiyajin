@@ -115,6 +115,18 @@ enum TransformacaoSaiyajin {
     }
     return null;
   }
+
+  /// Cor da lente holográfica do visor Scouter para esta transformação.
+  Color get corLenteScouter {
+    switch (this) {
+      case TransformacaoSaiyajin.superSaiyajin2:
+        return const Color(0xFF00E5FF); // Ciano bioelétrico
+      case TransformacaoSaiyajin.instintoSuperior:
+        return const Color(0xFF80D8FF); // Azul celeste divino
+      default:
+        return corAura;
+    }
+  }
 }
 
 /// Entidade de domínio que calcula e consolida o Poder de Luta (Ki) do usuário.

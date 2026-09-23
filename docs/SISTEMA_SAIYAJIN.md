@@ -35,13 +35,13 @@ O Ki acumulado determina o **Patamar de Poder** do guerreiro, desbloqueando aura
 
 | Patamar | Faixa de Ki | Cor do Badge | Lente do Scouter | Subtítulo Épico Oficial |
 | :--- | :--- | :--- | :--- | :--- |
-| **Classe Baixa** | 0 – 999 | `#757575` (Cinza neutro) | `#757575` | *Iniciando a jornada rumo à grandeza* |
-| **Guerreiro Z** | 1.000 – 3.999 | `#4CAF50` (Verde Namekusei) | `#4CAF50` | *Defensor da Terra em constante evolução* |
-| **Elite Saiyajin** | 4.000 – 7.999 | `#2196F3` (Azul Príncipe) | `#2196F3` | *O orgulho e a determinação de um guerreiro nato* |
+| **Classe Baixa** | 0 – 999 | `#9E9E9E` (Cinza neutro) | `#9E9E9E` | *Início da jornada do guerreiro* |
+| **Guerreiro Z** | 1.000 – 3.999 | `#4FC3F7` (Azul Celeste) | `#4FC3F7` | *Defensor em treinamento constante* |
+| **Elite Saiyajin** | 4.000 – 7.999 | `#FF5252` (Vermelho concentrado) | `#FF5252` | *Aura vermelha de poder concentrado* |
 | **Super Saiyajin** | 8.000 – 14.999 | `#FFD700` (Dourado clássico) | `#FFD700` | *O lendário guerreiro dourado despertou* |
 | **Super Saiyajin 2** | 15.000 – 29.999 | `#FF9E00` (Âmbar elétrico) | `#00E5FF` (Ciano elétrico) | *A fúria que rompeu a barreira do Super Saiyajin* |
-| **Super Saiyajin 3** | 30.000 – 49.999 | `#FF5722` (Laranja vulcânico) | `#FF5722` | *A força colossal que faz o universo estremecer* |
-| **Instinto Superior** | 50.000+ | `#E0E6ED` (Prata celestial) | `#80D8FF` | *O estado divino onde o corpo age por puro instinto* |
+| **Super Saiyajin 3** | 30.000 – 49.999 | `#FF6D00` (Laranja cósmico) | `#FF6D00` | *A força colossal que faz o universo estremecer* |
+| **Instinto Superior** | 50.000+ | `#FFFFFF` (Prata celestial) | `#80D8FF` (Azul divino) | *O estado divino onde o corpo age por puro instinto* |
 
 ### Destaque Visual do Super Saiyajin 2:
 - **Card e Borda Harmonizados**: Borda externa do card em gradiente âmbar elétrico `#FF9E00`, proporcionando uma transição visual límpida e nobre entre o ouro do SSJ1 e o fogo do SSJ3.
