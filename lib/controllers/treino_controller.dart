@@ -142,7 +142,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       final fim = (_timerEndTime != null && agora.isAfter(_timerEndTime!))
           ? _timerEndTime!
           : agora;
-      final decorrido = fim.difference(_inicioDescansoAtual!).inSeconds;
+      final decorridoMs = fim.difference(_inicioDescansoAtual!).inMilliseconds;
+      final decorrido = (decorridoMs / 1000.0).round();
       return _descansoTotalSegundos + (decorrido > 0 ? decorrido : 0);
     }
     return _descansoTotalSegundos;
@@ -871,7 +872,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       final fim = (_timerEndTime != null && agora.isAfter(_timerEndTime!))
           ? _timerEndTime!
           : agora;
-      final decorrido = fim.difference(_inicioDescansoAtual!).inSeconds;
+      final decorridoMs = fim.difference(_inicioDescansoAtual!).inMilliseconds;
+      final decorrido = (decorridoMs / 1000.0).round();
       if (decorrido > 0) {
         _descansoTotalSegundos += decorrido;
       }
@@ -881,9 +883,10 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
   void iniciarTimer() {
     _acumularDescansoAtual();
+    final agora = DateTime.now();
     _tempoAtual = _tempoDescansoPadrao;
-    _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
-    _inicioDescansoAtual = DateTime.now();
+    _timerEndTime = agora.add(Duration(seconds: _tempoAtual));
+    _inicioDescansoAtual = agora;
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();
@@ -910,8 +913,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     if (_tempoAtual <= 0) {
       _tempoAtual = _tempoDescansoPadrao;
     }
-    _timerEndTime = DateTime.now().add(Duration(seconds: _tempoAtual));
-    _inicioDescansoAtual = DateTime.now();
+    final agora = DateTime.now();
+    _timerEndTime = agora.add(Duration(seconds: _tempoAtual));
+    _inicioDescansoAtual = agora;
     _isTimerRodando = true;
     unawaited(_notificationService.agendarNotificacaoDescanso(_tempoAtual));
     notifyListeners();

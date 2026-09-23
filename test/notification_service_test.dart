@@ -141,7 +141,7 @@ void main() {
         expect(details.android?.largeIcon, isA<DrawableResourceAndroidBitmap>());
         final largeIcon =
             details.android?.largeIcon as DrawableResourceAndroidBitmap;
-        expect(largeIcon.data, '@mipmap/ic_launcher');
+        expect(largeIcon.data, '@drawable/ic_notification_large');
       },
     );
   });

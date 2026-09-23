@@ -42,14 +42,13 @@ class NotificationService {
         >()
         ?.requestPermissions(alert: true, badge: true, sound: true);
 
-    // Solicitação de permissões para Android 13+ e Alarmes Exatos (Android 12+)
+    // Solicitação de permissão de notificações para Android 13+ (POST_NOTIFICATIONS)
     final androidImplementation = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
     if (androidImplementation != null) {
       await androidImplementation.requestNotificationsPermission();
-      await androidImplementation.requestExactAlarmsPermission();
     }
   }
 
@@ -76,7 +75,7 @@ class NotificationService {
         visibility: NotificationVisibility.public,
         icon: '@drawable/ic_notification',
         color: Color(0xFFFF9800),
-        largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+        largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification_large'),
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),

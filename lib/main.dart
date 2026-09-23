@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'controllers/historico_controller.dart';
 import 'controllers/progresso_controller.dart';
@@ -10,11 +11,11 @@ import 'screens/treino_screen.dart';
 import 'screens/historico_screen.dart';
 import 'screens/progresso_screen.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final notificationService = NotificationService();
-  await notificationService.init();
   runApp(GymSaiyajinApp(notificationService: notificationService));
+  unawaited(notificationService.init());
 }
 
 class GymSaiyajinApp extends StatelessWidget {
