@@ -13,22 +13,33 @@ class NotificationService {
   Future<void> init() async {
     tz_data.initializeTimeZones();
 
-    const androidSettings = AndroidInitializationSettings(
-      '@drawable/ic_notification',
-    );
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
 
-    const settings = InitializationSettings(
-      android: androidSettings,
-      iOS: darwinSettings,
-      macOS: darwinSettings,
-    );
-
-    await _plugin.initialize(settings: settings);
+    try {
+      const androidSettings = AndroidInitializationSettings(
+        'ic_notification',
+      );
+      const settings = InitializationSettings(
+        android: androidSettings,
+        iOS: darwinSettings,
+        macOS: darwinSettings,
+      );
+      await _plugin.initialize(settings: settings);
+    } catch (_) {
+      const androidSettingsFallback = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
+      const settings = InitializationSettings(
+        android: androidSettingsFallback,
+        iOS: darwinSettings,
+        macOS: darwinSettings,
+      );
+      await _plugin.initialize(settings: settings);
+    }
 
     await _plugin
         .resolvePlatformSpecificImplementation<
@@ -73,9 +84,28 @@ class NotificationService {
         autoCancel: true,
         category: AndroidNotificationCategory.alarm,
         visibility: NotificationVisibility.public,
-        icon: '@drawable/ic_notification',
+        icon: 'ic_notification',
         color: Color(0xFFFF9800),
-        largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification_large'),
+        largeIcon: DrawableResourceAndroidBitmap('ic_notification_large'),
+      ),
+      iOS: DarwinNotificationDetails(),
+      macOS: DarwinNotificationDetails(),
+    );
+
+    const detalhesFallback = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'descanso_channel_v2',
+        'Descanso',
+        channelDescription: 'Notificacoes para fim do descanso e regeneracao',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+        autoCancel: true,
+        category: AndroidNotificationCategory.alarm,
+        visibility: NotificationVisibility.public,
+        icon: '@mipmap/ic_launcher',
+        color: Color(0xFFFF9800),
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),
@@ -131,20 +161,23 @@ class NotificationService {
     } catch (e) {
       if (currentToken != _schedulingCounter) return;
 
-      if (modoAgendamento == AndroidScheduleMode.exactAllowWhileIdle) {
+      final isIconError = e.toString().contains('invalid_icon') ||
+          e.toString().contains('invalid_large_icon');
+      final detalhesParaUsar = isIconError ? detalhesFallback : detalhes;
+
+      try {
         await _plugin.zonedSchedule(
           id: 1,
           title: 'Regeneração Concluída ⏱️',
           body: 'Seu Ki e energia foram restaurados. Hora da próxima série!',
           scheduledDate: dataAgendada,
-          notificationDetails: detalhes,
+          notificationDetails: detalhesParaUsar,
           androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
           matchDateTimeComponents: null,
         );
-        return;
+      } catch (err) {
+        debugPrint('Erro ao agendar notificacao no fallback: $err');
       }
-
-      rethrow;
     }
   }
 

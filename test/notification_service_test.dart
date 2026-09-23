@@ -136,12 +136,12 @@ void main() {
 
         final chamada = mockPlugin.zonedScheduleChamadas.first;
         final details = chamada['notificationDetails'] as NotificationDetails;
-        expect(details.android?.icon, '@drawable/ic_notification');
+        expect(details.android?.icon, 'ic_notification');
         expect(details.android?.color, const Color(0xFFFF9800));
         expect(details.android?.largeIcon, isA<DrawableResourceAndroidBitmap>());
         final largeIcon =
             details.android?.largeIcon as DrawableResourceAndroidBitmap;
-        expect(largeIcon.data, '@drawable/ic_notification_large');
+        expect(largeIcon.data, 'ic_notification_large');
       },
     );
   });
