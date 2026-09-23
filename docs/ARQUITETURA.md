@@ -11,7 +11,7 @@ graph TD
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
         Widgets[Widgets Reutilizáveis & Modais]
-        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon]
+        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, EscotilhaCamaraPainter]
     end
 
     subgraph ControllersLayer ["Camada de Controle & Estado"]
@@ -147,4 +147,5 @@ O repositório possui cobertura ampla de testes unitários e de widgets na pasta
 | [`test/dragon_radar_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_radar_icon_test.dart) | CustomPainter Radar do Dragão | Variação de 0 a 7 esferas dinâmicas, mira, dial metálico e shouldRepaint. |
 | [`test/capsule_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/capsule_icon_test.dart) | CustomPainter Cápsula Hoi-Poi | Cores personalizadas, dimensões, botão push trigger e shouldRepaint. |
 | [`test/caminho_serpente_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/caminho_serpente_test.dart) | Caminho da Serpente & Planeta Kaioh | Progressão senoidal, PlanetaKaiohIcon, sessões sempre expandidas e modal de ajuste de tempo. |
+| [`test/cronometro_widget_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/cronometro_widget_test.dart) | Escotilha da Câmara de Regeneração | Estados de repouso, regeneração ativa com bolhas animadas, pausa e telemetria. |
 | [`test/notification_service_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes e controle de concorrência. |

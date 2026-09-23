@@ -108,6 +108,17 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
 - **Uso Oficial**:
   - Ponto de chegada supremo e meta final na barra de progresso do **Caminho da Serpente** (`CaminhoSerpenteProgressBar`).
 
+### `EscotilhaCamaraPainter`
+- **Arquivo**: [`lib/widgets/escotilha_camara_painter.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/escotilha_camara_painter.dart)
+- **Renderização**:
+  - Aro exterior circular em liga metálica escura chanfrada em 3D com 8 rebites industriais prateados simétricos.
+  - Anel de fluido bioenergético com gradiente Ouro Super Saiyajin e Laranja Ki (`#FFD700` $\to$ `#FF8C00`).
+  - Vidro escurecido com fluido de Ki submarino profundo e reflexo curvo de curvatura acrílica.
+  - Silhueta sutil da máscara de oxigênio submersa ao fundo com grelha de ar e mangueiras sanfonadas.
+  - Micro-bolhas procedurais de oxigênio em subida senoidal contínua.
+- **Uso Oficial**:
+  - Visual temático do cronômetro circular de descanso (`CronometroWidget`), contextualizando a recuperação biológica dos guerreiros como a Câmara de Cura/Regeneração Médica de Dragon Ball Z.
+
 ---
 
 ## 📊 4. Estimativa de 1RM (Fórmula de Epley Refinada)

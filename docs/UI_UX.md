@@ -99,11 +99,18 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - **Visual Dark Outline**: Mantém fundo escuro `#14161E` com borda fina dourada e sombra preta. Quando o círculo da série é concluído e ganha preenchimento amarelo brilhante, o micro-badge escuro por cima cria um **contraste de alto relevo nítido e elegante**, sem se fundir na cor de fundo.
   - **Ícone Vetorial Nativo**: Exibe a mini Esfera do Dragão de 1 estrela `DragonBallIcon(size: 10, stars: 1)` na série ativa que quebrou recorde.
 
-### 2. Cronômetro Circular de Descanso (`CronometroWidget`)
-- **Visor em Camadas**:
-  - Anel externo com `CircularProgressIndicator` de 10px de espessura com cor dinâmica de acordo com o tempo restante.
-  - Círculo interno centralizado com fundo escuro translúcido e visor digital em grande escala (`MIN : SEG`).
-  - Toque no visor para abertura imediata do modal de ajuste fino de tempo.
+### 2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (`CronometroWidget`)
+- **Estética de Escotilha Industrial de Namekusei**:
+  - **Aro Metálico de Titânio**: Moldura circular escura chanfrada em 3D com **8 rebites prateados chanfrados** simétricos com fenda e ponto de reflexo.
+  - **Anel de Fluido Bioenergético Saiyajin**: Arco de progresso em gradiente de **Ouro Super Saiyajin e Laranja Ki** (`#FFD700` $\to$ `#FF8C00`), com halo luminescente (*glow*) ativo enquanto o cronômetro roda.
+  - **Efervescência & Micro-Bolhas Animadas**: Bolhas de oxigênio procedurais subindo continuamente pelo líquido com oscilação senoidal lateral. A animação é executada **exclusivamente enquanto o timer está contando**, economizando 100% de bateria e CPU em repouso ou pausa.
+  - **Silhueta Submersa da Máscara**: Silhueta discreta em tom âmbar da máscara respiratória com grelha e mangueiras sanfonadas ao fundo da câmara, conferindo profundidade sem prejudicar a leitura dos dígitos.
+- **Sincronização Matemática Exata (Eliminação do Delay de 1s)**:
+  - Eliminação do truncamento de `Duration.inSeconds` via cálculo com teto (`ceil`), assegurando que $\lceil \text{tempoRestante} \rceil + \lfloor \text{tempoDecorrido} \rfloor = \text{tempoTotal}$.
+  - Ao iniciar um descanso de 120s (`02:00`), ele permanece em `02:00` pelo primeiro segundo completo e desce em sincronia milissegundo a milissegundo com o contador de descanso acumulado.
+- **Telemetria Médica & Dígitos**:
+  - Chip superior de status dinâmico: `REGENERAÇÃO` com LED pulsante dourado quando ativo, `PAUSADO` em âmbar e `CÂMARA DE CURA` em repouso.
+  - Dígitos numéricos em grande escala (`38dp`, peso 900) com sombra luminescente para leitura imediata no espelho.
 - **Modal de Ajuste de Tempo**:
   - Botões satélites `+/- 15s` para correções rápidas sem digitação.
   - Grade simétrica 3×2 de atalhos rápidos (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
@@ -228,7 +235,14 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Ponto de Ki dinâmico do guerreiro com aura brilhante proporcional à porcentagem percorrida rumo a 1.000.000 km.
   - Ponto de chegada ornamentado diretamente com o `PlanetaKaiohPainter`.
   - Selo marcial oficial do Senhor Kaioh (**界王**) em tipografia destacada com aro dourado no topo do card.
-- **Papel na Interface**: Barra de progresso sempre visível no card do Caminho da Serpente na tela de Histórico, com suporte a expansão por toque para exibir métricas detalhadas.
+### `EscotilhaCamaraPainter`
+- **Renderização**:
+  - Aro circular exterior em liga escura de titânio chanfrada em 3D com **8 rebites prateados chanfrados** simétricos com fenda e ponto de reflexo especular.
+  - Anel de fluido bioenergético em gradiente **Ouro Super Saiyajin e Âmbar** (`#FFD700` $\to$ `#FF8C00`), com halo luminescente (*glow*) ativo enquanto o cronômetro roda.
+  - Vidro escurecido com fluido de Ki translúcido em profundidade e reflexo curvo de curvatura acrílica.
+  - Silhueta sutil da máscara de oxigênio submersa ao fundo com grelha e mangueiras sanfonadas.
+  - Micro-bolhas procedurais de oxigênio subindo continuamente com oscilação senoidal lateral.
+- **Papel na Interface**: Renderização da escotilha da câmara de regeneração no cronômetro circular de descanso (`CronometroWidget`) na Tela de Treino.
 
 ---
 

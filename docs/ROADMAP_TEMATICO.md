@@ -4,48 +4,36 @@ Este documento consolida e detalha o planejamento das próximas evoluções tem�
 
 ---
 
+---
+
 ## 🧭 Visão Geral das Propostas
 
 ```mermaid
 graph TD
-    A[Identidade Temática Esportiva] --> B[🌱 Semente dos Deuses - Senzu Bean]
+    A[Identidade Temática Esportiva] --> B[🧪 Câmara de Regeneração - Medical Machine]
     A --> C[🐍 Caminho da Serpente - Snake Way]
     A --> D[☁️ Nuvem Voadora - Kinto-un]
 
-    B --> B1[Recuperação Biológica no Cronômetro de Descanso]
-    C --> C1[Jornada de Disciplina Contínua na Timeline do Histórico]
-    D --> D1[Mobilidade & Eficiência no Aquecimento / Deload]
+    B --> B1[Recuperação Biológica no Cronômetro de Descanso - Concluído]
+    C --> C1[Jornada de Disciplina Contínua na Timeline do Histórico - Concluído]
+    D --> D1[Mobilidade & Eficiência no Aquecimento / Deload - Backlog]
 ```
 
 ---
 
-## 🌱 Proposta 1: A "Semente dos Deuses" (*Senzu Bean*) no Cronômetro de Descanso
+## 🧪 Proposta 1: A "Câmara de Regeneração Médica" no Cronômetro de Descanso [✅ CONCLUÍDO]
 
 ### 1. Justificativa & Lore Canônica
-- **Conceito Biológico**: Na lore de Dragon Ball, a Semente dos Deuses (*Senzu Bean*) restaura instantaneamente o vigor físico, recupera lesões musculares e restabelece a energia vital (Ki) dos guerreiros após batalhas intensas.
-- **Aplicação no Treino**: No treinamento de musculação, o período de descanso entre séries é justamente a janela de recuperação fisiológica de ATP-CP, depuração de metabólitos e restauração do sistema neuromuscular.
-- **Tom & Seriedade**: Ao invés de usar emojis infantis, a Semente dos Deuses será representada por um ícone vetorial proprietário de alta precisão geométrica com acabamento premium.
+- **Conceito Biológico**: Em Dragon Ball Z, a Câmara de Regeneração Médica (*Medical Machine / Cápsula de Namekusei*) é o ápice da biotecnologia de cura onde Goku se recuperou após as batalhas devastadoras contra as Forças Ginyu.
+- **Aplicação no Treino**: No treinamento de musculação, o período de descanso entre séries é a janela de regeneração de ATP-CP, tamponamento de íons de hidrogênio e restauração neuromuscular para a próxima batalha de alta carga.
 
-### 2. Especificação Técnica & Visual
-
-#### A. Componente Vetorial: `SenzuBeanIcon`
-- **Arquivo Previsto**: `lib/widgets/senzu_bean_icon.dart`
-- **Técnica**: `CustomPainter` renderizado em Canvas.
-- **Geometria**:
-  - Formato reniforme orgânico característico do feijão mágico.
-  - Gradiente suave verde esmeralda / musgo nobre (`#4CAF50` $\to$ `#2E7D32`).
-  - Brilho especular curvo translúcido superior (`#81C784`), conferindo profundidade tridimensional.
-  - Vinco longitudinal central sutil com sombra projetada.
-
-#### B. Integração no `CronometroWidget`
-- **Arquivo**: `lib/widgets/cronometro_widget.dart`
-- **Comportamento Interativo**:
-  - **Fase de Descanso em Andamento**:
-    - O ícone `SenzuBeanIcon` repousa elegantemente acima do visor numérico digital central.
-    - Uma animação suave de respiração/pulsação (*breathing glow* de 0.8s) em tom esmeralda circunda o anel de progresso, indicando a "regeneração celular e recuperação de ATP".
-  - **Fim do Descanso (00:00)**:
-    - O feijão emite um sutil pulso de luz (*flare* verde dourado), sinalizando que o guerreiro está 100% regenerado e pronto para a próxima série com carga máxima.
-    - O feedback háptico (vibração curta) e o alerta sonoro ocorrem em sincronia com o brilho.
+### 2. Implementação Final Entregue
+- **Escotilha Industrial com Rebites (`EscotilhaCamaraPainter`)**:
+  - Moldura circular exterior em titânio escuro chanfrado com 8 rebites prateados tridimensionais.
+  - Anel de fluido bioenergético em **Ouro Super Saiyajin e Laranja Ki** (`#FFD700` $\to$ `#FF8C00`), harmonizado com a identidade visual do app.
+  - Micro-bolhas procedurais animadas subindo continuamente e silhueta discreta da máscara de oxigênio submersa.
+  - Chip superior de telemetria médica (`REGENERAÇÃO` / `PAUSADO` / `CÂMARA DE CURA`).
+  - Sincronização matemática exata entre tempo restante e descanso acumulado via arredondamento com teto (`ceil`), eliminando qualquer delay de 1s.
 
 ---
 
@@ -71,7 +59,7 @@ graph TD
 
 ---
 
-## ☁️ Proposta 3 (Bônus): A "Nuvem Voadora" (*Kinto-un*) na Gestão de Fichas & Mobilidade
+## ☁️ Proposta 3: A "Nuvem Voadora" (*Kinto-un*) na Gestão de Fichas & Mobilidade
 
 ### 1. Justificativa & Lore Canônica
 - A Nuvem Voadora exige pureza de intenções, leveza e agilidade.
@@ -85,17 +73,18 @@ graph TD
 
 | Proposta | Componente Principal | Onde Atua | Complexidade | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
-| **🌱 Semente dos Deuses** | `SenzuBeanIcon` + Pulso no Cronômetro | `CronometroWidget` (Tela de Treino) | Média (UI/Canvas) | **🚀 Próxima Prioridade** |
-| **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **Backlog Futuro** |
+| **🧪 Câmara de Regeneração** | `EscotilhaCamaraPainter` + Cronômetro | `TreinoScreen` (Tela de Treino) | Alta (Painter 3D + animação + sync) | **✅ CONCLUÍDO & TESTADO** |
+| **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
+| **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **🚀 Próxima Prioridade** |
 
 ---
 
 ## 📋 Próximos Passos de Execução Recomendados
 
-1. **Fase 1 (Semente dos Deuses)**:
-   - Construir o `SenzuBeanIcon` via `CustomPainter` vetorial com testes unitários dedicados em `test/senzu_bean_icon_test.dart`.
-   - Integrar no `CronometroWidget` durante a contagem regressiva de descanso com pulso de brilho esmeralda.
-2. **Fase 2 (Nuvem Voadora)**:
+1. **Fase 1 (Nuvem Voadora)**:
    - Especificação e design do badge de séries de aquecimento (*warm-up*).
+   - Não interferir nos recordes nem nos cálculos de 1RM.
+2. **Fase 2 (Chamas de Ki - `KiAuraIcon`)**:
+   - Desenho de labareda vetorial para substituir o ícone genérico de raio nos recordes e no cálculo de Ki.
+
 

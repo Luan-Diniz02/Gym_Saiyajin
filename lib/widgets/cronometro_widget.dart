@@ -148,7 +148,7 @@ class _CronometroWidgetState extends State<CronometroWidget>
                                   : (widget.tempoAtual <
                                           widget.tempoDescansoPadrao
                                       ? 'PAUSADO'
-                                      : 'CÂMARA DE KI'),
+                                      : 'CÂMARA DE CURA'),
                               style: TextStyle(
                                 fontSize: 8.5,
                                 fontWeight: FontWeight.bold,
