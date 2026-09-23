@@ -141,7 +141,7 @@ graph TD
 
 #### 2. Scouter HUD (Telemetria Saiyajin)
 - **Topo**: Divisão do treino no canto esquerdo e Carimbo Scouter holográfico no canto direito (`+X Ki` com lente vetorial `ScouterIcon` e título da transformação).
-- **Dock de Telemetria Unificada na Base**: Um único container translúcido com borda nobre e aura de Ki unindo as métricas, contagem de PRs (`DragonBallIcon`), divisor sutil e a marca com data/@handle, eliminando elementos soltos.
+- **Dock de Telemetria Unificada na Base**: Um único container translúcido com borda nobre e aura de Ki unindo as métricas, contagem contextual de PRs obtidos especificamente naquela sessão (`DragonBallIcon` com formatação singular/plural `1 PR` / `2 PRs`), divisor sutil e a marca com data/@handle, eliminando elementos soltos.
 
 #### 3. Rodapé Minimalista (Ancorado)
 - **Topo e Centro 100% Limpos**: Toda a informação é consolidada em um painel translúcido na base com cantos arredondados e gradiente de proteção.

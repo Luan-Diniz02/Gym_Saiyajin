@@ -69,12 +69,19 @@ No painel inferior do estúdio em tela cheia (com `SafeArea` e pré-visualizaç�
    - Botão **Câmera**: Aciona a câmera nativa do aparelho via `image_picker` (altura 46dp, ícone destacado).
    - Botão **Galeria**: Permite selecionar uma foto existente do rolo da câmera (altura 46dp).
    - Botão **Remover**: Botão de exclusão dedicado de 46x46dp com realce perigo suave, retornando ao fundo texturizado nativo de Shenlong.
-4. **Tipografia de Alto Contraste Nativa**:
+4. **Exibição Inteligente de PRs da Sessão Específica**:
+   - O card calcula e exibe **estritamente os Recordes Pessoais (PRs) conquistados naquela sessão específica**, e não o total vitalício do app.
+   - O `ProgressoController` reconstitui cronologicamente o histórico até o momento do treino compartilhado para determinar se houve quebra de recorde prévio.
+   - Quando há PRs, exibe a esfera de 4 estrelas (`DragonBallIcon`) e a formatação precisa no singular ou plural (`1 PR`, `2 PRs`, `3 PRs`...). Caso o treino não tenha tido recordes batidos, a coluna de PR é omitida, mantendo o dock limpo e harmonioso.
+5. **Patamar de Transformação Saiyajin Atual**:
+   - A categoria estampada no topo direito (Scouter HUD) ou no rodapé exibe o **Patamar atual de evolução do atleta** (ex: *Guerreiro Z, Super Saiyajin...*), carregado de forma unificada tanto pelo término do treino (`TreinoScreen`) quanto pela navegação no histórico (`HistoricoScreen`).
+   - A telemetria exibe o ganho instantâneo daquela sessão (`+X Ki`) com a lente do Scouter (`corLenteScouter`) reativa à transformação.
+6. **Tipografia de Alto Contraste Nativa**:
    - Texto em branco puro (`Colors.white`) protegido por camadas quádruplas de drop shadow preto (`Shadow`), garantindo contraste absoluto contra qualquer fundo fotográfico (iluminação clara ou escura de academia) sem poluição visual.
-5. **Campo de `@handle` / Legenda**:
-   - Input dedicado com ícone `@`, botão para limpar texto e tecla `Done`. O texto digitado é estampado em tempo real no rodapé do cartão (ex: `@luan.diniz`).
+7. **Campo de `@handle` / Legenda**:
+   - Input dedicado de 46dp com ícone `@`, botão para limpar texto e tecla `Done`. O texto digitado é estampado em tempo real no rodapé do cartão (ex: `@luan.diniz`).
    - Se deixado em branco, o cartão exibe a data formatada como assinatura padrão.
-6. **Fallback Texturizado Sem Foto**:
+8. **Fallback Texturizado Sem Foto**:
    - Caso o atleta prefira não anexar uma foto de si mesmo, o card renderiza um gradiente escuro texturizado com a silhueta sutil de Shenlong ao fundo, permitindo compartilhar os resultados do treino imediatamente.
 
 ---
