@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-71%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-80%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -28,11 +28,11 @@
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes.
-- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets) e arte vetorial nativa no Canvas.
-- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon` e `CapsuleIcon`) e fórmula de Epley refinada para estimativa de 1RM.
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (80 testes automatizados).
+- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`) e ergonomia do Histórico.
+- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM e a jornada de 1.000.000 km no Caminho da Serpente.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
-- 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Planejamento arquitetural e estético da Semente dos Deuses (regeneração de Ki no cronômetro), Caminho da Serpente (jornada épica e odômetro de ferro no histórico) e Nuvem Voadora.
+- 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Histórico de implementações canônicas (Caminho da Serpente concluído) e planejamento arquitetural da Semente dos Deuses (regeneração de Ki no cronômetro) e Nuvem Voadora.
 
 ---
 
@@ -50,9 +50,17 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
   - Cronômetro regressivo com visor circular, alerta sonoro nativo, vibração háptica contínua e cancelamento atômico de notificações para prevenir duplicidades.
 - **Encerramento Protegido & Celebração de Conquistas**: Confirmação segura, cálculo imediato do Ki ganho na sessão com bônus de $+150$ Ki por PR conquistado e disparo do modal de compartilhamento.
 
-### 📜 Histórico de Sessões & Backup
-- **Timeline Contínua**: Linha vertical com nós de calendário conectando as sessões concluídas.
-- **Métricas Consolidadas no Cabeçalho**: Resumo com total de exercícios, séries concluídas, **Volume Total Levantado** ($\sum \text{reps} \times \text{peso}$), **Duração** e **Tempo de Descanso Acumulado**.
+### 📜 Histórico de Sessões & Caminho da Serpente
+- **Caminho da Serpente (*Snake Way*)**:
+  - Barra de progresso senoidal contínua com curvas suaves de alta fidelidade matemática, nuvens celestiais do Outro Mundo, aura de Ki do guerreiro e o Planeta do Senhor Kaioh vetorial (`PlanetaKaiohIcon`) na chegada. Sempre visível no card.
+  - Card interativo com Kanji Kaioh oficial (**界王**) e alternância de dados analíticos: odômetro de ferro (meta épica de 1.000.000 km), marcos de lore canônica e métricas consolidadas (*Carga Total*, *Tempo Total* e *Sessões*).
+- **Timeline Contínua & Sessões Sempre Expandidas**:
+  - Navegação vertical fluida sem acordeões fechados: todos os exercícios e séries ficam prontamente visíveis ao rolar a tela.
+  - Nós uniformes com ícone de calendário Saiyajin (`Icons.calendar_month`) em laranja vibrante com sombra.
+  - Cabeçalho harmonizado em linha única: **Data** + **Tag da Divisão** (`[ TREINO A ]`) + **Badge Dourado de PRs** (`[ ✪ 2 PRs ]`).
+  - Linha de métricas esportivas em caixa alta: `EXERCÍCIOS • SÉRIES • VOLUME • DURAÇÃO • DESCANSO`.
+- **Menu de Ações Unificado (`⋮`)**: Botão discreto substituindo múltiplos controles dispersos, permitindo *Compartilhar card*, *Editar treino* e *Excluir treino*.
+- **Edição Completa de Sessão Salva**: Ajuste de data da sessão, alteração de nome/divisão e steppers ergonômicos de 5 em 5 minutos para duração total e tempo de descanso (com validação fisiológica que impede o descanso de ultrapassar a duração total do treino).
 - **Backup & Restauração Completa v2 (JSON)**: Exportação e importação de todo o banco SQLite (sessões e fichas permanentes), meta semanal e composição corporal (peso, altura e percentual de gordura) com opções de **Mesclar Dados** ou **Substituir Tudo** e retrocompatibilidade com a v1.
 - **Exclusão Segura**: Confirmação modal com exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 

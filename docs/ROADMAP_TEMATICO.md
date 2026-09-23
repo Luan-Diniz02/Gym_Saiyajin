@@ -49,30 +49,25 @@ graph TD
 
 ---
 
-## 🐍 Proposta 2: Histórico de Treinos como o "Caminho da Serpente" (*Snake Way*)
+## 🐍 Proposta 2: Histórico de Treinos como o "Caminho da Serpente" (*Snake Way*) [✅ CONCLUÍDO]
 
 ### 1. Justificativa & Lore Canônica
 - **Conceito Biológico**: O Caminho da Serpente (*Serpentine Road / Snake Way*) tem 1 milhão de quilômetros e representa a maior prova de disciplina, persistência inabalável e condicionamento que Goku enfrentou para treinar com o Senhor Kaioh.
 - **Aplicação no Treino**: A hipertrofia e a força não são construídas em uma única sessão, mas sim na constância de centenas de treinos ao longo dos meses e anos. A timeline do histórico deve transmitir essa sensação de jornada épica e acumulada.
 
-### 2. Especificação Técnica & Visual
-
-#### A. Estilização da Timeline no `HistoricoScreen`
-- **Arquivo**: `lib/screens/historico_screen.dart` e `lib/widgets/historico_card_widget.dart`
-- **Elementos Visuais**:
-  - **A Linha-Guia Serpenteante**:
-    - A atual linha vertical cinza da timeline passa a ter uma leve ondulação orgânica suave desenhada via `CustomPainter` contínuo.
-    - Gradiente dinâmico na linha: tons de pedra ancestral Saiyajin (`#2A2B36`) com realces sutis em âmbar dourado conectando as sessões concluídas.
-  - **Nós de Treino (Marcos de Passagem)**:
-    - Cada dia de treino concluído atua como um "Marco do Caminho", exibindo um nó hexagonal ou anel metálico.
-    - Sessões com **PRs batidos** recebem um anel dourado com micro-esfera de 4 estrelas (`DragonBallIcon`), indicando um grande marco de superação na travessia.
-
-#### B. Odômetro de Ferro ("Quilômetros Percorridos")
-- **Cabeçalho Analítico no Topo do Histórico**:
-  - Um painel consolidado esportivo converte a tonelagem total acumulada e o tempo total de treino em "Quilômetros no Caminho da Serpente".
-  - **Cálculo Proposto**:
-    $$\text{Distância no Caminho (km)} = \left(\frac{\text{Volume Total em kg}}{100}\right) + \left(\frac{\text{Minutos de Treino}}{10}\right)$$
-  - Um marcador de progresso mostra a distância percorrida rumo ao planeta do Senhor Kaioh (meta de 1.000.000 km simbólicos), gamificando a retenção a longo prazo.
+### 2. Implementação Final Entregue
+- **Barra Senoidal Suave Sempre Visível (`CaminhoSerpenteProgressBar`)**:
+  - Modelagem matemática em função senoidal contínua ($2.5$ ciclos), drop shadow realista e nuvens celestiais do Outro Mundo.
+  - Indicador de Ki do guerreiro que se move em tempo real conforme os quilômetros são conquistados.
+  - Ponto de chegada ornado com o ícone vetorial cel-shaded em 3D do **Planeta do Sr. Kaioh** (`PlanetaKaiohIcon`).
+  - Selo marcial oficial do Senhor Kaioh (**界王**) com tipografia destacada e aro dourado no topo.
+- **Card Interativo & Odômetro de Ferro**:
+  - Exibição de porcentagem percorrida e chevron animado.
+  - Toque no card expande as métricas consolidadas: Odômetro numérico detalhado (`X km / Meta: 1.000.000 km`), marco narrativo de lore e os 3 cards (*Carga Total*, *Tempo Total* e *Sessões*).
+- **Harmonização da Linha do Tempo**:
+  - Sessões sempre expandidas para consulta imediata de exercícios e séries sem atrito.
+  - Nós uniformes com ícone de calendário Saiyajin (`Icons.calendar_month`).
+  - Linha única horizontal para Data, Divisão e Badge de PRs, com menu unificado `⋮`.
 
 ---
 
@@ -86,13 +81,13 @@ graph TD
 
 ---
 
-## 🗓️ Tabela Comparativa & Priorização
+## 🗓️ Tabela Comparativa & Status
 
-| Proposta | Componente Principal | Onde Atua | Complexidade | Impacto na Experiência |
+| Proposta | Componente Principal | Onde Atua | Complexidade | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **🌱 Semente dos Deuses** | `SenzuBeanIcon` + Pulso no Cronômetro | `CronometroWidget` (Tela de Treino) | Média (UI/Canvas) | **Imediato e Diário**: Todo atleta descansa entre séries e verá a animação de recuperação a cada 1-3 minutos. |
-| **🐍 Caminho da Serpente** | Linha Serpenteante + Odômetro de Km | `HistoricoScreen` (Tela de Histórico) | Média/Alta (Painter contínuo + Métricas) | **Retenção & Longo Prazo**: Conecta o volume acumulado a uma sensação épica de progresso contínuo. |
-| **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **Ergonomia Específica**: Organização de séries preparatórias sem sujar o cálculo de PRs. |
+| **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
+| **🌱 Semente dos Deuses** | `SenzuBeanIcon` + Pulso no Cronômetro | `CronometroWidget` (Tela de Treino) | Média (UI/Canvas) | **🚀 Próxima Prioridade** |
+| **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **Backlog Futuro** |
 
 ---
 
@@ -100,7 +95,7 @@ graph TD
 
 1. **Fase 1 (Semente dos Deuses)**:
    - Construir o `SenzuBeanIcon` via `CustomPainter` vetorial com testes unitários dedicados em `test/senzu_bean_icon_test.dart`.
-   - Integrar no `CronometroWidget` durante a contagem regressiva de descanso.
-2. **Fase 2 (Caminho da Serpente)**:
-   - Implementar o indicador de "Quilômetros de Ferro" no cabeçalho do `HistoricoScreen`.
-   - Estilizar a linha de timeline e os nós de marcos comemorativos de PRs.
+   - Integrar no `CronometroWidget` durante a contagem regressiva de descanso com pulso de brilho esmeralda.
+2. **Fase 2 (Nuvem Voadora)**:
+   - Especificação e design do badge de séries de aquecimento (*warm-up*).
+

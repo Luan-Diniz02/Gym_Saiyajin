@@ -108,6 +108,28 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Botões satélites `+/- 15s` para correções rápidas sem digitação.
   - Grade simétrica 3×2 de atalhos rápidos (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
 
+### 3. Linha do Tempo & Cabeçalho de Sessão (`HistoricoScreen`)
+- **Alinhamento em Linha Única Fluida**:
+  - Reúne em um único `Wrap` horizontal: **Data do Treino** (`21/09/2026`), **Tag de Divisão/Nome** (`[ COSTAS E BÍCEPS ]`) com fundo escuro e borda âmbar, e o **Badge Dourado de PRs** (`[ ✪ 2 PRs ]`) estilizado com a Esfera do Dragão.
+  - Alinhamento à direita exclusivo para o **Menu Popup Unificado (`⋮`)**, eliminando múltiplos botões avulsos na tela e reduzindo drasticamente a sobrecarga cognitiva.
+- **Sessões Sempre Expandidas**:
+  - Elimina a fadiga de toques múltiplos e acordes fechados: ao navegar pela timeline, todas as sessões já apresentam sua lista completa de exercícios e séries abertas, permitindo inspeção instantânea ao deslizar a tela.
+- **Nó Uniforme de Calendário**:
+  - Nó circular com `Icons.calendar_month` em laranja Saiyajin com sombra e borda suave em todos os marcos da timeline.
+- **Métricas de Sessão em Caixa Alta**:
+  - Tipografia de impacto esportivo e espaçamento balanceado:
+    `6 EXERCÍCIOS • 23 SÉRIES • VOLUME: 8224 kg • 1 min • 1 min`
+
+### 4. Modal de Edição de Sessões Salvas
+- **Campos Editáveis**:
+  - Data da sessão (com seletor nativo `DatePicker`).
+  - Nome / Divisão do treino com campo de texto e sugestões rápidas.
+  - Duração total do treino e tempo acumulado de descanso.
+- **Steppers Ergonômicos (+/- 5 min)**:
+  - Botões dedicados `[-] 5 min` e `[+] 5 min` com alvos de toque generosos (mínimo de 44dp), alinhados à mesma convenção do cronômetro da tela de treino.
+- **Salvaguarda Fisiológica**:
+  - O sistema impede matematicamente que o tempo de descanso ultrapasse a duração total do treino (`descanso <= duracao`), prevenindo inconsistências em relatórios analíticos e nos cálculos do Caminho da Serpente.
+
 ---
 
 ## 📸 4. Estúdio de Compartilhamento Social (UX Imersiva)
@@ -189,6 +211,24 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Faixa central preta técnica com o logotipo circular canônico da Capsule Corp (monograma em "C" concêntrico).
   - Orientação isométrica dinâmica (~35°) e iluminação 3D longitudinal com sombra projetada.
 - **Papel na Interface**: Representação oficial do card de Composição Corporal e Medidas (IMC e Percentual de Gordura) no Dashboard de Progresso.
+
+### `PlanetaKaiohIcon`
+- **Renderização**:
+  - Mini-planeta esférico cel-shaded com gradiente radial verde grama com iluminação volumétrica 3D (`#7CB342` $\to$ `#33691E`).
+  - Estrada anelar circular branca com perspectiva curvada em torno do equador do planeta.
+  - O lendário carro conversível vintage esportivo vermelho do Sr. Kaioh estacionado sobre a pista.
+  - Casa principal esférica em domo bege com telhado marrom tradicional e anexo/garagem lateral.
+  - Copas densas de árvores arredondadas distribuídas na borda e atmosfera sutil translúcida.
+- **Papel na Interface**: Destino épico no final do Caminho da Serpente em `CaminhoSerpenteProgressBar`.
+
+### `CaminhoSerpenteProgressBar`
+- **Renderização**:
+  - Curva senoidal matemática contínua e suave ($y = \text{midY} - A \cdot \sin(t \cdot 2.5 \cdot 2\pi)$) simulando a serpente que serpenteia pelo Outro Mundo.
+  - Fundo com nuvens celestiais douradas e drop shadow conferindo profundidade espacial.
+  - Ponto de Ki dinâmico do guerreiro com aura brilhante proporcional à porcentagem percorrida rumo a 1.000.000 km.
+  - Ponto de chegada ornamentado diretamente com o `PlanetaKaiohPainter`.
+  - Selo marcial oficial do Senhor Kaioh (**界王**) em tipografia destacada com aro dourado no topo do card.
+- **Papel na Interface**: Barra de progresso sempre visível no card do Caminho da Serpente na tela de Histórico, com suporte a expansão por toque para exibir métricas detalhadas.
 
 ---
 

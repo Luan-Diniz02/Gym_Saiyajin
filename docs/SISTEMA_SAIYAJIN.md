@@ -97,6 +97,17 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
 - **Uso Oficial**:
   - Representação oficial do card de **Composição Corporal e Medidas** (IMC e Percentual de Gordura) no Dashboard de Progresso.
 
+### `PlanetaKaiohIcon`
+- **Arquivo**: [`lib/widgets/planeta_kaioh_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/planeta_kaioh_icon.dart)
+- **Renderização**:
+  - Planeta esférico cel-shaded com gradiente volumétrico 3D em verde musgo/esmeralda.
+  - Estrada anelar circular pavimentada com curvatura elíptica em torno do pequeno astro.
+  - O clássico carro conversível vintage esportivo vermelho do Sr. Kaioh estacionado sobre a pista.
+  - Casa em domo clássica bege com teto marrom tradicional e anexo lateral de garagem.
+  - Bosques de árvores com copas em relevo ao longo do contorno do planeta.
+- **Uso Oficial**:
+  - Ponto de chegada supremo e meta final na barra de progresso do **Caminho da Serpente** (`CaminhoSerpenteProgressBar`).
+
 ---
 
 ## 📊 4. Estimativa de 1RM (Fórmula de Epley Refinada)
@@ -111,3 +122,37 @@ $$1\text{RM} = \begin{cases}
 
 - **Teto Estatístico de 15 Repetições**: Séries com mais de 15 reps medem primordialmente resistência muscular localizada (RML) e não força máxima neuromuscular; portanto, a fórmula limita o multiplicador em 15 para prevenir distorções hiperbólicas nos cálculos de 1RM.
 - **Formatação Limpa**: Valores inteiros são apresentados sem casas decimais (`120 kg`), enquanto frações preservam uma casa decimal (`102.5 kg`).
+
+---
+
+## 🐍 5. O Caminho da Serpente & Odômetro de Ferro (1.000.000 km)
+
+Na lore canônica de Dragon Ball Z, o **Caminho da Serpente** (*Snake Way*) tem exatamente 1 milhão de quilômetros de extensão e paira sobre as nuvens do Outro Mundo, conectando o Palácio de Enma Daioh ao Planeta do Senhor Kaioh. Representa a prova máxima de disciplina física e resiliência mental que Goku enfrentou para obter o treinamento dos Deuses.
+
+No **Gym Saiyajin**, a constância de meses e anos na academia é traduzida diretamente na travessia dessa estrada mística:
+
+### A. A Fórmula dos Quilômetros de Ferro
+
+$$\text{Distância no Caminho (km)} = \left(\frac{\text{Volume Total em kg}}{100}\right) + \left(\frac{\text{Minutos Totais de Treino}}{10}\right)$$
+
+- Cada **100 kg** erguidos no acumulado de todos os treinos equivalem a **1 km** percorrido no Caminho.
+- Cada **10 minutos** sob esforço ativo de ferro e recuperação somam **1 km** adicional de marcha.
+- A **Meta Absoluta** é fixada em **1.000.000 km**, premiando a consistência ininterrupta no estilo de vida do ferro.
+
+### B. Marcos Narrativos Canônicos (Lore por Porcentagem)
+
+De acordo com a fração da distância percorrida ($\frac{\text{km}}{1.000.000} \times 100$), o guerreiro atinge marcos canônicos exibidos no card expansível:
+
+| Faixa (%) | Marco Narrativo Oficial | Lore de Dragon Ball Z |
+| :--- | :--- | :--- |
+| **0.0% – 4.9%** | *Palácio de Enma Daioh* | O guerreiro recebe a permissão especial e inicia a corrida épica sobre a cauda da serpente. |
+| **5.0% – 24.9%** | *Curvas da Serpente* | Vencendo os primeiros trechos sinuosos sem olhar para baixo; o corpo começa a forjar resistência. |
+| **25.0% – 49.9%** | *Castelo da Princesa Serpente* | Resistindo às distrações, preguiça e tentações de abandonar o caminho sagrado da força. |
+| **50.0% – 74.9%** | *Salto sobre o Inferno* | Metade do caminho superada com sucesso; disciplina de ferro inabalável rumo à divindade. |
+| **75.0% – 99.9%** | *Cauda Final da Serpente* | A cauda se eleva em direção aos céus; o campo de gravidade de 10x do planeta já começa a ser sentido. |
+| **100.0%+** | *Planeta do Sr. Kaioh Conquistado!* | O guerreiro alcança o pequeno planeta sagrado e está pronto para o Treino com Pesos Divinos! |
+
+### C. Apresentação Visual no Histórico
+- **Barra Senoidal Contínua (`CaminhoSerpenteProgressBar`)**: Ondulação suave de seno ($2.5$ ciclos), drop shadows espaciais, aura de Ki que se desloca com o avanço e o `PlanetaKaiohIcon` ancorado na chegada.
+- **Interatividade & Ocultação Inteligente**: A barra permanece sempre visível para impacto estético instantâneo, enquanto os números analíticos (odômetro numérico, texto do marco e os 3 cards de carga, tempo e sessões) expandem ou recolhem suavemente ao toque.
+
