@@ -66,11 +66,14 @@ class NotificationService {
       android: AndroidNotificationDetails(
         'descanso_channel_v2',
         'Descanso',
-        channelDescription: 'Notificacoes para fim do descanso',
+        channelDescription: 'Notificacoes para fim do descanso e regeneracao',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
         enableVibration: true,
+        autoCancel: true,
+        category: AndroidNotificationCategory.alarm,
+        visibility: NotificationVisibility.public,
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),
@@ -116,8 +119,8 @@ class NotificationService {
     try {
       await _plugin.zonedSchedule(
         id: 1,
-        title: 'Descanso Finalizado! ⏰',
-        body: 'Bora voltar para o treino, monstro!',
+        title: 'Regeneração Concluída ⏱️',
+        body: 'Seu Ki e energia foram restaurados. Hora da próxima série!',
         scheduledDate: dataAgendada,
         notificationDetails: detalhes,
         androidScheduleMode: modoAgendamento,
@@ -129,8 +132,8 @@ class NotificationService {
       if (modoAgendamento == AndroidScheduleMode.exactAllowWhileIdle) {
         await _plugin.zonedSchedule(
           id: 1,
-          title: 'Descanso Finalizado! ⏰',
-          body: 'Bora voltar para o treino, monstro!',
+          title: 'Regeneração Concluída ⏱️',
+          body: 'Seu Ki e energia foram restaurados. Hora da próxima série!',
           scheduledDate: dataAgendada,
           notificationDetails: detalhes,
           androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,

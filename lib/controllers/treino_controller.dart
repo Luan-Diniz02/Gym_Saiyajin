@@ -944,7 +944,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
           _timerEndTime = null;
           _tempoAtual = 0;
           _descansoFinalizadoEvento++;
-          unawaited(_notificationService.cancelarNotificacao());
           notifyListeners();
         }
       }
@@ -979,7 +978,6 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
           _timerEndTime = null;
           _tempoAtual = 0;
           _descansoFinalizadoEvento++;
-          unawaited(_notificationService.cancelarNotificacao());
         }
       }
 
