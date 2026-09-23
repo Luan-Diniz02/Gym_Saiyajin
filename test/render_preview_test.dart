@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/widgets/capsule_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_ball_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_radar_icon.dart';
+import 'package:gym_saiyajin/widgets/escotilha_camara_painter.dart';
 import 'package:gym_saiyajin/widgets/planeta_kaioh_icon.dart';
 
 void main() {
@@ -57,5 +58,25 @@ void main() {
 
     // Renderizar PlanetaKaiohIcon (Planeta do Senhor Kaioh com casa, anexo, pista e carro)
     await renderPainter(const PlanetaKaiohPainter(), 'preview_planeta_kaioh.png', size: 300);
+
+    // Renderizar Escotilha da Câmara de Regeneração (Repouso e Ativa)
+    await renderPainter(
+      const EscotilhaCamaraPainter(
+        animationValue: 0.35,
+        isAtivo: true,
+        progresso: 0.65,
+      ),
+      'preview_escotilha_camara_ativa.png',
+      size: 320,
+    );
+    await renderPainter(
+      const EscotilhaCamaraPainter(
+        animationValue: 0.0,
+        isAtivo: false,
+        progresso: 1.0,
+      ),
+      'preview_escotilha_camara_repouso.png',
+      size: 320,
+    );
   });
 }
