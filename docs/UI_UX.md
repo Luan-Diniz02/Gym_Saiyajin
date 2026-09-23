@@ -267,3 +267,49 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 4. **Internacionalização Numérica dos Pesos**:
    - Cargas inteiras são exibidas sem decimais (`100 kg`), e cargas fracionárias exibem apenas uma casa decimal limpa (`12.5 kg`).
    - Volumes e pontuações de Ki acima de 1.000 são pontuados automaticamente (`27.080 kg`, `+15.200 Ki`).
+
+---
+
+## 🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin
+
+O **Gym Saiyajin** é, primordialmente, uma **ferramenta de musculação e performance de força real**. A aplicação de temáticas de anime no design de software corre um risco crônico e documentado: a **caricatura infantilizada**, na qual piadas internas, slogans gritados ou excesso de referências transformam a ferramenta em um brinquedo, gerando constrangimento ao ser utilizado no ambiente da academia.
+
+Para blindar o aplicativo contra qualquer caricatura e manter a máxima sofisticação técnica, foram estabelecidas quatro diretrizes irrevogáveis de produto:
+
+```mermaid
+graph TD
+    A[Identidade Gym Saiyajin] --> B[1. Fisiologia & Ergonomia em 1º Lugar]
+    A --> C[2. Lore Canônica como Fisiologia & Tech]
+    A --> D[3. Tom de Voz Marcial & Estoico]
+    A --> E[4. Estética Dark Tech Esportivo]
+
+    B --> B1[Dados brutos inalterados: Carga, Reps, 1RM, Volume]
+    C --> C1[Câmara = Recuperação de ATP; Serpente = Constância]
+    D --> D1[Sem gritos de anime ou piadas; comunicação enxuta e firme]
+    E --> E1[Zero rostos/stickers; apenas símbolos vetoriais industriais]
+```
+
+### 1. Fisiologia e Ergonomia Sempre em Primeiro Lugar
+- **Termos Técnicos Preservados**: A tela de treino nunca substitui os termos essenciais da musculação por gírias. **Carga (kg)**, **Reps**, **Volume**, **1RM (Fórmula de Epley Refinada)**, **Séries** e **Tempo de Descanso** permanecem explícitos e destacados.
+- **Leitura em Situação de Exaustão**: Um atleta ofegante entre séries pesadas não pode perder tempo decifrando metáforas lúdicas. A telemetria esportiva é prioridade absoluta.
+
+### 2. Lore Canônica como Metáfora de Alta Tecnologia & Fisiologia
+Em vez de magia mística descontextualizada, os elementos de Dragon Ball Z são mapeados diretamente para a ciência do treinamento de força:
+- **Câmara de Regeneração Médica**: Representa a biotecnologia de cura de tecidos, tamponamento de íons $H^+$ e restauração dos estoques de fosfocreatina (ATP-CP).
+- **Caminho da Serpente**: Representa a jornada de constância e disciplina de anos; a meta de 1.000.000 km é um odômetro real de hipertrofia acumulada.
+- **Cápsulas Hoi-Poi**: Representa a engenharia da Capsule Corp compactando fichas e rotinas completas em estojos organizados.
+- **Poder de Luta (Ki)**: Uma pontuação composta por força máxima nos 6 grupos musculares e capacidade total de trabalho.
+
+### 3. Tom de Voz Marcial e Estoico (Anti-Caricatura)
+- **O que é estritamente proibido**:
+  - Gritos de anime em caixa alta exagerados (*"KAMEHAMEHA!"*, *"VOU TE DESTRUIR!"*).
+  - Troca de nomes de exercícios por golpes (*ex: proibir "Supino Genki Dama"*).
+  - Citações infantis ou ofensivas fora de contexto (*"Você é um verme"*).
+- **O que é adotado**:
+  - Comunicação firme, concisa e disciplinada (inspirada no foco de Goku e Vegeta na Sala do Tempo, ou Piccolo meditando): *"Regeneração Concluída"*, *"Prepare-se para a próxima série"*, *"Encerrar Batalha"*, *"Consolide seus ganhos"*.
+
+### 4. Estética Visual "Dark Tech Esportivo"
+- **Zero Stickers de Personagens**: O app não exibe ilustrações literais de rostos de anime na interface de treino.
+- **Ícones Cel-Shaded Vetoriais Nativos**: Todos os ícones (`CapsuleIcon`, `KiAuraIcon`, `DragonBallIcon`, `ScouterIcon`, `PlanetaKaiohIcon`) são geométricos, limpos e renderizados diretamente no Canvas do Flutter com acabamento industrial.
+- **Percepção Visual Externa**: Qualquer pessoa a 1 metro de distância na academia enxerga uma interface escura, elegante, moderna e de alto padrão (semelhante a dashboards da Garmin, Strava ou Strong).
+

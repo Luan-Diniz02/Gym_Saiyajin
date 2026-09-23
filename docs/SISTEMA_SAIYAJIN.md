@@ -185,4 +185,19 @@ No treinamento esportivo do **Gym Saiyajin**, essa aura simboliza o **Vigor e a 
   4. *Sparks de Alta Tensão*: Faíscas e relâmpagos pontiagudos flutuando nas laterais.
 - **Harmonização de Transformações**: Cores adaptáveis dinamicamente às transformações Saiyajin (Classe Baixa, Guerreiro Z, Elite Saiyajin, Super Saiyajin 1/2/3).
 
+---
+
+## 🛡️ 7. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore
+
+Para que o **Gym Saiyajin** mantenha credibilidade inabalável como aplicativo de musculação sério, todo o sistema opera sob o princípio de **Fisiologia em Primeiro Lugar**:
+
+1. **Anti-Caricatura**: Elementos de anime nunca viram piadas infantis ou gritos desconectados na tela. O tom do guerreiro é estoico, focado na autossuperação, disciplina e no silêncio concentrado da Sala do Tempo.
+2. **Equivalência Biológica Real**:
+   - **Câmara de Cura** = Recuperação celular de ATP-CP, tamponamento de $H^+$ e restauração de glicogênio muscular.
+   - **Caminho da Serpente** = Princípio da Continuidade e Sobrecarga Progressiva acumulada ao longo de meses e anos.
+   - **Cápsulas Hoi-Poi** = Engenharia de precisão para modularização de rotinas e templates de treino.
+   - **Ki & Patamares** = Capacidade neuromuscular composta (força máxima 1RM $\times$ volume total de repetições).
+3. **Ergonomia Intocável**: Os inputs de carga em kg, repetições e o cronômetro têm prioridade visual máxima sobre quaisquer adornos estéticos.
+
+
 
