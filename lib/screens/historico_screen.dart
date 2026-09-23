@@ -3,6 +3,7 @@ import '../controllers/historico_controller.dart';
 import '../controllers/progresso_controller.dart';
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
+import '../widgets/caminho_serpente_progress_bar.dart';
 import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/dragon_ball_icon.dart';
 import '../widgets/historico_card_widget.dart';
@@ -27,6 +28,8 @@ class HistoricoScreen extends StatefulWidget {
 
 class _HistoricoScreenState extends State<HistoricoScreen> {
   late final HistoricoController _controller;
+  bool _caminhoSerpenteExpandido = false;
+  final Set<int> _sessoesExpandidasIds = <int>{};
 
   @override
   void initState() {
@@ -256,199 +259,213 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
     final tempoMin = _controller.tempoTotalMinutosGeral;
     final totalTreinos = _controller.historicoTreinos.length;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary.withValues(alpha: 0.12),
-            AppColors.surface,
-          ],
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.35),
-          width: 1.2,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        onTap: () {
+          setState(() {
+            _caminhoSerpenteExpandido = !_caminhoSerpenteExpandido;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primary.withValues(alpha: 0.12),
+                AppColors.surface,
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.alt_route_rounded,
-                      color: AppColors.primary,
-                      size: 18,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.alt_route_rounded,
+                            color: AppColors.primary,
+                            size: 18,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'CAMINHO DA SERPENTE',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.8,
+                                  color: AppColors.textLight,
+                                ),
+                              ),
+                              Text(
+                                _caminhoSerpenteExpandido
+                                    ? 'Jornada rumo ao Planeta do Sr. Kaioh'
+                                    : '${_formatarKm(kmPercorridos)} km • ${(progresso * 100).toStringAsFixed(1)}%',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: _caminhoSerpenteExpandido
+                                      ? AppColors.textDimmed
+                                      : AppColors.accent,
+                                  fontWeight: _caminhoSerpenteExpandido
+                                      ? FontWeight.normal
+                                      : FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'CAMINHO DA SERPENTE',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.8,
-                          color: AppColors.textLight,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Text(
+                          '${(progresso * 100).toStringAsFixed(2)}%',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
-                      Text(
-                        'Jornada rumo ao Planeta do Sr. Kaioh',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: AppColors.textDimmed,
-                        ),
+                      const SizedBox(width: 6),
+                      Icon(
+                        _caminhoSerpenteExpandido
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.textDimmed,
+                        size: 22,
                       ),
                     ],
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Text(
-                  '${(progresso * 100).toStringAsFixed(2)}%',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          // Distância e Meta
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                '${_formatarKm(kmPercorridos)} km',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.accent,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Text(
-                'percorridos',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDimmed,
-                ),
-              ),
-              const Spacer(),
-              const Text(
-                'Meta: 1.000.000 km',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDimmed,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Barra de progresso visual
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Stack(
-              children: [
-                Container(
-                  height: 8,
-                  width: double.infinity,
-                  color: AppColors.background,
-                ),
-                FractionallySizedBox(
-                  widthFactor: progresso.clamp(0.005, 1.0),
-                  child: Container(
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.accent,
-                        ],
+              if (_caminhoSerpenteExpandido) ...[
+                const SizedBox(height: 14),
+                // Barra serpenteada temática (Snake Way com nuvens e Planeta do Sr. Kaioh)
+                CaminhoSerpenteProgressBar(progresso: progresso, height: 52),
+                const SizedBox(height: 12),
+                // Distância e Meta
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      '${_formatarKm(kmPercorridos)} km',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.accent,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'percorridos',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textDimmed,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Text(
+                      'Meta: 1.000.000 km',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textDimmed,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                // Marco / Lore Dragon Ball
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.auto_awesome,
+                      size: 14,
+                      color: AppColors.accent,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        marco,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textLight,
+                          fontStyle: FontStyle.italic,
+                          height: 1.25,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Divider(color: AppColors.cardBorder, height: 1),
+                const SizedBox(height: 8),
+                // Estatísticas da travessia
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _itemEstatisticaJornada(
+                      icon: Icons.fitness_center_rounded,
+                      rotulo: 'Carga Total',
+                      valor: '${volumeTon.toStringAsFixed(1)} ton',
+                    ),
+                    _itemEstatisticaJornada(
+                      icon: Icons.timer_outlined,
+                      rotulo: 'Tempo Total',
+                      valor: '${tempoMin ~/ 60}h ${tempoMin % 60}m',
+                    ),
+                    _itemEstatisticaJornada(
+                      icon: Icons.sports_martial_arts_rounded,
+                      rotulo: 'Sessões',
+                      valor: '$totalTreinos',
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Marco / Lore Dragon Ball
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                Icons.auto_awesome,
-                size: 14,
-                color: AppColors.accent,
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  marco,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textLight,
-                    fontStyle: FontStyle.italic,
-                    height: 1.25,
-                  ),
-                ),
-              ),
             ],
           ),
-          const SizedBox(height: 10),
-          const Divider(color: AppColors.cardBorder, height: 1),
-          const SizedBox(height: 8),
-          // Estatísticas da travessia
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _itemEstatisticaJornada(
-                icon: Icons.fitness_center_rounded,
-                rotulo: 'Carga Total',
-                valor: '${volumeTon.toStringAsFixed(1)} ton',
-              ),
-              _itemEstatisticaJornada(
-                icon: Icons.timer_outlined,
-                rotulo: 'Tempo Total',
-                valor: '${tempoMin ~/ 60}h ${tempoMin % 60}m',
-              ),
-              _itemEstatisticaJornada(
-                icon: Icons.sports_martial_arts_rounded,
-                rotulo: 'Sessões',
-                valor: '$totalTreinos',
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -563,6 +580,18 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
     final exercicios = diaTreino.sessao.exerciciosConcluidosHoje;
     final prsSessao = widget.progressoController?.obterPRsDaSessao(diaTreino.sessao) ?? 0;
     final bool temPR = prsSessao > 0;
+    final sessaoId = diaTreino.sessao.id ?? (diaTreino.sessao.data?.millisecondsSinceEpoch ?? 0);
+    final isExpandido = _sessoesExpandidasIds.contains(sessaoId);
+
+    void toggleExpansao() {
+      setState(() {
+        if (_sessoesExpandidasIds.contains(sessaoId)) {
+          _sessoesExpandidasIds.remove(sessaoId);
+        } else {
+          _sessoesExpandidasIds.add(sessaoId);
+        }
+      });
+    }
 
     int totalSeries = 0;
     double volumeTotal = 0.0;
@@ -657,76 +686,83 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: toggleExpansao,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Flexible(
-                            child: Text(
-                              diaTreino.dataLabel,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textLight,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (temPR) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFF9800).withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  diaTreino.dataLabel,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textLight,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  DragonBallIcon(size: 10, stars: prsSessao.clamp(1, 7)),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    prsSessao == 1 ? '1 PR' : '$prsSessao PRs',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w900,
-                                      color: Color(0xFFFFB300),
+                              if (temPR) ...[
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFF9800).withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: const Color(0xFFFFB300).withValues(alpha: 0.5),
                                     ),
                                   ),
-                                ],
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      DragonBallIcon(size: 10, stars: prsSessao.clamp(1, 7)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        prsSessao == 1 ? '1 PR' : '$prsSessao PRs',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w900,
+                                          color: Color(0xFFFFB300),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (diaTreino.sessao.nomeTreino != null &&
+                              diaTreino.sessao.nomeTreino!.trim().isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: AppColors.primary.withValues(alpha: 0.4),
+                                ),
+                              ),
+                              child: Text(
+                                diaTreino.sessao.nomeTreino!.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primary,
+                                  letterSpacing: 0.8,
+                                ),
                               ),
                             ),
                           ],
                         ],
                       ),
-                      if (diaTreino.sessao.nomeTreino != null &&
-                          diaTreino.sessao.nomeTreino!.trim().isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.4),
-                            ),
-                          ),
-                          child: Text(
-                            diaTreino.sessao.nomeTreino!.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.primary,
-                              letterSpacing: 0.8,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
                 ),
                 IconButton(
@@ -747,94 +783,113 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   color: AppColors.textDimmed,
                   tooltip: 'Excluir treino',
                 ),
+                IconButton(
+                  onPressed: toggleExpansao,
+                  icon: Icon(
+                    isExpandido ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                    size: 22,
+                  ),
+                  color: AppColors.accent,
+                  tooltip: isExpandido ? 'Recolher exercícios' : 'Ver exercícios',
+                ),
               ],
             ),
             const SizedBox(height: 4),
             // Subtítulo com métricas resumidas do treino (exercícios, séries, volume, duração e descanso)
             Padding(
               padding: const EdgeInsets.only(left: 50.0, bottom: 12.0),
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  Text(
-                    '${exercicios.length} EXERCÍCIOS',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textDimmed,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
-                  Text(
-                    '$totalSeries SÉRIES',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textDimmed,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
-                  Text(
-                    'VOLUME: $volumeFormatado',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.accent,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  if (diaTreino.sessao.duracaoSegundos > 0) ...[
-                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.timer_outlined, size: 14, color: AppColors.textDimmed),
-                        const SizedBox(width: 3),
-                        Text(
-                          diaTreino.sessao.duracaoFormatada,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDimmed,
-                            letterSpacing: 0.8,
-                          ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: toggleExpansao,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        '${exercicios.length} EXERCÍCIOS',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textDimmed,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                      Text(
+                        '$totalSeries SÉRIES',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textDimmed,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                      Text(
+                        'VOLUME: $volumeFormatado',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.accent,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                      if (diaTreino.sessao.duracaoSegundos > 0) ...[
+                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.timer_outlined, size: 14, color: AppColors.textDimmed),
+                            const SizedBox(width: 3),
+                            Text(
+                              diaTreino.sessao.duracaoFormatada,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textDimmed,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                  if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
-                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.textDimmed),
-                        const SizedBox(width: 3),
-                        Text(
-                          diaTreino.sessao.descansoFormatado,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDimmed,
-                            letterSpacing: 0.8,
-                          ),
+                      if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
+                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.textDimmed),
+                            const SizedBox(width: 3),
+                            Text(
+                              diaTreino.sessao.descansoFormatado,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textDimmed,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                ],
+                    ],
+                  ),
+                ),
               ),
             ),
-            // Cards dos exercícios da sessão
-            Padding(
-              padding: const EdgeInsets.only(left: 50.0, bottom: 28.0),
-              child: Column(
-                children: exercicios.map((ex) => HistoricoCardWidget(exercicio: ex)).toList(),
-              ),
-            ),
+            // Cards dos exercícios da sessão (visíveis apenas quando expandido)
+            if (isExpandido)
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0, bottom: 28.0),
+                child: Column(
+                  children: exercicios.map((ex) => HistoricoCardWidget(exercicio: ex)).toList(),
+                ),
+              )
+            else
+              const SizedBox(height: 12),
           ],
         ),
       ],

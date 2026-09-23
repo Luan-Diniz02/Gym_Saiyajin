@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
+import 'modal_ajuste_tempo_sessao.dart';
 
 class ModalEditarSessaoDialog extends StatefulWidget {
   final SessaoTreino sessao;
@@ -105,272 +106,40 @@ class _ModalEditarSessaoDialogState extends State<ModalEditarSessaoDialog> {
   }
 
   Future<void> _abrirAjusteDuracao() async {
-    int horas = _duracaoSegundos ~/ 3600;
-    int minutos = (_duracaoSegundos % 3600) ~/ 60;
-    final horasCtrl = TextEditingController(text: '$horas');
-    final minutosCtrl = TextEditingController(text: '$minutos');
-
-    final novoTempo = await showDialog<int>(
+    final novoTempo = await ModalAjusteTempoSessao.show(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDlgState) {
-          void alterarMinutos(int delta) {
-            int totalMin = (int.tryParse(horasCtrl.text) ?? 0) * 60 + (int.tryParse(minutosCtrl.text) ?? 0) + delta;
-            if (totalMin < 0) totalMin = 0;
-            horas = totalMin ~/ 60;
-            minutos = totalMin % 60;
-            horasCtrl.text = '$horas';
-            minutosCtrl.text = '$minutos';
-            setDlgState(() {});
-          }
-
-          return AlertDialog(
-            backgroundColor: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppColors.cardBorder),
-            ),
-            title: const Row(
-              children: [
-                Icon(Icons.timer_outlined, color: AppColors.primary, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  'Ajustar Duração',
-                  style: TextStyle(color: AppColors.textLight, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: horasCtrl,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.textLight, fontSize: 20, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                          labelText: 'Horas',
-                          labelStyle: const TextStyle(color: AppColors.textDimmed, fontSize: 12),
-                          filled: true,
-                          fillColor: AppColors.background,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(':', style: TextStyle(color: AppColors.textLight, fontSize: 22, fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: minutosCtrl,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.textLight, fontSize: 20, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                          labelText: 'Minutos',
-                          labelStyle: const TextStyle(color: AppColors.textDimmed, fontSize: 12),
-                          filled: true,
-                          fillColor: AppColors.background,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _chipAjuste('-15m', () => alterarMinutos(-15)),
-                    _chipAjuste('-5m', () => alterarMinutos(-5)),
-                    _chipAjuste('+5m', () => alterarMinutos(5)),
-                    _chipAjuste('+15m', () => alterarMinutos(15)),
-                    _chipAjuste('+30m', () => alterarMinutos(30)),
-                    _chipAjuste('+1h', () => alterarMinutos(60)),
-                  ],
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final h = int.tryParse(horasCtrl.text) ?? 0;
-                  final m = int.tryParse(minutosCtrl.text) ?? 0;
-                  Navigator.pop(ctx, (h * 3600) + (m * 60));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                ),
-                child: const Text('Confirmar'),
-              ),
-            ],
-          );
-        },
-      ),
+      titulo: 'DURAÇÃO DO TREINO',
+      icone: Icons.timer_outlined,
+      corDestaque: AppColors.primary,
+      tempoInicialSegundos: _duracaoSegundos,
+      isDescanso: false,
     );
 
     if (novoTempo != null && mounted) {
-      setState(() => _duracaoSegundos = novoTempo);
+      setState(() {
+        _duracaoSegundos = novoTempo;
+        // Validação estrita: o descanso não pode ultrapassar o tempo de treino
+        if (_descansoTotalSegundos > _duracaoSegundos) {
+          _descansoTotalSegundos = _duracaoSegundos;
+        }
+      });
     }
   }
 
   Future<void> _abrirAjusteDescanso() async {
-    int minutos = _descansoTotalSegundos ~/ 60;
-    int segundos = _descansoTotalSegundos % 60;
-    final minutosCtrl = TextEditingController(text: '$minutos');
-    final segundosCtrl = TextEditingController(text: '$segundos');
-
-    final novoTempo = await showDialog<int>(
+    final novoTempo = await ModalAjusteTempoSessao.show(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDlgState) {
-          void alterarSegundos(int delta) {
-            int totalSec = (int.tryParse(minutosCtrl.text) ?? 0) * 60 + (int.tryParse(segundosCtrl.text) ?? 0) + delta;
-            if (totalSec < 0) totalSec = 0;
-            minutos = totalSec ~/ 60;
-            segundos = totalSec % 60;
-            minutosCtrl.text = '$minutos';
-            segundosCtrl.text = '$segundos';
-            setDlgState(() {});
-          }
-
-          return AlertDialog(
-            backgroundColor: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppColors.cardBorder),
-            ),
-            title: const Row(
-              children: [
-                Icon(Icons.snooze_rounded, color: Color(0xFF00E676), size: 20),
-                SizedBox(width: 8),
-                Text(
-                  'Ajustar Descanso',
-                  style: TextStyle(color: AppColors.textLight, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: minutosCtrl,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.textLight, fontSize: 20, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                          labelText: 'Minutos',
-                          labelStyle: const TextStyle(color: AppColors.textDimmed, fontSize: 12),
-                          filled: true,
-                          fillColor: AppColors.background,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(':', style: TextStyle(color: AppColors.textLight, fontSize: 22, fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: segundosCtrl,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.textLight, fontSize: 20, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                          labelText: 'Segundos',
-                          labelStyle: const TextStyle(color: AppColors.textDimmed, fontSize: 12),
-                          filled: true,
-                          fillColor: AppColors.background,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.cardBorder)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _chipAjuste('-1m', () => alterarSegundos(-60)),
-                    _chipAjuste('-30s', () => alterarSegundos(-30)),
-                    _chipAjuste('+30s', () => alterarSegundos(30)),
-                    _chipAjuste('+1m', () => alterarSegundos(60)),
-                    _chipAjuste('+2m', () => alterarSegundos(120)),
-                    _chipAjuste('+5m', () => alterarSegundos(300)),
-                  ],
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final m = int.tryParse(minutosCtrl.text) ?? 0;
-                  final s = int.tryParse(segundosCtrl.text) ?? 0;
-                  Navigator.pop(ctx, (m * 60) + s);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                ),
-                child: const Text('Confirmar'),
-              ),
-            ],
-          );
-        },
-      ),
+      titulo: 'TEMPO DE DESCANSO',
+      icone: Icons.snooze_rounded,
+      corDestaque: const Color(0xFF00E676),
+      tempoInicialSegundos: _descansoTotalSegundos,
+      limiteMaximoSegundos: _duracaoSegundos,
+      isDescanso: true,
     );
 
     if (novoTempo != null && mounted) {
       setState(() => _descansoTotalSegundos = novoTempo);
     }
-  }
-
-  static Widget _chipAjuste(String rotulo, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.cardBorder.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.cardBorder),
-        ),
-        child: Text(
-          rotulo,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.textLight,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
   }
 
   String _formatarData(DateTime data) {
