@@ -58,22 +58,44 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
 - **Renderização**:
   - Esfera com gradiente radial âmbar/laranja profundo (`#FFB703` $\to$ `#FB8500`).
   - Brilho especular translúcido simétrico simulando reflexo de cristal/acrílico.
-  - Estrelas vermelhas de 5 pontas desenhadas matematicamente com funções trigonométricas ($\cos/\sin$ a cada $72^\circ$).
-  - Suporte procedural a qualquer constelação de **1 a 7 estrelas**, distribuídas em círculos concêntricos e centro.
-- **Uso Oficial**:
-  - Ícone de prestígio do **Registro de Poder** (Quadro de Recordes Pessoais).
-  - Marcador oficial de conquistas de Recordes Pessoais (**PRs**) no card de compartilhamento social.
+  - Estrelas vermelhas de 5 pontas desenhadas matematicamente com funções trigonométricas ($\cos/\sin$ a cada $72^\circ$) e facetas 3D rubi.
+  - Suporte procedural completo a qualquer constelação de **1 a 7 estrelas**: 1 (centro), 2 (diagonal), 3 (triângulo), 4 (losango do Vovô Gohan), 5 (quincunce), 6 (grade 2x3) e 7 (anel circular com centro).
+- **Gamificação Oficial dos PRs**:
+  - **Correspondência Direta**: No modal de encerramento do treino e no card social, o número de estrelas reflete o total de PRs batidos no dia (1 PR = Esfera de 1 Estrela ⭐, até 7 PRs = Esfera de 7 Estrelas ⭐⭐⭐⭐⭐⭐⭐).
+  - **Na Série em Andamento**: A tag de PR ativo em tempo real exibe uma mini Esfera do Dragão de 1 estrela.
+  - **No Quadro de Recordes**: A esfera do card e cabeçalho adapta suas estrelas de acordo com a quantidade total de recordes históricos registrados.
 
 ### `ScouterIcon`
 - **Arquivo**: [`lib/widgets/scouter_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/scouter_icon.dart)
 - **Renderização**:
   - Haste ergonômica auricular com detalhes de parafusos e juntas mecânicas.
   - Arco superior angular com textura de liga metálica.
-  - Lente translúcida frontal chanfrada em acrílico holográfico.
+  - Lente translúcida frontal chanfrada em acrílico holográfico reativa à transformação.
   - Retículo de mira/alvo interno digital e linhas de telemetria estilizadas.
 - **Uso Oficial**:
   - Carimbo tecnológico de telemetria no modo de compartilhamento **Scouter HUD**.
-  - Identificador visual da transformação atual do guerreiro no painel de Ki.
+  - Identificador visual da transformação atual do guerreiro no modal de level-up e painel de Ki.
+
+### `DragonRadarIcon`
+- **Arquivo**: [`lib/widgets/dragon_radar_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/dragon_radar_icon.dart)
+- **Renderização**:
+  - Bisel metálico chanfrado prateado e dial clássico de cronômetro no topo.
+  - Visor CRT verde militar escuro com retículo de grade de coordenadas ortogonais.
+  - Seta norteadora rubi central e mira amarela.
+  - Esferas do Dragão dinâmicas (`dots: 0..7`) piscando com halo e núcleo luminosos.
+- **Uso Oficial**:
+  - Gamificação da **Meta Semanal** no Dashboard de Progresso (cada dia ativo de treino na semana ilumina uma Esfera do Dragão no radar).
+
+### `CapsuleIcon`
+- **Arquivo**: [`lib/widgets/capsule_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/capsule_icon.dart)
+- **Renderização**:
+  - Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.
+  - Botão metálico de acionamento no topo (*push trigger* com haste cilíndrica e anel de retenção).
+  - Faixas coloridas vibrantes (com suporte a azul clássico Capsule Corp, laranja Saiyajin, verde e vermelho).
+  - Faixa central preta técnica com o logotipo circular canônico da Capsule Corp (monograma em "C" concêntrico).
+  - Orientação isométrica dinâmica (~35°) e iluminação 3D longitudinal com sombra projetada.
+- **Uso Oficial**:
+  - Representação oficial do card de **Composição Corporal e Medidas** (IMC e Percentual de Gordura) no Dashboard de Progresso.
 
 ---
 

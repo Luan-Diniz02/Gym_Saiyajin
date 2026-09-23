@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-67%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-71%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -30,7 +30,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 
 - 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes.
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets) e arte vetorial nativa no Canvas.
-- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon`, `ScouterIcon` e `DragonRadarIcon`) e fórmula de Epley refinada para estimativa de 1RM.
+- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon` e `CapsuleIcon`) e fórmula de Epley refinada para estimativa de 1RM.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
 - 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Planejamento arquitetural e estético da Semente dos Deuses (regeneração de Ki no cronômetro), Caminho da Serpente (jornada épica e odômetro de ferro no histórico) e Nuvem Voadora.
 
@@ -62,10 +62,10 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
   - Escala canônica de patamares: *Classe Baixa* $\to$ *Guerreiro Z* $\to$ *Elite Saiyajin* $\to$ *Super Saiyajin* $\to$ *Super Saiyajin 2* $\to$ *Super Saiyajin 3* $\to$ *Instinto Superior*.
   - Subtítulos épicos oficiais e badge com gradiente e sombras temáticas.
 - **Registro de Poder (Quadro de Recordes)**:
-  - Marcado com o ícone oficial da Esfera do Dragão de 4 estrelas (`DragonBallIcon`).
+  - Marcado com o ícone oficial da Esfera do Dragão (`DragonBallIcon`), cujas estrelas refletem dinamicamente os recordes conquistados (1 a 7 estrelas).
   - Lista detalhada de maiores cargas e 1RMs estimados com busca instantânea e filtros musculares.
 - **Gráfico de Evolução de Cargas (`fl_chart`)**: Curva analítica de sobrecarga progressiva com filtro por exercício.
-- **Cálculo de IMC & Metas Corporais**: Padrão OMS em 6 faixas com atalhos de atualização rápida.
+- **Cálculo de IMC & Metas Corporais**: Marcado com o ícone vetorial da Cápsula Hoi-Poi da Capsule Corp (`CapsuleIcon`), cálculo padrão OMS em 6 faixas e atalhos de atualização rápida.
 
 ### 📱 Compartilhamento Social de Alta Performance
 - **Proporções Flexíveis**: Alternância entre `STORIES (9:16)` (Instagram Stories / WhatsApp Status) e `FEED (1:1)` (Instagram Feed / WhatsApp Chat).
@@ -132,6 +132,7 @@ gym_saiyajin/
 │   ├── theme/                          # Design Tokens e paleta de cores centralizada
 │   │   └── app_colors.dart
 │   └── widgets/                        # Componentes visuais atômicos e CustomPainters
+│       ├── capsule_icon.dart           # CustomPainter da Cápsula Hoi-Poi da Capsule Corp
 │       ├── celebracao_transformacao_modal.dart
 │       ├── compartilhar_card_modal.dart
 │       ├── config_tempo_descanso_modal.dart
@@ -149,8 +150,9 @@ gym_saiyajin/
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                               # Suíte de 67 testes automatizados
+├── test/                               # Suíte de 71 testes automatizados
 │   ├── backup_test.dart
+│   ├── capsule_icon_test.dart
 │   ├── compartilhar_card_test.dart
 │   ├── dragon_ball_icon_test.dart
 │   ├── dragon_radar_icon_test.dart

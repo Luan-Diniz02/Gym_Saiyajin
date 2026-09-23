@@ -11,7 +11,7 @@ graph TD
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
         Widgets[Widgets Reutilizáveis & Modais]
-        Painters[CustomPainters: DragonBallIcon, ScouterIcon]
+        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon]
     end
 
     subgraph ControllersLayer ["Camada de Controle & Estado"]
@@ -144,4 +144,6 @@ O repositório possui cobertura ampla de testes unitários e de widgets na pasta
 | [`test/ficha_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/ficha_test.dart) | CRUD de Fichas e Templates | Criação, edição, enfileiramento e personalização de séries padrão. |
 | [`test/backup_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/backup_test.dart) | Exportação e Importação JSON | Mesclagem de dados, deduplicação e integridade de schema. |
 | [`test/imc_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/imc_test.dart) | Métricas Corporais | Cálculo de IMC nas 6 faixas da OMS e categorização de BF. |
+| [`test/dragon_radar_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_radar_icon_test.dart) | CustomPainter Radar do Dragão | Variação de 0 a 7 esferas dinâmicas, mira, dial metálico e shouldRepaint. |
+| [`test/capsule_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/capsule_icon_test.dart) | CustomPainter Cápsula Hoi-Poi | Cores personalizadas, dimensões, botão push trigger e shouldRepaint. |
 | [`test/notification_service_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes e controle de concorrência. |

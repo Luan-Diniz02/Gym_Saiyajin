@@ -97,7 +97,7 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Posicionado `top: -8` diretamente acima do círculo da série.
   - **Zero impacto na largura horizontal**: não empurra nem espreme os campos de Peso e Reps em celulares estreitos (360dp).
   - **Visual Dark Outline**: Mantém fundo escuro `#14161E` com borda fina dourada e sombra preta. Quando o círculo da série é concluído e ganha preenchimento amarelo brilhante, o micro-badge escuro por cima cria um **contraste de alto relevo nítido e elegante**, sem se fundir na cor de fundo.
-  - **Ícone Vetorial Nativo**: Exibe `Icons.bolt_rounded` (Modo Saiyajin) ou `Icons.emoji_events_rounded` (Modo Atleta).
+  - **Ícone Vetorial Nativo**: Exibe a mini Esfera do Dragão de 1 estrela `DragonBallIcon(size: 10, stars: 1)` na série ativa que quebrou recorde.
 
 ### 2. Cronômetro Circular de Descanso (`CronometroWidget`)
 - **Visor em Camadas**:
@@ -181,6 +181,15 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Esferas do Dragão luminosas dinâmicas rastreadas na tela (`dots`, de 0 a 7) com brilho âmbar radial.
 - **Papel na Interface**: Gamificação da frequência semanal no card de Meta Semanal (cada dia treinado na semana acende uma esfera no radar).
 
+### `CapsuleIcon`
+- **Renderização**:
+  - Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.
+  - Botão metálico de acionamento no topo (*push trigger* com haste cilíndrica e anel de retenção).
+  - Faixas coloridas vibrantes (com suporte a azul clássico Capsule Corp, laranja Saiyajin, verde e vermelho).
+  - Faixa central preta técnica com o logotipo circular canônico da Capsule Corp (monograma em "C" concêntrico).
+  - Orientação isométrica dinâmica (~35°) e iluminação 3D longitudinal com sombra projetada.
+- **Papel na Interface**: Representação oficial do card de Composição Corporal e Medidas (IMC e Percentual de Gordura) no Dashboard de Progresso.
+
 ---
 
 ## 🛡️ 6. Diretrizes de Proteção de Layout & Acessibilidade
@@ -189,6 +198,8 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
    - Todo modal e tela implementa margens dinâmicas de `SafeArea`, garantindo que a barra de navegação de 3 botões ou a linha gestual do Android nunca sobreponha botões ou inputs de texto.
 2. **Prevenção de Truncamento de Nomes**:
    - Todos os títulos longos de exercícios e rotinas utilizam `Expanded` e `Flexible` com `TextOverflow.ellipsis` ou modo expandido com quebra de linha permitida.
-3. **Internacionalização Numérica dos Pesos**:
+3. **Ocultação Condicional de Badges Zerados**:
+   - No modal de encerramento do treino, métricas contextuais como PRs só são renderizadas quando presentes (`totalPrs > 0`). Caso contrário, o elemento é ocultado e a métrica de Volume preenche 100% da largura, preservando a harmonia sem exibir "0 PRs (+0 Ki)".
+4. **Internacionalização Numérica dos Pesos**:
    - Cargas inteiras são exibidas sem decimais (`100 kg`), e cargas fracionárias exibem apenas uma casa decimal limpa (`12.5 kg`).
    - Volumes e pontuações de Ki acima de 1.000 são pontuados automaticamente (`27.080 kg`, `+15.200 Ki`).

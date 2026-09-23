@@ -33,7 +33,7 @@ graph TD
 ### 1. Slim Clássico (Padrão)
 - **Inspiração**: Estilo esportivo limpo em espelho de musculação.
 - **Estrutura**:
-  - **Topo Sutil com Troféu**: Pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) e, quando houver recordes batidos na sessão, um chip comemorativo elegante com a Esfera do Dragão (`DragonBallIcon`) e o total em dourado Saiyajin (ex: `2 PRs`), organizados com quebra fluida (`Wrap`) e proteção contra overflow para nomes longos.
+  - **Topo Sutil com Troféu**: Pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) e, quando houver recordes batidos na sessão, um chip comemorativo elegante com a Esfera do Dragão (`DragonBallIcon` com estrelas refletindo dinamicamente a quantidade de PRs batidos, de 1 a 7 estrelas) e o total em dourado Saiyajin (ex: `2 PRs`), organizados com quebra fluida (`Wrap`) e proteção contra overflow para nomes longos.
   - **Centro e Terço Superior 100% Livres**: Preserva integralmente o rosto, cabeça, fones de ouvido e o físico do atleta em fotos clássicas de espelho.
   - **Base Esportiva**: Três métricas principais com amplo respiro horizontal e sem linhas divisórias — **`VOLUME`**, **`SÉRIES`** e **`DURAÇÃO`** — em caixa alta. O rodapé com logo de Shenlong, marca e data/@handle completa a composição com máxima clareza.
 
