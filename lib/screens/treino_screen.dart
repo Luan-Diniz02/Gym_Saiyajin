@@ -8,11 +8,13 @@ import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
 import '../models/serie.dart';
 import '../controllers/progresso_controller.dart';
+import '../widgets/capsule_icon.dart';
 import '../widgets/celebracao_transformacao_modal.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
 import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/gerenciar_fichas_modal.dart';
+import '../widgets/ki_aura_icon.dart';
 import '../widgets/modal_encerrar_treino.dart';
 import '../widgets/selecao_exercicio_modal.dart';
 import '../widgets/serie_row_widget.dart';
@@ -84,16 +86,22 @@ class _TreinoScreenState extends State<TreinoScreen> {
           ),
           title: const Row(
             children: [
-              Icon(Icons.timer, color: AppColors.accent, size: 28),
-              SizedBox(width: 8),
+              KiAuraIcon(
+                size: 24,
+                primaryColor: AppColors.accent,
+                secondaryColor: AppColors.primary,
+                showGlow: true,
+                showSparks: false,
+              ),
+              SizedBox(width: 10),
               Text(
-                'DESCANSO FINALIZADO!',
+                'REGENERAÇÃO CONCLUÍDA!',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           content: const Text(
-            'Hora de voltar pro ferro. Prepare-se para a próxima série!',
+            'Seu Ki e energia foram restaurados. Prepare-se para a próxima série!',
             style: TextStyle(color: AppColors.textLight),
           ),
           actions: [
@@ -617,8 +625,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.assignment_outlined,
+                              CapsuleIcon(
                                 size: 16,
                                 color: AppColors.accent,
                               ),
@@ -946,7 +953,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
             height: 50,
             child: OutlinedButton.icon(
               onPressed: _abrirGerenciarFichas,
-              icon: const Icon(Icons.assignment, size: 20, color: AppColors.primary),
+              icon: const CapsuleIcon(size: 20, color: AppColors.primary),
               label: const Text(
                 'CARREGAR FICHA DE TREINO',
                 style: TextStyle(

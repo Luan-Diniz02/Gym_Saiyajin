@@ -4,6 +4,7 @@ import '../controllers/treino_controller.dart';
 import '../models/ficha_treino.dart';
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
+import 'capsule_icon.dart';
 import 'selecao_exercicio_modal.dart';
 
 class GerenciarFichasModal extends StatefulWidget {
@@ -177,7 +178,9 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
                       width: 1,
                     ),
                   ),
-                  child: const Icon(Icons.assignment_outlined, color: AppColors.primary, size: 22),
+                  child: const Center(
+                    child: CapsuleIcon(color: AppColors.primary, size: 22),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 const Expanded(

@@ -6,6 +6,7 @@ import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
 import 'dragon_ball_icon.dart';
+import 'ki_aura_icon.dart';
 import 'modal_ajuste_tempo_sessao.dart';
 import 'scouter_icon.dart';
 
@@ -253,10 +254,12 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                 color: AppColors.primary.withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.trending_up_rounded,
+                              child: const KiAuraIcon(
                                 size: 16,
-                                color: AppColors.primary,
+                                primaryColor: AppColors.primary,
+                                secondaryColor: AppColors.accent,
+                                showGlow: false,
+                                showSparks: false,
                               ),
                             ),
                             const SizedBox(width: 8),
