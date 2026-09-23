@@ -124,7 +124,7 @@ class EscotilhaCamaraPainter extends CustomPainter {
     }
   }
 
-  /// Desenha o anel circular de fluido bioenergético com glow medicinal
+  /// Desenha o anel circular de fluido bioenergético com glow de Ki Saiyajin
   void _desenharAnelFluido(
     Canvas canvas,
     Offset center,
@@ -136,7 +136,7 @@ class EscotilhaCamaraPainter extends CustomPainter {
 
     // Trilho de fundo (fluido escuro em repouso)
     final trackPaint = Paint()
-      ..color = const Color(0xFF063336).withValues(alpha: 0.6)
+      ..color = const Color(0xFF261805).withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
     canvas.drawArc(rect, -math.pi / 2, 2 * math.pi, false, trackPaint);
@@ -148,7 +148,7 @@ class EscotilhaCamaraPainter extends CustomPainter {
     // Brilho exterior (Glow suave) quando ativo
     if (isAtivo) {
       final glowPaint = Paint()
-        ..color = const Color(0xFF00E5FF).withValues(alpha: 0.45)
+        ..color = const Color(0xFFFFB300).withValues(alpha: 0.45)
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth + 4.0
         ..strokeCap = StrokeCap.round
@@ -156,16 +156,16 @@ class EscotilhaCamaraPainter extends CustomPainter {
       canvas.drawArc(rect, -math.pi / 2, sweepAngle, false, glowPaint);
     }
 
-    // Arco frontal do fluido em gradiente ciano -> verde-água medicinal
+    // Arco frontal do fluido em gradiente Ouro Super Saiyajin -> Laranja Ki
     final progressPaint = Paint()
       ..shader = const SweepGradient(
         startAngle: -math.pi / 2,
         endAngle: 3 * math.pi / 2,
         colors: [
-          Color(0xFF00E5FF), // Ciano puro
-          Color(0xFF00BFA5), // Verde-água medicinal
-          Color(0xFF1DE9B6), // Esmeralda bioenergética
-          Color(0xFF00E5FF),
+          Color(0xFFFFD700), // Ouro SSJ
+          Color(0xFFFF9E00), // Âmbar elétrico
+          Color(0xFFFF8C00), // Laranja Ki clássico
+          Color(0xFFFFD700),
         ],
         stops: [0.0, 0.45, 0.8, 1.0],
       ).createShader(rect)
@@ -176,25 +176,25 @@ class EscotilhaCamaraPainter extends CustomPainter {
     canvas.drawArc(rect, -math.pi / 2, sweepAngle, false, progressPaint);
   }
 
-  /// Desenha o interior de vidro com fluido medicinal profundo
+  /// Desenha o interior de vidro com fluido de Ki profundo
   void _desenharVidroEFluido(Canvas canvas, Offset center, double glassRadius) {
     final glassRect = Rect.fromCircle(center: center, radius: glassRadius);
 
-    // Gradiente submarino profundo de líquido curativo
+    // Gradiente de fluido de Ki escurecido
     final liquidPaint = Paint()
       ..shader = RadialGradient(
         center: Alignment.center,
         radius: 0.95,
         colors: isAtivo
             ? const [
-                Color(0xFF0B2E33), // Centro com bioluminescência ativa
-                Color(0xFF062024), // Meio tom
-                Color(0xFF031114), // Borda escura profunda
+                Color(0xFF281905), // Centro com bioluminescência dourada ativa
+                Color(0xFF1A1003), // Meio tom
+                Color(0xFF0D0802), // Borda escura profunda
               ]
             : const [
-                Color(0xFF081C20), // Repouso / escuro
-                Color(0xFF051518),
-                Color(0xFF020B0D),
+                Color(0xFF181005), // Repouso / escuro
+                Color(0xFF100B03),
+                Color(0xFF080502),
               ],
         stops: const [0.0, 0.65, 1.0],
       ).createShader(glassRect)
@@ -227,11 +227,11 @@ class EscotilhaCamaraPainter extends CustomPainter {
     final maskCenterX = center.dx;
 
     final maskFillPaint = Paint()
-      ..color = const Color(0xFF00383D).withValues(alpha: 0.35)
+      ..color = const Color(0xFF332005).withValues(alpha: 0.35)
       ..style = PaintingStyle.fill;
 
     final maskStrokePaint = Paint()
-      ..color = const Color(0xFF00E5FF).withValues(alpha: 0.22)
+      ..color = const Color(0xFFFFD700).withValues(alpha: 0.22)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
 
@@ -252,7 +252,7 @@ class EscotilhaCamaraPainter extends CustomPainter {
 
     // Filtro central / grelha da máscara
     final grillPaint = Paint()
-      ..color = const Color(0xFF00E5FF).withValues(alpha: 0.18)
+      ..color = const Color(0xFFFFB300).withValues(alpha: 0.18)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
@@ -269,7 +269,7 @@ class EscotilhaCamaraPainter extends CustomPainter {
 
     // Mangueiras sanfonadas conectadas aos lados e descendo
     final hosePaint = Paint()
-      ..color = const Color(0xFF00E5FF).withValues(alpha: 0.18)
+      ..color = const Color(0xFFFFB300).withValues(alpha: 0.18)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.2
       ..strokeCap = StrokeCap.round;
@@ -324,16 +324,16 @@ class EscotilhaCamaraPainter extends CustomPainter {
     ];
 
     final bubbleStrokePaint = Paint()
-      ..color = const Color(0xFF00E5FF).withValues(alpha: isAtivo ? 0.65 : 0.25)
+      ..color = const Color(0xFFFFD700).withValues(alpha: isAtivo ? 0.70 : 0.25)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
     final bubbleFillPaint = Paint()
-      ..color = const Color(0xFF00BFA5).withValues(alpha: isAtivo ? 0.22 : 0.08)
+      ..color = const Color(0xFFFF9E00).withValues(alpha: isAtivo ? 0.22 : 0.08)
       ..style = PaintingStyle.fill;
 
     final bubbleHighlight = Paint()
-      ..color = Colors.white.withValues(alpha: isAtivo ? 0.75 : 0.3)
+      ..color = Colors.white.withValues(alpha: isAtivo ? 0.80 : 0.3)
       ..style = PaintingStyle.fill;
 
     final effectiveAnim = isAtivo ? animationValue : 0.2;
@@ -382,9 +382,9 @@ class EscotilhaCamaraPainter extends CustomPainter {
         endAngle: -math.pi * 0.15,
         colors: [
           Colors.transparent,
-          Color(0x3300E5FF),
+          Color(0x33FFD700),
           Color(0x55FFFFFF),
-          Color(0x3300E5FF),
+          Color(0x33FFD700),
           Colors.transparent,
         ],
         stops: [0.0, 0.25, 0.5, 0.75, 1.0],

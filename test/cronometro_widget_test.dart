@@ -28,7 +28,7 @@ void main() {
 
       // Verifica textos
       expect(find.text('01:30'), findsOneWidget);
-      expect(find.text('CÂMARA DE CURA'), findsOneWidget);
+      expect(find.text('CÂMARA DE KI'), findsOneWidget);
       expect(find.text('TOQUE P/ AJUSTAR'), findsOneWidget);
 
       // Verifica presença do CustomPaint da Escotilha

@@ -893,7 +893,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   void pausarTimer() {
     _acumularDescansoAtual();
     if (_timerEndTime != null) {
-      final restante = _timerEndTime!.difference(DateTime.now()).inSeconds;
+      final diffMs = _timerEndTime!.difference(DateTime.now()).inMilliseconds;
+      final restante = (diffMs / 1000.0).ceil();
       _tempoAtual = restante > 0 ? restante : 0;
     }
     _timer?.cancel();
@@ -931,7 +932,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (_timerEndTime != null) {
-        final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
+        final diffMs = _timerEndTime!.difference(DateTime.now()).inMilliseconds;
+        final remaining = (diffMs / 1000.0).ceil();
         if (remaining > 0) {
           _tempoAtual = remaining;
           notifyListeners();
@@ -963,7 +965,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       }
 
       if (_isTimerRodando && _timerEndTime != null) {
-        final remaining = _timerEndTime!.difference(DateTime.now()).inSeconds;
+        final diffMs = _timerEndTime!.difference(DateTime.now()).inMilliseconds;
+        final remaining = (diffMs / 1000.0).ceil();
         if (remaining > 0) {
           _tempoAtual = remaining;
           if (_timer == null || !_timer!.isActive) {

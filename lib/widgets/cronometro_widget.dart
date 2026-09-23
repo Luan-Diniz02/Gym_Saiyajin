@@ -110,8 +110,8 @@ class _CronometroWidgetState extends State<CronometroWidget>
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: widget.isTimerRodando
-                                ? const Color(0xFF00E5FF).withValues(alpha: 0.4)
-                                : const Color(0xFF00BFA5).withValues(alpha: 0.25),
+                                ? const Color(0xFFFFD700).withValues(alpha: 0.45)
+                                : const Color(0xFFFF9E00).withValues(alpha: 0.25),
                             width: 0.8,
                           ),
                         ),
@@ -124,15 +124,15 @@ class _CronometroWidgetState extends State<CronometroWidget>
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: widget.isTimerRodando
-                                    ? const Color(0xFF00E5FF)
+                                    ? const Color(0xFFFFD700)
                                     : (widget.tempoAtual <
                                             widget.tempoDescansoPadrao
-                                        ? const Color(0xFFFFB300)
-                                        : const Color(0xFF00BFA5)),
+                                        ? const Color(0xFFFF8C00)
+                                        : const Color(0xFFFFD54F)),
                                 boxShadow: widget.isTimerRodando
                                     ? [
                                         BoxShadow(
-                                          color: const Color(0xFF00E5FF)
+                                          color: const Color(0xFFFFD700)
                                               .withValues(alpha: 0.8),
                                           blurRadius: 4,
                                           spreadRadius: 1,
@@ -148,17 +148,17 @@ class _CronometroWidgetState extends State<CronometroWidget>
                                   : (widget.tempoAtual <
                                           widget.tempoDescansoPadrao
                                       ? 'PAUSADO'
-                                      : 'CÂMARA DE CURA'),
+                                      : 'CÂMARA DE KI'),
                               style: TextStyle(
                                 fontSize: 8.5,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.0,
                                 color: widget.isTimerRodando
-                                    ? const Color(0xFF00E5FF)
+                                    ? const Color(0xFFFFD700)
                                     : (widget.tempoAtual <
                                             widget.tempoDescansoPadrao
-                                        ? const Color(0xFFFFB300)
-                                        : const Color(0xFF80DEEA)),
+                                        ? const Color(0xFFFF8C00)
+                                        : const Color(0xFFFFD54F)),
                               ),
                             ),
                           ],
@@ -173,12 +173,12 @@ class _CronometroWidgetState extends State<CronometroWidget>
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                           color: widget.isTimerRodando
-                              ? const Color(0xFFE0F7FA)
+                              ? const Color(0xFFFFF8E1)
                               : AppColors.textLight,
                           shadows: [
                             Shadow(
                               color: widget.isTimerRodando
-                                  ? const Color(0xFF00E5FF)
+                                  ? const Color(0xFFFFB300)
                                       .withValues(alpha: 0.7)
                                   : Colors.black87,
                               blurRadius: widget.isTimerRodando ? 12 : 6,
@@ -194,7 +194,7 @@ class _CronometroWidgetState extends State<CronometroWidget>
                           fontSize: 9,
                           fontWeight: FontWeight.w600,
                           color: widget.isTimerRodando
-                              ? const Color(0xFF80DEEA).withValues(alpha: 0.9)
+                              ? const Color(0xFFFFD54F).withValues(alpha: 0.9)
                               : AppColors.textDimmed,
                           letterSpacing: 1.1,
                         ),
@@ -220,9 +220,9 @@ class _CronometroWidgetState extends State<CronometroWidget>
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(48, 48),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                foregroundColor: const Color(0xFF80DEEA),
+                foregroundColor: AppColors.primary,
                 side: BorderSide(
-                  color: const Color(0xFF00BFA5).withValues(alpha: 0.6),
+                  color: AppColors.primary.withValues(alpha: 0.6),
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -238,16 +238,14 @@ class _CronometroWidgetState extends State<CronometroWidget>
                 minimumSize: const Size(48, 48),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 backgroundColor: widget.isTimerRodando
-                    ? const Color(0xFF00BFA5)
+                    ? AppColors.accent
                     : AppColors.primary,
-                foregroundColor: widget.isTimerRodando
-                    ? Colors.black
-                    : AppColors.background,
+                foregroundColor: AppColors.background,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: widget.isTimerRodando ? 4 : 1,
-                shadowColor: const Color(0xFF00E5FF).withValues(alpha: 0.5),
+                shadowColor: const Color(0xFFFFB300).withValues(alpha: 0.5),
               ),
               child: Icon(
                 widget.isTimerRodando ? Icons.pause : Icons.play_arrow,
