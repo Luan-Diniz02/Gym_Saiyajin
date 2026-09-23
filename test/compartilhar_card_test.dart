@@ -249,8 +249,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
-      expect(find.text('Recordes'), findsOneWidget);
-      expect(find.text('1 PR'), findsOneWidget);
+      expect(find.text('PRs'), findsWidgets);
+      expect(find.text('1'), findsWidgets);
     });
 
     testWidgets('Deve exibir a contagem de PRs no preset Rodapé Minimalista', (tester) async {

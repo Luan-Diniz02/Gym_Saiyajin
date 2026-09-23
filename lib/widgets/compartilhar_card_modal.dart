@@ -593,45 +593,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   ),
                   if (prsCount > 0)
                     Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const DragonBallIcon(size: 11, stars: 4),
-                                const SizedBox(width: 3),
-                                Text(
-                                  'Recordes',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white.withValues(alpha: 0.92),
-                                    letterSpacing: 0.2,
-                                    shadows: _sombraTextoForte(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                                letterSpacing: 0.3,
-                                shadows: _sombraTextoForte(),
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: _buildMetricaOverlay(
+                        rotulo: 'PRs',
+                        valor: '$prsCount',
                       ),
                     ),
                 ],
