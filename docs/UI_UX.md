@@ -136,7 +136,8 @@ graph TD
 ### As 3 Soluções de Presets Gráficos:
 
 #### 1. Slim Clássico (Espelho de Musculação)
-- **Desobstrução Total do Físico**: Apenas o badge da divisão fica centralizado no topo. As 3 métricas esportivas (`Duração`, `Volume`, `Séries`) ficam na base, logo acima da marca `GYM SAIYAJIN` e da data/@handle.
+- **Desobstrução Total do Físico**: Apenas o badge da divisão fica centralizado no topo. As métricas esportivas (`Duração`, `Volume`, `Séries`) ficam na base, logo acima da marca `GYM SAIYAJIN` e da data/@handle.
+- **PRs Contextuais Sem Ruído Visual**: Quando há recordes pessoais batidos na sessão, uma 4ª métrica `PR` / `PRs` (singular ou plural) aparece na base, usando exatamente o mesmo componente tipográfico das outras métricas — sem ícones, sem elementos decorativos extras. Filosofia: a informação existe, mas não compete com a foto.
 - **Benefício de UX**: Deixa **100% da área da cabeça, rosto e peitoral desimpedidos**, valorizando a foto real tirada no espelho.
 
 #### 2. Scouter HUD (Telemetria Saiyajin Stealth)

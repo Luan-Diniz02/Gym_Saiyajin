@@ -35,7 +35,7 @@ graph TD
 - **Estrutura**:
   - **Topo Sutil**: Apenas a pílula sutil da divisão do treino (ex: `TREINO A - PEITO E TRÍCEPS`) centralizada no topo.
   - **Centro e Terço Superior 100% Livres**: Preserva integralmente o rosto, cabeça, fones de ouvido e o físico do atleta em fotos clássicas de espelho.
-  - **Base Esportiva**: Três métricas essenciais alinhadas horizontalmente na base (**Duração**, **Volume Total** e **Séries Concluídas**), logo acima do rodapé com o logo de Shenlong, marca e data/@handle.
+  - **Base Esportiva**: Métricas alinhadas horizontalmente na base — **Duração**, **Volume Total** e **Séries Concluídas** — e, quando houver recordes pessoais batidos na sessão, uma 4ª coluna contextual **`PR` / `PRs`** (singular ou plural conforme o total) é exibida no mesmo estilo tipográfico das outras métricas, sem ícones ou elementos adicionais. O rodapé com logo de Shenlong, marca e data/@handle completa a composição.
 
 ### 2. Scouter HUD
 - **Inspiração**: Telemetria avançada de alto desempenho com estética *stealth* (estilo heads-up display aeronáutico/cyberpunk).
