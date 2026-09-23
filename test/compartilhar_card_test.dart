@@ -198,5 +198,34 @@ void main() {
       // Deve voltar para Scouter HUD
       expect(find.text('SCOUTER HUD'), findsOneWidget);
     });
+
+    testWidgets('Deve exibir a contagem de PRs da sessão específica no modo Scouter HUD', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CompartilharCardModal(
+              sessao: sessaoMock,
+              prsSessao: 2,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Muda para Scouter HUD
+      final proximoBtn = find.byTooltip('Próximo preset');
+      await tester.tap(proximoBtn);
+      await tester.pumpAndSettle();
+
+      expect(find.text('SCOUTER HUD'), findsOneWidget);
+      expect(find.text('2 PRs'), findsOneWidget);
+    });
   });
 }

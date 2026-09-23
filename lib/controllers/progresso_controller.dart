@@ -340,4 +340,111 @@ class ProgressoController extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  /// Calcula quantos recordes pessoais (PRs) foram superados em uma sessão específica,
+  /// reconstituindo cronologicamente o histórico até o momento daquela sessão.
+  int obterPRsDaSessao(SessaoTreino sessaoAlvo) {
+    final poolSessoes = List<SessaoTreino>.from(_historicoCache);
+    final jaContem = poolSessoes.any(
+      (s) =>
+          (sessaoAlvo.id != null && s.id == sessaoAlvo.id) ||
+          (sessaoAlvo.data != null &&
+              s.data != null &&
+              s.data!.isAtSameMomentAs(sessaoAlvo.data!)),
+    );
+    if (!jaContem) {
+      poolSessoes.add(sessaoAlvo);
+    }
+
+    if (poolSessoes.isEmpty) return 0;
+
+    // Ordena o histórico cronologicamente crescente
+    poolSessoes.sort((a, b) {
+      final dataA = a.data ?? DateTime(1970);
+      final dataB = b.data ?? DateTime(1970);
+      final comp = dataA.compareTo(dataB);
+      if (comp != 0) return comp;
+      return (a.id ?? 0).compareTo(b.id ?? 0);
+    });
+
+    final Map<String, (double maxPeso, int repsMaxPeso, double max1RM)> recordesPrevios = {};
+
+    for (final sessao in poolSessoes) {
+      final isSessaoAlvo = (sessaoAlvo.id != null && sessao.id == sessaoAlvo.id) ||
+          (sessao.data != null &&
+              sessaoAlvo.data != null &&
+              sessao.data!.isAtSameMomentAs(sessaoAlvo.data!));
+
+      if (isSessaoAlvo) {
+        int prsNaSessao = 0;
+
+        for (final ex in sessaoAlvo.exerciciosConcluidosHoje) {
+          final chave = ex.nome.trim().toLowerCase();
+          final previo = recordesPrevios[chave];
+
+          if (previo != null) {
+            bool bateuPR = false;
+            for (final s in ex.seriesDetalhes) {
+              if (!s.concluida ||
+                  s.peso == null ||
+                  s.reps == null ||
+                  s.peso! <= 0 ||
+                  s.reps! <= 0) {
+                continue;
+              }
+              final p = s.peso!;
+              final r = s.reps!;
+              final umRM = RecordePessoal.calcular1RM(p, r);
+
+              if (p > previo.$1 ||
+                  (p == previo.$1 && r > previo.$2) ||
+                  umRM > previo.$3) {
+                bateuPR = true;
+                break;
+              }
+            }
+            if (bateuPR) {
+              prsNaSessao++;
+            }
+          }
+        }
+        return prsNaSessao;
+      }
+
+      // Atualiza os recordes prévios acumulados para os próximos treinos
+      for (final ex in sessao.exerciciosConcluidosHoje) {
+        final chave = ex.nome.trim().toLowerCase();
+        double melhorP = recordesPrevios[chave]?.$1 ?? 0.0;
+        int melhorR = recordesPrevios[chave]?.$2 ?? 0;
+        double melhor1RM = recordesPrevios[chave]?.$3 ?? 0.0;
+
+        for (final s in ex.seriesDetalhes) {
+          if (!s.concluida ||
+              s.peso == null ||
+              s.reps == null ||
+              s.peso! <= 0 ||
+              s.reps! <= 0) {
+            continue;
+          }
+          final p = s.peso!;
+          final r = s.reps!;
+          final umRM = RecordePessoal.calcular1RM(p, r);
+
+          if (p > melhorP || (p == melhorP && r > melhorR)) {
+            melhorP = p;
+            melhorR = r;
+          }
+          if (umRM > melhor1RM) {
+            melhor1RM = umRM;
+          }
+        }
+
+        if (melhorP > 0 || melhor1RM > 0) {
+          recordesPrevios[chave] = (melhorP, melhorR, melhor1RM);
+        }
+      }
+    }
+
+    return 0;
+  }
 }

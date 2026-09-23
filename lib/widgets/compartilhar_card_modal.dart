@@ -27,11 +27,13 @@ enum EstiloCardOverlay {
 class CompartilharCardModal extends StatefulWidget {
   final SessaoTreino sessao;
   final ProgressoController? progressoController;
+  final int? prsSessao;
 
   const CompartilharCardModal({
     super.key,
     required this.sessao,
     this.progressoController,
+    this.prsSessao,
   });
 
   @override
@@ -188,7 +190,10 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }
 
   int _obterTotalPRs() {
-    return widget.progressoController?.totalRecordes ?? 0;
+    if (widget.prsSessao != null) {
+      return widget.prsSessao!;
+    }
+    return widget.progressoController?.obterPRsDaSessao(widget.sessao) ?? 0;
   }
 
   TransformacaoSaiyajin _obterTransformacao() {
@@ -802,7 +807,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                '$prsCount PRs',
+                                '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
                                 style: TextStyle(
                                   fontSize: 9,
                                   fontWeight: FontWeight.w900,

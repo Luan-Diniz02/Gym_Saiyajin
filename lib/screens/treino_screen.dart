@@ -319,6 +319,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
       }
 
       final transAntes = widget.progressoController?.poderLuta.transformacao;
+      final totalPRsHoje = _controller.totalRecordesBatidosHoje;
 
       final sessaoSalva = await _controller.encerrarTreino(
         descartarAtual: resultado.descartarAtual,
@@ -357,6 +358,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
           builder: (context) => CompartilharCardModal(
             sessao: sessaoSalva,
             progressoController: widget.progressoController,
+            prsSessao: totalPRsHoje,
           ),
         );
       }
