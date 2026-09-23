@@ -121,7 +121,7 @@ class NotificationService {
         >();
 
     AndroidScheduleMode modoAgendamento =
-        AndroidScheduleMode.exactAllowWhileIdle;
+        AndroidScheduleMode.alarmClock;
 
     if (android != null) {
       final notificacoesHabilitadas = await android.areNotificationsEnabled();

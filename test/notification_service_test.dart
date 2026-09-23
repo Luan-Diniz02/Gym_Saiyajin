@@ -135,6 +135,10 @@ void main() {
         await service.agendarNotificacaoDescanso(60);
 
         final chamada = mockPlugin.zonedScheduleChamadas.first;
+        expect(
+          chamada['androidScheduleMode'],
+          AndroidScheduleMode.alarmClock,
+        );
         final details = chamada['notificationDetails'] as NotificationDetails;
         expect(details.android?.icon, 'ic_notification');
         expect(details.android?.color, const Color(0xFFFF9800));
