@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gym_saiyajin/widgets/capsule_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_ball_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_radar_icon.dart';
 
@@ -46,5 +47,11 @@ void main() {
     await renderPainter(const DragonBallPainter(stars: 4), 'preview_dragon_ball_4stars.png', size: 300);
     await renderPainter(const DragonBallPainter(stars: 7), 'preview_dragon_ball_7stars.png', size: 300);
     await renderPainter(const DragonBallPainter(stars: 1), 'preview_dragon_ball_1star.png', size: 300);
+
+    // Renderizar CapsuleIcon (Azul clássico Capsule Corp, Laranja Saiyajin, Verde e Vermelho)
+    await renderPainter(const CapsulePainter(color: Color(0xFF00A3FF)), 'preview_capsule_blue.png', size: 300);
+    await renderPainter(const CapsulePainter(color: Color(0xFFFF9800)), 'preview_capsule_orange.png', size: 300);
+    await renderPainter(const CapsulePainter(color: Color(0xFF22C55E)), 'preview_capsule_green.png', size: 300);
+    await renderPainter(const CapsulePainter(color: Color(0xFFEF4444)), 'preview_capsule_red.png', size: 300);
   });
 }

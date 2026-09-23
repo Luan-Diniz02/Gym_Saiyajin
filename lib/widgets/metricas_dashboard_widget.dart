@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../controllers/progresso_controller.dart';
 import '../theme/app_colors.dart';
+import 'capsule_icon.dart';
 import 'dragon_radar_icon.dart';
 
 class MetricasDashboardWidget extends StatelessWidget {
@@ -98,7 +99,7 @@ class MetricasDashboardWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.monitor_weight_outlined, color: AppColors.primary, size: 30),
+                            const CapsuleIcon(size: 32),
                             const SizedBox(height: 12),
                             Text(
                               controller.percentualGordura != null
