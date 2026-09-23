@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-63%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-67%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -30,7 +30,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 
 - 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes.
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets) e arte vetorial nativa no Canvas.
-- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon` e `ScouterIcon`) e fórmula de Epley refinada para estimativa de 1RM.
+- ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon`, `ScouterIcon` e `DragonRadarIcon`) e fórmula de Epley refinada para estimativa de 1RM.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
 - 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Planejamento arquitetural e estético da Semente dos Deuses (regeneração de Ki no cronômetro), Caminho da Serpente (jornada épica e odômetro de ferro no histórico) e Nuvem Voadora.
 
@@ -137,6 +137,7 @@ gym_saiyajin/
 │       ├── config_tempo_descanso_modal.dart
 │       ├── cronometro_widget.dart
 │       ├── dragon_ball_icon.dart       # CustomPainter das Esferas do Dragão (1-7 estrelas)
+│       ├── dragon_radar_icon.dart      # CustomPainter do Radar do Dragão (meta semanal)
 │       ├── gerenciar_fichas_modal.dart
 │       ├── historico_card_widget.dart
 │       ├── metricas_dashboard_widget.dart
@@ -148,10 +149,11 @@ gym_saiyajin/
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                               # Suíte de 63 testes automatizados
+├── test/                               # Suíte de 67 testes automatizados
 │   ├── backup_test.dart
 │   ├── compartilhar_card_test.dart
 │   ├── dragon_ball_icon_test.dart
+│   ├── dragon_radar_icon_test.dart
 │   ├── ficha_test.dart
 │   ├── imc_test.dart
 │   ├── notification_service_test.dart
@@ -176,7 +178,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (63 testes)
+# Executar a suíte completa de testes automatizados (67 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

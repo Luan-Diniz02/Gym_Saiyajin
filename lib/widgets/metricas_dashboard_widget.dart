@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../controllers/progresso_controller.dart';
 import '../theme/app_colors.dart';
+import 'dragon_radar_icon.dart';
 
 class MetricasDashboardWidget extends StatelessWidget {
   final ProgressoController controller;
@@ -44,7 +45,10 @@ class MetricasDashboardWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.calendar_today, color: AppColors.primary, size: 30),
+                            DragonRadarIcon(
+                              size: 32,
+                              dots: controller.diasTreinadosNaSemana,
+                            ),
                             const SizedBox(height: 12),
                             const Text(
                               'META SEMANAL',

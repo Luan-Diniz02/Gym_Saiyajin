@@ -173,6 +173,14 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Retículo de mira/alvo interno digital e linhas de telemetria estilizadas.
 - **Papel na Interface**: Identificador de telemetria no modo Scouter HUD e ícone de Ki na finalização do treino.
 
+### `DragonRadarIcon`
+- **Renderização**:
+  - Gabinete metálico circular com bisel prateado chanfrado e botão de cronômetro superior (dial).
+  - Visor CRT/LCD verde esmeralda com grade ortogonal de coordenadas e arco especular de vidro curvo.
+  - Cursor central com triângulo rubi direcionador e retículo em cruz amarelo.
+  - Esferas do Dragão luminosas dinâmicas rastreadas na tela (`dots`, de 0 a 7) com brilho âmbar radial.
+- **Papel na Interface**: Gamificação da frequência semanal no card de Meta Semanal (cada dia treinado na semana acende uma esfera no radar).
+
 ---
 
 ## 🛡️ 6. Diretrizes de Proteção de Layout & Acessibilidade
