@@ -76,7 +76,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
   void _mostrarDialogoDescansoFinalizado() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,

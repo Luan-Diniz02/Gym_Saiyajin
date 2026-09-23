@@ -332,6 +332,37 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
               ],
             ),
           ),
+          confirmDismiss: (direction) async {
+            return await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  backgroundColor: AppColors.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  title: Text('Remover Série ${widget.index + 1}?'),
+                  content: const Text(
+                    'Tem certeza que deseja remover esta série do treino atual?',
+                    style: TextStyle(color: AppColors.textLight),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text(
+                        'Remover',
+                        style: TextStyle(color: AppColors.danger),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
           onDismissed: (_) {
             widget.controller.removerSerie(widget.index);
             ScaffoldMessenger.of(context).showSnackBar(

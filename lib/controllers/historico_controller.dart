@@ -21,6 +21,7 @@ class HistoricoController extends ChangeNotifier {
   final BackupService _backupService;
   final List<SessaoTreino> _sessoesTreino = [];
   bool _isProcessandoBackup = false;
+  bool _isLoading = true;
 
   HistoricoController({
     required TreinoRepository repository,
@@ -29,13 +30,20 @@ class HistoricoController extends ChangeNotifier {
         _backupService = backupService ?? BackupService(repository: repository);
 
   bool get isProcessandoBackup => _isProcessandoBackup;
+  bool get isLoading => _isLoading;
 
   Future<void> carregarHistorico() async {
-    final sessoes = await _repository.buscarHistoricoTreinos();
-    _sessoesTreino
-      ..clear()
-      ..addAll(sessoes);
+    _isLoading = true;
     notifyListeners();
+    try {
+      final sessoes = await _repository.buscarHistoricoTreinos();
+      _sessoesTreino
+        ..clear()
+        ..addAll(sessoes);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> excluirSessao(int sessaoId) async {

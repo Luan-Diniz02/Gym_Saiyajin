@@ -89,6 +89,12 @@ void main() {
       expect(controller.marcoCaminhoSerpente, contains('Cauda da Serpente'));
     });
 
+    test('Estado inicial deve ter isLoading true e mudar para false após carregar', () async {
+      expect(controller.isLoading, isTrue);
+      await controller.carregarHistorico();
+      expect(controller.isLoading, isFalse);
+    });
+
     test('Cálculo da distância do Caminho da Serpente com sessões registradas', () async {
       // Cria sessão com 2.000 kg de volume e 60 minutos (3600s) de treino
       final sessao1 = SessaoTreino(

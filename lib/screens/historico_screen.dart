@@ -566,16 +566,22 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                 _buildCaminhoSerpenteHeader(),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: historico.isEmpty
-                      ? _buildEmptyState()
-                      : ListView.builder(
-                          itemCount: historico.length,
-                          itemBuilder: (context, index) {
-                            final diaTreino = historico[index];
-                            final isUltimo = index == historico.length - 1;
-                            return _buildTimelineItem(diaTreino, isUltimo);
-                          },
-                        ),
+                  child: _controller.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : historico.isEmpty
+                          ? _buildEmptyState()
+                          : ListView.builder(
+                              itemCount: historico.length,
+                              itemBuilder: (context, index) {
+                                final diaTreino = historico[index];
+                                final isUltimo = index == historico.length - 1;
+                                return _buildTimelineItem(diaTreino, isUltimo);
+                              },
+                            ),
                 ),
               ],
             ),

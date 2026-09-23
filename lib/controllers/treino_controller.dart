@@ -150,6 +150,10 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   bool get isTreinoEmAndamento => _inicioTreino != null;
+  bool get treinoAtivo =>
+      isTreinoEmAndamento ||
+      temExercicioEmAndamento ||
+      _sessaoTreino.exerciciosConcluidosHoje.isNotEmpty;
   bool get isTreinoPausado => _treinoPausado;
 
   String get duracaoTreinoFormatada =>

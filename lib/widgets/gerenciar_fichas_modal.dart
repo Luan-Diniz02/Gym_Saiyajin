@@ -1031,7 +1031,7 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
                                   IconButton(
                                     visualDensity: VisualDensity.compact,
                                     padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                                     icon: Icon(
                                       Icons.remove_circle_outline_rounded,
                                       size: 18,
@@ -1067,7 +1067,7 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
                                   IconButton(
                                     visualDensity: VisualDensity.compact,
                                     padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                                     icon: Icon(
                                       Icons.add_circle_outline_rounded,
                                       size: 18,
@@ -1092,7 +1092,7 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
                               IconButton(
                                 visualDensity: VisualDensity.compact,
                                 padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                                constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                                 icon: const Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.danger),
                                 hoverColor: AppColors.danger.withValues(alpha: 0.15),
                                 onPressed: () {
