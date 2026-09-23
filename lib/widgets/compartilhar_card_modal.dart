@@ -48,6 +48,8 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
   ProporcaoCard _proporcao = ProporcaoCard.stories;
   EstiloCardOverlay _estilo = EstiloCardOverlay.slimClassico;
+  double _dragDeltaCard = 0.0;
+  double _dragDeltaBarra = 0.0;
 
   @override
   void dispose() {
@@ -94,6 +96,35 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     setState(() {
       _imagemSelecionada = null;
     });
+  }
+
+  void _proximoEstilo() {
+    HapticFeedback.selectionClick();
+    final currentIndex = EstiloCardOverlay.values.indexOf(_estilo);
+    final nextIndex = (currentIndex + 1) % EstiloCardOverlay.values.length;
+    setState(() {
+      _estilo = EstiloCardOverlay.values[nextIndex];
+    });
+  }
+
+  void _estiloAnterior() {
+    HapticFeedback.selectionClick();
+    final currentIndex = EstiloCardOverlay.values.indexOf(_estilo);
+    final prevIndex = (currentIndex - 1 + EstiloCardOverlay.values.length) % EstiloCardOverlay.values.length;
+    setState(() {
+      _estilo = EstiloCardOverlay.values[prevIndex];
+    });
+  }
+
+  (IconData icone, String nome, String subtitulo) _detalhesEstilo(EstiloCardOverlay estilo) {
+    switch (estilo) {
+      case EstiloCardOverlay.slimClassico:
+        return (Icons.view_agenda_rounded, 'SLIM CLÁSSICO', 'Métricas na Base');
+      case EstiloCardOverlay.scouterHud:
+        return (Icons.track_changes_rounded, 'SCOUTER HUD', 'Dock Telemetria');
+      case EstiloCardOverlay.rodapeMinimalista:
+        return (Icons.dock_rounded, 'RODAPÉ MINIMALISTA', 'Card Ancorado');
+    }
   }
 
   void _mostrarAviso(String msg) {
@@ -209,14 +240,30 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               // Barra Superior Estilo Studio
               _buildBarraSuperior(),
 
-              // Área de Pré-Visualização Dinâmica (FittedBox responsivo sem cortes)
+              // Área de Pré-Visualização Dinâmica (FittedBox responsivo com suporte a gesto de swipe/arrastar)
               Expanded(
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: _buildCardVisual(),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onHorizontalDragStart: (_) => _dragDeltaCard = 0.0,
+                      onHorizontalDragUpdate: (details) => _dragDeltaCard += details.primaryDelta ?? 0,
+                      onHorizontalDragEnd: (DragEndDetails details) {
+                        final v = details.primaryVelocity ?? 0;
+                        if (_dragDeltaCard < -40 || v < -120) {
+                          // Arrastou para a esquerda -> Próximo preset
+                          _proximoEstilo();
+                        } else if (_dragDeltaCard > 40 || v > 120) {
+                          // Arrastou para a direita -> Preset anterior
+                          _estiloAnterior();
+                        }
+                        _dragDeltaCard = 0.0;
+                      },
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: _buildCardVisual(),
+                      ),
                     ),
                   ),
                 ),
@@ -1048,7 +1095,11 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Linha 1: Seletor de Proporção (Stories vs Feed)
+          // Linha 1: Seletor de Presets com Setas, Indicador de Dots e Swipe
+          _buildSeletorPresets(),
+          const SizedBox(height: 10),
+
+          // Linha 2: Seletor de Proporção (Stories vs Feed)
           Row(
             children: [
               Expanded(
@@ -1068,31 +1119,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-
-          // Linha 2: Seletor Segmentado de Presets
-          Row(
-            children: [
-              _buildChipEstilo(
-                rotulo: 'Slim Clássico',
-                estilo: EstiloCardOverlay.slimClassico,
-                icone: Icons.vertical_align_bottom_rounded,
-              ),
-              const SizedBox(width: 6),
-              _buildChipEstilo(
-                rotulo: 'Scouter HUD',
-                estilo: EstiloCardOverlay.scouterHud,
-                icone: Icons.track_changes_rounded,
-              ),
-              const SizedBox(width: 6),
-              _buildChipEstilo(
-                rotulo: 'Rodapé',
-                estilo: EstiloCardOverlay.rodapeMinimalista,
-                icone: Icons.dock_rounded,
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
           // Linha 3: Ações de Foto (Câmera / Galeria / Excluir)
           Row(
@@ -1100,22 +1127,27 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               Expanded(
                 child: InkWell(
                   onTap: _tirarFoto,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    height: 46,
                     decoration: BoxDecoration(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: AppColors.cardBorder),
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.camera_alt_rounded, color: AppColors.primary, size: 16),
-                        SizedBox(width: 6),
+                        Icon(Icons.camera_alt_rounded, color: AppColors.primary, size: 20),
+                        SizedBox(width: 8),
                         Text(
                           'Câmera',
-                          style: TextStyle(color: AppColors.textLight, fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            color: AppColors.textLight,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.3,
+                          ),
                         ),
                       ],
                     ),
@@ -1126,22 +1158,27 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               Expanded(
                 child: InkWell(
                   onTap: _escolherGaleria,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    height: 46,
                     decoration: BoxDecoration(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: AppColors.cardBorder),
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.photo_library_rounded, color: AppColors.primary, size: 16),
-                        SizedBox(width: 6),
+                        Icon(Icons.photo_library_rounded, color: AppColors.primary, size: 20),
+                        SizedBox(width: 8),
                         Text(
                           'Galeria',
-                          style: TextStyle(color: AppColors.textLight, fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            color: AppColors.textLight,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.3,
+                          ),
                         ),
                       ],
                     ),
@@ -1150,39 +1187,43 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               ),
               if (_imagemSelecionada != null) ...[
                 const SizedBox(width: 8),
-                IconButton(
-                  onPressed: _removerFoto,
-                  icon: const Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 18),
-                  tooltip: 'Remover foto',
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: AppColors.cardBorder),
+                InkWell(
+                  onTap: _removerFoto,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    height: 46,
+                    width: 46,
+                    decoration: BoxDecoration(
+                      color: AppColors.danger.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.danger.withValues(alpha: 0.45)),
+                    ),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.danger,
+                      size: 22,
                     ),
                   ),
                 ),
               ],
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
           // Linha 4: Campo de @handle ou legenda no rodapé
           TextField(
             controller: _handleController,
-            style: const TextStyle(fontSize: 12, color: AppColors.textLight),
+            style: const TextStyle(fontSize: 13, color: AppColors.textLight),
             onChanged: (_) => setState(() {}),
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
               isDense: true,
               hintText: 'Seu @ ou legenda no rodapé (ex: @usuario)',
-              hintStyle: const TextStyle(fontSize: 11, color: AppColors.textMuted),
-              prefixIcon: const Icon(Icons.alternate_email, size: 15, color: AppColors.primary),
+              hintStyle: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+              prefixIcon: const Icon(Icons.alternate_email, size: 18, color: AppColors.primary),
               suffixIcon: _handleController.text.isNotEmpty
                   ? IconButton(
-                      icon: const Icon(Icons.close, size: 14, color: AppColors.textDimmed),
+                      icon: const Icon(Icons.close, size: 16, color: AppColors.textDimmed),
                       onPressed: () {
                         _handleController.clear();
                         setState(() {});
@@ -1191,20 +1232,136 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                   : null,
               filled: true,
               fillColor: AppColors.background,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: AppColors.cardBorder),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: AppColors.cardBorder),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Seletor de Presets com Setas de Navegação, Indicador de Dots e Suporte a Swipe
+  Widget _buildSeletorPresets() {
+    final info = _detalhesEstilo(_estilo);
+    final totalPresets = EstiloCardOverlay.values.length;
+    final currentIndex = EstiloCardOverlay.values.indexOf(_estilo);
+
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.cardBorder),
+      ),
+      child: Row(
+        children: [
+          // Seta Esquerda
+          IconButton(
+            onPressed: _estiloAnterior,
+            icon: const Icon(Icons.chevron_left_rounded, color: AppColors.textLight, size: 26),
+            tooltip: 'Preset anterior',
+            splashRadius: 22,
+          ),
+
+          // Centro interativo com nome, subtítulo, ícone e dots indicadores
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragStart: (_) => _dragDeltaBarra = 0.0,
+              onHorizontalDragUpdate: (details) => _dragDeltaBarra += details.primaryDelta ?? 0,
+              onHorizontalDragEnd: (details) {
+                final v = details.primaryVelocity ?? 0;
+                if (_dragDeltaBarra < -30 || v < -100) _proximoEstilo();
+                if (_dragDeltaBarra > 30 || v > 100) _estiloAnterior();
+                _dragDeltaBarra = 0.0;
+              },
+              child: InkWell(
+                onTap: _proximoEstilo,
+                borderRadius: BorderRadius.circular(8),
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    transitionBuilder: (child, animation) => FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(
+                        scale: Tween<double>(begin: 0.94, end: 1.0).animate(animation),
+                        child: child,
+                      ),
+                    ),
+                    child: Row(
+                      key: ValueKey(_estilo),
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(info.$1, size: 18, color: AppColors.primary),
+                        const SizedBox(width: 8),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              info.$2,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.textLight,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                            Text(
+                              info.$3,
+                              style: const TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primary,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 12),
+                        // Dots indicadores de posição do preset
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(totalPresets, (index) {
+                            final isCurrent = index == currentIndex;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                              width: isCurrent ? 14 : 5,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: isCurrent ? AppColors.primary : Colors.white24,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Seta Direita
+          IconButton(
+            onPressed: _proximoEstilo,
+            icon: const Icon(Icons.chevron_right_rounded, color: AppColors.textLight, size: 26),
+            tooltip: 'Próximo preset',
+            splashRadius: 22,
           ),
         ],
       ),
@@ -1222,16 +1379,17 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
         HapticFeedback.selectionClick();
         setState(() => _proporcao = proporcao);
       },
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: isSel ? AppColors.surface : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          color: isSel ? AppColors.surface : AppColors.background,
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSel ? AppColors.primary : AppColors.cardBorder,
-            width: 1,
+            width: isSel ? 1.2 : 1.0,
           ),
         ),
         child: Row(
@@ -1239,73 +1397,20 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           children: [
             Icon(
               icone,
-              size: 14,
+              size: 18,
               color: isSel ? AppColors.primary : AppColors.textDimmed,
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 8),
             Text(
               rotulo,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
                 color: isSel ? AppColors.textLight : AppColors.textDimmed,
-                letterSpacing: 0.4,
+                letterSpacing: 0.5,
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChipEstilo({
-    required String rotulo,
-    required EstiloCardOverlay estilo,
-    required IconData icone,
-  }) {
-    final isSel = _estilo == estilo;
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          setState(() => _estilo = estilo);
-        },
-        borderRadius: BorderRadius.circular(10),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          decoration: BoxDecoration(
-            color: isSel ? AppColors.primary.withValues(alpha: 0.15) : AppColors.background,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: isSel ? AppColors.primary : AppColors.cardBorder,
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icone,
-                size: 13,
-                color: isSel ? AppColors.primary : AppColors.textDimmed,
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    rotulo,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
-                      color: isSel ? AppColors.primary : AppColors.textDimmed,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

@@ -58,10 +58,10 @@ void main() {
       expect(find.text('STORIES (9:16)'), findsOneWidget);
       expect(find.text('FEED (1:1)'), findsOneWidget);
 
-      // Verifica opções de estilo de overlay
-      expect(find.text('Slim Clássico'), findsOneWidget);
-      expect(find.text('Scouter HUD'), findsOneWidget);
-      expect(find.text('Rodapé'), findsOneWidget);
+      // Verifica seletor de presets e setas de navegação
+      expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
+      expect(find.byTooltip('Próximo preset'), findsOneWidget);
+      expect(find.byTooltip('Preset anterior'), findsOneWidget);
 
       // Verifica elementos do layout Slim Clássico padrão (sem foto)
       expect(find.text('GYM SAIYAJIN'), findsWidgets);
@@ -97,7 +97,7 @@ void main() {
       expect(aspectRatioFinder, findsWidgets);
     });
 
-    testWidgets('Deve alternar para estilo Scouter HUD e renderizar o ScouterIcon', (tester) async {
+    testWidgets('Deve alternar para estilo Scouter HUD via seta e renderizar o ScouterIcon', (tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() {
@@ -114,18 +114,22 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Clica em 'Scouter HUD'
-      final scouterChip = find.text('Scouter HUD');
-      expect(scouterChip, findsOneWidget);
-      await tester.tap(scouterChip);
+      // Inicialmente em Slim Clássico
+      expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
+
+      // Clica na seta de próximo preset
+      final proximoBtn = find.byTooltip('Próximo preset');
+      expect(proximoBtn, findsOneWidget);
+      await tester.tap(proximoBtn);
       await tester.pumpAndSettle();
 
-      // Deve encontrar o ScouterIcon no modo HUD
+      // Agora deve estar em Scouter HUD
+      expect(find.text('SCOUTER HUD'), findsOneWidget);
       expect(find.byType(ScouterIcon), findsWidgets);
       expect(find.text('+25 Ki'), findsOneWidget);
     });
 
-    testWidgets('Deve alternar estilo para Rodapé Minimalista', (tester) async {
+    testWidgets('Deve alternar estilo para Rodapé Minimalista via setas', (tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() {
@@ -142,14 +146,57 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Clica em 'Rodapé'
-      final rodapeChip = find.text('Rodapé');
-      expect(rodapeChip, findsOneWidget);
-      await tester.tap(rodapeChip);
+      final proximoBtn = find.byTooltip('Próximo preset');
+      // Avança 2x para chegar a Rodapé Minimalista (Slim -> Scouter -> Rodapé)
+      await tester.tap(proximoBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(proximoBtn);
       await tester.pumpAndSettle();
 
+      expect(find.text('RODAPÉ MINIMALISTA'), findsOneWidget);
       expect(find.text('TREINO A - PEITO E TRÍCEPS'), findsOneWidget);
       expect(find.text('2.500 kg'), findsOneWidget); // (100*10*2) + (25*10*2) = 2000 + 500 = 2500 kg
+    });
+
+    testWidgets('Deve alternar preset ao arrastar (swipe) horizontalmente no preview do card', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CompartilharCardModal(sessao: sessaoMock),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
+
+      // Simula gesto de arrasto horizontal da direita para a esquerda (swipe left) no card
+      await tester.drag(find.byType(AspectRatio).first, const Offset(-300, 0));
+      await tester.pumpAndSettle();
+
+      // Deve ter avançado para Scouter HUD
+      expect(find.text('SCOUTER HUD'), findsOneWidget);
+
+      // Arrastar novamente para a esquerda
+      await tester.drag(find.byType(AspectRatio).first, const Offset(-300, 0));
+      await tester.pumpAndSettle();
+
+      // Deve ter avançado para Rodapé Minimalista
+      expect(find.text('RODAPÉ MINIMALISTA'), findsOneWidget);
+
+      // Arrastar da esquerda para a direita (swipe right)
+      await tester.drag(find.byType(AspectRatio).first, const Offset(300, 0));
+      await tester.pumpAndSettle();
+
+      // Deve voltar para Scouter HUD
+      expect(find.text('SCOUTER HUD'), findsOneWidget);
     });
   });
 }

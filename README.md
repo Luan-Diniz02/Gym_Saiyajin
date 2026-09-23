@@ -32,6 +32,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets) e arte vetorial nativa no Canvas.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Bagagem de Batalha e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos (`DragonBallIcon` e `ScouterIcon`) e fórmula de Epley refinada para estimativa de 1RM.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
+- 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Planejamento arquitetural e estético da Semente dos Deuses (regeneração de Ki no cronômetro), Caminho da Serpente (jornada épica e odômetro de ferro no histórico) e Nuvem Voadora.
 
 ---
 
@@ -101,6 +102,7 @@ gym_saiyajin/
 │   ├── ARQUITETURA.md                  # Camadas, SQLite, migrações e testes
 │   ├── SISTEMA_SAIYAJIN.md             # Matemática do Ki, patamares e ícones vetoriais
 │   ├── COMPARTILHAMENTO_SOCIAL.md      # Presets, proporções 9:16/1:1 e exportação
+│   ├── ROADMAP_TEMATICO.md             # Planejamento: Semente dos Deuses, Caminho da Serpente
 │   └── images/                         # Assets visuais da documentação
 ├── lib/
 │   ├── controllers/                    # Gerenciamento de estado reativo (ChangeNotifier)

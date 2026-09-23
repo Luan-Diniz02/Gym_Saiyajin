@@ -127,10 +127,10 @@ graph TD
     C --> C1[Card Stories 9:16 ou Feed 1:1]
     C --> C2[Adaptação dinâmica sem cortes em qualquer tela]
 
-    D --> D1[Linha 1: Seletor de Proporção Stories vs Feed]
-    D --> D2[Linha 2: Presets Slim, Scouter HUD, Rodapé]
-    D --> D3[Linha 3: Ações de Foto Câmera, Galeria, Remover]
-    D --> D4[Linha 4: Campo @handle com botão de limpar e Done]
+    D --> D1[Linha 1: Seletor de Presets com Setas, Indicador de Dots e Swipe]
+    D --> D2[Linha 2: Seletor de Proporção Stories vs Feed 44dp]
+    D --> D3[Linha 3: Ações de Foto Câmera, Galeria, Remover 46dp]
+    D --> D4[Linha 4: Campo @handle 46dp com botão de limpar e Done]
 ```
 
 ### As 3 Soluções de Presets Gráficos:

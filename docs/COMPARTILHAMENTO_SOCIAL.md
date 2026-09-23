@@ -60,14 +60,15 @@ graph TD
 
 No painel inferior do estúdio em tela cheia (com `SafeArea` e pré-visualização adaptativa via `FittedBox`), o guerreiro tem acesso direto a:
 
-1. **Seletor de Formato**:
-   - Botões segmentados para alternar entre **Stories (9:16)** e **Feed (1:1)**.
-2. **Seleção de Presets**:
-   - Chips táteis para alternar instantaneamente entre **Slim Clássico**, **Scouter HUD** e **Rodapé**.
-3. **Ações de Foto**:
-   - Botão **Câmera**: Aciona a câmera nativa do aparelho via `image_picker`.
-   - Botão **Galeria**: Permite selecionar uma foto existente do rolo da câmera.
-   - Botão **Remover**: Retorna instantaneamente ao fundo texturizado nativo de Shenlong.
+1. **Navegação Entre Presets (Setas & Gesto de Swipe)**:
+   - Seletor ergonômico de 48dp com setas esquerda/direita (`<` e `>`), indicador animado de dots de posição (1 de 3) e transição suave.
+   - Suporte completo a **gesto de deslize (swipe horizontal)** diretamente sobre a pré-visualização do card ou sobre a barra de controles com feedback háptico.
+2. **Seletor de Formato**:
+   - Botões ergonômicos ampliados (44dp de altura) para alternar entre **Stories (9:16)** e **Feed (1:1)**.
+3. **Ações de Foto Ergonômicas**:
+   - Botão **Câmera**: Aciona a câmera nativa do aparelho via `image_picker` (altura 46dp, ícone destacado).
+   - Botão **Galeria**: Permite selecionar uma foto existente do rolo da câmera (altura 46dp).
+   - Botão **Remover**: Botão de exclusão dedicado de 46x46dp com realce perigo suave, retornando ao fundo texturizado nativo de Shenlong.
 4. **Tipografia de Alto Contraste Nativa**:
    - Texto em branco puro (`Colors.white`) protegido por camadas quádruplas de drop shadow preto (`Shadow`), garantindo contraste absoluto contra qualquer fundo fotográfico (iluminação clara ou escura de academia) sem poluição visual.
 5. **Campo de `@handle` / Legenda**:
