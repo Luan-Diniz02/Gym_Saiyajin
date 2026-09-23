@@ -498,7 +498,9 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }) {
     switch (_estilo) {
       case EstiloCardOverlay.slimClassico:
-        return _buildOverlaySlimClassico();
+        return _buildOverlaySlimClassico(
+          prsCount: prsCount,
+        );
       case EstiloCardOverlay.scouterHud:
         return _buildOverlayScouterHud(
           transformacao: transformacao,
@@ -508,6 +510,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
       case EstiloCardOverlay.rodapeMinimalista:
         return _buildOverlayRodapeMinimalista(
           transformacao: transformacao,
+          prsCount: prsCount,
         );
     }
   }
@@ -516,7 +519,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   /// - Topo: Apenas a pílula sutil da divisão do treino.
   /// - Centro: 100% livre para o rosto e corpo do atleta.
   /// - Base: Métricas limpas com alto contraste e rodapé com marca/handle.
-  Widget _buildOverlaySlimClassico() {
+  Widget _buildOverlaySlimClassico({int prsCount = 0}) {
     final volume = _calcularVolumeTotal();
     final volumeStr = _formatarVolume(volume);
     final totalSeries = _calcularTotalSeries();
@@ -588,6 +591,49 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       valor: '$totalSeries',
                     ),
                   ),
+                  if (prsCount > 0)
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const DragonBallIcon(size: 11, stars: 4),
+                                const SizedBox(width: 3),
+                                Text(
+                                  'Recordes',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white.withValues(alpha: 0.92),
+                                    letterSpacing: 0.2,
+                                    shadows: _sombraTextoForte(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                letterSpacing: 0.3,
+                                shadows: _sombraTextoForte(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -699,17 +745,17 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.50),
+                  color: Colors.black.withValues(alpha: 0.45),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: transformacao.corBadge.withValues(alpha: 0.7),
-                    width: 1.0,
+                    color: Colors.white.withValues(alpha: 0.18),
+                    width: 0.8,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: transformacao.corBadge.withValues(alpha: 0.22),
-                      blurRadius: 10,
-                      spreadRadius: 1,
+                      color: Colors.black.withValues(alpha: 0.35),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -737,8 +783,8 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         ),
                         Text(
                           transformacao.titulo.toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.90),
                             fontSize: 8,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.8,
@@ -756,17 +802,17 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.52),
+              color: Colors.black.withValues(alpha: 0.40),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: transformacao.corBadge.withValues(alpha: 0.45),
-                width: 1.0,
+                color: Colors.white.withValues(alpha: 0.16),
+                width: 0.8,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: transformacao.corBadge.withValues(alpha: 0.15),
+                  color: Colors.black.withValues(alpha: 0.40),
                   blurRadius: 12,
-                  spreadRadius: 1,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -886,6 +932,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   /// - Painel translúcido elegante ancorado suavemente na base.
   Widget _buildOverlayRodapeMinimalista({
     required TransformacaoSaiyajin transformacao,
+    int prsCount = 0,
   }) {
     final volume = _calcularVolumeTotal();
     final volumeStr = _formatarVolume(volume);
@@ -895,22 +942,29 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
 
     return Padding(
       padding: EdgeInsets.only(
-        bottom: isStories ? 18.0 : 12.0,
-        left: 16.0,
-        right: 16.0,
+        bottom: isStories ? 16.0 : 10.0,
+        left: 14.0,
+        right: 14.0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.52),
+              color: Colors.black.withValues(alpha: 0.38),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.20),
+                color: Colors.white.withValues(alpha: 0.15),
                 width: 0.8,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.35),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -929,27 +983,38 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: 1.2,
-                          color: AppColors.primary,
+                          letterSpacing: 1.0,
+                          color: Colors.white,
                           shadows: _sombraTextoForte(),
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      transformacao.titulo.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                        color: transformacao.corBadge,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.16),
+                          width: 0.6,
+                        ),
+                      ),
+                      child: Text(
+                        transformacao.titulo.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.8,
+                          color: Colors.white.withValues(alpha: 0.92),
+                        ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
 
-                // 3 Métricas em Linha
+                // Métricas em Linha
                 Row(
                   children: [
                     Expanded(
@@ -972,6 +1037,29 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         valor: '$totalSeries',
                       ),
                     ),
+                    if (prsCount > 0) ...[
+                      _buildDivisorVertical(),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const DragonBallIcon(size: 13, stars: 4),
+                            const SizedBox(height: 1),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w900,
+                                  color: transformacao.corBadge,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 8),

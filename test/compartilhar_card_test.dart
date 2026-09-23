@@ -227,5 +227,61 @@ void main() {
       expect(find.text('SCOUTER HUD'), findsOneWidget);
       expect(find.text('2 PRs'), findsOneWidget);
     });
+
+    testWidgets('Deve exibir a contagem de PRs também no preset Slim Clássico padrão', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CompartilharCardModal(
+              sessao: sessaoMock,
+              prsSessao: 1,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
+      expect(find.text('Recordes'), findsOneWidget);
+      expect(find.text('1 PR'), findsOneWidget);
+    });
+
+    testWidgets('Deve exibir a contagem de PRs no preset Rodapé Minimalista', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CompartilharCardModal(
+              sessao: sessaoMock,
+              prsSessao: 3,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Avança 2 presets para Rodapé Minimalista
+      final proximoBtn = find.byTooltip('Próximo preset');
+      await tester.tap(proximoBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(proximoBtn);
+      await tester.pumpAndSettle();
+
+      expect(find.text('RODAPÉ MINIMALISTA'), findsOneWidget);
+      expect(find.text('3 PRs'), findsOneWidget);
+    });
   });
 }

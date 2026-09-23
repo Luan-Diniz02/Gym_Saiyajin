@@ -38,20 +38,20 @@ graph TD
   - **Base Esportiva**: Três métricas essenciais alinhadas horizontalmente na base (**Duração**, **Volume Total** e **Séries Concluídas**), logo acima do rodapé com o logo de Shenlong, marca e data/@handle.
 
 ### 2. Scouter HUD
-- **Inspiração**: Telemetria avançada de alto desempenho (estilo Foto 4 do Adidas Running).
+- **Inspiração**: Telemetria avançada de alto desempenho com estética *stealth* (estilo heads-up display aeronáutico/cyberpunk).
 - **Estrutura**:
-  - **Carimbo Scouter no Topo Direito**: Lente holográfica (`ScouterIcon`), leitura digital de Ki obtido na sessão (`+X Ki`) e Patamar Saiyajin atual.
+  - **Carimbo Scouter no Topo Direito**: Vidro fumê fosco translúcido com borda neutra e sombra de profundidade (`0.8px` com `Colors.white18`), lente vetorial holográfica (`ScouterIcon`) reativa à transformação, leitura digital de Ki obtido na sessão (`+X Ki`) e Patamar Saiyajin.
   - **Badge de Treino no Topo Esquerdo**: Pílula translúcida com borda fosca contendo a divisão do treino.
-  - **Dock de Telemetria Unificada na Base**: Painel translúcido de vidro tecnológico de Scouter reunindo as métricas (`Volume`, `Duração`, `Séries`, `DragonBallIcon` com PRs), linha de corte fina e a assinatura oficial com a marca e o `@handle` em uma única moldura coesa com aura de Ki.
+  - **Dock de Telemetria Unificada na Base**: Painel translúcido de vidro tecnológico de Scouter reunindo as métricas (`Volume`, `Duração`, `Séries`, `DragonBallIcon` com PRs), linha de corte fina e a assinatura oficial com a marca e o `@handle` em uma única moldura coesa com acabamento neutro, evitando bordas coloridas invasivas para que o físico do atleta seja o protagonista absoluto.
 
 ### 3. Rodapé Minimalista
-- **Inspiração**: Estilo de corrida com terço inferior translúcido (estilo Foto 1 do Adidas Running).
+- **Inspiração**: Estilo esportivo moderno com terço inferior translúcido (*frosted glass dock* ancorado).
 - **Estrutura**:
   - **Topo e Meio 100% Desimpedidos**: O enquadramento superior e central da foto fica totalmente limpo.
   - **Painel Inferior Translúcido Ancorado (*Frosted Glass*)**:
     - Ancorado suavemente na base com gradiente de apoio e margens seguras para Instagram Stories.
-    - Cabeçalho interno com a divisão do treino e o badge do patamar de poder.
-    - Linha de métricas esportivas separadas por divisores verticais discretos.
+    - Cabeçalho interno com a divisão do treino em branco puro com sombra e badge de patamar em chip fosco minimalista.
+    - Linha de métricas esportivas (`Volume`, `Duração`, `Séries` e `Recordes` com `DragonBallIcon`) separadas por divisores verticais discretos.
     - Divisor translúcido fino com logotipo oficial e `@handle`.
 
 ---

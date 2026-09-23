@@ -139,13 +139,14 @@ graph TD
 - **Desobstrução Total do Físico**: Apenas o badge da divisão fica centralizado no topo. As 3 métricas esportivas (`Duração`, `Volume`, `Séries`) ficam na base, logo acima da marca `GYM SAIYAJIN` e da data/@handle.
 - **Benefício de UX**: Deixa **100% da área da cabeça, rosto e peitoral desimpedidos**, valorizando a foto real tirada no espelho.
 
-#### 2. Scouter HUD (Telemetria Saiyajin)
-- **Topo**: Divisão do treino no canto esquerdo e Carimbo Scouter holográfico no canto direito (`+X Ki` com lente vetorial `ScouterIcon` e título da transformação).
-- **Dock de Telemetria Unificada na Base**: Um único container translúcido com borda nobre e aura de Ki unindo as métricas, contagem contextual de PRs obtidos especificamente naquela sessão (`DragonBallIcon` com formatação singular/plural `1 PR` / `2 PRs`), divisor sutil e a marca com data/@handle, eliminando elementos soltos.
+#### 2. Scouter HUD (Telemetria Saiyajin Stealth)
+- **Topo**: Divisão do treino no canto esquerdo e Carimbo Scouter holográfico no canto direito (`+X Ki` com lente vetorial `ScouterIcon` reativa à transformação e patamar).
+- **Moldura Neutra & Foco na Foto**: Tanto o carimbo quanto o dock inferior utilizam bordas neutras ultrafinas (`Colors.white18`) e vidro fumê translúcido, eliminando contornos neon invasivos para que a foto do físico seja o centro das atenções.
+- **Dock de Telemetria Unificada na Base**: Um único container translúcido unindo métricas, contagem contextual de PRs obtidos na sessão (`DragonBallIcon` com `1 PR` / `2 PRs`), divisor fino e a marca com data/@handle.
 
 #### 3. Rodapé Minimalista (Ancorado)
-- **Topo e Centro 100% Limpos**: Toda a informação é consolidada em um painel translúcido na base com cantos arredondados e gradiente de proteção.
-- **Ancoragem Proporcional**: Margens calculadas para não flutuar alto demais no corpo e respeitar a zona segura de Stories do Instagram.
+- **Topo e Centro 100% Limpos**: Toda a informação é consolidada em um dock translúcido ancorado na base com cantos arredondados, margens seguras para Instagram Stories e tipografia em branco puro com sombra (evitando blocos de cor saturada concorrentes).
+- **Suporte a PRs e Badge Neutro**: Exibe a divisão do treino em branco puro, o patamar em chip fosco discreto e a contagem contextual de PRs.
 
 #### Tipografia de Alto Contraste Nativa
 - Padronizada em **branco puro (`Colors.white`)** com sombra multinível preta quádrupla (`Shadow`), garantindo leitura cristalina em qualquer foto (seja com iluminação clara ou sombra profunda).
