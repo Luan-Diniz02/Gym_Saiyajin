@@ -8,7 +8,6 @@ import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
 import '../models/serie.dart';
 import '../controllers/progresso_controller.dart';
-import '../widgets/capsule_icon.dart';
 import '../widgets/celebracao_transformacao_modal.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
@@ -625,7 +624,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CapsuleIcon(
+                              Icon(
+                                Icons.assignment_outlined,
                                 size: 16,
                                 color: AppColors.accent,
                               ),
@@ -910,7 +910,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
           ),
           const SizedBox(height: 16),
           const Text(
-            'PRONTO PARA DESTRUIR?',
+            'INICIAR SESSÃO DE TREINO',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -919,7 +919,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Adicione o seu primeiro exercício do dia para começar a registrar as cargas.',
+            'Inicie um treino livre ou carregue uma ficha salva para começar a registrar suas cargas.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, color: AppColors.textDimmed),
           ),
@@ -953,7 +953,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
             height: 50,
             child: OutlinedButton.icon(
               onPressed: _abrirGerenciarFichas,
-              icon: const CapsuleIcon(size: 20, color: AppColors.primary),
+              icon: const Icon(Icons.assignment_outlined, size: 20, color: AppColors.primary),
               label: const Text(
                 'CARREGAR FICHA DE TREINO',
                 style: TextStyle(
