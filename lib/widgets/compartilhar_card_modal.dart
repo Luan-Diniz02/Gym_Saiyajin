@@ -116,14 +116,14 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
     });
   }
 
-  (IconData icone, String nome, String subtitulo) _detalhesEstilo(EstiloCardOverlay estilo) {
+  (IconData icone, String nome) _detalhesEstilo(EstiloCardOverlay estilo) {
     switch (estilo) {
       case EstiloCardOverlay.slimClassico:
-        return (Icons.view_agenda_rounded, 'SLIM CLÁSSICO', 'Métricas na Base');
+        return (Icons.view_agenda_rounded, 'SLIM CLÁSSICO');
       case EstiloCardOverlay.scouterHud:
-        return (Icons.track_changes_rounded, 'SCOUTER HUD', 'Dock Telemetria');
+        return (Icons.track_changes_rounded, 'SCOUTER HUD');
       case EstiloCardOverlay.rodapeMinimalista:
-        return (Icons.dock_rounded, 'RODAPÉ MINIMALISTA', 'Card Ancorado');
+        return (Icons.dock_rounded, 'RODAPÉ MINIMALISTA');
     }
   }
 
@@ -1306,29 +1306,14 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                       children: [
                         Icon(info.$1, size: 18, color: AppColors.primary),
                         const SizedBox(width: 8),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              info.$2,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.textLight,
-                                letterSpacing: 0.8,
-                              ),
-                            ),
-                            Text(
-                              info.$3,
-                              style: const TextStyle(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primary,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          info.$2,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textLight,
+                            letterSpacing: 0.8,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         // Dots indicadores de posição do preset
