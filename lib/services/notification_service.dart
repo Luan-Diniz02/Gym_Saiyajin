@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter/foundation.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -14,7 +14,7 @@ class NotificationService {
     tz_data.initializeTimeZones();
 
     const androidSettings = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@drawable/ic_notification',
     );
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -74,6 +74,9 @@ class NotificationService {
         autoCancel: true,
         category: AndroidNotificationCategory.alarm,
         visibility: NotificationVisibility.public,
+        icon: '@drawable/ic_notification',
+        color: Color(0xFFFF9800),
+        largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),

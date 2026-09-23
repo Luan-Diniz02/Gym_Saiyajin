@@ -11,7 +11,10 @@ import 'package:gym_saiyajin/widgets/planeta_kaioh_icon.dart';
 
 void main() {
   test('Renderizar preview dos icones em PNG de alta resolucao', () async {
-    const outputDir = 'C:/Users/luand/.gemini/antigravity/brain/4ebfba63-94c3-4c1f-835b-f10540a6f547';
+    final envDir = Platform.environment['ANTIGRAVITY_OUTPUT_DIR'];
+    final outputDir = (envDir != null && envDir.isNotEmpty && Directory(envDir).existsSync())
+        ? envDir
+        : '${Directory.systemTemp.path}/gym_saiyajin_previews';
     await Directory(outputDir).create(recursive: true);
 
     Future<void> renderPainter(CustomPainter painter, String fileName, {double size = 256}) async {
@@ -34,11 +37,15 @@ void main() {
 
       final picture = recorder.endRecording();
       final img = await picture.toImage(size.toInt(), size.toInt());
-      final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
-      final buffer = byteData!.buffer.asUint8List();
+      try {
+        final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+        final buffer = byteData!.buffer.asUint8List();
 
-      final file = File('$outputDir/$fileName');
-      await file.writeAsBytes(buffer);
+        final file = File('$outputDir/$fileName');
+        await file.writeAsBytes(buffer);
+      } finally {
+        img.dispose();
+      }
     }
 
     // Renderizar DragonRadarIcon com 3 dots e com 7 dots

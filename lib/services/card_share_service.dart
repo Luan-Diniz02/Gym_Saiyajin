@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/rendering.dart';
@@ -19,10 +20,14 @@ class CardShareService {
 
       // Renderiza com pixelRatio 3.0 para alta nitidez em Stories / WhatsApp
       final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return false;
-
-      final pngBytes = byteData.buffer.asUint8List();
+      final Uint8List pngBytes;
+      try {
+        final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        if (byteData == null) return false;
+        pngBytes = byteData.buffer.asUint8List();
+      } finally {
+        image.dispose();
+      }
 
       final tempDir = await getTemporaryDirectory();
       final file = File('${tempDir.path}/$nomeArquivo.png');

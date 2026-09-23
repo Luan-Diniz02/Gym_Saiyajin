@@ -113,7 +113,11 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
           ],
         );
       },
-    );
+    ).then((_) {
+      pesoController.dispose();
+      alturaController.dispose();
+      gorduraController.dispose();
+    });
   }
 
   void _abrirModalAtualizarMeta() {

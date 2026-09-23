@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/services/notification_service.dart';
@@ -36,6 +37,7 @@ class MockFlutterLocalNotificationsPlugin extends Fake
       'title': title,
       'body': body,
       'scheduledDate': scheduledDate,
+      'notificationDetails': notificationDetails,
       'androidScheduleMode': androidScheduleMode,
     });
   }
@@ -124,6 +126,22 @@ void main() {
 
         // Nenhuma notificação deve ter sido agendada
         expect(mockPlugin.zonedScheduleChamadas, isEmpty);
+      },
+    );
+
+    test(
+      'Deve configurar icone monocromatico, cor ambar e largeIcon nos detalhes Android',
+      () async {
+        await service.agendarNotificacaoDescanso(60);
+
+        final chamada = mockPlugin.zonedScheduleChamadas.first;
+        final details = chamada['notificationDetails'] as NotificationDetails;
+        expect(details.android?.icon, '@drawable/ic_notification');
+        expect(details.android?.color, const Color(0xFFFF9800));
+        expect(details.android?.largeIcon, isA<DrawableResourceAndroidBitmap>());
+        final largeIcon =
+            details.android?.largeIcon as DrawableResourceAndroidBitmap;
+        expect(largeIcon.data, '@mipmap/ic_launcher');
       },
     );
   });
