@@ -196,7 +196,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Encerrar Batalha',
+                          'Encerrar Treino',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -206,7 +206,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Consolide seus ganhos e seu Ki da sessão',
+                          'Consolide seu volume e Ki da sessão',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.textDimmed,

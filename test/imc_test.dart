@@ -92,7 +92,7 @@ void main() {
       expect(controller.classificacaoGordura, 'FÍSICO ATLÉTICO');
 
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 18.0);
-      expect(controller.classificacaoGordura, 'MODERADO / EM FORMA');
+      expect(controller.classificacaoGordura, 'MODERADO');
 
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 22.0);
       expect(controller.classificacaoGordura, 'ELEVADO');

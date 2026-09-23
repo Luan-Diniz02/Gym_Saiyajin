@@ -35,7 +35,7 @@ class ProgressoController extends ChangeNotifier {
     if (bf == null) return null;
     if (bf < 10.0) return 'MUITO DEFINIDO';
     if (bf < 15.0) return 'FÍSICO ATLÉTICO';
-    if (bf < 20.0) return 'MODERADO / EM FORMA';
+    if (bf < 20.0) return 'MODERADO';
     if (bf < 25.0) return 'ELEVADO';
     return 'ALTO';
   }
@@ -367,10 +367,12 @@ class ProgressoController extends ChangeNotifier {
       return (a.id ?? 0).compareTo(b.id ?? 0);
     });
 
-    final Map<String, (double maxPeso, int repsMaxPeso, double max1RM)> recordesPrevios = {};
+    final Map<String, (double maxPeso, int repsMaxPeso, double max1RM)>
+    recordesPrevios = {};
 
     for (final sessao in poolSessoes) {
-      final isSessaoAlvo = (sessaoAlvo.id != null && sessao.id == sessaoAlvo.id) ||
+      final isSessaoAlvo =
+          (sessaoAlvo.id != null && sessao.id == sessaoAlvo.id) ||
           (sessao.data != null &&
               sessaoAlvo.data != null &&
               sessao.data!.isAtSameMomentAs(sessaoAlvo.data!));

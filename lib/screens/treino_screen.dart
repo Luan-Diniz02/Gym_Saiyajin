@@ -678,7 +678,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                     height: 50,
                     child: ElevatedButton.icon(
                       onPressed: _confirmarEncerramentoTreino,
-                      icon: const Icon(Icons.sports_score, size: 20),
+                      icon: const Icon(Icons.check_circle_outline, size: 20),
                       label: Text(
                         textoEncerrarTreino,
                         style: const TextStyle(
@@ -688,8 +688,8 @@ class _TreinoScreenState extends State<TreinoScreen> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.danger,
-                        foregroundColor: AppColors.textLight,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
