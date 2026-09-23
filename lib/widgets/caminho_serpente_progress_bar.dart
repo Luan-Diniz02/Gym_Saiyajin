@@ -1,10 +1,12 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'planeta_kaioh_icon.dart';
 
-/// Barra de progresso tematica vetorial que reproduz o icônico
-/// Caminho da Serpente de Dragon Ball Z (curvas de Bézier sobre nuvens amarelas).
+/// Barra de progresso temática vetorial que reproduz o icônico Caminho da Serpente
+/// de Dragon Ball Z com curvatura senoidal uniforme e o Planeta do Sr. Kaioh ao final.
 class CaminhoSerpenteProgressBar extends StatelessWidget {
   final double progresso; // de 0.0 a 1.0
   final double height;
@@ -41,47 +43,48 @@ class _CaminhoSerpentePainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Pontos-chave da curva em "S" com perspectiva
-    // Início na Cauda (inferior esquerdo) -> Ondulação -> Cabeça/Planeta Kaioh (superior direito)
+    // Espaçamento e limites do trajeto
     final startX = 22.0;
-    final startY = h - 14.0;
-    final endX = w - 24.0;
-    final endY = 14.0;
+    const planetSize = 34.0;
+    final endX = w - planetSize - 2.0;
+    final totalWidth = endX - startX;
+    if (totalWidth <= 0) return;
 
+    final midY = h / 2.0;
+    // Amplitude da onda senoidal (ondulação suave e uniforme)
+    final amplitude = (h / 2.0) - 11.0;
+    // 2.5 ciclos senoidais completos na extensão do caminho
+    const cycles = 2.5;
+
+    // Constrói a curva senoidal matematicamente perfeita
     final path = Path();
-    path.moveTo(startX, startY);
+    final steps = (totalWidth / 2.0).ceil();
+    for (int i = 0; i <= steps; i++) {
+      final t = i / steps;
+      final x = startX + t * totalWidth;
+      // Inicia subindo levemente, ondula em vales e cristas e finaliza no centro
+      final y = midY - amplitude * math.sin(t * cycles * 2 * math.pi);
+      if (i == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
 
-    // Curva 1: sobe ondulando para a direita
-    final p1x = w * 0.28;
-    final p1y = h * 0.15;
-    final c1x = w * 0.12;
-    final c1y = h * 0.95;
-
-    // Curva 2: desce suavemente no centro
-    final p2x = w * 0.62;
-    final p2y = h * 0.75;
-    final c2x = w * 0.44;
-    final c2y = h * -0.15;
-
-    // Curva 3: sobe em direção ao Planeta Kaioh
-    final c3x = w * 0.80;
-    final c3y = h * 1.05;
-
-    path.cubicTo(c1x, c1y, p1x, p1y, w * 0.35, h * 0.38);
-    path.cubicTo(w * 0.45, h * 0.10, c2x, c2y, p2x, p2y);
-    path.cubicTo(c3x, c3y, w * 0.88, h * 0.35, endX, endY);
-
-    // 1. Nuvens Amarelas do Outro Mundo no fundo (fundo temático sutil)
+    // 1. Nuvens Amarelas do Outro Mundo no fundo (sob as curvas)
     final cloudPaint = Paint()
-      ..color = const Color(0xFFFFB300).withValues(alpha: 0.08)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
-    canvas.drawCircle(Offset(w * 0.25, h * 0.6), 18, cloudPaint);
-    canvas.drawCircle(Offset(w * 0.55, h * 0.4), 22, cloudPaint);
-    canvas.drawCircle(Offset(w * 0.82, h * 0.5), 18, cloudPaint);
+      ..color = const Color(0xFFFFB300).withValues(alpha: 0.09)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
 
-    // 2. Sombra projetada do Caminho da Serpente
+    for (int i = 0; i < 5; i++) {
+      final cloudX = startX + totalWidth * (0.12 + i * 0.19);
+      final cloudY = midY + (i.isEven ? 8.0 : -8.0);
+      canvas.drawCircle(Offset(cloudX, cloudY), 16.0, cloudPaint);
+    }
+
+    // 2. Sombra projetada do Caminho da Serpente sobre as nuvens
     final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.45)
+      ..color = Colors.black.withValues(alpha: 0.50)
       ..strokeWidth = 9.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
@@ -93,9 +96,9 @@ class _CaminhoSerpentePainter extends CustomPainter {
     canvas.drawPath(path, shadowPaint);
     canvas.restore();
 
-    // 3. Pista base do Caminho da Serpente (cinza-azulado com escamas)
+    // 3. Pista base do Caminho da Serpente (leito de pedras escurecido)
     final baseRoadBorderPaint = Paint()
-      ..color = const Color(0xFF1B2838)
+      ..color = const Color(0xFF141E28)
       ..strokeWidth = 9.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
@@ -103,7 +106,7 @@ class _CaminhoSerpentePainter extends CustomPainter {
     canvas.drawPath(path, baseRoadBorderPaint);
 
     final baseRoadPaint = Paint()
-      ..color = const Color(0xFF37474F)
+      ..color = const Color(0xFF33424D)
       ..strokeWidth = 6.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
@@ -120,9 +123,9 @@ class _CaminhoSerpentePainter extends CustomPainter {
       if (currentLen > 0) {
         final activeSubPath = metric.extractPath(0.0, currentLen);
 
-        // Halo de brilho do Ki
+        // Halo de brilho do Ki do guerreiro
         final glowPaint = Paint()
-          ..color = AppColors.primary.withValues(alpha: 0.35)
+          ..color = AppColors.primary.withValues(alpha: 0.38)
           ..strokeWidth = 10.0
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
@@ -132,8 +135,8 @@ class _CaminhoSerpentePainter extends CustomPainter {
         // Linha dourada ativa
         final activePaint = Paint()
           ..shader = ui.Gradient.linear(
-            Offset(startX, startY),
-            Offset(endX, endY),
+            Offset(startX, midY),
+            Offset(endX, midY),
             const [
               Color(0xFFFF9800),
               Color(0xFFFFD54F),
@@ -148,18 +151,18 @@ class _CaminhoSerpentePainter extends CustomPainter {
         canvas.drawPath(activeSubPath, activePaint);
       }
 
-      // 5. Marcador do Guerreiro / Ponto de Ki atual
+      // 5. Marcador do Guerreiro Saiyajin (viajando sobre a onda senoidal)
       final tangent = metric.getTangentForOffset(currentLen);
       if (tangent != null) {
         final warriorPos = tangent.position;
 
-        // Aura de Ki externa
+        // Aura de Ki externa pulsante
         final auraPaint = Paint()
-          ..color = const Color(0xFFFF9800).withValues(alpha: 0.4)
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
-        canvas.drawCircle(warriorPos, 7.5, auraPaint);
+          ..color = const Color(0xFFFF9800).withValues(alpha: 0.45)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
+        canvas.drawCircle(warriorPos, 8.5, auraPaint);
 
-        // Núcleo do guerreiro (brilho branco-dourado)
+        // Núcleo do guerreiro (brilho dourado cel-shaded)
         final markerBorder = Paint()..color = const Color(0xFF1E1E1E);
         canvas.drawCircle(warriorPos, 5.0, markerBorder);
 
@@ -171,37 +174,18 @@ class _CaminhoSerpentePainter extends CustomPainter {
       }
     }
 
-    // 6. Início da Jornada: Cauda da Serpente
+    // 6. Início da Jornada: Cauda da Serpente estilizada
+    final tailBorder = Paint()..color = const Color(0xFF141E28);
+    canvas.drawCircle(Offset(startX, midY), 5.5, tailBorder);
     final tailPaint = Paint()..color = const Color(0xFFFF9800);
-    canvas.drawCircle(Offset(startX, startY), 3.5, tailPaint);
+    canvas.drawCircle(Offset(startX, midY), 3.5, tailPaint);
 
-    // 7. Destino Final: Planeta do Sr. Kaioh (Mini esfera verde com anel e casinha)
-    final planetCenter = Offset(endX + 6, endY - 2);
-
-    // Aura celestial do planeta
-    final planetGlow = Paint()
-      ..color = const Color(0xFF00E676).withValues(alpha: 0.25)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-    canvas.drawCircle(planetCenter, 9.0, planetGlow);
-
-    // Esfera do Planeta Kaioh (gramado verde característico)
-    final planetPaint = Paint()..color = const Color(0xFF2E7D32);
-    canvas.drawCircle(planetCenter, 7.0, planetPaint);
-
-    final planetBorder = Paint()
-      ..color = const Color(0xFF81C784)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
-    canvas.drawCircle(planetCenter, 7.0, planetBorder);
-
-    // Casinha vermelha clássica do Sr. Kaioh no topo do planeta
-    final housePaint = Paint()..color = const Color(0xFFD32F2F);
-    final houseRect = Rect.fromCenter(
-      center: Offset(planetCenter.dx, planetCenter.dy - 6.5),
-      width: 4.5,
-      height: 3.5,
-    );
-    canvas.drawRRect(RRect.fromRectAndRadius(houseRect, const Radius.circular(1)), housePaint);
+    // 7. Destino Final: Planeta do Sr. Kaioh renderizado em alta definição
+    final planetOrigin = Offset(endX, midY - planetSize / 2.0);
+    canvas.save();
+    canvas.translate(planetOrigin.dx, planetOrigin.dy);
+    const PlanetaKaiohPainter().paint(canvas, const Size(planetSize, planetSize));
+    canvas.restore();
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/widgets/capsule_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_ball_icon.dart';
 import 'package:gym_saiyajin/widgets/dragon_radar_icon.dart';
+import 'package:gym_saiyajin/widgets/planeta_kaioh_icon.dart';
 
 void main() {
   test('Renderizar preview dos icones em PNG de alta resolucao', () async {
@@ -53,5 +54,8 @@ void main() {
     await renderPainter(const CapsulePainter(color: Color(0xFFFF9800)), 'preview_capsule_orange.png', size: 300);
     await renderPainter(const CapsulePainter(color: Color(0xFF22C55E)), 'preview_capsule_green.png', size: 300);
     await renderPainter(const CapsulePainter(color: Color(0xFFEF4444)), 'preview_capsule_red.png', size: 300);
+
+    // Renderizar PlanetaKaiohIcon (Planeta do Senhor Kaioh com casa, anexo, pista e carro)
+    await renderPainter(const PlanetaKaiohPainter(), 'preview_planeta_kaioh.png', size: 300);
   });
 }

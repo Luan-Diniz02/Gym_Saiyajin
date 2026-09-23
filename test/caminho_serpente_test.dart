@@ -11,6 +11,7 @@ import 'package:gym_saiyajin/services/notification_service.dart';
 import 'package:gym_saiyajin/services/preferences_service.dart';
 import 'package:gym_saiyajin/widgets/caminho_serpente_progress_bar.dart';
 import 'package:gym_saiyajin/widgets/modal_ajuste_tempo_sessao.dart';
+import 'package:gym_saiyajin/widgets/planeta_kaioh_icon.dart';
 
 class FakeTreinoRepository extends Fake implements TreinoRepository {
   List<SessaoTreino> sessoes = [];
@@ -183,6 +184,25 @@ void main() {
     });
   });
 
+  group('PlanetaKaiohIcon Widget Tests', () {
+    testWidgets('Renderiza PlanetaKaiohIcon com diferentes tamanhos sem erros', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                PlanetaKaiohIcon(size: 24),
+                PlanetaKaiohIcon(size: 48),
+                PlanetaKaiohIcon(size: 96),
+              ],
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(PlanetaKaiohIcon), findsNWidgets(3));
+    });
+  });
+
   group('CaminhoSerpenteProgressBar Widget Tests', () {
     testWidgets('Renderiza sem erros com progresso 0.0, 0.5 e 1.0', (tester) async {
       await tester.pumpWidget(
@@ -310,7 +330,9 @@ void main() {
 
       // Sessão está visível no resumo
       expect(find.text('SUPER SAIYAJIN COSTAS'), findsOneWidget);
-      expect(find.text('1 EXERCÍCIOS'), findsOneWidget);
+      expect(find.text('1 ex'), findsOneWidget);
+      expect(find.byIcon(Icons.calendar_month), findsOneWidget);
+      expect(find.byType(PopupMenuButton<String>), findsNWidgets(2)); // 1 do topo + 1 do card
 
       // Porém os detalhes do exercício começam COLAPSADOS por padrão ("1 - Todos colapsados")
       expect(find.text('Puxada Frontal'), findsNothing);
@@ -330,7 +352,7 @@ void main() {
       expect(find.text('Puxada Frontal'), findsNothing);
     });
 
-    testWidgets('Caminho da Serpente alterna entre compacto e expandido', (tester) async {
+    testWidgets('Caminho da Serpente exibe Kanji Kaioh e alterna entre compacto e expandido', (tester) async {
       await controller.carregarHistorico();
 
       await tester.pumpWidget(
@@ -342,8 +364,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Header está visível
+      // Header está visível com o Kanji Kaioh (界王)
       expect(find.text('CAMINHO DA SERPENTE'), findsOneWidget);
+      expect(find.text('界王'), findsOneWidget);
 
       // Inicialmente compacto: a barra customizada com custom painter ainda não está expandida
       expect(find.byType(CaminhoSerpenteProgressBar), findsNothing);

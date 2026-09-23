@@ -297,15 +297,32 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                     child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(6),
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.2),
+                            color: const Color(0xFF160E05),
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.25),
+                                blurRadius: 6,
+                              ),
+                            ],
                           ),
-                          child: const Icon(
-                            Icons.alt_route_rounded,
-                            color: AppColors.primary,
-                            size: 18,
+                          child: const Center(
+                            child: Text(
+                              '界王',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.primary,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -641,49 +658,29 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Linha com o nó do calendário/DragonBall, data e botões de ação (compartilhar, editar e excluir)
+            // Linha com o nó do calendário, data, menu de ações e chevron
             Row(
               children: [
-                if (temPR)
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFA000).withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xFFFFB300),
-                        width: 1.5,
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.25),
+                        blurRadius: 6,
+                        spreadRadius: 1,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFFFF9800).withValues(alpha: 0.35),
-                          blurRadius: 8,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: DragonBallIcon(
-                        size: 20,
-                        stars: prsSessao.clamp(1, 7),
-                      ),
-                    ),
-                  )
-                else
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.calendar_month,
-                      color: AppColors.background,
-                      size: 20,
-                    ),
+                    ],
                   ),
+                  child: const Icon(
+                    Icons.calendar_month,
+                    color: AppColors.background,
+                    size: 19,
+                  ),
+                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: InkWell(
@@ -765,23 +762,51 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () => _abrirCompartilharCard(diaTreino.sessao),
-                  icon: const Icon(Icons.share_outlined, size: 20),
-                  color: AppColors.primary,
-                  tooltip: 'Compartilhar card',
-                ),
-                IconButton(
-                  onPressed: () => _abrirEditarSessao(diaTreino),
-                  icon: const Icon(Icons.edit_outlined, size: 20),
-                  color: AppColors.textLight,
-                  tooltip: 'Editar treino',
-                ),
-                IconButton(
-                  onPressed: () => _onExcluirSessao(diaTreino),
-                  icon: const Icon(Icons.delete_outline, size: 22),
-                  color: AppColors.textDimmed,
-                  tooltip: 'Excluir treino',
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, size: 20, color: AppColors.textDimmed),
+                  color: AppColors.surface,
+                  tooltip: 'Mais opções',
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                  onSelected: (val) {
+                    if (val == 'compartilhar') _abrirCompartilharCard(diaTreino.sessao);
+                    if (val == 'editar') _abrirEditarSessao(diaTreino);
+                    if (val == 'excluir') _onExcluirSessao(diaTreino);
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'compartilhar',
+                      child: Row(
+                        children: [
+                          Icon(Icons.share_outlined, color: AppColors.primary, size: 18),
+                          SizedBox(width: 10),
+                          Text('Compartilhar card', style: TextStyle(fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'editar',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit_outlined, color: AppColors.textLight, size: 18),
+                          SizedBox(width: 10),
+                          Text('Editar treino', style: TextStyle(fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'excluir',
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete_outline, color: AppColors.danger, size: 18),
+                          SizedBox(width: 10),
+                          Text('Excluir treino', style: TextStyle(fontSize: 13, color: AppColors.danger)),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 IconButton(
                   onPressed: toggleExpansao,
@@ -805,71 +830,66 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 2.0),
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 8,
+                    spacing: 6,
                     runSpacing: 4,
                     children: [
                       Text(
-                        '${exercicios.length} EXERCÍCIOS',
+                        '${exercicios.length} ex',
                         style: const TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textDimmed,
-                          letterSpacing: 0.8,
                         ),
                       ),
-                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                       Text(
-                        '$totalSeries SÉRIES',
+                        '$totalSeries séries',
                         style: const TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textDimmed,
-                          letterSpacing: 0.8,
                         ),
                       ),
-                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                       Text(
-                        'VOLUME: $volumeFormatado',
+                        volumeFormatado,
                         style: const TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: AppColors.accent,
-                          letterSpacing: 0.8,
                         ),
                       ),
                       if (diaTreino.sessao.duracaoSegundos > 0) ...[
-                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.timer_outlined, size: 14, color: AppColors.textDimmed),
+                            const Icon(Icons.timer_outlined, size: 13, color: AppColors.textDimmed),
                             const SizedBox(width: 3),
                             Text(
                               diaTreino.sessao.duracaoFormatada,
                               style: const TextStyle(
                                 fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textDimmed,
-                                letterSpacing: 0.8,
                               ),
                             ),
                           ],
                         ),
                       ],
                       if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
-                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.textDimmed),
+                            const Icon(Icons.pause_circle_outline, size: 13, color: AppColors.textDimmed),
                             const SizedBox(width: 3),
                             Text(
-                              diaTreino.sessao.descansoFormatado,
+                              '${diaTreino.sessao.descansoFormatado} desc.',
                               style: const TextStyle(
                                 fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textDimmed,
-                                letterSpacing: 0.8,
                               ),
                             ),
                           ],
