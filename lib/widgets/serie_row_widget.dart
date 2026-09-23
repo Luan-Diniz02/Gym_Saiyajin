@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../controllers/treino_controller.dart';
 import '../models/serie.dart';
 import '../theme/app_colors.dart';
+import 'dragon_ball_icon.dart';
 
 class SerieRowWidget extends StatefulWidget {
   final int index;
@@ -184,11 +185,10 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                                 letterSpacing: 0.5,
                               ),
                             ),
-                            const SizedBox(width: 2),
-                            const Icon(
-                              Icons.bolt_rounded,
-                              size: 11,
-                              color: AppColors.accent,
+                            const SizedBox(width: 3),
+                            const DragonBallIcon(
+                              size: 10,
+                              stars: 1,
                             ),
                           ],
                         ),

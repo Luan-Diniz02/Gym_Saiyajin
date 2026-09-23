@@ -587,7 +587,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const DragonBallIcon(size: 13, stars: 4),
+                        DragonBallIcon(size: 13, stars: prsCount.clamp(1, 7)),
                         const SizedBox(width: 5),
                         Text(
                           '$prsCount ${prsCount == 1 ? 'PR' : 'PRs'}',
@@ -845,7 +845,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const DragonBallIcon(size: 13, stars: 4),
+                            DragonBallIcon(size: 13, stars: prsCount.clamp(1, 7)),
                             const SizedBox(height: 1),
                             FittedBox(
                               fit: BoxFit.scaleDown,
@@ -1040,7 +1040,7 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const DragonBallIcon(size: 13, stars: 4),
+                            DragonBallIcon(size: 13, stars: prsCount.clamp(1, 7)),
                             const SizedBox(height: 1),
                             FittedBox(
                               fit: BoxFit.scaleDown,

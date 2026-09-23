@@ -251,7 +251,13 @@ void main() {
 
       expect(find.text('SLIM CLÁSSICO'), findsOneWidget);
       expect(find.text('1 PR'), findsOneWidget);
-      expect(find.byType(DragonBallIcon), findsWidgets);
+      final dbIconFinder = find.byType(DragonBallIcon);
+      expect(dbIconFinder, findsWidgets);
+      final customPaint = tester.widget<CustomPaint>(
+        find.descendant(of: dbIconFinder.first, matching: find.byType(CustomPaint)),
+      );
+      final painter = customPaint.painter as DragonBallPainter;
+      expect(painter.stars, 1);
       expect(find.text('VOLUME'), findsWidgets);
       expect(find.text('SÉRIES'), findsWidgets);
       expect(find.text('DURAÇÃO'), findsWidgets);
@@ -286,6 +292,13 @@ void main() {
 
       expect(find.text('RODAPÉ MINIMALISTA'), findsOneWidget);
       expect(find.text('3 PRs'), findsOneWidget);
+      final dbIconFinder = find.byType(DragonBallIcon);
+      expect(dbIconFinder, findsWidgets);
+      final customPaint = tester.widget<CustomPaint>(
+        find.descendant(of: dbIconFinder.first, matching: find.byType(CustomPaint)),
+      );
+      final painter = customPaint.painter as DragonBallPainter;
+      expect(painter.stars, 3);
     });
   });
 }

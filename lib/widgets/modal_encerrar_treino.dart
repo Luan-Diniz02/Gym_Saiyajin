@@ -286,7 +286,10 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                             ),
                             child: Row(
                               children: [
-                                const DragonBallIcon(size: 16, stars: 4),
+                                DragonBallIcon(
+                                  size: 16,
+                                  stars: (totalPrs > 0 ? totalPrs : 4).clamp(1, 7),
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
@@ -352,11 +355,9 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                   color: AppColors.primary.withValues(alpha: 0.12),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Center(
-                                  child: DragonBallIcon(
-                                    size: 20,
-                                    stars: 4,
-                                  ),
+                                child: DragonBallIcon(
+                                  size: 20,
+                                  stars: recordes.length.clamp(1, 7),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -401,6 +402,8 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
+                                    const DragonBallIcon(size: 12, stars: 1),
+                                    const SizedBox(width: 5),
                                     Text(
                                       pr.exercicioNome,
                                       style: const TextStyle(

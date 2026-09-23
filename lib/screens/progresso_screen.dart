@@ -260,8 +260,11 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                   color: AppColors.primary.withValues(alpha: 0.25),
                 ),
               ),
-              child: const Center(
-                child: DragonBallIcon(size: 26, stars: 4),
+              child: Center(
+                child: DragonBallIcon(
+                  size: 26,
+                  stars: total > 0 ? total.clamp(1, 7) : 4,
+                ),
               ),
             ),
             const SizedBox(width: 14),
