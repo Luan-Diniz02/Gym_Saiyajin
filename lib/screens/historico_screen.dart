@@ -29,7 +29,6 @@ class HistoricoScreen extends StatefulWidget {
 class _HistoricoScreenState extends State<HistoricoScreen> {
   late final HistoricoController _controller;
   bool _caminhoSerpenteExpandido = false;
-  final Set<int> _sessoesExpandidasIds = <int>{};
 
   @override
   void initState() {
@@ -329,8 +328,8 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 'CAMINHO DA SERPENTE',
                                 style: TextStyle(
                                   fontSize: 12,
@@ -340,17 +339,10 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                                 ),
                               ),
                               Text(
-                                _caminhoSerpenteExpandido
-                                    ? 'Jornada rumo ao Planeta do Sr. Kaioh'
-                                    : '${_formatarKm(kmPercorridos)} km • ${(progresso * 100).toStringAsFixed(1)}%',
+                                'Jornada rumo ao Planeta do Sr. Kaioh',
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: _caminhoSerpenteExpandido
-                                      ? AppColors.textDimmed
-                                      : AppColors.accent,
-                                  fontWeight: _caminhoSerpenteExpandido
-                                      ? FontWeight.normal
-                                      : FontWeight.w700,
+                                  color: AppColors.textDimmed,
                                 ),
                               ),
                             ],
@@ -392,10 +384,10 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              // Barra serpenteada temática SEMPRE VISÍVEL (com onda senoidal e Planeta do Sr. Kaioh)
+              CaminhoSerpenteProgressBar(progresso: progresso, height: 52),
               if (_caminhoSerpenteExpandido) ...[
-                const SizedBox(height: 14),
-                // Barra serpenteada temática (Snake Way com nuvens e Planeta do Sr. Kaioh)
-                CaminhoSerpenteProgressBar(progresso: progresso, height: 52),
                 const SizedBox(height: 12),
                 // Distância e Meta
                 Row(
@@ -597,18 +589,6 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
     final exercicios = diaTreino.sessao.exerciciosConcluidosHoje;
     final prsSessao = widget.progressoController?.obterPRsDaSessao(diaTreino.sessao) ?? 0;
     final bool temPR = prsSessao > 0;
-    final sessaoId = diaTreino.sessao.id ?? (diaTreino.sessao.data?.millisecondsSinceEpoch ?? 0);
-    final isExpandido = _sessoesExpandidasIds.contains(sessaoId);
-
-    void toggleExpansao() {
-      setState(() {
-        if (_sessoesExpandidasIds.contains(sessaoId)) {
-          _sessoesExpandidasIds.remove(sessaoId);
-        } else {
-          _sessoesExpandidasIds.add(sessaoId);
-        }
-      });
-    }
 
     int totalSeries = 0;
     double volumeTotal = 0.0;
@@ -658,8 +638,9 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Linha com o nó do calendário, data, menu de ações e chevron
+            // Linha com o nó do calendário, data, nome do treino, PRs e menu de ações
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 36,
@@ -683,83 +664,67 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: toggleExpansao,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        diaTreino.dataLabel,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                      if (diaTreino.sessao.nomeTreino != null &&
+                          diaTreino.sessao.nomeTreino!.trim().isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: Text(
+                            diaTreino.sessao.nomeTreino!.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primary,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      if (temPR)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF9800).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Flexible(
-                                child: Text(
-                                  diaTreino.dataLabel,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textLight,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                              DragonBallIcon(size: 10, stars: prsSessao.clamp(1, 7)),
+                              const SizedBox(width: 4),
+                              Text(
+                                prsSessao == 1 ? '1 PR' : '$prsSessao PRs',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFFFFB300),
                                 ),
                               ),
-                              if (temPR) ...[
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFF9800).withValues(alpha: 0.15),
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      color: const Color(0xFFFFB300).withValues(alpha: 0.5),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      DragonBallIcon(size: 10, stars: prsSessao.clamp(1, 7)),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        prsSessao == 1 ? '1 PR' : '$prsSessao PRs',
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xFFFFB300),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
                             ],
                           ),
-                          if (diaTreino.sessao.nomeTreino != null &&
-                              diaTreino.sessao.nomeTreino!.trim().isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: AppColors.primary.withValues(alpha: 0.4),
-                                ),
-                              ),
-                              child: Text(
-                                diaTreino.sessao.nomeTreino!.toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primary,
-                                  letterSpacing: 0.8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
+                        ),
+                    ],
                   ),
                 ),
                 PopupMenuButton<String>(
@@ -808,108 +773,94 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
                     ),
                   ],
                 ),
-                IconButton(
-                  onPressed: toggleExpansao,
-                  icon: Icon(
-                    isExpandido ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                    size: 22,
-                  ),
-                  color: AppColors.accent,
-                  tooltip: isExpandido ? 'Recolher exercícios' : 'Ver exercícios',
-                ),
               ],
             ),
             const SizedBox(height: 4),
             // Subtítulo com métricas resumidas do treino (exercícios, séries, volume, duração e descanso)
             Padding(
               padding: const EdgeInsets.only(left: 50.0, bottom: 12.0),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(6),
-                onTap: toggleExpansao,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 6,
-                    runSpacing: 4,
-                    children: [
-                      Text(
-                        '${exercicios.length} ex',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textDimmed,
-                        ),
-                      ),
-                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
-                      Text(
-                        '$totalSeries séries',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textDimmed,
-                        ),
-                      ),
-                      const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
-                      Text(
-                        volumeFormatado,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.accent,
-                        ),
-                      ),
-                      if (diaTreino.sessao.duracaoSegundos > 0) ...[
-                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.timer_outlined, size: 13, color: AppColors.textDimmed),
-                            const SizedBox(width: 3),
-                            Text(
-                              diaTreino.sessao.duracaoFormatada,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDimmed,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                      if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
-                        const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.pause_circle_outline, size: 13, color: AppColors.textDimmed),
-                            const SizedBox(width: 3),
-                            Text(
-                              '${diaTreino.sessao.descansoFormatado} desc.',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDimmed,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ],
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    '${exercicios.length} EXERCÍCIOS',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textDimmed,
+                      letterSpacing: 0.8,
+                    ),
                   ),
-                ),
+                  const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                  Text(
+                    '$totalSeries SÉRIES',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textDimmed,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                  Text(
+                    'VOLUME: $volumeFormatado',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.accent,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  if (diaTreino.sessao.duracaoSegundos > 0) ...[
+                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.timer_outlined, size: 14, color: AppColors.textDimmed),
+                        const SizedBox(width: 3),
+                        Text(
+                          diaTreino.sessao.duracaoFormatada,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  if (diaTreino.sessao.descansoTotalSegundos > 0) ...[
+                    const Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.pause_circle_outline, size: 14, color: AppColors.textDimmed),
+                        const SizedBox(width: 3),
+                        Text(
+                          diaTreino.sessao.descansoFormatado,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDimmed,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
               ),
             ),
-            // Cards dos exercícios da sessão (visíveis apenas quando expandido)
-            if (isExpandido)
-              Padding(
-                padding: const EdgeInsets.only(left: 50.0, bottom: 28.0),
-                child: Column(
-                  children: exercicios.map((ex) => HistoricoCardWidget(exercicio: ex)).toList(),
-                ),
-              )
-            else
-              const SizedBox(height: 12),
+            // Cards dos exercícios da sessão (sempre expandidos)
+            Padding(
+              padding: const EdgeInsets.only(left: 50.0, bottom: 28.0),
+              child: Column(
+                children: exercicios.map((ex) => HistoricoCardWidget(exercicio: ex)).toList(),
+              ),
+            ),
           ],
         ),
       ],

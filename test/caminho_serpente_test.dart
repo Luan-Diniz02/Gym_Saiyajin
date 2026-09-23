@@ -299,7 +299,7 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets('Sessões devem iniciar colapsadas e expandir com toque', (tester) async {
+    testWidgets('Sessões exibem calendário, divisão, PRs e exercícios sempre expandidos', (tester) async {
       final sessao = SessaoTreino(
         id: 1,
         data: DateTime(2026, 3, 15),
@@ -328,31 +328,17 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Sessão está visível no resumo
+      // Sessão está visível com calendário, data e divisão
       expect(find.text('SUPER SAIYAJIN COSTAS'), findsOneWidget);
-      expect(find.text('1 ex'), findsOneWidget);
+      expect(find.text('1 EXERCÍCIOS'), findsOneWidget);
       expect(find.byIcon(Icons.calendar_month), findsOneWidget);
       expect(find.byType(PopupMenuButton<String>), findsNWidgets(2)); // 1 do topo + 1 do card
 
-      // Porém os detalhes do exercício começam COLAPSADOS por padrão ("1 - Todos colapsados")
-      expect(find.text('Puxada Frontal'), findsNothing);
-
-      // Clica no header da sessão para expandir
-      await tester.tap(find.text('SUPER SAIYAJIN COSTAS'));
-      await tester.pumpAndSettle();
-
-      // Agora o exercício detalhado deve estar visível
+      // Detalhes do exercício estão sempre expandidos
       expect(find.text('Puxada Frontal'), findsOneWidget);
-
-      // Clica novamente para recolher
-      await tester.tap(find.text('SUPER SAIYAJIN COSTAS'));
-      await tester.pumpAndSettle();
-
-      // Volta a ficar oculto
-      expect(find.text('Puxada Frontal'), findsNothing);
     });
 
-    testWidgets('Caminho da Serpente exibe Kanji Kaioh e alterna entre compacto e expandido', (tester) async {
+    testWidgets('Caminho da Serpente exibe Kanji Kaioh e barra senoidal sempre visível, alternando estatísticas ao tocar', (tester) async {
       await controller.carregarHistorico();
 
       await tester.pumpWidget(
@@ -368,23 +354,26 @@ void main() {
       expect(find.text('CAMINHO DA SERPENTE'), findsOneWidget);
       expect(find.text('界王'), findsOneWidget);
 
-      // Inicialmente compacto: a barra customizada com custom painter ainda não está expandida
-      expect(find.byType(CaminhoSerpenteProgressBar), findsNothing);
+      // A barra senoidal do Caminho da Serpente está SEMPRE visível (Opção 1)
+      expect(find.byType(CaminhoSerpenteProgressBar), findsOneWidget);
+      // Porém as estatísticas numéricas detalhadas e meta começam ocultas
+      expect(find.text('Meta: 1.000.000 km'), findsNothing);
 
-      // Clica para expandir
+      // Clica para expandir as estatísticas e meta
       await tester.tap(find.text('CAMINHO DA SERPENTE'));
       await tester.pumpAndSettle();
 
-      // Agora o CaminhoSerpenteProgressBar e a meta estão visíveis
+      // Agora a meta e o lore estão visíveis
       expect(find.byType(CaminhoSerpenteProgressBar), findsOneWidget);
       expect(find.text('Meta: 1.000.000 km'), findsOneWidget);
 
-      // Clica para recolher novamente
+      // Clica para recolher novamente as estatísticas
       await tester.tap(find.text('CAMINHO DA SERPENTE'));
       await tester.pumpAndSettle();
 
-      // Volta a ficar compacto
-      expect(find.byType(CaminhoSerpenteProgressBar), findsNothing);
+      // Estatísticas recolhem, mas a barra senoidal continua visível
+      expect(find.text('Meta: 1.000.000 km'), findsNothing);
+      expect(find.byType(CaminhoSerpenteProgressBar), findsOneWidget);
     });
   });
 }
