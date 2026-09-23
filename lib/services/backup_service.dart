@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../models/ficha_treino.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
 import 'preferences_service.dart';
@@ -13,11 +14,13 @@ class BackupResult {
   final bool sucesso;
   final String mensagem;
   final int totalSessoes;
+  final int totalFichas;
 
   const BackupResult({
     required this.sucesso,
     required this.mensagem,
     this.totalSessoes = 0,
+    this.totalFichas = 0,
   });
 }
 
@@ -34,6 +37,7 @@ class BackupService {
   Future<BackupResult> exportarBackup() async {
     try {
       final sessoes = await _repository.buscarHistoricoTreinos();
+      final fichas = await _repository.buscarFichas();
       final prefsExerciciosRaw = await _preferencesService
           .lerString(PreferencesService.keyExerciciosCustomizados);
 
@@ -44,12 +48,30 @@ class BackupService {
         } catch (_) {}
       }
 
+      final metaDias = await _preferencesService.lerInt(PreferencesService.keyMetaDiasSemana);
+      final pesoAtual = await _preferencesService.lerDouble(PreferencesService.keyPesoAtual);
+      final altura = await _preferencesService.lerDouble(PreferencesService.keyAltura);
+      final percentualGordura = await _preferencesService.lerDouble(PreferencesService.keyPercentualGordura);
+      final dataAtualizacaoPeso = await _preferencesService.lerString(PreferencesService.keyDataUltimaAtualizacaoPeso);
+      final tempoDescanso = await _preferencesService.lerInt(PreferencesService.keyTempoDescanso);
+
+      final Map<String, dynamic> perfilUsuario = {};
+      if (metaDias != null) perfilUsuario['meta_dias_semana'] = metaDias;
+      if (pesoAtual != null) perfilUsuario['peso_atual'] = pesoAtual;
+      if (altura != null) perfilUsuario['altura'] = altura;
+      if (percentualGordura != null) perfilUsuario['percentual_gordura'] = percentualGordura;
+      if (dataAtualizacaoPeso != null) perfilUsuario['data_atualizacao_peso'] = dataAtualizacaoPeso;
+      if (tempoDescanso != null) perfilUsuario['tempo_descanso_padrao'] = tempoDescanso;
+
       final Map<String, dynamic> backupData = {
         'app': 'Gym Saiyajin',
-        'versao_backup': 1,
+        'versao_backup': 2,
         'data_exportacao': DateTime.now().toIso8601String(),
         'total_sessoes': sessoes.length,
+        'total_fichas': fichas.length,
         'sessoes': sessoes.map((s) => s.toJson()).toList(),
+        'fichas': fichas.map((f) => f.toJson()).toList(),
+        'perfil_usuario': perfilUsuario,
         'exercicios_customizados': exerciciosCustomizados,
       };
 
@@ -73,7 +95,7 @@ class BackupService {
         ShareParams(
           files: [xFile],
           subject: 'Backup Gym Saiyajin ($dataFormatada)',
-          text: 'Backup completo do histórico de treinos do Gym Saiyajin.',
+          text: 'Backup completo do histórico de treinos e fichas do Gym Saiyajin.',
         ),
       );
 
@@ -84,6 +106,7 @@ class BackupService {
             ? 'Backup exportado com sucesso!'
             : 'Arquivo de backup gerado.',
         totalSessoes: sessoes.length,
+        totalFichas: fichas.length,
       );
     } catch (e) {
       return BackupResult(
@@ -127,6 +150,7 @@ class BackupService {
         );
       }
 
+      // 1. Restaurar Sessões de Treino
       final List<dynamic> sessoesJson = data['sessoes'] as List<dynamic>;
       final List<SessaoTreino> sessoesParaImportar = [];
 
@@ -141,7 +165,70 @@ class BackupService {
         mesclar: mesclar,
       );
 
-      // Restaurar exercícios customizados se existirem
+      // 2. Restaurar Fichas de Treino se existirem
+      int totalFichasImportadas = 0;
+      if (data.containsKey('fichas') && data['fichas'] is List) {
+        final List<dynamic> fichasJson = data['fichas'] as List<dynamic>;
+        final List<FichaTreino> fichasParaImportar = [];
+        for (final item in fichasJson) {
+          if (item is Map<String, dynamic>) {
+            fichasParaImportar.add(FichaTreino.fromJson(item));
+          }
+        }
+        totalFichasImportadas = await _repository.importarFichas(
+          fichasParaImportar,
+          mesclar: mesclar,
+        );
+      }
+
+      // 3. Restaurar Perfil do Usuário e Medidas se existirem
+      final perfilJson = data['perfil_usuario'] as Map<String, dynamic>? ??
+          data['usuario'] as Map<String, dynamic>?;
+      if (perfilJson != null) {
+        if (perfilJson.containsKey('meta_dias_semana') &&
+            perfilJson['meta_dias_semana'] is int) {
+          await _preferencesService.salvarInt(
+            PreferencesService.keyMetaDiasSemana,
+            perfilJson['meta_dias_semana'] as int,
+          );
+        }
+        if (perfilJson.containsKey('peso_atual') &&
+            perfilJson['peso_atual'] is num) {
+          await _preferencesService.salvarDouble(
+            PreferencesService.keyPesoAtual,
+            (perfilJson['peso_atual'] as num).toDouble(),
+          );
+        }
+        if (perfilJson.containsKey('altura') && perfilJson['altura'] is num) {
+          await _preferencesService.salvarDouble(
+            PreferencesService.keyAltura,
+            (perfilJson['altura'] as num).toDouble(),
+          );
+        }
+        if (perfilJson.containsKey('percentual_gordura') &&
+            perfilJson['percentual_gordura'] is num) {
+          await _preferencesService.salvarDouble(
+            PreferencesService.keyPercentualGordura,
+            (perfilJson['percentual_gordura'] as num).toDouble(),
+          );
+        }
+        if (perfilJson.containsKey('data_atualizacao_peso') &&
+            perfilJson['data_atualizacao_peso'] is String) {
+          await _preferencesService.salvarString(
+            PreferencesService.keyDataUltimaAtualizacaoPeso,
+            perfilJson['data_atualizacao_peso'] as String,
+          );
+        }
+        if (perfilJson.containsKey('tempo_descanso_padrao') &&
+            perfilJson['tempo_descanso_padrao'] is int) {
+          await _preferencesService.salvarInt(
+            PreferencesService.keyTempoDescanso,
+            perfilJson['tempo_descanso_padrao'] as int,
+          );
+        }
+      }
+
+      // 4. Restaurar exercícios customizados se existirem
       if (data.containsKey('exercicios_customizados') &&
           data['exercicios_customizados'] is List) {
         final List<dynamic> customizadosJson =
@@ -175,12 +262,26 @@ class BackupService {
         }
       }
 
+      final partes = <String>[];
+      partes.add(mesclar
+          ? '$totalImportadas nova(s) sessão(ões)'
+          : '$totalImportadas sessão(ões)');
+      if (totalFichasImportadas > 0 || (!mesclar && data.containsKey('fichas'))) {
+        partes.add(mesclar
+            ? '$totalFichasImportadas nova(s) ficha(s)'
+            : '$totalFichasImportadas ficha(s)');
+      }
+      if (perfilJson != null && perfilJson.isNotEmpty) {
+        partes.add('perfil e metas');
+      }
+
       return BackupResult(
         sucesso: true,
         mensagem: mesclar
-            ? '$totalImportadas nova(s) sessão(ões) importada(s) com sucesso!'
-            : 'Histórico restaurado com sucesso ($totalImportadas sessões)!',
+            ? 'Importação concluída: ${partes.join(', ')} importada(s) com sucesso!'
+            : 'Backup restaurado com sucesso (${partes.join(', ')})!',
         totalSessoes: totalImportadas,
+        totalFichas: totalFichasImportadas,
       );
     } catch (e) {
       return BackupResult(

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gym_saiyajin/models/exercicio.dart';
 import 'package:gym_saiyajin/models/serie.dart';
 import 'package:gym_saiyajin/models/sessao_treino.dart';
+import 'package:gym_saiyajin/services/backup_service.dart';
 
 void main() {
   group('Serialização e Modelo de SessaoTreino (Backup)', () {
@@ -81,6 +82,113 @@ void main() {
       expect(SessaoTreino.formatarSegundosLegivel(120), '2 min');
       expect(SessaoTreino.formatarSegundosLegivel(3600), '1h');
       expect(SessaoTreino.formatarSegundosLegivel(4500), '1h 15m');
+    });
+  });
+
+  group('Backup v2 - Fichas, Metas e Medidas Corporais', () {
+    test('BackupResult deve registrar totalSessoes e totalFichas com padrão zero', () {
+      const res = BackupResult(sucesso: true, mensagem: 'OK');
+      expect(res.totalSessoes, 0);
+      expect(res.totalFichas, 0);
+
+      const resCompleto = BackupResult(
+        sucesso: true,
+        mensagem: 'Sucesso',
+        totalSessoes: 5,
+        totalFichas: 2,
+      );
+      expect(resCompleto.totalSessoes, 5);
+      expect(resCompleto.totalFichas, 2);
+    });
+
+    test('Deve suportar estrutura completa de backup v2 com fichas e perfil_usuario', () {
+      final jsonBackupV2 = {
+        'app': 'Gym Saiyajin',
+        'versao_backup': 2,
+        'data_exportacao': '2026-09-23T10:00:00.000',
+        'total_sessoes': 1,
+        'total_fichas': 1,
+        'sessoes': [
+          {
+            'id': 100,
+            'data': '2026-09-23T08:00:00.000',
+            'nome_treino': 'Push Day',
+            'duracao_segundos': 2400,
+            'descanso_total_segundos': 600,
+            'exercicios': [
+              {
+                'nome': 'Supino Reto',
+                'grupo': 'PEITO',
+                'seriesDetalhes': [
+                  {'peso': 90.0, 'reps': 8, 'concluida': true},
+                ],
+              },
+            ],
+          },
+        ],
+        'fichas': [
+          {
+            'id': 1,
+            'nome': 'Treino A - Push',
+            'descricao': 'Peito, Ombro e Tríceps',
+            'exercicios': [
+              {
+                'id': 1,
+                'fichaId': 1,
+                'nome': 'Supino Reto',
+                'grupo': 'PEITO',
+                'ordem': 0,
+                'seriesPadrao': 4,
+              },
+            ],
+          },
+        ],
+        'perfil_usuario': {
+          'meta_dias_semana': 4,
+          'peso_atual': 74.5,
+          'altura': 1.76,
+          'percentual_gordura': 13.5,
+          'data_atualizacao_peso': '2026-09-23T09:00:00.000',
+          'tempo_descanso_padrao': 90,
+        },
+        'exercicios_customizados': [
+          {'nome': 'Crucifixo Inclinado com Halteres', 'grupo': 'PEITO'},
+        ],
+      };
+
+      expect(jsonBackupV2['versao_backup'], 2);
+      expect((jsonBackupV2['fichas'] as List).length, 1);
+      final perfil = jsonBackupV2['perfil_usuario'] as Map<String, dynamic>;
+      expect(perfil['meta_dias_semana'], 4);
+      expect(perfil['peso_atual'], 74.5);
+      expect(perfil['tempo_descanso_padrao'], 90);
+    });
+
+    test('Deve manter retrocompatibilidade com backup v1 ausente de fichas e perfil', () {
+      final jsonBackupV1 = {
+        'app': 'Gym Saiyajin',
+        'versao_backup': 1,
+        'data_exportacao': '2026-09-20T10:00:00.000',
+        'total_sessoes': 1,
+        'sessoes': [
+          {
+            'id': 50,
+            'data': '2026-09-20T08:00:00.000',
+            'nome_treino': 'Leg Day',
+            'duracao_segundos': 3000,
+            'descanso_total_segundos': 500,
+            'exercicios': [],
+          },
+        ],
+        'exercicios_customizados': [],
+      };
+
+      expect(jsonBackupV1['versao_backup'], 1);
+      expect(jsonBackupV1.containsKey('fichas'), false);
+      expect(jsonBackupV1.containsKey('perfil_usuario'), false);
+
+      final perfil = jsonBackupV1['perfil_usuario'] as Map<String, dynamic>?;
+      expect(perfil, isNull);
     });
   });
 }

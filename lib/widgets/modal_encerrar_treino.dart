@@ -286,11 +286,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.military_tech_rounded,
-                                  size: 18,
-                                  color: AppColors.accent,
-                                ),
+                                const DragonBallIcon(size: 16, stars: 4),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
@@ -306,7 +302,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
-                                        '$totalPrs PRs (+$kiPrs Ki)',
+                                        '${totalPrs == 1 ? '1 PR' : '$totalPrs PRs'} (+$kiPrs Ki)',
                                         style: const TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w800,

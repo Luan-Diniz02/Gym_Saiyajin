@@ -133,7 +133,8 @@ enum TransformacaoSaiyajin {
 class PoderLuta {
   final int poderTotal;
   final int forcaBase;
-  final int bagagemBatalha;
+  final int vigorSaiyajin;
+  int get bagagemBatalha => vigorSaiyajin;
   final int bonusPRs;
   final TransformacaoSaiyajin transformacao;
   final double progressoProxima;
@@ -143,19 +144,20 @@ class PoderLuta {
   const PoderLuta({
     required this.poderTotal,
     required this.forcaBase,
-    required this.bagagemBatalha,
+    int? vigorSaiyajin,
+    int? bagagemBatalha,
     required this.bonusPRs,
     required this.transformacao,
     required this.progressoProxima,
     required this.pontosFaltantes,
     required this.maiores1RMPorGrupo,
-  });
+  }) : vigorSaiyajin = vigorSaiyajin ?? bagagemBatalha ?? 0;
 
   factory PoderLuta.zero() {
     return const PoderLuta(
       poderTotal: 0,
       forcaBase: 0,
-      bagagemBatalha: 0,
+      vigorSaiyajin: 0,
       bonusPRs: 0,
       transformacao: TransformacaoSaiyajin.classeBaixa,
       progressoProxima: 0.0,
@@ -181,7 +183,7 @@ class PoderLuta {
 
   /// Calcula o Poder de Luta usando a fórmula híbrida:
   /// - Força Base: Soma dos maiores 1RM estimados de cada grupo muscular x 10
-  /// - Bagagem de Batalha: Volume total histórico / 100
+  /// - Vigor Saiyajin (Volume): Volume total histórico / 100
   /// - Bônus PRs: Quantidade de recordes pessoais x 150
   static PoderLuta calcular({
     required List<RecordePessoal> recordes,
@@ -204,7 +206,7 @@ class PoderLuta {
     max1RMPorGrupo.forEach((_, v) => soma1RMs += v);
     final int forcaBaseCalculada = (soma1RMs * 10).round();
 
-    // 2. Calcular o Volume Total Histórico (kg levantados)
+    // 2. Calcular o Vigor Saiyajin através do Volume Total Histórico (kg levantados)
     double volumeAcumulado = 0.0;
     for (final sessao in historico) {
       for (final ex in sessao.exerciciosConcluidosHoje) {
@@ -215,13 +217,13 @@ class PoderLuta {
         }
       }
     }
-    final int bagagemCalculada = (volumeAcumulado / 100.0).round();
+    final int vigorCalculado = (volumeAcumulado / 100.0).round();
 
     // 3. Bônus por Recordes Pessoais batidos
     final int bonusCalculado = recordes.length * 150;
 
     final int poderTotalCalculado =
-        forcaBaseCalculada + bagagemCalculada + bonusCalculado;
+        forcaBaseCalculada + vigorCalculado + bonusCalculado;
 
     // 4. Determinar patamar e progresso
     final transformacao =
@@ -248,7 +250,7 @@ class PoderLuta {
     return PoderLuta(
       poderTotal: poderTotalCalculado,
       forcaBase: forcaBaseCalculada,
-      bagagemBatalha: bagagemCalculada,
+      vigorSaiyajin: vigorCalculado,
       bonusPRs: bonusCalculado,
       transformacao: transformacao,
       progressoProxima: progresso,

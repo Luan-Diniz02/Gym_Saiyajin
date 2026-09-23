@@ -110,6 +110,7 @@ class _TelaBaseState extends State<TelaBase> {
         progressoController: _progressoController,
         onHistoricoAtualizado: () {
           _progressoController.carregarDados();
+          _treinoController.carregarFichas();
         },
       ),
       ProgressoScreen(controller: _progressoController),

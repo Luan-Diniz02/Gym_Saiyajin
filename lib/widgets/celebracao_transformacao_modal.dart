@@ -173,10 +173,9 @@ class _CelebracaoTransformacaoModalState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.military_tech_rounded,
+                      ScouterIcon(
                         size: 18,
-                        color: transformacao.corBadge,
+                        lensColor: transformacao.corLenteScouter,
                       ),
                       const SizedBox(width: 8),
                       Text(

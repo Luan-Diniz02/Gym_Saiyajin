@@ -68,7 +68,7 @@ void main() {
       expect(poder.transformacao, TransformacaoSaiyajin.guerreiroZ);
     });
 
-    test('Deve converter o volume histórico de treinos em Bagagem de Batalha (Volume / 100)', () {
+    test('Deve converter o volume histórico de treinos em Vigor Saiyajin (Volume / 100)', () {
       final sessoes = [
         SessaoTreino(
           duracaoSegundos: 3600,
@@ -99,10 +99,11 @@ void main() {
       ];
 
       // Volume total concluído = 2000 + 2000 + 1000 = 5000 kg
-      // Bagagem de batalha = 5000 / 100 = 50 Ki
+      // Vigor Saiyajin = 5000 / 100 = 50 Ki
       final poder = PoderLuta.calcular(recordes: [], historico: sessoes);
 
-      expect(poder.bagagemBatalha, 50);
+      expect(poder.vigorSaiyajin, 50);
+      expect(poder.bagagemBatalha, 50); // Alias mantido para compatibilidade
       expect(poder.poderTotal, 50);
       expect(poder.transformacao, TransformacaoSaiyajin.classeBaixa);
       expect(poder.pontosFaltantes, 950);

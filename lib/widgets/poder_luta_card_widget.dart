@@ -5,6 +5,7 @@ import '../controllers/progresso_controller.dart';
 import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
+import 'dragon_ball_icon.dart';
 import 'scouter_icon.dart';
 
 /// Card interativo do Poder de Luta e Patamar de Transformação Saiyajin.
@@ -315,19 +316,19 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
                   ),
                   const SizedBox(height: 8),
 
-                  // Pilar 2: Bagagem de Batalha
+                  // Pilar 2: Vigor Saiyajin
                   _buildLinhaPilar(
-                    icone: Icons.history_edu_rounded,
-                    titulo: 'Bagagem de Batalha (Volume)',
+                    icone: Icons.bolt_rounded,
+                    titulo: 'Vigor Saiyajin (Volume)',
                     subtitulo: 'Volume histórico de repetições / 100',
-                    valor: '${PoderLuta.formatarPoder(poder.bagagemBatalha)} Ki',
+                    valor: '${PoderLuta.formatarPoder(poder.vigorSaiyajin)} Ki',
                     cor: const Color(0xFF4FC3F7),
                   ),
                   const SizedBox(height: 8),
 
                   // Pilar 3: Bônus de PRs
                   _buildLinhaPilar(
-                    icone: Icons.military_tech_rounded,
+                    iconeWidget: const DragonBallIcon(size: 16, stars: 4),
                     titulo: 'Limites Superados (PRs)',
                     subtitulo: '${widget.controller.totalRecordes} recordes registrados × 150',
                     valor: '${PoderLuta.formatarPoder(poder.bonusPRs)} Ki',
@@ -384,7 +385,8 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
 }
 
   Widget _buildLinhaPilar({
-    required IconData icone,
+    IconData? icone,
+    Widget? iconeWidget,
     required String titulo,
     required String subtitulo,
     required String valor,
@@ -405,7 +407,7 @@ class _PoderLutaCardWidgetState extends State<PoderLutaCardWidget> {
               color: cor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icone, size: 16, color: cor),
+            child: iconeWidget ?? Icon(icone, size: 16, color: cor),
           ),
           const SizedBox(width: 10),
           Expanded(

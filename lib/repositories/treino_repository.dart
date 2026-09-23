@@ -353,6 +353,63 @@ class TreinoRepository {
     }
   }
 
+  /// Importa fichas de treino a partir de uma lista (utilizado na restauração de backups).
+  /// Se [mesclar] for false, todas as fichas existentes são removidas antes de importar.
+  /// Se [mesclar] for true, fichas com nomes idênticos aos existentes não são duplicadas.
+  Future<int> importarFichas(List<FichaTreino> fichasNovas, {bool mesclar = true}) async {
+    try {
+      final db = await _databaseHelper.database;
+
+      return await db.transaction<int>((txn) async {
+        if (!mesclar) {
+          await txn.delete('ficha_exercicios');
+          await txn.delete('fichas');
+        }
+
+        final List<Map<String, Object?>> fichasExistentes = mesclar
+            ? await txn.query('fichas', columns: ['nome'])
+            : [];
+        final Set<String> nomesExistentes = fichasExistentes
+            .map((r) => (r['nome'] as String? ?? '').toLowerCase().trim())
+            .where((n) => n.isNotEmpty)
+            .toSet();
+
+        int importadas = 0;
+        for (final ficha in fichasNovas) {
+          final nomeNormalizado = ficha.nome.trim().toLowerCase();
+          if (nomeNormalizado.isEmpty) continue;
+
+          if (mesclar && nomesExistentes.contains(nomeNormalizado)) {
+            continue;
+          }
+
+          final int fichaId = await txn.insert('fichas', {
+            'nome': ficha.nome.trim(),
+            'descricao': ficha.descricao?.trim(),
+          });
+
+          for (int i = 0; i < ficha.exercicios.length; i++) {
+            final item = ficha.exercicios[i];
+            await txn.insert('ficha_exercicios', {
+              'ficha_id': fichaId,
+              'nome': item.nome.trim(),
+              'grupo': item.grupo.trim(),
+              'ordem': i,
+              'series_padrao': item.seriesPadrao,
+            });
+          }
+
+          nomesExistentes.add(nomeNormalizado);
+          importadas++;
+        }
+
+        return importadas;
+      });
+    } catch (e) {
+      throw Exception('Erro ao importar fichas de treino: $e');
+    }
+  }
+
   /// Busca todos os recordes pessoais (PRs) consolidados no histórico de treinos.
   Future<List<RecordePessoal>> buscarRecordesPessoais() async {
     try {

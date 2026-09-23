@@ -8,7 +8,7 @@ O **Gym Saiyajin** combina o rigor do treinamento de força e hipertrofia com um
 
 O Poder de Luta do guerreiro é dinâmico e reflete tanto a **força bruta** quanto o **volume acumulado** e a **frequência de superação**:
 
-$$\text{Poder de Luta (Ki)} = \text{Força Base} + \text{Bagagem de Batalha} + \text{Limites Superados}$$
+$$\text{Poder de Luta (Ki)} = \text{Força Base} + \text{Vigor Saiyajin} + \text{Limites Superados}$$
 
 $$\text{Poder de Luta (Ki)} = \left(\sum \text{Maior 1RM Estimado por Grupo Muscular} \times 10\right) + \left(\frac{\text{Volume Total Histórico}}{100}\right) + (\text{PRs Batidos} \times 150)$$
 
@@ -18,10 +18,10 @@ $$\text{Poder de Luta (Ki)} = \left(\sum \text{Maior 1RM Estimado por Grupo Musc
    - Para cada um dos 6 grupos musculares principais (*Peito, Costas, Pernas, Ombros, Braços, Abdômen*), o sistema identifica o exercício com a maior estimativa de repetição máxima (1RM).
    - A soma desses maiores 1RMs é multiplicada por **10**. Esse pilar garante que a evolução na intensidade absoluta dos exercícios fundamentais (supinos, agachamentos, terras, desenvolvimentos) impulsione diretamente o patamar do atleta.
 
-2. **Bagagem de Batalha ($\frac{\text{Volume Histórico}}{100}$)**:
+2. **Vigor Saiyajin ($\frac{\text{Volume Histórico}}{100}$)**:
    - Volume total levantado em toda a jornada pelo atleta:
      $$\text{Volume} = \sum (\text{peso} \times \text{repetições})$$
-   - Dividido por **100**. Premia a consistência, a disciplina de frequência e a quilometragem de treino acumulada na Sala do Tempo.
+   - Dividido por **100**. Premia a consistência, a resistência neuromuscular à fadiga e a capacidade de trabalho acumulada nas incontáveis sessões de ferro contra a gravidade.
 
 3. **Limites Superados ($\text{PRs} \times 150$)**:
    - Cada novo Recorde Pessoal (PR) conquistado (seja por carga absoluta ou por 1RM estimado) concede **+150 de Ki permanente**.
