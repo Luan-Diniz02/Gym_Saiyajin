@@ -138,7 +138,7 @@ class _TelaBaseState extends State<TelaBase> {
           return;
         }
 
-        // Se houver treino ativo na Sala do Tempo, solicita confirmação para não perder o progresso
+        // Se houver treino em andamento, solicita confirmação para não perder o progresso
         final confirmarSaida = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -164,7 +164,7 @@ class _TelaBaseState extends State<TelaBase> {
               ],
             ),
             content: const Text(
-              'Você possui um treino ativo na Sala do Tempo. Deseja realmente sair do aplicativo?',
+              'Você possui um treino em andamento. Deseja realmente sair do aplicativo?',
               style: TextStyle(color: AppColors.textLight),
             ),
             actions: [
