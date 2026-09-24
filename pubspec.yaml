@@ -1,7 +1,7 @@
 name: gym_saiyajin
 description: "Aplicativo mobile offline-first para rastreamento de treinos de musculacao com tematica Saiyajin."
 publish_to: 'none'
-version: 0.1.0+1
+version: 2.0.0+2
 
 environment:
   sdk: ^3.11.4
