@@ -1,21 +1,36 @@
-MIT License
+TERMOS DE USO E LICENÇA DE PORTFÓLIO / NÃO-COMERCIAL
+Copyright (c) 2026 Luan Pereira Diniz. Todos os direitos reservados.
 
-Copyright (c) 2026 
+Este repositório e seu código-fonte foram desenvolvidos e concebidos por Luan Pereira Diniz 
+como projeto principal de demonstração de engenharia de software, arquitetura de sistemas mobile 
+e design de interface para exibição em portfólio profissional.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. PERMISSÕES CONCEDIDAS (USO PESSOAL, ESTUDO E AVALIAÇÃO):
+   - Concede-se permissão a qualquer pessoa para visualizar, clonar, navegar, compilar e executar 
+     este projeto localmente EXCLUSIVAMENTE para fins de estudo acadêmico, aprendizado de desenvolvimento, 
+     auditoria de código-fonte e avaliação profissional para processos de contratação ou recrutamento técnico.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. RESTRIÇÕES EXPRESSAS DE USO COMERCIAL E REDISTRIBUIÇÃO:
+   - É ESTRITAMENTE PROIBIDA qualquer utilização, reprodução, distribuição, modificação, sublicenciamento 
+     ou venda deste software (ou de suas partes/componentes), com ou sem fins lucrativos, para exploração comercial.
+   - É ESTRITAMENTE PROIBIDA a publicação, disponibilização, distribuição ou submissão deste aplicativo 
+     (ou de obras derivadas baseadas neste código ou em seus CustomPainters proprietários) em quaisquer lojas 
+     de aplicativos públicas ou privadas (incluindo, mas não se limitando a: Google Play Store, Apple App Store, 
+     Samsung Galaxy Store, Amazon Appstore ou equivalentes), exceto mediante autorização prévia, expressa e 
+     por escrito concedida pelo autor original (Luan Pereira Diniz).
+   - Qualquer menção, estudo ou citação deste projeto deve preservar integralmente os créditos de autoria e o 
+     link original para o repositório de Luan Pereira Diniz.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. DECLARAÇÃO DE PROPRIEDADE INTELECTUAL DE TERCEIROS (FAIR USE):
+   - Os termos e elementos temáticos "Dragon Ball", "Dragon Ball Z", "Saiyajin", "Shenlong", "Sr. Kaioh", 
+     "Cápsula Hoi-Poi", bem como personagens e símbolos associados, são marcas registradas e propriedades 
+     intelectuais de Bird Studio, Akira Toriyama, Shueisha e Toei Animation.
+   - Este projeto consiste em um tributo esportivo independente e sem fins lucrativos, desenvolvido sob os 
+     princípios de Fair Use exclusivamente para fins didáticos, educacionais e de demonstração técnica em 
+     portfólio de engenharia de software. Não há qualquer afiliação comercial, endosso ou vínculo oficial com as 
+     empresas detentoras dos direitos da franquia.
+
+4. ISENÇÃO DE RESPONSABILIDADE:
+   - O SOFTWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" (AS IS), SEM QUALQUER GARANTIA EXPRESSA OU IMPLÍCITA. 
+     EM NENHUMA HIPÓTESE O AUTOR SERÁ RESPONSÁVEL POR QUAISQUER DANOS, PERDAS DE DADOS OU RECLAMAÇÕES DECORRENTES 
+     DO USO OU DO DESEMPENHO DESTE SOFTWARE.

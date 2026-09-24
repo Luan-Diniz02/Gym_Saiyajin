@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
   <img src="https://img.shields.io/badge/Tests-104%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
-  <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
+  <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
 ---
@@ -247,6 +247,11 @@ flutter build apk
 
 ---
 
-## 📄 Licença
+## 📄 Licença & Termos de Uso
 
-Distribuído sob a licença MIT. Consulte `LICENSE` para mais detalhes.
+Este projeto foi desenvolvido por **Luan Pereira Diniz** para fins de demonstração técnica e exibição em portfólio profissional de Engenharia de Computação.
+
+- **Código e Arquitetura**: Licenciados para visualização, estudo acadêmico, compilação local e auditoria técnica. É **estritamente proibida** a exploração comercial, sublicenciamento, cópia não autorizada ou publicação em lojas de aplicativos (como Google Play Store, App Store ou equivalentes) sem autorização prévia por escrito do autor.
+- **Tributo & Fair Use**: *"Dragon Ball"*, *"Dragon Ball Z"*, *"Saiyajin"* e elementos visuais associados são marcas registradas e propriedades intelectuais de *Bird Studio / Shueisha / Toei Animation*. Este é um tributo esportivo independente, sem fins lucrativos e sem qualquer vínculo oficial.
+
+Consulte o arquivo [`LICENSE`](LICENSE) para o texto completo dos termos.
