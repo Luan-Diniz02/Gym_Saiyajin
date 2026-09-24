@@ -1,8 +1,10 @@
-# 📜 Propostas Temáticas & Próximos Passos Saiyajin
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Propostas Temáticas & Próximos Passos Saiyajin</h1>
+</p>
 
 Este documento consolida e detalha o planejamento das próximas evoluções temáticas do **Gym Saiyajin**, conectando elementos canônicos do universo Dragon Ball à fisiologia do treino de força e hipertrofia de forma sóbria, elegante e esportiva.
-
----
 
 ---
 

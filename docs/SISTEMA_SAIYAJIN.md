@@ -1,4 +1,8 @@
-# ⚡ Sistema Saiyajin & Progressão de Poder (Ki)
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Sistema Saiyajin & Progressão de Poder (Ki)</h1>
+</p>
 
 O **Gym Saiyajin** combina o rigor do treinamento de força e hipertrofia com uma temática autêntica, sóbria e canônica do universo Dragon Ball. O sistema de gamificação foi desenhado para incentivar a consistência, a sobrecarga progressiva e a superação contínua de recordes pessoais, mantendo sempre uma apresentação esportiva de alto nível sem poluição visual ou excesso de emojis infantis.
 

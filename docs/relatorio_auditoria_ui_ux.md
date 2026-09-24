@@ -1,4 +1,8 @@
-# 🥋 Relatório de Auditoria UI/UX — Gym Saiyajin
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Relatório de Auditoria UI/UX — Gym Saiyajin</h1>
+</p>
 
 > **Projeto**: `gym_saiyajin`  
 > **Objetivo**: Avaliação aprofundada de Design, Usabilidade, Arquitetura de Interface, Acessibilidade e Experiência do Usuário (UX) no ecossistema Flutter.  

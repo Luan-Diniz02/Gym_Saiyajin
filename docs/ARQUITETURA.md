@@ -1,4 +1,8 @@
-# 🏛️ Arquitetura e Engenharia de Software
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Arquitetura e Engenharia de Software</h1>
+</p>
 
 O **Gym Saiyajin** é estruturado sobre princípios sólidos de arquitetura limpa e separação de preocupações (*Separation of Concerns*), projetado para operar em modelo **offline-first** com tolerância a falhas, integridade referencial e alta performance em dispositivos móveis Android.
 

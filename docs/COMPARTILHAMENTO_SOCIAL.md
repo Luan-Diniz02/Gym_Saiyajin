@@ -1,4 +1,8 @@
-# 📸 Compartilhamento Social Personalizável (Stories & Feed)
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Compartilhamento Social Personalizável (Stories & Feed)</h1>
+</p>
 
 O módulo de compartilhamento do **Gym Saiyajin** foi projetado com base no padrão estético e funcional dos melhores aplicativos esportivos do mercado (com destaque para referências de corrida como *Adidas Running* e fotos clássicas de espelho de academia).
 

@@ -1,4 +1,8 @@
-# 🎨 Design System, Ergonomia & Experiência do Usuário (UI/UX)
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Design System, Ergonomia & UI/UX</h1>
+</p>
 
 O **Gym Saiyajin** foi projetado sob uma premissa fundamental de design esportivo mobile: **a interface precisa funcionar com perfeição e clareza no ambiente real da academia**, onde o atleta está ofegante, com as mãos suadas, sob fadiga muscular intensa, luzes adversas e com pouco tempo para interações lentas ou botões diminutos.
 
@@ -190,6 +194,14 @@ graph TD
 Substituímos o uso de emojis convencionais por arte vetorial matemática renderizada via código direto no Canvas:
 
 ### `DragonBallIcon`
+<p align="center">
+  <img src="images/icons/preview_dragon_ball_1star.png" width="85" alt="Dragon Ball 1 Estrela" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_ball_4stars.png" width="85" alt="Dragon Ball 4 Estrelas (Goku)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_ball_7stars.png" width="85" alt="Dragon Ball 7 Estrelas" />
+</p>
+
 - **Renderização**:
   - Esfera com gradiente radial esférico âmbar/laranja profundo (`#FFB703` $\to$ `#FB8500`).
   - Brilho especular translúcido simulando reflexo de cristal/acrílico.
@@ -205,6 +217,14 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 - **Papel na Interface**: Identificador de telemetria no modo Scouter HUD e ícone de Ki na finalização do treino.
 
 ### `DragonRadarIcon`
+<p align="center">
+  <img src="images/icons/preview_dragon_radar_1dot.png" width="95" alt="Radar com 1 Esfera" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_radar_3dots.png" width="95" alt="Radar com 3 Esferas" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_radar_7dots.png" width="95" alt="Radar Completo (7 Esferas)" />
+</p>
+
 - **Renderização**:
   - Gabinete metálico circular com bisel prateado chanfrado e botão de cronômetro superior (dial).
   - Visor CRT/LCD verde esmeralda com grade ortogonal de coordenadas e arco especular de vidro curvo.
@@ -213,6 +233,16 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 - **Papel na Interface**: Gamificação da frequência semanal no card de Meta Semanal (cada dia treinado na semana acende uma esfera no radar).
 
 ### `CapsuleIcon`
+<p align="center">
+  <img src="images/icons/preview_capsule_blue.png" width="80" alt="Cápsula Hoi-Poi Azul (Capsule Corp)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_orange.png" width="80" alt="Cápsula Hoi-Poi Laranja (Saiyajin)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_green.png" width="80" alt="Cápsula Hoi-Poi Verde" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_red.png" width="80" alt="Cápsula Hoi-Poi Vermelha" />
+</p>
+
 - **Renderização**:
   - Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.
   - Botão metálico de acionamento no topo (*push trigger* com haste cilíndrica e anel de retenção).
@@ -222,6 +252,10 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 - **Papel na Interface**: Representação oficial do card de Composição Corporal e Medidas (IMC e Percentual de Gordura) no Dashboard de Progresso.
 
 ### `PlanetaKaiohIcon`
+<p align="center">
+  <img src="images/icons/preview_planeta_kaioh.png" width="115" alt="Planeta do Sr. Kaioh" />
+</p>
+
 - **Renderização**:
   - Mini-planeta esférico cel-shaded com gradiente radial verde grama com iluminação volumétrica 3D (`#7CB342` $\to$ `#33691E`).
   - Estrada anelar circular branca com perspectiva curvada em torno do equador do planeta.
@@ -237,7 +271,16 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Ponto de Ki dinâmico do guerreiro com aura brilhante proporcional à porcentagem percorrida rumo a 1.000.000 km.
   - Ponto de chegada ornamentado diretamente com o `PlanetaKaiohPainter`.
   - Selo marcial oficial do Senhor Kaioh (**界王**) em tipografia destacada com aro dourado no topo do card.
+
 ### `EscotilhaCamaraPainter`
+<p align="center">
+  <img src="images/icons/preview_escotilha_camara_ativa.png" width="115" alt="Escotilha em Atividade" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_escotilha_camara_repouso.png" width="115" alt="Escotilha em Repouso" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_cronometro_completo.png" width="115" alt="Cronômetro Completo" />
+</p>
+
 - **Renderização**:
   - Aro circular exterior em liga escura de titânio chanfrada em 3D com **8 rebites prateados chanfrados** simétricos com fenda e ponto de reflexo especular.
   - Anel de fluido bioenergético em gradiente **Ouro Super Saiyajin e Âmbar** (`#FFD700` $\to$ `#FF8C00`), com halo luminescente (*glow*) ativo enquanto o cronômetro roda.
@@ -247,6 +290,16 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 - **Papel na Interface**: Renderização da escotilha da câmara de regeneração no cronômetro circular de descanso (`CronometroWidget`) na Tela de Treino.
 
 ### `KiAuraIcon` & `KiAuraPainter`
+<p align="center">
+  <img src="images/icons/preview_ki_aura_gold.png" width="85" alt="Ki Aura Ouro SSJ" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_red.png" width="85" alt="Ki Aura Vermelho Kaio-ken" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_cyan.png" width="85" alt="Ki Aura Ciano SSJ2/Deus" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_purple.png" width="85" alt="Ki Aura Roxo Destruição" />
+</p>
+
 - **Renderização**:
   - Silhueta canônica de labareda de Ki com línguas de fogo ascendentes e pontiagudas (*upward energy tongues*), com pico central proeminente e cristas laterais afiadas.
   - Gradiente vertical de energia com contorno de realce luminoso.

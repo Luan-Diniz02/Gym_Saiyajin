@@ -1,6 +1,7 @@
-# 🐉 Gym Saiyajin
-
 <p align="center">
+  <img src="docs/images/shenlong_logo.png" width="130" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Gym Saiyajin</h1>
   <strong>Aplicativo mobile offline-first para rastreamento de treinos de musculação, construído com Flutter, SQLite e arquitetura limpa com foco em ergonomia esportiva, robustez visual e temática Saiyajin.</strong>
 </p>
 
@@ -21,6 +22,15 @@
   <img src="docs/images/historico.png" width="30%" alt="Histórico" />
   <img src="docs/images/progresso.png" width="30%" alt="Progresso & Ki" />
 </p>
+
+### 🎨 Design System Vetorial Nativo (Canvas Puro via CustomPainters)
+
+Todos os elementos temáticos foram construídos com `CustomPainter` vetorial matemático, garantindo nitidez absoluta em qualquer densidade de tela (DPI), ausência de distorções e tamanho de aplicativo ultraleve:
+
+| Câmara de Regeneração | Chamas de Ki (Aura) | Planeta do Sr. Kaioh | Radar do Dragão | Esfera do Dragão | Cápsula Hoi-Poi |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| <img src="docs/images/icons/preview_escotilha_camara_ativa.png" width="90" /> | <img src="docs/images/icons/preview_ki_aura_gold.png" width="90" /> | <img src="docs/images/icons/preview_planeta_kaioh.png" width="90" /> | <img src="docs/images/icons/preview_dragon_radar_7dots.png" width="90" /> | <img src="docs/images/icons/preview_dragon_ball_4stars.png" width="90" /> | <img src="docs/images/icons/preview_capsule_blue.png" width="90" /> |
+| Escotilha com micro-bolhas | Vigor e transformações | Marco de 1.000.000 km | Meta semanal de treino | Recordes batidos (PRs) | Composição corporal |
 
 ---
 
