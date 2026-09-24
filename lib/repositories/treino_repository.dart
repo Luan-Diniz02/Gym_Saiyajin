@@ -47,6 +47,7 @@ class TreinoRepository {
         }
       });
     } catch (e) {
+      if (e is ArgumentError) rethrow;
       throw Exception('Erro ao salvar sessao de treino: $e');
     }
   }
@@ -587,7 +588,12 @@ class _RecordeAcumulador {
       this.sessaoId = sessaoId;
     }
 
-    if (peso > cargaMaxima || (peso == cargaMaxima && reps > repsCargaMaxima)) {
+    if (RecordePessoal.bateuCarga(
+      peso: peso,
+      reps: reps,
+      baseCarga: cargaMaxima,
+      baseReps: repsCargaMaxima,
+    )) {
       cargaMaxima = peso;
       repsCargaMaxima = reps;
       dataCargaMaxima = data;

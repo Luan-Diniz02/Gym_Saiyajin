@@ -271,9 +271,9 @@ IMPACTO │
 - [x] Alinhar histórico de migrações SQLite e matriz de testes em `docs/ARQUITETURA.md`.
 
 ### Fase 4: Otimização de Arquitetura e Performance
-- [ ] Isolar a reatividade do cronômetro de treino para evitar rebuilds de 1s na tela inteira.
-- [ ] Refatorar regras de PRs/1RM para uma entidade unificada.
-- [ ] Expandir cobertura de testes para a camada de persistência com `sqflite_common_ffi`.
+- [x] Isolar a reatividade do cronômetro de treino para evitar rebuilds de 1s na tela inteira.
+- [x] Refatorar regras de PRs/1RM para uma entidade unificada.
+- [x] Expandir cobertura de testes para a camada de persistência com `sqflite_common_ffi`.
 
 ---
 *Relatório consolidado gerado automaticamente pela suíte de subagentes especializados.*

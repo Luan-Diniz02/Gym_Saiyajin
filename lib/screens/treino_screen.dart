@@ -412,13 +412,18 @@ class _TreinoScreenState extends State<TreinoScreen> {
                           letterSpacing: 0.8,
                         ),
                       ),
-                      Text(
-                        _controller.duracaoTreinoFormatada,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textLight,
-                        ),
+                      ValueListenableBuilder<int>(
+                        valueListenable: _controller.duracaoTreinoNotifier,
+                        builder: (context, duracao, _) {
+                          return Text(
+                            _controller.formatarTempoLegivel(duracao),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textLight,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -459,13 +464,18 @@ class _TreinoScreenState extends State<TreinoScreen> {
                           letterSpacing: 0.8,
                         ),
                       ),
-                      Text(
-                        _controller.descansoTotalFormatado,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textLight,
-                        ),
+                      ValueListenableBuilder<int>(
+                        valueListenable: _controller.tempoDescansoNotifier,
+                        builder: (context, _, _) {
+                          return Text(
+                            _controller.descansoTotalFormatado,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textLight,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -499,15 +509,20 @@ class _TreinoScreenState extends State<TreinoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CronometroWidget(
-                  tempoFormatado: _controller.tempoFormatado,
-                  tempoAtual: _controller.tempoAtual,
-                  tempoDescansoPadrao: _controller.tempoDescansoPadrao,
-                  isTimerRodando: _controller.isTimerRodando,
-                  onTapConfig: _abrirConfigTempoDescanso,
-                  onPausar: _controller.pausarTimer,
-                  onReiniciar: _controller.reiniciarTimer,
-                  onIniciarOuContinuar: _controller.continuarTimer,
+                ValueListenableBuilder<int>(
+                  valueListenable: _controller.tempoDescansoNotifier,
+                  builder: (context, tempoRestante, _) {
+                    return CronometroWidget(
+                      tempoFormatado: TreinoController.formatarSegundosDescanso(tempoRestante),
+                      tempoAtual: tempoRestante,
+                      tempoDescansoPadrao: _controller.tempoDescansoPadrao,
+                      isTimerRodando: _controller.isTimerRodando,
+                      onTapConfig: _abrirConfigTempoDescanso,
+                      onPausar: _controller.pausarTimer,
+                      onReiniciar: _controller.reiniciarTimer,
+                      onIniciarOuContinuar: _controller.continuarTimer,
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 _buildBarraTempoTreino(),

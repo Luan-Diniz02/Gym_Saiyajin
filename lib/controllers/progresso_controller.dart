@@ -396,11 +396,14 @@ class ProgressoController extends ChangeNotifier {
               }
               final p = s.peso!;
               final r = s.reps!;
-              final umRM = RecordePessoal.calcular1RM(p, r);
 
-              if (p > previo.$1 ||
-                  (p == previo.$1 && r > previo.$2) ||
-                  umRM > previo.$3) {
+              if (RecordePessoal.superaMarca(
+                peso: p,
+                reps: r,
+                baseCarga: previo.$1,
+                baseReps: previo.$2,
+                base1RM: previo.$3,
+              )) {
                 bateuPR = true;
                 break;
               }
@@ -432,7 +435,12 @@ class ProgressoController extends ChangeNotifier {
           final r = s.reps!;
           final umRM = RecordePessoal.calcular1RM(p, r);
 
-          if (p > melhorP || (p == melhorP && r > melhorR)) {
+          if (RecordePessoal.bateuCarga(
+            peso: p,
+            reps: r,
+            baseCarga: melhorP,
+            baseReps: melhorR,
+          )) {
             melhorP = p;
             melhorR = r;
           }

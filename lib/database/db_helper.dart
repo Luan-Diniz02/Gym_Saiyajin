@@ -4,10 +4,19 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
+  Database? _customDatabase;
 
   DatabaseHelper._init();
 
+  /// Construtor para injeção de dependência em testes com SQLite em memória.
+  DatabaseHelper.withDatabase(Database db) : _customDatabase = db;
+
+  static void resetForTests() {
+    _database = null;
+  }
+
   Future<Database> get database async {
+    if (_customDatabase != null) return _customDatabase!;
     if (_database != null) return _database!;
     _database = await _initDB('gym_saiyajin.db');
     return _database!;
@@ -60,6 +69,11 @@ class DatabaseHelper {
 
       await db.execute('CREATE INDEX IF NOT EXISTS idx_ficha_exercicios_ficha_id ON ficha_exercicios (ficha_id)');
     }
+  }
+
+  /// Cria todo o schema de tabelas e índices em uma instância de Database (útil para testes unitários).
+  static Future<void> createSchema(Database db) async {
+    await instance._createDB(db, 3);
   }
 
   Future _createDB(Database db, int version) async {

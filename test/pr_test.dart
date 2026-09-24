@@ -67,4 +67,68 @@ void main() {
       expect(reconstruido.sessaoId, 42);
     });
   });
+
+  group('RecordePessoal - Regras Unificadas de Superação de PR', () {
+    const recordeBase = RecordePessoal(
+      exercicioNome: 'Supino Reto',
+      grupo: 'Peito',
+      cargaMaxima: 100.0,
+      repsCargaMaxima: 5,
+      umRepMaxEstimado: 116.7, // 100 * (1 + 5/30) = 116.7
+      peso1RM: 100.0,
+      reps1RM: 5,
+    );
+
+    test('bateuCarga deve retornar true se o peso for maior ou se mesmo peso com mais reps', () {
+      // Peso maior
+      expect(RecordePessoal.bateuCarga(peso: 105.0, reps: 3, baseCarga: 100.0, baseReps: 5), isTrue);
+      // Mesmo peso com mais reps
+      expect(RecordePessoal.bateuCarga(peso: 100.0, reps: 6, baseCarga: 100.0, baseReps: 5), isTrue);
+      // Mesmo peso com mesmas reps
+      expect(RecordePessoal.bateuCarga(peso: 100.0, reps: 5, baseCarga: 100.0, baseReps: 5), isFalse);
+      // Peso menor
+      expect(RecordePessoal.bateuCarga(peso: 90.0, reps: 10, baseCarga: 100.0, baseReps: 5), isFalse);
+      // Valores não positivos
+      expect(RecordePessoal.bateuCarga(peso: 0.0, reps: 10, baseCarga: 100.0, baseReps: 5), isFalse);
+      expect(RecordePessoal.bateuCarga(peso: 100.0, reps: 0, baseCarga: 100.0, baseReps: 5), isFalse);
+    });
+
+    test('bateu1RM deve retornar true quando o 1RM estimado for estritamente maior', () {
+      // 95kg x 8 reps -> 95 * (1 + 8/30) = 120.3 > 116.7
+      expect(RecordePessoal.bateu1RM(peso: 95.0, reps: 8, base1RM: 116.7), isTrue);
+      // 90kg x 6 reps -> 90 * (1 + 6/30) = 108.0 < 116.7
+      expect(RecordePessoal.bateu1RM(peso: 90.0, reps: 6, base1RM: 116.7), isFalse);
+      // Valores não positivos
+      expect(RecordePessoal.bateu1RM(peso: -10.0, reps: 5, base1RM: 116.7), isFalse);
+    });
+
+    test('supera deve detectar quebra de recorde por carga ou por 1RM', () {
+      // Quebrou por carga máxima absoluta (110kg x 2) -> 1RM = 117.3
+      expect(recordeBase.supera(110.0, 2), isTrue);
+      expect(recordeBase.superaCarga(110.0, 2), isTrue);
+
+      // Quebrou por 1RM com carga menor mas alto volume (95kg x 8 reps -> 1RM 120.3)
+      expect(recordeBase.supera(95.0, 8), isTrue);
+      expect(recordeBase.superaCarga(95.0, 8), isFalse);
+      expect(recordeBase.supera1RM(95.0, 8), isTrue);
+
+      // Não quebrou nem carga nem 1RM (90kg x 5 -> 1RM 105.0)
+      expect(recordeBase.supera(90.0, 5), isFalse);
+      expect(recordeBase.superaCarga(90.0, 5), isFalse);
+      expect(recordeBase.supera1RM(90.0, 5), isFalse);
+    });
+
+    test('superaMarca estático deve avaliar corretamente os critérios base', () {
+      expect(
+        RecordePessoal.superaMarca(
+          peso: 80.0,
+          reps: 12, // 1RM: 80 * 1.4 = 112.0
+          baseCarga: 90.0,
+          baseReps: 5, // 1RM: 90 * 1.166 = 105.0
+          base1RM: 105.0,
+        ),
+        isTrue, // 112.0 > 105.0
+      );
+    });
+  });
 }

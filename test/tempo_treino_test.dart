@@ -193,6 +193,28 @@ void main() {
       expect(controller.duracaoTreinoSegundos, 0);
       expect(controller.descansoTotalSegundos, 0);
       expect(controller.exerciciosConcluidosHoje.isEmpty, true);
+      expect(controller.duracaoTreinoNotifier.value, 0);
+      expect(controller.tempoDescansoNotifier.value, controller.tempoDescansoPadrao);
+    });
+
+    test('duracaoTreinoNotifier e tempoDescansoNotifier devem sincronizar valores sem rebuild geral', () {
+      expect(controller.tempoDescansoNotifier.value, 90);
+
+      controller.atualizarTempoDescanso(120);
+      expect(controller.tempoDescansoNotifier.value, 120);
+
+      controller.iniciarTimer();
+      expect(controller.tempoDescansoNotifier.value, 120);
+
+      controller.pausarTimer();
+      expect(controller.tempoDescansoNotifier.value, closeTo(120, 2));
+
+      controller.reiniciarTimer();
+      expect(controller.tempoDescansoNotifier.value, 120);
+
+      controller.iniciarTreinoSeNecessario();
+      expect(controller.isTreinoEmAndamento, isTrue);
+      expect(controller.duracaoTreinoNotifier.value, isNonNegative);
     });
   });
 }

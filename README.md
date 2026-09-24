@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-92%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-104%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -28,7 +28,7 @@
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (92 testes automatizados).
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (104 testes automatizados).
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `EscotilhaCamaraPainter`) e ergonomia do Histórico e do Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente e a Câmara de Regeneração Médica.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
@@ -168,7 +168,7 @@ gym_saiyajin/
 │       ├── serie_anterior_chip.dart
 │       ├── serie_row_widget.dart
 │       └── status_barra_treino.dart
-├── test/                               # Suíte de 92 testes automatizados
+├── test/                               # Suíte de 104 testes automatizados
 │   ├── backup_test.dart
 │   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
@@ -185,7 +185,8 @@ gym_saiyajin/
 │   ├── render_preview_test.dart
 │   ├── serie_row_widget_test.dart
 │   ├── tempo_treino_test.dart
-│   └── treino_controller_test.dart
+│   ├── treino_controller_test.dart
+│   └── treino_repository_test.dart
 ├── pubspec.yaml
 └── README.md
 ```
@@ -203,7 +204,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (92 testes)
+# Executar a suíte completa de testes automatizados (104 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

@@ -128,17 +128,17 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (92 Testes)
+## 🧪 4. Suíte de Testes Automatizados (104 Testes)
 
-O repositório possui cobertura ampla de testes unitários e de widgets na pasta `test/`, executáveis via `flutter test`:
+O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
 | Arquivo de Teste | Área de Cobertura | Casos Chave |
 | :--- | :--- | :--- |
 | [`test/compartilhar_card_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/compartilhar_card_test.dart) | Modal de Compartilhamento Social | Proporções (Stories/Feed), Presets (Slim, Scouter HUD, Rodapé), Cores e Ícones. |
 | [`test/dragon_ball_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_ball_icon_test.dart) | CustomPainter Esfera do Dragão | Dimensões, renderização de 1 a 7 estrelas e método `shouldRepaint`. |
 | [`test/poder_luta_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/poder_luta_test.dart) | Matemática do Ki e Transformações | Fórmula híbrida, pontuação dos 3 pilares, faixas de poder e auras. |
-| [`test/pr_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/pr_test.dart) | Cálculo de 1RM e Recordes | Fórmula de Epley, teto de 15 reps, formatação limpa e serialização. |
-| [`test/tempo_treino_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/tempo_treino_test.dart) | Cronômetro e Background | Pausa/retomada, saltos temporais com tela bloqueada e persistência de descanso. |
+| [`test/pr_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/pr_test.dart) | Cálculo de 1RM e Recordes | Fórmula de Epley, teto de 15 reps, regras canônicas de superação de PR, formatação limpa e serialização. |
+| [`test/tempo_treino_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/tempo_treino_test.dart) | Cronômetro e Background | Pausa/retomada, saltos temporais com tela bloqueada, persistência de descanso e notifiers isolados. |
 | [`test/treino_controller_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/treino_controller_test.dart) | Fluxo do Treino e Fichas | Carga anterior, substituição de aparelho ocupado, volume e bônus de Ki por PR. |
 | [`test/ficha_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/ficha_test.dart) | CRUD de Fichas e Templates | Criação, edição, enfileiramento e personalização de séries padrão. |
 | [`test/backup_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/backup_test.dart) | Exportação e Importação JSON | Mesclagem de dados, deduplicação e integridade de schema. |
@@ -150,4 +150,5 @@ O repositório possui cobertura ampla de testes unitários e de widgets na pasta
 | [`test/ki_aura_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/ki_aura_icon_test.dart) | CustomPainter Chamas de Ki | Dimensões, suporte a cores de transformação, núcleo de energia, glow e sparks. |
 | [`test/notification_service_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes, agendamento exato alarmClock e controle de concorrência. |
 | [`test/serie_row_widget_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/serie_row_widget_test.dart) | Ergonomia e Segurança de Séries | Confirmação de exclusão em `Dismissible`, cancelamento e remoção segura. |
+| [`test/treino_repository_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/treino_repository_test.dart) | Persistência SQLite em Memória (FFI) | Inserção/leitura de sessões, cascata (`ON DELETE CASCADE`), agregação de PRs e CRUD de fichas. |
 | [`test/render_preview_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/render_preview_test.dart) | Renderização de Arte Gráfica | Geração de previews em alta resolução dos CustomPainters em PNG. |

@@ -45,6 +45,72 @@ class RecordePessoal {
     return peso.toStringAsFixed(1);
   }
 
+  /// Verifica se uma combinação de peso e reps supera uma carga base (peso maior ou mesmo peso com mais reps).
+  static bool bateuCarga({
+    required double peso,
+    required int reps,
+    required double baseCarga,
+    required int baseReps,
+  }) {
+    if (peso <= 0 || reps <= 0) return false;
+    return peso > baseCarga || (peso == baseCarga && reps > baseReps);
+  }
+
+  /// Verifica se uma combinação de peso e reps supera um 1RM estimado base.
+  static bool bateu1RM({
+    required double peso,
+    required int reps,
+    required double base1RM,
+  }) {
+    if (peso <= 0 || reps <= 0) return false;
+    return calcular1RM(peso, reps) > base1RM;
+  }
+
+  /// Verifica se um par (peso, reps) supera qualquer uma das métricas base (Carga Máxima ou 1RM estimado).
+  static bool superaMarca({
+    required double peso,
+    required int reps,
+    required double baseCarga,
+    required int baseReps,
+    required double base1RM,
+  }) {
+    return bateuCarga(
+          peso: peso,
+          reps: reps,
+          baseCarga: baseCarga,
+          baseReps: baseReps,
+        ) ||
+        bateu1RM(
+          peso: peso,
+          reps: reps,
+          base1RM: base1RM,
+        );
+  }
+
+  /// Verifica se o par (peso, reps) supera a carga máxima deste recorde.
+  bool superaCarga(double peso, int reps) => bateuCarga(
+        peso: peso,
+        reps: reps,
+        baseCarga: cargaMaxima,
+        baseReps: repsCargaMaxima,
+      );
+
+  /// Verifica se o par (peso, reps) supera o 1RM estimado deste recorde.
+  bool supera1RM(double peso, int reps) => bateu1RM(
+        peso: peso,
+        reps: reps,
+        base1RM: umRepMaxEstimado,
+      );
+
+  /// Verifica se o par (peso, reps) quebra o recorde pessoal (carga máxima ou 1RM estimado).
+  bool supera(double peso, int reps) => superaMarca(
+        peso: peso,
+        reps: reps,
+        baseCarga: cargaMaxima,
+        baseReps: repsCargaMaxima,
+        base1RM: umRepMaxEstimado,
+      );
+
   RecordePessoal copyWith({
     String? exercicioNome,
     String? grupo,
