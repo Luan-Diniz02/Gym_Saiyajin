@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.0.0"><img src="https://img.shields.io/badge/Release-v2.0.0-FF8C00?logo=github&logoColor=white" alt="Release v2.0.0" /></a>
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
@@ -31,6 +32,23 @@ Todos os elementos temáticos foram construídos com `CustomPainter` vetorial ma
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | <img src="docs/images/icons/preview_escotilha_camara_ativa.png" width="90" /> | <img src="docs/images/icons/preview_ki_aura_gold.png" width="90" /> | <img src="docs/images/icons/preview_planeta_kaioh.png" width="90" /> | <img src="docs/images/icons/preview_dragon_radar_7dots.png" width="90" /> | <img src="docs/images/icons/preview_dragon_ball_4stars.png" width="90" /> | <img src="docs/images/icons/preview_capsule_blue.png" width="90" /> |
 | Escotilha com micro-bolhas | Vigor e transformações | Marco de 1.000.000 km | Meta semanal de treino | Recordes batidos (PRs) | Composição corporal |
+
+---
+
+## 📲 Download & Instalação (APK Android)
+
+A versão estável do aplicativo está pronta para instalação imediata no seu celular Android:
+
+<p align="center">
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.0.0/Gym.Saiyajin.v2.0.0.-.Offline.Edition.apk">
+    <img src="https://img.shields.io/badge/Download_APK-Gym_Saiyajin_v2.0.0-FF8C00?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+  </a>
+</p>
+
+### 📥 Instruções para Instalação no Smartphone:
+1. **Baixar o APK**: Faça o download do arquivo **[`Gym.Saiyajin.v2.0.0.-.Offline.Edition.apk`](https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.0.0/Gym.Saiyajin.v2.0.0.-.Offline.Edition.apk)** diretamente no seu dispositivo Android.
+2. **Autorizar Fontes Desconhecidas**: Ao abrir o arquivo baixado, caso o Android solicite, autorize a instalação a partir do navegador ou gerenciador de arquivos.
+3. **Instalar e Treinar**: Toque em **Instalar** e inicie o uso. O aplicativo opera **100% offline-first**, sem necessidade de cadastro, criação de conta ou acesso à internet.
 
 ---
 
