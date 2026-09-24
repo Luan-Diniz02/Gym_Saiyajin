@@ -51,14 +51,16 @@ A paleta é construída sobre uma base **OLED True Dark**, minimizando o consumo
 ┌─────────────────────────────────────────────────────────────┐
 │                      PALETA PRINCIPAL                       │
 ├───────────────────┬─────────────────────────────────────────┤
-│ Background        │ #0E0F14 (Preto profundo azulado)        │
-│ Surface           │ #14161E (Elevação de cards e painéis)   │
-│ Card Border       │ #262938 (Bordas sutis com 1px)          │
-│ Primary (Saiyajin)│ #FF8C00 (Laranja Ki tradicional)        │
+│ Background        │ #000000 (Preto profundo OLED)           │
+│ Surface           │ #1E1E1E (Elevação de cards e painéis)   │
+│ Card Border       │ #2C2C2C (Bordas sutis com 1px)          │
+│ Primary (Saiyajin)│ #FF8C00 (Laranja Ki vibrante)           │
 │ Accent (Ouro SSJ) │ #FFD700 (Dourado Super Saiyajin / PRs)  │
-│ Text Light        │ #F5F5F7 (Texto primário de alto leitura)│
-│ Text Dimmed       │ #8F94A6 (Rótulos e legendas auxiliares) │
-│ Danger            │ #E53935 (Ações destrutivas e avisos)    │
+│ Text Light        │ #FFFFFF (Texto primário de alta leitura)│
+│ Text Dimmed       │ #AAAAAA (Rótulos e legendas auxiliares) │
+│ Text Muted        │ #757575 (Textos terciários/desativados) │
+│ Success           │ #00E676 (Verde de conclusão)            │
+│ Danger            │ #FF4444 (Vermelho de perigo/exclusão)   │
 └───────────────────┴─────────────────────────────────────────┘
 ```
 

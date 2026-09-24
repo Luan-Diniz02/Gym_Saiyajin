@@ -108,10 +108,9 @@ erDiagram
 
 ### Histórico de Migrações (`onUpgrade`):
 - **Versão 1 $\to$ 2**:
-  - Adição das tabelas de templates permanentes `fichas` e `ficha_exercicios`.
+  - Adição das colunas de telemetria temporal `duracao_segundos INTEGER DEFAULT 0` e `descanso_total_segundos INTEGER DEFAULT 0` na tabela `sessoes`.
 - **Versão 2 $\to$ 3**:
-  - Adição da coluna `nome_treino TEXT` na tabela `sessoes` para registrar a divisão executada.
-  - Adição da coluna `series_padrao INTEGER DEFAULT 3` na tabela `ficha_exercicios` para permitir personalização de séries por exercício.
+  - Criação das tabelas de templates e rotinas permanentes `fichas` e `ficha_exercicios` (com `series_padrao INTEGER DEFAULT 3` e chave estrangeira `CASCADE`).
   - Criação de índices de busca rápida (`idx_sessoes_data`, `idx_exercicios_sessao`, `idx_series_exercicio`, `idx_ficha_exercicios_ficha`).
 
 ---
@@ -129,7 +128,7 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados
+## 🧪 4. Suíte de Testes Automatizados (92 Testes)
 
 O repositório possui cobertura ampla de testes unitários e de widgets na pasta `test/`, executáveis via `flutter test`:
 
@@ -149,4 +148,6 @@ O repositório possui cobertura ampla de testes unitários e de widgets na pasta
 | [`test/caminho_serpente_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/caminho_serpente_test.dart) | Caminho da Serpente & Planeta Kaioh | Progressão senoidal, PlanetaKaiohIcon, sessões sempre expandidas e modal de ajuste de tempo. |
 | [`test/cronometro_widget_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/cronometro_widget_test.dart) | Escotilha da Câmara de Regeneração | Estados de repouso, regeneração ativa com bolhas animadas, pausa e telemetria. |
 | [`test/ki_aura_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/ki_aura_icon_test.dart) | CustomPainter Chamas de Ki | Dimensões, suporte a cores de transformação, núcleo de energia, glow e sparks. |
-| [`test/notification_service_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes e controle de concorrência. |
+| [`test/notification_service_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes, agendamento exato alarmClock e controle de concorrência. |
+| [`test/serie_row_widget_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/serie_row_widget_test.dart) | Ergonomia e Segurança de Séries | Confirmação de exclusão em `Dismissible`, cancelamento e remoção segura. |
+| [`test/render_preview_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/render_preview_test.dart) | Renderização de Arte Gráfica | Geração de previews em alta resolução dos CustomPainters em PNG. |

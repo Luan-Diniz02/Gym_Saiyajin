@@ -1,5 +1,5 @@
 name: gym_saiyajin
-description: "A new Flutter project."
+description: "Aplicativo mobile offline-first para rastreamento de treinos de musculacao com tematica Saiyajin."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   flutter_local_notifications: ^21.0.0
   flutter_ringtone_player: ^4.0.0+4
-  flutter_svg: ^2.3.0
   image_picker: ^1.2.3
   path: ^1.9.1
   path_provider: ^2.1.6

@@ -144,24 +144,24 @@ No **Gym Saiyajin**, a constância de meses e anos na academia é traduzida dire
 
 ### A. A Fórmula dos Quilômetros de Ferro
 
-$$\text{Distância no Caminho (km)} = \left(\frac{\text{Volume Total em kg}}{100}\right) + \left(\frac{\text{Minutos Totais de Treino}}{10}\right)$$
+$$\text{Distância no Caminho (km)} = \left(\frac{\text{Volume Total em kg}}{10}\right) + (\text{Minutos Totais de Treino} \times 2)$$
 
-- Cada **100 kg** erguidos no acumulado de todos os treinos equivalem a **1 km** percorrido no Caminho.
-- Cada **10 minutos** sob esforço ativo de ferro e recuperação somam **1 km** adicional de marcha.
+- Cada **10 kg** erguidos no acumulado de todos os treinos equivalem a **1 km** percorrido no Caminho.
+- Cada **1 minuto** sob esforço ativo de ferro e recuperação soma **2 km** adicionais de marcha.
 - A **Meta Absoluta** é fixada em **1.000.000 km**, premiando a consistência ininterrupta no estilo de vida do ferro.
 
 ### B. Marcos Narrativos Canônicos (Lore por Porcentagem)
 
-De acordo com a fração da distância percorrida ($\frac{\text{km}}{1.000.000} \times 100$), o guerreiro atinge marcos canônicos exibidos no card expansível:
+De acordo com a distância percorrida ($\frac{\text{km}}{1.000.000} \times 100$), o guerreiro atinge marcos canônicos exibidos no card expansível do histórico:
 
-| Faixa (%) | Marco Narrativo Oficial | Lore de Dragon Ball Z |
+| Faixa (%) / Distância | Marco Narrativo Oficial | Lore de Dragon Ball Z |
 | :--- | :--- | :--- |
-| **0.0% – 4.9%** | *Palácio de Enma Daioh* | O guerreiro recebe a permissão especial e inicia a corrida épica sobre a cauda da serpente. |
-| **5.0% – 24.9%** | *Curvas da Serpente* | Vencendo os primeiros trechos sinuosos sem olhar para baixo; o corpo começa a forjar resistência. |
-| **25.0% – 49.9%** | *Castelo da Princesa Serpente* | Resistindo às distrações, preguiça e tentações de abandonar o caminho sagrado da força. |
-| **50.0% – 74.9%** | *Salto sobre o Inferno* | Metade do caminho superada com sucesso; disciplina de ferro inabalável rumo à divindade. |
-| **75.0% – 99.9%** | *Cauda Final da Serpente* | A cauda se eleva em direção aos céus; o campo de gravidade de 10x do planeta já começa a ser sentido. |
-| **100.0%+** | *Planeta do Sr. Kaioh Conquistado!* | O guerreiro alcança o pequeno planeta sagrado e está pronto para o Treino com Pesos Divinos! |
+| **0.0% – 4.9%** (< 50.000 km) | *Cauda da Serpente (Início da Jornada)* | O guerreiro recebe a permissão especial de Enma Daioh e inicia a corrida épica sobre a cauda da serpente. |
+| **5.0% – 19.9%** (50.000 – 199.999 km) | *Região das Nuvens Amarelas* | Vencendo os primeiros trechos sinuosos sobre o manto dourado do Outro Mundo; o corpo começa a forjar resistência. |
+| **20.0% – 49.9%** (200.000 – 499.999 km) | *Palácio da Princesa Serpente* | Resistindo às distrações, preguiça e tentações de abandonar o caminho sagrado da força. |
+| **50.0% – 79.9%** (500.000 – 799.999 km) | *Fim do Nevoeiro do Outro Mundo* | Metade do caminho superada com sucesso; o nevoeiro se dissipa revelando a disciplina de ferro inabalável. |
+| **80.0% – 99.9%** (800.000 – 999.999 km) | *Cabeça da Serpente (Aterrissagem Iminente)* | A cabeça da serpente desponta nas alturas; o campo de gravidade de 10x do planeta já começa a ser sentido. |
+| **100.0%+** (≥ 1.000.000 km) | *Planeta do Sr. Kaioh (Travessia Concluída!)* | O guerreiro alcança o pequeno planeta sagrado e está pronto para o Treino com Pesos Divinos! |
 
 ### C. Apresentação Visual no Histórico
 - **Barra Senoidal Contínua (`CaminhoSerpenteProgressBar`)**: Ondulação suave de seno ($2.5$ ciclos), drop shadows espaciais, aura de Ki que se desloca com o avanço e o `PlanetaKaiohIcon` ancorado na chegada.

@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Flutter-%3E%3D3.11.4-02569B?logo=flutter&logoColor=white" alt="Flutter" />
-  <img src="https://img.shields.io/badge/Dart-%3E%3D3.1.0-0175C2?logo=dart&logoColor=white" alt="Dart" />
+  <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-87%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-92%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-MIT-F9A825" alt="License" />
 </p>
 
@@ -28,7 +28,7 @@
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (87 testes automatizados).
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (92 testes automatizados).
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `EscotilhaCamaraPainter`) e ergonomia do Histórico e do Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente e a Câmara de Regeneração Médica.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
@@ -144,6 +144,7 @@ gym_saiyajin/
 │   ├── theme/                          # Design Tokens e paleta de cores centralizada
 │   │   └── app_colors.dart
 │   └── widgets/                        # Componentes visuais atômicos e CustomPainters
+│       ├── caminho_serpente_progress_bar.dart # Barra senoidal contínua e Planeta Kaioh
 │       ├── capsule_icon.dart           # CustomPainter da Cápsula Hoi-Poi da Capsule Corp
 │       ├── celebracao_transformacao_modal.dart
 │       ├── compartilhar_card_modal.dart
@@ -153,26 +154,36 @@ gym_saiyajin/
 │       ├── dragon_radar_icon.dart      # CustomPainter do Radar do Dragão (meta semanal)
 │       ├── gerenciar_fichas_modal.dart
 │       ├── historico_card_widget.dart
+│       ├── ki_aura_icon.dart           # CustomPainter da Aura de Ki Saiyajin
 │       ├── metricas_dashboard_widget.dart
+│       ├── modal_editar_sessao.dart
 │       ├── modal_encerrar_treino.dart
 │       ├── modal_importar_backup.dart
+│       ├── planeta_kaioh_icon.dart     # CustomPainter do Planeta do Sr. Kaioh
 │       ├── poder_luta_card_widget.dart
 │       ├── progresso_grafico_widget.dart
 │       ├── quadro_recordes_modal.dart
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
-│       └── serie_row_widget.dart
-├── test/                               # Suíte de 71 testes automatizados
+│       ├── serie_anterior_chip.dart
+│       ├── serie_row_widget.dart
+│       └── status_barra_treino.dart
+├── test/                               # Suíte de 92 testes automatizados
 │   ├── backup_test.dart
+│   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
 │   ├── compartilhar_card_test.dart
+│   ├── cronometro_widget_test.dart
 │   ├── dragon_ball_icon_test.dart
 │   ├── dragon_radar_icon_test.dart
 │   ├── ficha_test.dart
 │   ├── imc_test.dart
+│   ├── ki_aura_icon_test.dart
 │   ├── notification_service_test.dart
 │   ├── poder_luta_test.dart
 │   ├── pr_test.dart
+│   ├── render_preview_test.dart
+│   ├── serie_row_widget_test.dart
 │   ├── tempo_treino_test.dart
 │   └── treino_controller_test.dart
 ├── pubspec.yaml
@@ -184,7 +195,7 @@ gym_saiyajin/
 ## 🧪 Como Executar e Testar
 
 ### Pré-requisitos
-- Flutter SDK instalado (`>= 3.11.4`)
+- Flutter SDK instalado (`>= 3.22.0`)
 - Dispositivo Android conectado via USB (com depuração ativada) ou emulador
 
 ### Comandos
@@ -192,7 +203,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (67 testes)
+# Executar a suíte completa de testes automatizados (92 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)
