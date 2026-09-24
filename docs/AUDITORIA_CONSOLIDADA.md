@@ -256,16 +256,19 @@ IMPACTO │
 - [x] Corrigir o caminho hardcoded em `test/render_preview_test.dart` com fallback para diretório temporário do sistema.
 
 ### Fase 2: Segurança de Dados e Usabilidade (UI/UX)
-- [ ] Implementar confirmação ou ação "Desfazer" ao excluir série no `serie_row_widget.dart`.
-- [ ] Conectar o método `preencherSerieComAnterior` ao toque no campo ou botão rápido.
-- [ ] Adicionar `PopScope` na tela base para alertar sobre treino em andamento antes de sair.
-- [ ] Alterar o modal de descanso para não bloquear a tela inteira (`barrierDismissible: true` ou auto-dismiss).
+- [x] Implementar confirmação com AlertDialog ao excluir série no `serie_row_widget.dart` ([UX-01]).
+- [x] Validado fluxo de auto-preenchimento ao concluir série com campos vazios ([UX-02]).
+- [x] Adicionar `PopScope` na tela base para alertar sobre treino em andamento antes de sair ([UX-03]).
+- [x] Alterar o modal de descanso para não bloquear a tela inteira (`barrierDismissible: true`) ([UX-04]).
+- [x] Adicionar indicador `isLoading` no Histórico para eliminar flash visual ([UX-05]).
+- [x] Ampliar touch targets na gestão de fichas de 28dp para 44dp ([UX-06]).
 
 ### Fase 3: Alinhamento da Documentação e Higienização do Projeto
-- [ ] Atualizar fórmula e marcos em `docs/SISTEMA_SAIYAJIN.md`.
-- [ ] Atualizar `README.md` (versão do Flutter/Dart, contagem de 87 testes e listagem completa de widgets e testes).
-- [ ] Remover `flutter_svg` de `pubspec.yaml` e atualizar descrição do projeto.
-- [ ] Alinhar tokens de cores em `docs/UI_UX.md` com `AppColors`.
+- [x] Atualizar fórmula e marcos em `docs/SISTEMA_SAIYAJIN.md`.
+- [x] Atualizar `README.md` (versão do Flutter/Dart, contagem de 92 testes e listagem completa de widgets e testes).
+- [x] Remover dependência órfã `flutter_svg` de `pubspec.yaml` e atualizar descrição do projeto.
+- [x] Alinhar tokens de cores em `docs/UI_UX.md` com `AppColors`.
+- [x] Alinhar histórico de migrações SQLite e matriz de testes em `docs/ARQUITETURA.md`.
 
 ### Fase 4: Otimização de Arquitetura e Performance
 - [ ] Isolar a reatividade do cronômetro de treino para evitar rebuilds de 1s na tela inteira.
