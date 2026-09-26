@@ -56,6 +56,51 @@ class SessaoTreino {
   String get duracaoFormatada => formatarSegundosLegivel(duracaoSegundos);
   String get descansoFormatado => formatarSegundosLegivel(descansoTotalSegundos);
 
+  /// Calcula o volume total em kg da sessão (soma de peso * reps de todas as séries válidas)
+  double get volumeTotal {
+    double total = 0.0;
+    for (final ex in exerciciosConcluidosHoje) {
+      for (final s in ex.seriesDetalhes) {
+        final peso = s.peso ?? 0.0;
+        final reps = s.reps ?? 0;
+        if (peso > 0 && reps > 0) {
+          total += peso * reps;
+        }
+      }
+    }
+    return total;
+  }
+
+  /// Total de séries registradas na sessão
+  int get totalSeries {
+    int total = 0;
+    for (final ex in exerciciosConcluidosHoje) {
+      total += ex.seriesDetalhes.length;
+    }
+    return total;
+  }
+
+  /// Formata o volume em kg com separador de milhar (ex: '8.440 kg')
+  static String formatarVolume(double volume) {
+    if (volume <= 0) return '0 kg';
+    final intVal = volume.round();
+    final str = intVal.toString();
+    final buffer = StringBuffer();
+    int count = 0;
+    for (int i = str.length - 1; i >= 0; i--) {
+      buffer.write(str[i]);
+      count++;
+      if (count % 3 == 0 && i > 0) {
+        buffer.write('.');
+      }
+    }
+    final formatted = buffer.toString().split('').reversed.join('');
+    return '$formatted kg';
+  }
+
+  /// Retorna o volume total formatado da sessão
+  String get volumeFormatado => formatarVolume(volumeTotal);
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

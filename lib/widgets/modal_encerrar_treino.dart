@@ -4,6 +4,7 @@ import '../controllers/progresso_controller.dart';
 import '../controllers/treino_controller.dart';
 import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
+import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
 import 'dragon_ball_icon.dart';
 import 'ki_aura_icon.dart';
@@ -319,7 +320,7 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
-                                        '${RecordePessoal.formatarPeso(volumeSessao)} kg (+$kiVolume Ki)',
+                                        '${SessaoTreino.formatarVolume(volumeSessao)} (+$kiVolume Ki)',
                                         style: const TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w800,

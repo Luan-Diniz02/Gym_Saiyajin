@@ -149,39 +149,15 @@ class _CompartilharCardModalState extends State<CompartilharCardModal> {
   }
 
   double _calcularVolumeTotal() {
-    double total = 0.0;
-    for (final ex in widget.sessao.exerciciosConcluidosHoje) {
-      for (final s in ex.seriesDetalhes) {
-        if (s.concluida || (s.peso != null && s.peso! > 0 && s.reps != null && s.reps! > 0)) {
-          total += (s.peso ?? 0.0) * (s.reps ?? 0);
-        }
-      }
-    }
-    return total;
+    return widget.sessao.volumeTotal;
   }
 
   String _formatarVolume(double volume) {
-    final intVal = volume.round();
-    final str = intVal.toString();
-    final buffer = StringBuffer();
-    int count = 0;
-    for (int i = str.length - 1; i >= 0; i--) {
-      buffer.write(str[i]);
-      count++;
-      if (count % 3 == 0 && i > 0) {
-        buffer.write('.');
-      }
-    }
-    final formatted = buffer.toString().split('').reversed.join('');
-    return '$formatted kg';
+    return SessaoTreino.formatarVolume(volume);
   }
 
   int _calcularTotalSeries() {
-    int total = 0;
-    for (final ex in widget.sessao.exerciciosConcluidosHoje) {
-      total += ex.seriesDetalhes.length;
-    }
-    return total;
+    return widget.sessao.totalSeries;
   }
 
   int _calcularKiSessao() {

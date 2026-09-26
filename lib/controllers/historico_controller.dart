@@ -70,15 +70,7 @@ class HistoricoController extends ChangeNotifier {
   double get volumeTotalGeral {
     double total = 0.0;
     for (final sessao in _sessoesTreino) {
-      for (final ex in sessao.exerciciosConcluidosHoje) {
-        for (final serie in ex.seriesDetalhes) {
-          final reps = serie.reps ?? 0;
-          final peso = serie.peso ?? 0.0;
-          if (reps > 0 && peso > 0) {
-            total += reps * peso;
-          }
-        }
-      }
+      total += sessao.volumeTotal;
     }
     return total;
   }

@@ -592,41 +592,12 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   }
 
   Widget _buildTimelineItem(HistoricoDia diaTreino, bool isUltimo) {
-    final exercicios = diaTreino.sessao.exerciciosConcluidosHoje;
-    final prsSessao = widget.progressoController?.obterPRsDaSessao(diaTreino.sessao) ?? 0;
+    final sessao = diaTreino.sessao;
+    final exercicios = sessao.exerciciosConcluidosHoje;
+    final prsSessao = widget.progressoController?.obterPRsDaSessao(sessao) ?? 0;
     final bool temPR = prsSessao > 0;
-
-    int totalSeries = 0;
-    double volumeTotal = 0.0;
-    bool temSerieConcluida = false;
-
-    for (final ex in exercicios) {
-      totalSeries += ex.seriesDetalhes.length;
-      for (final serie in ex.seriesDetalhes) {
-        if (serie.concluida) {
-          temSerieConcluida = true;
-          final reps = serie.reps ?? 0;
-          final peso = serie.peso ?? 0.0;
-          volumeTotal += reps * peso;
-        }
-      }
-    }
-
-    if (!temSerieConcluida) {
-      for (final ex in exercicios) {
-        for (final serie in ex.seriesDetalhes) {
-          final reps = serie.reps ?? 0;
-          final peso = serie.peso ?? 0.0;
-          if (reps > 0 && peso > 0) {
-            volumeTotal += reps * peso;
-          }
-        }
-      }
-    }
-
-    final volumeFormatado = volumeTotal % 1 == 0
-        ? '${volumeTotal.toInt()} kg'
-        : '${volumeTotal.toStringAsFixed(1)} kg';
+    final int totalSeries = sessao.totalSeries;
+    final String volumeFormatado = sessao.volumeFormatado;
 
     return Stack(
       children: [

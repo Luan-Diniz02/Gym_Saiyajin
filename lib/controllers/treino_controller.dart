@@ -35,16 +35,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
   /// Calcula o volume total (kg levantados) da sessão atual.
   double calcularVolumeSessao({bool incluirAtual = true}) {
-    double volumeTotal = 0.0;
-    for (final exercicio in _sessaoTreino.exerciciosConcluidosHoje) {
-      for (final serie in exercicio.seriesDetalhes) {
-        final peso = serie.peso ?? 0.0;
-        final reps = serie.reps ?? 0;
-        if (peso > 0 && reps > 0) {
-          volumeTotal += (peso * reps);
-        }
-      }
-    }
+    double volumeTotal = _sessaoTreino.volumeTotal;
 
     if (incluirAtual && _sessaoTreino.exercicioAtual != null) {
       for (final serie in _sessaoTreino.exercicioAtual!.seriesDetalhes) {
@@ -415,11 +406,19 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       return 'Preencha o peso e as repetições de TODAS as séries antes de finalizar!';
     }
 
+    final seriesConcluidas = atual.seriesDetalhes
+        .map((serie) {
+          final copy = serie.copy();
+          if ((copy.peso ?? 0) > 0 && (copy.reps ?? 0) > 0) {
+            copy.concluida = true;
+          }
+          return copy;
+        })
+        .toList();
+
     _sessaoTreino.exerciciosConcluidosHoje.add(
       atual.copyWith(
-        seriesDetalhes: atual.seriesDetalhes
-            .map((serie) => serie.copy())
-            .toList(),
+        seriesDetalhes: seriesConcluidas,
       ),
     );
     _sessaoTreino.exercicioAtual = null;
@@ -527,7 +526,11 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
                 serie.peso! > 0 &&
                 serie.reps! > 0,
           )
-          .map((serie) => serie.copy())
+          .map((serie) {
+            final copy = serie.copy();
+            copy.concluida = true;
+            return copy;
+          })
           .toList();
 
       if (seriesFiltradas.isNotEmpty) {
