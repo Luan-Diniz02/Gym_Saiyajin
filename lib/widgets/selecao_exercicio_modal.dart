@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../controllers/treino_controller.dart';
 import '../models/catalogo_exercicios.dart';
+import '../services/exercicio_custom_midia_service.dart';
 import '../theme/app_colors.dart';
 import 'exercicio_midia_widget.dart';
 
@@ -104,73 +108,710 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
     final String nomeNovoExercicio = _termoBusca.trim();
     if (nomeNovoExercicio.isEmpty) return;
 
-    final grupos = [
-      'PEITO',
-      'COSTAS',
-      'PERNAS',
-      'BÍCEPS',
-      'TRÍCEPS',
-      'OMBROS',
-      'ABDÔMEN',
-      'OUTROS',
-    ];
+    await _abrirFormularioExercicioCustomizado(
+      nomeInicial: nomeNovoExercicio,
+      grupoInicial: _grupoSelecionado != 'TODOS' ? _grupoSelecionado : 'PEITO',
+      isEdicao: false,
+    );
+  }
 
-    final grupoSelecionado = await showDialog<String>(
+  Future<void> _abrirDialogEditarExercicioCustomizado(
+    String nomeAtual,
+    String grupoAtual,
+  ) async {
+    await _abrirFormularioExercicioCustomizado(
+      nomeInicial: nomeAtual,
+      grupoInicial: grupoAtual,
+      isEdicao: true,
+    );
+  }
+
+  Future<void> _abrirFormularioExercicioCustomizado({
+    required String nomeInicial,
+    required String grupoInicial,
+    required bool isEdicao,
+  }) async {
+    final nomeCtrl = TextEditingController(text: nomeInicial);
+    String grupoEscolhido =
+        grupoInicial.trim().isNotEmpty ? grupoInicial.trim().toUpperCase() : 'PEITO';
+    const linha1Grupos = ['PEITO', 'COSTAS', 'PERNAS', 'OMBROS'];
+    const linha2Grupos = ['BÍCEPS', 'TRÍCEPS', 'ABDÔMEN', 'OUTROS'];
+
+    InfoExercicioCatalogo? itemCatalogoEscolhido;
+    MidiaExercicioCustom? midiaAtual =
+        ExercicioCustomMidiaService.instance.obterMidia(nomeInicial);
+    bool removerMidiaExistente = false;
+    bool salvando = false;
+
+    final resultado = await showDialog<Map<String, String>>(
       context: context,
+      barrierDismissible: false,
       builder: (dialogContext) {
-        return AlertDialog(
-          backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: AppColors.cardBorder, width: 1),
-          ),
-          title: const Text(
-            'Qual o grupo muscular?',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          content: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: grupos.map((grupo) {
-              return InkWell(
-                onTap: () => Navigator.pop(dialogContext, grupo),
-                borderRadius: BorderRadius.circular(10),
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            Widget previewMidia;
+            String tituloMidia;
+            String subtituloMidia;
+
+            if (itemCatalogoEscolhido != null) {
+              tituloMidia = itemCatalogoEscolhido!.nome;
+              subtituloMidia =
+                  '${itemCatalogoEscolhido!.equipamento} • Catálogo Offline';
+              previewMidia = ClipRRect(
+                borderRadius: BorderRadius.circular(11),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.cardBorder),
+                  width: 52,
+                  height: 52,
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(2),
+                  child: Image.asset(
+                    itemCatalogoEscolhido!.thumbAsset,
+                    fit: BoxFit.contain,
                   ),
-                  child: Text(
-                    grupo,
-                    style: const TextStyle(
-                      color: AppColors.textLight,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                ),
+              );
+            } else if (!removerMidiaExistente && midiaAtual != null) {
+              final isArquivo = midiaAtual!.tipo == 'arquivo';
+              tituloMidia = isArquivo
+                  ? 'Foto / GIF do seu dispositivo'
+                  : (midiaAtual!.nomeReferenciaCatalogo ??
+                      midiaAtual!.nomeExercicio);
+              subtituloMidia = isArquivo
+                  ? 'Salvo localmente (100% offline)'
+                  : '${midiaAtual!.equipamento ?? 'Catálogo'} • Catálogo Offline';
+
+              final localPath = midiaAtual!.thumbLocalPath;
+              final assetPath = midiaAtual!.thumbAsset;
+              previewMidia = ClipRRect(
+                borderRadius: BorderRadius.circular(11),
+                child: Container(
+                  width: 52,
+                  height: 52,
+                  color: isArquivo ? AppColors.surface : Colors.white,
+                  child: assetPath != null
+                      ? Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: Image.asset(assetPath, fit: BoxFit.contain),
+                        )
+                      : (localPath != null && File(localPath).existsSync()
+                          ? Image.file(File(localPath), fit: BoxFit.cover)
+                          : const Icon(
+                              Icons.fitness_center_rounded,
+                              color: AppColors.primary,
+                            )),
+                ),
+              );
+            } else {
+              tituloMidia = 'Sem imagem ou GIF personalizado';
+              subtituloMidia =
+                  'Escolha uma animação do catálogo ou envie uma foto';
+              previewMidia = Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(11),
+                  border: Border.all(color: AppColors.cardBorder),
+                ),
+                child: const Icon(
+                  Icons.add_photo_alternate_outlined,
+                  color: AppColors.textDimmed,
+                  size: 22,
+                ),
+              );
+            }
+
+            Widget buildLinhaGrupos(List<String> lista) {
+              return Row(
+                children: lista.asMap().entries.map((entry) {
+                  final idx = entry.key;
+                  final g = entry.value;
+                  final selecionado =
+                      _normalizarGrupo(grupoEscolhido) == _normalizarGrupo(g);
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: idx < lista.length - 1 ? 6 : 0,
+                      ),
+                      child: InkWell(
+                        onTap: () => setDialogState(() => grupoEscolhido = g),
+                        borderRadius: BorderRadius.circular(10),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 140),
+                          padding: const EdgeInsets.symmetric(vertical: 9),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: selecionado
+                                ? AppColors.primary
+                                : AppColors.background,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: selecionado
+                                  ? AppColors.primary
+                                  : AppColors.cardBorder,
+                            ),
+                          ),
+                          child: Text(
+                            g,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: selecionado
+                                  ? AppColors.background
+                                  : AppColors.textLight,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+            }
+
+            Widget buildBotaoMidia({
+              required IconData icon,
+              required String label,
+              required VoidCallback onTap,
+              bool destaque = false,
+            }) {
+              return Expanded(
+                child: InkWell(
+                  onTap: onTap,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    decoration: BoxDecoration(
+                      color: destaque
+                          ? AppColors.primary.withValues(alpha: 0.14)
+                          : AppColors.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: destaque
+                            ? AppColors.primary.withValues(alpha: 0.5)
+                            : AppColors.cardBorder,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          icon,
+                          size: 17,
+                          color: destaque
+                              ? AppColors.primary
+                              : AppColors.textLight,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          label,
+                          style: TextStyle(
+                            color: destaque
+                                ? AppColors.primary
+                                : AppColors.textLight,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               );
-            }).toList(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
-            ),
-          ],
+            }
+
+            final temMidiaSelecionada = itemCatalogoEscolhido != null ||
+                (!removerMidiaExistente && midiaAtual != null);
+
+            return AlertDialog(
+              backgroundColor: AppColors.surface,
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 20,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(22),
+                side: const BorderSide(color: AppColors.cardBorder, width: 1.2),
+              ),
+              titlePadding: const EdgeInsets.fromLTRB(20, 18, 14, 0),
+              contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              title: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      isEdicao ? Icons.edit_outlined : Icons.add_rounded,
+                      color: AppColors.primary,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      isEdicao
+                          ? 'Editar Exercício Personalizado'
+                          : 'Novo Exercício Personalizado',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 15.5,
+                        color: AppColors.textLight,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: salvando
+                        ? null
+                        : () => Navigator.pop(dialogContext),
+                    icon: const Icon(
+                      Icons.close,
+                      color: AppColors.textDimmed,
+                      size: 20,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'NOME DO EXERCÍCIO',
+                        style: TextStyle(
+                          color: AppColors.textDimmed,
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: nomeCtrl,
+                        style: const TextStyle(
+                          color: AppColors.textLight,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Ex: Supino Articulado Pegada Neutra',
+                          hintStyle: const TextStyle(
+                            color: AppColors.textDimmed,
+                            fontSize: 13,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.background,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: AppColors.cardBorder,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'GRUPO MUSCULAR',
+                        style: TextStyle(
+                          color: AppColors.textDimmed,
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      buildLinhaGrupos(linha1Grupos),
+                      const SizedBox(height: 6),
+                      buildLinhaGrupos(linha2Grupos),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'IMAGEM / GIF DE EXECUÇÃO (OPCIONAL)',
+                        style: TextStyle(
+                          color: AppColors.textDimmed,
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: AppColors.cardBorder),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                previewMidia,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        tituloMidia,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: AppColors.textLight,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        subtituloMidia,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: AppColors.textDimmed,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (temMidiaSelecionada)
+                                  IconButton(
+                                    tooltip: 'Remover imagem/GIF',
+                                    onPressed: () {
+                                      setDialogState(() {
+                                        itemCatalogoEscolhido = null;
+                                        removerMidiaExistente = true;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_outline_rounded,
+                                      color: AppColors.danger,
+                                      size: 20,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                buildBotaoMidia(
+                                  icon: Icons.burst_mode_rounded,
+                                  label: 'Catálogo',
+                                  destaque: true,
+                                  onTap: () async {
+                                    final item =
+                                        await SeletorMidiaCatalogoModal.mostrar(
+                                      context,
+                                      grupoInicial: grupoEscolhido,
+                                    );
+                                    if (item != null) {
+                                      setDialogState(() {
+                                        itemCatalogoEscolhido = item;
+                                        removerMidiaExistente = false;
+                                      });
+                                    }
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                                buildBotaoMidia(
+                                  icon: Icons.photo_library_outlined,
+                                  label: 'Galeria',
+                                  onTap: () async {
+                                    final alvoNome =
+                                        nomeCtrl.text.trim().isNotEmpty
+                                            ? nomeCtrl.text.trim()
+                                            : nomeInicial;
+                                    final novaMidia =
+                                        await ExercicioCustomMidiaService
+                                            .instance
+                                            .selecionarEAssociarDaGaleriaOuCamera(
+                                      nomeExercicio: alvoNome,
+                                      source: ImageSource.gallery,
+                                      grupo: grupoEscolhido,
+                                    );
+                                    if (novaMidia != null) {
+                                      setDialogState(() {
+                                        midiaAtual = novaMidia;
+                                        itemCatalogoEscolhido = null;
+                                        removerMidiaExistente = false;
+                                      });
+                                    }
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                                buildBotaoMidia(
+                                  icon: Icons.camera_alt_outlined,
+                                  label: 'Câmera',
+                                  onTap: () async {
+                                    final alvoNome =
+                                        nomeCtrl.text.trim().isNotEmpty
+                                            ? nomeCtrl.text.trim()
+                                            : nomeInicial;
+                                    final novaMidia =
+                                        await ExercicioCustomMidiaService
+                                            .instance
+                                            .selecionarEAssociarDaGaleriaOuCamera(
+                                      nomeExercicio: alvoNome,
+                                      source: ImageSource.camera,
+                                      grupo: grupoEscolhido,
+                                    );
+                                    if (novaMidia != null) {
+                                      setDialogState(() {
+                                        midiaAtual = novaMidia;
+                                        itemCatalogoEscolhido = null;
+                                        removerMidiaExistente = false;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: salvando
+                      ? null
+                      : () => Navigator.pop(dialogContext),
+                  child: const Text(
+                    'CANCELAR',
+                    style: TextStyle(
+                      color: AppColors.textDimmed,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 11,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: salvando
+                      ? null
+                      : () async {
+                          final novoNome = nomeCtrl.text.trim();
+                          if (novoNome.isEmpty) return;
+                          setDialogState(() => salvando = true);
+
+                          if (removerMidiaExistente) {
+                            await ExercicioCustomMidiaService.instance
+                                .removerMidia(nomeInicial);
+                            await ExercicioCustomMidiaService.instance
+                                .removerMidia(novoNome);
+                          } else if (itemCatalogoEscolhido != null) {
+                            await ExercicioCustomMidiaService.instance
+                                .salvarMidiaDoCatalogo(
+                              nomeExercicio: novoNome,
+                              itemCatalogo: itemCatalogoEscolhido!,
+                            );
+                          }
+
+                          if (dialogContext.mounted) {
+                            Navigator.pop(dialogContext, {
+                              'nome': novoNome,
+                              'grupo': grupoEscolhido,
+                            });
+                          }
+                        },
+                  child: salvando
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.background,
+                          ),
+                        )
+                      : Text(
+                          isEdicao ? 'SALVAR ALTERAÇÕES' : 'CRIAR EXERCÍCIO',
+                          style: const TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
 
-    if (!mounted || grupoSelecionado == null) return;
+    if (!mounted || resultado == null) return;
+    final novoNome = resultado['nome'] ?? '';
+    final novoGrupo = resultado['grupo'] ?? '';
+    if (novoNome.isEmpty || novoGrupo.isEmpty) return;
 
-    await widget.controller.salvarNovoExercicioCustomizado(nomeNovoExercicio, grupoSelecionado);
+    if (isEdicao) {
+      await widget.controller.editarExercicioCustomizado(
+        nomeAntigo: nomeInicial,
+        novoNome: novoNome,
+        novoGrupo: novoGrupo,
+      );
+      if (!mounted) return;
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Exercício atualizado para "$novoNome" ($novoGrupo).'),
+          backgroundColor: AppColors.surface,
+        ),
+      );
+    } else {
+      await widget.controller.salvarNovoExercicioCustomizado(
+        novoNome,
+        novoGrupo,
+      );
+      if (!mounted) return;
+      Navigator.pop(context);
+      widget.onSelecionarExercicio(novoNome, novoGrupo);
+    }
+  }
+
+  Future<void> _confirmarExclusaoExercicioCustomizado(
+    String nome,
+    String grupo,
+  ) async {
+    bool apagarDoHistorico = false;
+
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              backgroundColor: AppColors.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+                side: const BorderSide(color: AppColors.cardBorder, width: 1),
+              ),
+              title: const Row(
+                children: [
+                  Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 22),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Excluir Exercício?',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Deseja remover "$nome" ($grupo) da sua lista de exercícios personalizados e das fichas?',
+                    style: const TextStyle(color: AppColors.textLight, fontSize: 13, height: 1.4),
+                  ),
+                  const SizedBox(height: 12),
+                  InkWell(
+                    onTap: () => setDialogState(() => apagarDoHistorico = !apagarDoHistorico),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: apagarDoHistorico
+                              ? AppColors.danger.withValues(alpha: 0.6)
+                              : AppColors.cardBorder,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: Checkbox(
+                              value: apagarDoHistorico,
+                              activeColor: AppColors.danger,
+                              onChanged: (val) =>
+                                  setDialogState(() => apagarDoHistorico = val ?? false),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              'Apagar também do histórico de treinos anteriores',
+                              style: TextStyle(color: AppColors.textDimmed, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.danger,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () => Navigator.pop(dialogContext, true),
+                  child: const Text('EXCLUIR', style: TextStyle(fontWeight: FontWeight.w900)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (!mounted || confirmado != true) return;
+
+    await widget.controller.excluirExercicioCustomizado(
+      nome,
+      removerHistorico: apagarDoHistorico,
+    );
 
     if (!mounted) return;
-    Navigator.pop(context);
-    widget.onSelecionarExercicio(nomeNovoExercicio, grupoSelecionado);
+    setState(() {});
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Exercício "$nome" removido.'),
+        backgroundColor: AppColors.surface,
+      ),
+    );
   }
 
   @override
@@ -312,12 +953,20 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                             final nome = ex['nome'] ?? '';
                             final grupo = ex['grupo'] ?? '';
                             final info = CatalogoExercicios.buscarPorNome(nome);
+                            final midiaCustom = info == null
+                                ? ExercicioCustomMidiaService.instance.obterMidia(nome)
+                                : null;
                             final isPadraoExato = _exerciciosPadrao.any(
                               (p) => (p['nome'] ?? '').toLowerCase() == nome.toLowerCase(),
                             );
                             final subtitulo = info != null
                                 ? '$grupo • ${info.equipamento}'
-                                : '$grupo • Personalizado';
+                                : midiaCustom != null &&
+                                        midiaCustom.equipamento != null &&
+                                        midiaCustom.equipamento!.isNotEmpty &&
+                                        midiaCustom.equipamento != 'Personalizado'
+                                    ? '$grupo • ${midiaCustom.equipamento} (Personalizado)'
+                                    : '$grupo • Personalizado';
                             return ListTile(
                               contentPadding: const EdgeInsets.symmetric(vertical: 2),
                               leading: ExercicioThumbnailWidget(
@@ -346,53 +995,104 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (!isPadraoExato) ...[
-                                    InkWell(
-                                      onTap: () async {
-                                        final fundido = await AssociarExercicioModal.mostrar(
-                                          context,
-                                          controller: widget.controller,
-                                          nomeOrigem: nome,
-                                          grupoOrigem: grupo,
-                                        );
-                                        if (fundido != null && mounted) {
-                                          setState(() {});
+                                  if (!isPadraoExato)
+                                    PopupMenuButton<String>(
+                                      icon: const Icon(
+                                        Icons.more_vert_rounded,
+                                        color: AppColors.accent,
+                                        size: 20,
+                                      ),
+                                      tooltip: 'Opções do exercício personalizado',
+                                      color: AppColors.surface,
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(
+                                        minWidth: 32,
+                                        minHeight: 32,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: const BorderSide(color: AppColors.cardBorder),
+                                      ),
+                                      onSelected: (acao) async {
+                                        if (acao == 'editar') {
+                                          await _abrirDialogEditarExercicioCustomizado(
+                                            nome,
+                                            grupo,
+                                          );
+                                        } else if (acao == 'vincular') {
+                                          final fundido = await AssociarExercicioModal.mostrar(
+                                            context,
+                                            controller: widget.controller,
+                                            nomeOrigem: nome,
+                                            grupoOrigem: grupo,
+                                          );
+                                          if (fundido != null && mounted) {
+                                            setState(() {});
+                                          }
+                                        } else if (acao == 'excluir') {
+                                          await _confirmarExclusaoExercicioCustomizado(
+                                            nome,
+                                            grupo,
+                                          );
                                         }
                                       },
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.accent.withValues(alpha: 0.14),
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: AppColors.accent.withValues(alpha: 0.45),
+                                      itemBuilder: (context) => [
+                                        const PopupMenuItem(
+                                          value: 'editar',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.edit_outlined,
+                                                color: AppColors.textLight,
+                                                size: 18,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                'Editar (nome, grupo ou imagem)',
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        child: const Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.link_rounded,
-                                              color: AppColors.accent,
-                                              size: 14,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              'VINCULAR',
-                                              style: TextStyle(
+                                        const PopupMenuItem(
+                                          value: 'vincular',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.link_rounded,
                                                 color: AppColors.accent,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w900,
-                                                letterSpacing: 0.4,
+                                                size: 18,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(width: 10),
+                                              Text(
+                                                'Vincular ao catálogo',
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                        const PopupMenuItem(
+                                          value: 'excluir',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.delete_outline_rounded,
+                                                color: AppColors.danger,
+                                                size: 18,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                'Excluir exercício',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: AppColors.danger,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 8),
-                                  ],
                                   const Icon(
                                     Icons.add_circle_outline,
                                     color: AppColors.primary,

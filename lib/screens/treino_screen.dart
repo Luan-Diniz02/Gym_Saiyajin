@@ -1241,22 +1241,30 @@ class _TreinoScreenState extends State<TreinoScreen> {
             iconColor: AppColors.primary,
             collapsedIconColor: AppColors.textDimmed,
             tilePadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
+              horizontal: 14,
+              vertical: 6,
+            ),
+            leading: ExercicioThumbnailWidget(
+              nomeExercicio: exercicio.nome,
+              grupo: exercicio.grupo,
+              size: 44,
+              borderRadius: 11,
+              abrirModalAoTocar: true,
+              exibirIndicadorGif: true,
             ),
             title: Row(
               children: [
                 const Icon(
                   Icons.check_circle,
                   color: AppColors.primary,
-                  size: 20,
+                  size: 16,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     exercicio.nome,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textLight,
                     ),
@@ -1266,7 +1274,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
               ],
             ),
             subtitle: Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 28),
+              padding: const EdgeInsets.only(top: 6.0),
               child: Row(
                 children: [
                   Container(

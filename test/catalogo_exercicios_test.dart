@@ -7,8 +7,8 @@ import 'package:gym_saiyajin/widgets/exercicio_midia_widget.dart';
 
 void main() {
   group('CatalogoExercicios - Integridade do Catálogo Offline e Assets', () {
-    test('Deve conter 62 exercícios padrão com todos os metadados preenchidos', () {
-      expect(CatalogoExercicios.exerciciosPadrao.length, equals(62));
+    test('Deve conter 88 exercícios padrão com todos os metadados preenchidos', () {
+      expect(CatalogoExercicios.exerciciosPadrao.length, equals(88));
 
       for (final ex in CatalogoExercicios.exerciciosPadrao) {
         expect(ex.nome.isNotEmpty, isTrue, reason: 'Nome vazio');
@@ -72,6 +72,12 @@ void main() {
       expect(CatalogoExercicios.buscarPorNome('Remada Articulada')?.codigoMidia, equals('0588-IGjKj1v'));
       expect(CatalogoExercicios.buscarPorNome('Prancha')?.codigoMidia, equals('2135-VBAWRPG'));
       expect(CatalogoExercicios.buscarPorNome('Desenvolvimento Máquina')?.codigoMidia, equals('2318-dNFYIU1'));
+      expect(CatalogoExercicios.buscarPorNome('Elevação Lateral Polia')?.codigoMidia, equals('0192-wEulIzp'));
+      expect(CatalogoExercicios.buscarPorNome('Elevação Lateral (Polia)')?.codigoMidia, equals('0192-wEulIzp'));
+      expect(CatalogoExercicios.buscarPorNome('Abdominal Declinado')?.codigoMidia, equals('0277-9Ap7miY'));
+      expect(CatalogoExercicios.buscarPorNome('Supino Reto Unilateral')?.codigoMidia, equals('0343-zGSIWQi'));
+      expect(CatalogoExercicios.buscarPorNome('Remada Unilateral (Máquina)')?.codigoMidia, equals('1356-OIFMAp1'));
+      expect(CatalogoExercicios.buscarPorNome('Rosca Unilateral')?.codigoMidia, equals('0190-YTur5nR'));
       expect(CatalogoExercicios.buscarPorNome('Elevacao Pélvica')?.nome, equals('Elevação Pélvica'));
       expect(CatalogoExercicios.buscarPorNome('Exercício Inexistente XYZ'), isNull);
     });

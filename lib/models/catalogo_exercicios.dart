@@ -30,7 +30,7 @@ class CatalogoExercicios {
   CatalogoExercicios._();
 
   static const List<InfoExercicioCatalogo> exerciciosPadrao = [
-    // ==================== PEITO (10) ====================
+    // ==================== PEITO (15) ====================
     InfoExercicioCatalogo(
       nome: 'Supino Reto',
       grupo: 'PEITO',
@@ -136,6 +136,32 @@ class CatalogoExercicios {
       ],
     ),
     InfoExercicioCatalogo(
+      nome: 'Supino Reto Unilateral',
+      grupo: 'PEITO',
+      codigoMidia: '0343-zGSIWQi',
+      equipamento: 'Halter (Unilateral)',
+      musculoAlvo: 'Peitoral Maior & Estabilizadores',
+      musculosSecundarios: ['Tríceps', 'Deltoide Anterior', 'Core'],
+      instrucoes: [
+        'Deite-se no banco reto segurando um halter em uma das mãos e firme bem os pés no chão.',
+        'Desça o halter controladamente até a linha do peito mantendo o tronco estável sem girar.',
+        'Empurre de volta até o topo e repita com o outro braço.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Supino Inclinado Unilateral',
+      grupo: 'PEITO',
+      codigoMidia: '1281-rDAiRf9',
+      equipamento: 'Halter (Unilateral)',
+      musculoAlvo: 'Peitoral Superior',
+      musculosSecundarios: ['Deltoide Anterior', 'Tríceps', 'Core'],
+      instrucoes: [
+        'No banco inclinado a 30°–45°, segure um halter na linha do ombro e mantenha o abdômen firme.',
+        'Empurre verticalmente até estender o braço e desça controlando o alongamento.',
+        'Conclua as repetições de um lado antes de trocar.',
+      ],
+    ),
+    InfoExercicioCatalogo(
       nome: 'Supino Máquina',
       grupo: 'PEITO',
       codigoMidia: '0577-T0yTjgW',
@@ -146,6 +172,43 @@ class CatalogoExercicios {
         'Ajuste a altura do banco para que as manoplas fiquem alinhadas ao meio do peito.',
         'Empurre as alças à frente mantendo as escápulas coladas no encosto.',
         'Retorne controlando a fase excêntrica.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Supino Inclinado Máquina',
+      grupo: 'PEITO',
+      codigoMidia: '1299-jHAnWmT',
+      equipamento: 'Máquina Articulada',
+      musculoAlvo: 'Peitoral Superior',
+      musculosSecundarios: ['Deltoide Anterior', 'Tríceps'],
+      instrucoes: [
+        'Ajuste o banco da máquina inclinada para que as alças fiquem na altura da parte superior do peito.',
+        'Empurre as manoplas para cima e à frente mantendo as costas apoiadas.',
+        'Desça sob controle alongando o peitoral superior.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Supino Reto Smith',
+      grupo: 'PEITO',
+      codigoMidia: '0748-trqKQv2',
+      equipamento: 'Barra Guiada (Smith)',
+      musculoAlvo: 'Peitoral Maior',
+      musculosSecundarios: ['Tríceps', 'Deltoide Anterior'],
+      instrucoes: [
+        'Posicione o banco reto sob o Smith de modo que a barra desça na linha média do peito.',
+        'Destrave a barra, desça controladamente e empurre até quase estender os cotovelos.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Supino Inclinado Smith',
+      grupo: 'PEITO',
+      codigoMidia: '0757-5v7KYld',
+      equipamento: 'Barra Guiada (Smith)',
+      musculoAlvo: 'Peitoral Superior',
+      musculosSecundarios: ['Deltoide Anterior', 'Tríceps'],
+      instrucoes: [
+        'Posicione o banco inclinado (30°–45°) sob o Smith alinhando a barra à porção alta do peitoral.',
+        'Desça a barra de forma controlada e empurre mantendo as escápulas retraídas.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -278,6 +341,57 @@ class CatalogoExercicios {
         'Ajuste a altura do banco e apoie o peito firmemente contra o suporte acolchoado da máquina.',
         'Segure as manoplas com pegada neutra (fechada) e puxe os cotovelos para trás espremendo as escápulas.',
         'Pause brevemente na contração máxima e retorne devagar mantendo o peito colado ao apoio.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Remada Unilateral Máquina',
+      grupo: 'COSTAS',
+      codigoMidia: '1356-OIFMAp1',
+      equipamento: 'Máquina Articulada (Unilateral)',
+      musculoAlvo: 'Dorsal & Costas Superiores',
+      musculosSecundarios: ['Romboides', 'Bíceps', 'Deltoide Posterior'],
+      instrucoes: [
+        'Sente-se na máquina com o peito apoiado e segure a manopla com apenas uma das mãos.',
+        'Puxe a alça trazendo o cotovelo para trás e concentrando a contração unilateral na dorsal.',
+        'Retorne controlando o alongamento da escápula e repita com o outro lado.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Remada Unilateral Polia',
+      grupo: 'COSTAS',
+      codigoMidia: '0214-vpp9Ku2',
+      equipamento: 'Polia Baixa (Unilateral)',
+      musculoAlvo: 'Dorsal & Meio das Costas',
+      musculosSecundarios: ['Bíceps', 'Romboides'],
+      instrucoes: [
+        'Sentado na remada baixa com puxador individual, mantenha o tronco firme e coluna neutra.',
+        'Puxe a alça em direção à lateral do abdômen girando o punho para pegada neutra.',
+        'Estenda o braço à frente sob controle.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Puxada Unilateral Polia',
+      grupo: 'COSTAS',
+      codigoMidia: '3563-U5INZY6',
+      equipamento: 'Polia Alta (Unilateral)',
+      musculoAlvo: 'Latíssimo do Dorso (Dorsal)',
+      musculosSecundarios: ['Bíceps', 'Redondo Maior'],
+      instrucoes: [
+        'Segure o puxador individual na polia alta e mantenha o tronco estável.',
+        'Puxe a alça trazendo o cotovelo em direção à lateral das costelas para máxima contração do dorsal.',
+        'Retorne devagar alongando totalmente o braço no topo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Extensão Lombar',
+      grupo: 'COSTAS',
+      codigoMidia: '0489-zhMwOwE',
+      equipamento: 'Banco Romano',
+      musculoAlvo: 'Eretores da Espinha (Lombar)',
+      musculosSecundarios: ['Glúteos', 'Isquiotibiais'],
+      instrucoes: [
+        'Posicione-se no banco romano apoiando a parte superior das coxas na almofada, permitindo a flexão livre do quadril.',
+        'Desça o tronco mantendo a coluna alinhada e suba contraindo lombar e glúteos até alinhar o corpo.',
       ],
     ),
 
@@ -477,8 +591,59 @@ class CatalogoExercicios {
         'Eleve os calcanhares ao máximo e sustente brevemente no topo.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Agachamento Smith',
+      grupo: 'PERNAS',
+      codigoMidia: '0770-jFtipLl',
+      equipamento: 'Barra Guiada (Smith)',
+      musculoAlvo: 'Quadríceps & Glúteos',
+      musculosSecundarios: ['Isquiotibiais', 'Panturrilhas'],
+      instrucoes: [
+        'Posicione a barra do Smith sobre o trapézio e os pés levemente à frente da linha da barra.',
+        'Destrave o aparelho e desça flexionando quadril e joelhos com a coluna alinhada.',
+        'Empurre com força pelos calcanhares até retornar ao topo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Agachamento Frontal',
+      grupo: 'PERNAS',
+      codigoMidia: '0042-zG0zs85',
+      equipamento: 'Barra',
+      musculoAlvo: 'Quadríceps & Core',
+      musculosSecundarios: ['Glúteos', 'Eretores da Espinha'],
+      instrucoes: [
+        'Apoie a barra sobre a parte frontal dos ombros mantendo os cotovelos bem elevados à frente.',
+        'Desça com o tronco o mais vertical possível até quebrar a paralela.',
+        'Suba mantendo os cotovelos altos e o abdômen travado.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Agachamento Goblet',
+      grupo: 'PERNAS',
+      codigoMidia: '1760-yn8yg1r',
+      equipamento: 'Halter',
+      musculoAlvo: 'Quadríceps & Glúteos',
+      musculosSecundarios: ['Core', 'Adutores'],
+      instrucoes: [
+        'Segure um halter na vertical próximo ao peito com as duas mãos e cotovelos voltados para baixo.',
+        'Agache mantendo o peito aberto e a coluna neutra até boa profundidade.',
+        'Suba empurrando o solo com os pés firmes.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Levantamento Terra Sumô',
+      grupo: 'PERNAS',
+      codigoMidia: '0117-KgI0tqW',
+      equipamento: 'Barra',
+      musculoAlvo: 'Glúteos, Adutores & Posterior',
+      musculosSecundarios: ['Quadríceps', 'Lombar', 'Trapézio'],
+      instrucoes: [
+        'Afaste bem os pés com as pontas voltadas para fora (~45°) e segure a barra por dentro das pernas.',
+        'Mantenha o peito alto, coluna neutra e empurre o chão afastando os joelhos para fora até estender o quadril.',
+      ],
+    ),
 
-    // ==================== OMBROS (9) ====================
+    // ==================== OMBROS (14) ====================
     InfoExercicioCatalogo(
       nome: 'Desenvolvimento Halteres',
       grupo: 'OMBROS',
@@ -489,7 +654,7 @@ class CatalogoExercicios {
       instrucoes: [
         'Sentado em um banco com encosto vertical, segure os halteres na altura das orelhas.',
         'Empurre os halteres acima da cabeça até quase estender os cotovelos.',
-        'Desça de forma controlada mantendo os cotovelos levemente projetados à frente do plano do tronco.',
+        'Desça de forma controlada mantendo os cotovelos levemente projetados à frente do tronco.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -503,6 +668,19 @@ class CatalogoExercicios {
         'Em pé com os cotovelos sutilmente flexionados, segure os halteres ao lado do corpo.',
         'Eleve os braços lateralmente até a linha dos ombros conduzindo o movimento pelos cotovelos.',
         'Desça lentamente sem balançar o tronco.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Elevação Lateral Polia',
+      grupo: 'OMBROS',
+      codigoMidia: '0192-wEulIzp',
+      equipamento: 'Polia Baixa (Unilateral)',
+      musculoAlvo: 'Deltoide Lateral',
+      musculosSecundarios: ['Supraspinhal', 'Trapézio Superior'],
+      instrucoes: [
+        'Fique em pé de lado para a polia baixa e segure o puxador com a mão mais afastada do aparelho.',
+        'Com o cotovelo levemente flexionado, eleve o braço lateralmente até ficar paralelo ao solo.',
+        'Segure um instante no topo e desça devagar aproveitando a tensão contínua do cabo.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -596,8 +774,59 @@ class CatalogoExercicios {
         'Segure 1 segundo no topo e desça alongando o trapézio.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Encolhimento Barra',
+      grupo: 'OMBROS',
+      codigoMidia: '0095-dG7tG5y',
+      equipamento: 'Barra',
+      musculoAlvo: 'Trapézio Superior',
+      musculosSecundarios: ['Antebraço (Pegada)'],
+      instrucoes: [
+        'Em pé, segure a barra à frente das coxas com pegada pronada na largura dos ombros.',
+        'Eleve os ombros o mais alto possível em direção às orelhas mantendo os braços retos.',
+        'Segure um instante no topo e desça sob controle.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Desenvolvimento Arnold',
+      grupo: 'OMBROS',
+      codigoMidia: '2137-Xy4jlWA',
+      equipamento: 'Halteres',
+      musculoAlvo: 'Deltoide Anterior & Lateral',
+      musculosSecundarios: ['Tríceps', 'Trapézio Superior'],
+      instrucoes: [
+        'Sentado, inicie com os halteres à frente dos ombros e palmas voltadas para você (supinadas).',
+        'Empurre os halteres para cima enquanto gira os punhos até que as palmas fiquem voltadas para frente no topo.',
+        'Desça revertendo o giro de forma fluida.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Desenvolvimento Smith',
+      grupo: 'OMBROS',
+      codigoMidia: '0766-903mzG8',
+      equipamento: 'Barra Guiada (Smith)',
+      musculoAlvo: 'Deltoide Anterior & Lateral',
+      musculosSecundarios: ['Tríceps'],
+      instrucoes: [
+        'Posicione o banco com encosto vertical sob o Smith de modo que a barra desça à frente do rosto/queixo.',
+        'Empurre a barra até quase estender os cotovelos e desça controladamente até a altura do queixo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Remada Alta Barra',
+      grupo: 'OMBROS',
+      codigoMidia: '0120-UDlhcO8',
+      equipamento: 'Barra',
+      musculoAlvo: 'Deltoide Lateral & Trapézio',
+      musculosSecundarios: ['Bíceps', 'Antebraço'],
+      instrucoes: [
+        'Em pé, segure a barra com pegada pronada na largura dos ombros.',
+        'Puxe a barra verticalmente próxima ao corpo conduzindo pelos cotovelos até a altura do peitoral.',
+        'Desça devagar controlando o peso.',
+      ],
+    ),
 
-    // ==================== BÍCEPS (8) ====================
+    // ==================== BÍCEPS (11) ====================
     InfoExercicioCatalogo(
       nome: 'Rosca Direta',
       grupo: 'BÍCEPS',
@@ -702,8 +931,44 @@ class CatalogoExercicios {
         'Retorne devagar sem deixar os pesos baterem.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Unilateral Polia',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0190-YTur5nR',
+      equipamento: 'Polia Baixa (Unilateral)',
+      musculoAlvo: 'Bíceps Braquial',
+      musculosSecundarios: ['Braquial', 'Antebraço'],
+      instrucoes: [
+        'Segure o puxador individual na polia baixa com pegada supinada e mantenha o cotovelo fixo ao lado do tronco.',
+        'Flexione o cotovelo contraindo o bíceps até o topo e desça controlando a tensão do cabo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Concentrada',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0297-gvsWLQw',
+      equipamento: 'Halter (Unilateral)',
+      musculoAlvo: 'Bíceps (Pico / Cabeça Curta)',
+      musculosSecundarios: ['Braquial'],
+      instrucoes: [
+        'Sentado no banco, apoie a parte posterior do braço na parte interna da coxa do mesmo lado.',
+        'Suba o halter contraindo fortemente o bíceps sem mover o tronco e desça até estender o braço.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Barra W',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0447-6TG6x2w',
+      equipamento: 'Barra W (EZ)',
+      musculoAlvo: 'Bíceps Braquial & Braquial',
+      musculosSecundarios: ['Antebraço'],
+      instrucoes: [
+        'Em pé, segure a barra W na curvatura anatômica mantendo os cotovelos firmes ao lado das costelas.',
+        'Flexione os cotovelos até a altura dos ombros e desça sob controle sem balançar a lombar.',
+      ],
+    ),
 
-    // ==================== TRÍCEPS (6) ====================
+    // ==================== TRÍCEPS (8) ====================
     InfoExercicioCatalogo(
       nome: 'Tríceps Polia',
       grupo: 'TRÍCEPS',
@@ -782,8 +1047,32 @@ class CatalogoExercicios {
         'Empurre com força até estender novamente os braços no topo.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Tríceps Unilateral Polia',
+      grupo: 'TRÍCEPS',
+      codigoMidia: '1723-qRZ5S1N',
+      equipamento: 'Polia Alta (Unilateral)',
+      musculoAlvo: 'Tríceps Braquial',
+      musculosSecundarios: ['Ancôneo'],
+      instrucoes: [
+        'Em pé diante da polia alta, segure o puxador individual e mantenha o cotovelo colado ao tronco.',
+        'Estenda completamente o antebraço para baixo contraindo o tríceps e retorne sob controle.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Tríceps Francês Polia',
+      grupo: 'TRÍCEPS',
+      codigoMidia: '0194-2IxROQ1',
+      equipamento: 'Polia (Corda)',
+      musculoAlvo: 'Tríceps (Cabeça Longa)',
+      musculosSecundarios: ['Core (Estabilização)'],
+      instrucoes: [
+        'De costas para a polia, segure a corda atrás da cabeça com os cotovelos apontados para frente/alto.',
+        'Estenda os cotovelos projetando a corda à frente/acima até a contração total do tríceps.',
+      ],
+    ),
 
-    // ==================== ABDÔMEN (5) ====================
+    // ==================== ABDÔMEN (8) ====================
     InfoExercicioCatalogo(
       nome: 'Abdominal Supra',
       grupo: 'ABDÔMEN',
@@ -795,6 +1084,19 @@ class CatalogoExercicios {
         'Deite-se de costas no colchonete com os joelhos flexionados e pés apoiados no chão.',
         'Enrole a parte superior do tronco tirando as escápulas do solo enquanto solta o ar e contrai o abdômen.',
         'Desça devagar mantendo a tensão abdominal.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Abdominal Declinado',
+      grupo: 'ABDÔMEN',
+      codigoMidia: '0277-9Ap7miY',
+      equipamento: 'Banco Declinado',
+      musculoAlvo: 'Reto Abdominal',
+      musculosSecundarios: ['Flexores do Quadril', 'Oblíquos'],
+      instrucoes: [
+        'Deite-se no banco declinado prendendo os pés sob os rolos de apoio e flexione os joelhos a ~90°.',
+        'Com as mãos cruzadas no peito ou ao lado da cabeça, enrole o tronco contraindo forte o abdômen.',
+        'Segure um instante no topo e desça controladamente até a posição inicial.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -849,6 +1151,31 @@ class CatalogoExercicios {
         'Retorne devagar alongando o abdômen contra a resistência do cabo.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Roda Abdominal',
+      grupo: 'ABDÔMEN',
+      codigoMidia: '0857-NAgVB3t',
+      equipamento: 'Roda Abdominal (Ab Wheel)',
+      musculoAlvo: 'Reto Abdominal & Core Profundo',
+      musculosSecundarios: ['Dorsal', 'Ombros', 'Flexores do Quadril'],
+      instrucoes: [
+        'Ajoelhe-se apoiando as mãos nas alças da roda abdominal logo abaixo dos ombros.',
+        'Deslize a roda para frente mantendo o abdômen e glúteos fortemente contraídos sem deixar a lombar selar.',
+        'Traga a roda de volta puxando pelo core até a posição inicial.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Abdominal Oblíquo (Russian Twist)',
+      grupo: 'ABDÔMEN',
+      codigoMidia: '0687-XVDdcoj',
+      equipamento: 'Peso Corporal / Anilha',
+      musculoAlvo: 'Oblíquos & Core',
+      musculosSecundarios: ['Reto Abdominal'],
+      instrucoes: [
+        'Sente-se no solo inclinando levemente o tronco para trás com o abdômen contraído.',
+        'Gire o tronco de um lado para o outro de forma controlada acionando os oblíquos.',
+      ],
+    ),
   ];
 
   static String _normalizarChave(String texto) {
@@ -898,6 +1225,20 @@ class CatalogoExercicios {
     'remada fechada maquina': 'remada maquina',
     'remada sentado maquina': 'remada maquina',
     'remada na maquina': 'remada maquina',
+    'elevacao lateral na polia': 'elevacao lateral polia',
+    'elevacao lateral unilateral polia': 'elevacao lateral polia',
+    'elevacao lateral cabo': 'elevacao lateral polia',
+    'abdominal banco declinado': 'abdominal declinado',
+    'remada unilateral na maquina': 'remada unilateral maquina',
+    'rosca unilateral': 'rosca unilateral polia',
+    'rosca unilateral na polia': 'rosca unilateral polia',
+    'rosca direta barra w': 'rosca barra w',
+    'triceps unilateral': 'triceps unilateral polia',
+    'triceps frances na polia': 'triceps frances polia',
+    'triceps frances corda': 'triceps frances polia',
+    'terra sumo': 'levantamento terra sumo',
+    'russian twist': 'abdominal obliquo russian twist',
+    'abdominal obliquo': 'abdominal obliquo russian twist',
   };
 
   static final Map<String, InfoExercicioCatalogo> _mapaNormalizado = {

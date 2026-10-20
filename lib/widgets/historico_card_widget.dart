@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../theme/app_colors.dart';
+import 'exercicio_midia_widget.dart';
 
 class HistoricoCardWidget extends StatelessWidget {
   final Exercicio exercicio;
@@ -28,25 +29,25 @@ class HistoricoCardWidget extends StatelessWidget {
         child: ExpansionTile(
           iconColor: AppColors.primary,
           collapsedIconColor: AppColors.textDimmed,
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          title: Row(
-            children: [
-              const Icon(Icons.fitness_center, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  exercicio.nome,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textLight,
-                  ),
-                ),
-              ),
-            ],
+          tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          leading: ExercicioThumbnailWidget(
+            nomeExercicio: exercicio.nome,
+            grupo: exercicio.grupo,
+            size: 44,
+            borderRadius: 11,
+            abrirModalAoTocar: true,
+            exibirIndicadorGif: true,
+          ),
+          title: Text(
+            exercicio.nome,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textLight,
+            ),
           ),
           subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 28),
+            padding: const EdgeInsets.only(top: 6.0),
             child: Row(
               children: [
                 Container(

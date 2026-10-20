@@ -143,6 +143,16 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
 - **Salvaguarda Fisiológica**:
   - O sistema impede matematicamente que o tempo de descanso ultrapasse a duração total do treino (`descanso <= duracao`), prevenindo inconsistências em relatórios analíticos e nos cálculos do Caminho da Serpente.
 
+### 5. Miniaturas Fixas, Execução Sob Demanda & Gestão de Exercícios Personalizados (`ExercicioThumbnailWidget` & `SeletorMidiaCatalogoModal`)
+- **Estabilidade de Layout no Cabeçalho do Exercício Ativo**:
+  - A miniatura (`52×52 dp`) permanece ancorada na lateral esquerda do card do exercício ativo na `TreinoScreen`, garantindo posição fixa independentemente de o nome do exercício ocupar 1 ou 2 linhas.
+  - O indicador circular de *play* integrado sobre o canto inferior direito da miniatura elimina a necessidade de botões redundantes de texto (*"Ver Execução"*), preservando a limpeza visual.
+- **Execução Animada Sob Demanda (`ExercicioDetalheModal`)**:
+  - Ao tocar em qualquer miniatura (na Tela de Treino, na fila de próximos, no Gerenciador de Fichas, no Histórico ou no seletor), abre-se o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, músculos sinergistas e instruções técnicas passo a passo em português.
+- **Formulário Simétrico de Exercício Personalizado (`SelecaoExercicioModal`)**:
+  - **Grid 4×2 de Grupos Musculares**: Os 8 grupos (`PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BÍCEPS`, `TRÍCEPS`, `ABDÔMEN`, `OUTROS`) são distribuídos em 2 linhas simétricas de 4 colunas (`Expanded`), evitando quebras irregulares de `Wrap`.
+  - **Seção de Mídia Unificada**: Permite vincular qualquer uma das **88 animações 100% offline do catálogo** (`SeletorMidiaCatalogoModal`) ou enviar **foto/GIF próprio da Galeria ou Câmera** por meio de 3 botões proporcionais lado a lado (`Catálogo`, `Galeria`, `Câmera`), além de suportar edição em cascata, exclusão e mesclagem de histórico (`AssociarExercicioModal`).
+
 ---
 
 ## 📸 4. Estúdio de Compartilhamento Social (UX Imersiva)

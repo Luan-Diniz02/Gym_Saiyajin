@@ -6,11 +6,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.0.1"><img src="https://img.shields.io/badge/Release-v2.0.1-FF8C00?logo=github&logoColor=white" alt="Release v2.0.1" /></a>
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.1.0"><img src="https://img.shields.io/badge/Release-v2.1.0-FF8C00?logo=github&logoColor=white" alt="Release v2.1.0" /></a>
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-110%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-112%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -40,13 +40,13 @@ Todos os elementos temáticos foram construídos com `CustomPainter` vetorial ma
 A versão estável do aplicativo está pronta para instalação imediata no seu celular Android:
 
 <p align="center">
-  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.0.1/Gym.Saiyajin.v2.0.1.-.Offline.Edition.apk">
-    <img src="https://img.shields.io/badge/Download_APK-Gym_Saiyajin_v2.0.1-FF8C00?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.1.0/Gym.Saiyajin.v2.1.0.-.Offline.Edition.apk">
+    <img src="https://img.shields.io/badge/Download_APK-Gym_Saiyajin_v2.1.0-FF8C00?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
   </a>
 </p>
 
 ### 📥 Instruções para Instalação no Smartphone:
-1. **Baixar o APK**: Faça o download do arquivo **[`Gym.Saiyajin.v2.0.1.-.Offline.Edition.apk`](https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.0.1/Gym.Saiyajin.v2.0.1.-.Offline.Edition.apk)** diretamente no seu dispositivo Android.
+1. **Baixar o APK**: Faça o download do arquivo **[`Gym.Saiyajin.v2.1.0.-.Offline.Edition.apk`](https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.1.0/Gym.Saiyajin.v2.1.0.-.Offline.Edition.apk)** diretamente no seu dispositivo Android.
 2. **Autorizar Fontes Desconhecidas**: Ao abrir o arquivo baixado, caso o Android solicite, autorize a instalação a partir do navegador ou gerenciador de arquivos.
 3. **Instalar e Treinar**: Toque em **Instalar** e inicie o uso. O aplicativo opera **100% offline-first**, sem necessidade de cadastro, criação de conta ou acesso à internet.
 
@@ -56,7 +56,7 @@ A versão estável do aplicativo está pronta para instalação imediata no seu 
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (110 testes automatizados).
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (112 testes automatizados).
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `EscotilhaCamaraPainter`) e ergonomia do Histórico e do Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente e a Câmara de Regeneração Médica.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
@@ -67,9 +67,10 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
-- **Catálogo Offline de 61 Exercícios com Miniaturas & GIFs Sob Demanda**:
-  - Miniaturas anatômicas em containers arredondados no modal de busca, na fila *Próximos da Ficha*, no *Gerenciador de Fichas* e no cabeçalho do exercício ativo (zero impacto de CPU/RAM na rolagem).
-  - **Execução Animada Sob Demanda**: Toque na miniatura ou no chip `VER EXECUÇÃO` para abrir o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, sinergistas e instruções técnicas passo a passo em PT-BR — sem empurrar as séries para baixo durante o treino.
+- **Catálogo Offline de 88 Exercícios com Miniaturas & GIFs Sob Demanda**:
+  - Miniaturas anatômicas em containers arredondados no modal de busca, na fila *Próximos da Ficha*, no *Gerenciador de Fichas*, no cabeçalho fixo do exercício ativo e nos cards do *Histórico* e de *Exercícios Concluídos* (zero impacto de CPU/RAM na rolagem).
+  - **Execução Animada Sob Demanda**: Toque diretamente na miniatura com indicador de play para abrir o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, sinergistas e instruções técnicas passo a passo em PT-BR — sem empurrar as séries para baixo durante o treino.
+  - **Exercícios Personalizados com Edição, Exclusão & Mídia Customizada**: Crie, edite (atualizando nome e grupo muscular em cascata nas sessões e fichas) ou exclua seus exercícios personalizados, podendo associar qualquer uma das **88 animações 100% offline do catálogo** ou enviar **fotos/GIFs próprios da Galeria ou Câmera** (`ExercicioCustomMidiaService`).
   - **Unificação de Exercícios Customizados**: Associe/funda exercícios criados anteriormente a qualquer exercício padrão do catálogo com 1 toque (`AssociarExercicioModal`), transferindo 100% do histórico de séries, recordes (PRs) e fichas sem perder progresso.
 - **Nome & Divisão do Treino**: Chips de seleção rápida padronizados (`Treino A`, `Treino B`, `Push`, `Pull`, `Legs`, etc.) ou nome customizado digitado pelo usuário. Registrado na sessão e estampado na timeline e no card social.
 - **Fichas / Templates Permanentes com Reordenação Drag-and-Drop**: Crie, edite, reordene exercícios clicando e arrastando (`ReorderableListView`) e configure a quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
@@ -156,7 +157,7 @@ gym_saiyajin/
 │   ├── database/                       # Helper do SQLite, PRAGMAs e migrações (v1 -> v3)
 │   │   └── db_helper.dart
 │   ├── models/                         # Entidades de domínio imutáveis com serialização
-│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 58 exercícios, músculos e assets
+│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 88 exercícios, músculos e assets
 │   │   ├── exercicio.dart
 │   │   ├── ficha_treino.dart
 │   │   ├── poder_luta.dart
@@ -172,6 +173,7 @@ gym_saiyajin/
 │   ├── services/                       # Infraestrutura, Hardware e Compartilhamento
 │   │   ├── backup_service.dart
 │   │   ├── card_share_service.dart
+│   │   ├── exercicio_custom_midia_service.dart
 │   │   ├── notification_service.dart
 │   │   └── preferences_service.dart
 │   ├── theme/                          # Design Tokens e paleta de cores centralizada
@@ -202,7 +204,7 @@ gym_saiyajin/
 │       ├── serie_anterior_chip.dart
 │       ├── serie_row_widget.dart
 │       └── status_barra_treino.dart
-├── test/                               # Suíte de 110 testes automatizados
+├── test/                               # Suíte de 112 testes automatizados
 │   ├── backup_test.dart
 │   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
@@ -239,7 +241,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (110 testes)
+# Executar a suíte completa de testes automatizados (112 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

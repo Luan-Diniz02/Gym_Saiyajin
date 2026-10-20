@@ -11,6 +11,7 @@ import '../models/recorde_pessoal.dart';
 import '../models/serie.dart';
 import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
+import '../services/exercicio_custom_midia_service.dart';
 import '../services/notification_service.dart';
 import '../services/preferences_service.dart';
 
@@ -811,6 +812,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
         _atualizarTempoAtual(tempoSalvo);
       }
     }
+    await ExercicioCustomMidiaService.instance.inicializar();
     await carregarExerciciosCustomizados();
     notifyListeners();
   }
@@ -822,6 +824,21 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       final prefsString = await _preferencesService.lerString(
         PreferencesService.keyExerciciosCustomizados,
       );
+      final removidosString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizadosRemovidos,
+      );
+
+      final Set<String> removidos = {};
+      if (removidosString != null) {
+        try {
+          final List<dynamic> decodedRemovidos = jsonDecode(removidosString);
+          for (final item in decodedRemovidos) {
+            if (item is String && item.trim().isNotEmpty) {
+              removidos.add(item.trim().toLowerCase());
+            }
+          }
+        } catch (_) {}
+      }
 
       List<Map<String, String>> prefsExercicios = [];
       if (prefsString != null) {
@@ -842,8 +859,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       for (final ex in dbExercicios) {
         final nome = ex['nome'] ?? '';
         final grupo = ex['grupo'] ?? '';
-        if (nome.isNotEmpty && grupo.isNotEmpty) {
-          merged[nome.toLowerCase().trim()] = {
+        final chave = nome.toLowerCase().trim();
+        if (nome.isNotEmpty && grupo.isNotEmpty && !removidos.contains(chave)) {
+          merged[chave] = {
             'nome': nome.trim(),
             'grupo': grupo.trim(),
           };
@@ -852,8 +870,9 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       for (final ex in prefsExercicios) {
         final nome = ex['nome'] ?? '';
         final grupo = ex['grupo'] ?? '';
-        if (nome.isNotEmpty && grupo.isNotEmpty) {
-          merged[nome.toLowerCase().trim()] = {
+        final chave = nome.toLowerCase().trim();
+        if (nome.isNotEmpty && grupo.isNotEmpty && !removidos.contains(chave)) {
+          merged[chave] = {
             'nome': nome.trim(),
             'grupo': grupo.trim(),
           };
@@ -864,10 +883,60 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     } catch (_) {}
   }
 
+  Future<void> _removerDaListaIgnorados(String nome) async {
+    final chave = nome.trim().toLowerCase();
+    if (chave.isEmpty) return;
+    try {
+      final removidosString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizadosRemovidos,
+      );
+      if (removidosString == null) return;
+      final List<dynamic> decoded = jsonDecode(removidosString);
+      final atualizados = decoded
+          .whereType<String>()
+          .map((e) => e.trim().toLowerCase())
+          .where((e) => e.isNotEmpty && e != chave)
+          .toSet()
+          .toList();
+      await _preferencesService.salvarString(
+        PreferencesService.keyExerciciosCustomizadosRemovidos,
+        jsonEncode(atualizados),
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _adicionarNaListaIgnorados(String nome) async {
+    final chave = nome.trim().toLowerCase();
+    if (chave.isEmpty) return;
+    try {
+      final removidosString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizadosRemovidos,
+      );
+      final Set<String> removidos = {};
+      if (removidosString != null) {
+        try {
+          final List<dynamic> decoded = jsonDecode(removidosString);
+          for (final item in decoded) {
+            if (item is String && item.trim().isNotEmpty) {
+              removidos.add(item.trim().toLowerCase());
+            }
+          }
+        } catch (_) {}
+      }
+      removidos.add(chave);
+      await _preferencesService.salvarString(
+        PreferencesService.keyExerciciosCustomizadosRemovidos,
+        jsonEncode(removidos.toList()),
+      );
+    } catch (_) {}
+  }
+
   Future<void> salvarNovoExercicioCustomizado(String nome, String grupo) async {
     final nomeTrimmed = nome.trim();
     final grupoTrimmed = grupo.trim();
     if (nomeTrimmed.isEmpty || grupoTrimmed.isEmpty) return;
+
+    await _removerDaListaIgnorados(nomeTrimmed);
 
     final existe = _exerciciosCustomizados.any(
       (e) => e['nome']!.toLowerCase() == nomeTrimmed.toLowerCase(),
@@ -884,6 +953,155 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
       } catch (_) {}
       notifyListeners();
     }
+  }
+
+  /// Edita o nome e/ou grupo muscular de um exercício personalizado,
+  /// atualizando também todas as fichas e registros históricos existentes.
+  Future<void> editarExercicioCustomizado({
+    required String nomeAntigo,
+    required String novoNome,
+    required String novoGrupo,
+  }) async {
+    final antigoTrim = nomeAntigo.trim();
+    final novoTrim = novoNome.trim();
+    final grupoTrim = novoGrupo.trim();
+    if (antigoTrim.isEmpty || novoTrim.isEmpty || grupoTrim.isEmpty) return;
+
+    await _removerDaListaIgnorados(novoTrim);
+    if (antigoTrim.toLowerCase() != novoTrim.toLowerCase()) {
+      await _adicionarNaListaIgnorados(antigoTrim);
+      await ExercicioCustomMidiaService.instance.renomearExercicio(
+        antigoTrim,
+        novoTrim,
+      );
+    }
+
+    await _repository.fundirExercicio(
+      nomeOrigem: antigoTrim,
+      nomeDestino: novoTrim,
+      grupoDestino: grupoTrim,
+    );
+
+    try {
+      final prefsString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizados,
+      );
+      List<Map<String, String>> listaPrefs = [];
+      if (prefsString != null) {
+        try {
+          final List<dynamic> decoded = jsonDecode(prefsString);
+          listaPrefs = decoded
+              .map(
+                (e) => {
+                  'nome': (e['nome'] as String? ?? '').trim(),
+                  'grupo': (e['grupo'] as String? ?? '').trim(),
+                },
+              )
+              .where(
+                (e) =>
+                    e['nome']!.isNotEmpty &&
+                    e['nome']!.toLowerCase() != antigoTrim.toLowerCase() &&
+                    e['nome']!.toLowerCase() != novoTrim.toLowerCase(),
+              )
+              .toList();
+        } catch (_) {}
+      }
+      listaPrefs.add({'nome': novoTrim, 'grupo': grupoTrim});
+      await _preferencesService.salvarString(
+        PreferencesService.keyExerciciosCustomizados,
+        jsonEncode(listaPrefs),
+      );
+    } catch (_) {}
+
+    final chaveAntiga = antigoTrim.toLowerCase();
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual != null && atual.nome.trim().toLowerCase() == chaveAntiga) {
+      _sessaoTreino.exercicioAtual = atual.copyWith(
+        nome: novoTrim,
+        grupo: grupoTrim,
+      );
+    }
+
+    for (int i = 0; i < _sessaoTreino.exerciciosConcluidosHoje.length; i++) {
+      final ex = _sessaoTreino.exerciciosConcluidosHoje[i];
+      if (ex.nome.trim().toLowerCase() == chaveAntiga) {
+        _sessaoTreino.exerciciosConcluidosHoje[i] = ex.copyWith(
+          nome: novoTrim,
+          grupo: grupoTrim,
+        );
+      }
+    }
+
+    for (int i = 0; i < _exerciciosFichaPendentes.length; i++) {
+      final pendente = _exerciciosFichaPendentes[i];
+      if (pendente.nome.trim().toLowerCase() == chaveAntiga) {
+        _exerciciosFichaPendentes[i] = pendente.copyWith(
+          nome: novoTrim,
+          grupo: grupoTrim,
+        );
+      }
+    }
+
+    _ultimasSeriesCache.remove(chaveAntiga);
+    _recordesBaseCache.remove(chaveAntiga);
+
+    await carregarExerciciosCustomizados();
+    await carregarFichas();
+    await carregarSeriesAnteriores(novoTrim);
+    notifyListeners();
+  }
+
+  /// Exclui um exercício personalizado da lista de seleção e das fichas
+  /// (e opcionalmente do histórico de treinos se [removerHistorico] for true).
+  Future<void> excluirExercicioCustomizado(
+    String nome, {
+    bool removerHistorico = false,
+  }) async {
+    final nomeTrim = nome.trim();
+    if (nomeTrim.isEmpty) return;
+    final chave = nomeTrim.toLowerCase();
+
+    await _adicionarNaListaIgnorados(nomeTrim);
+    await ExercicioCustomMidiaService.instance.removerMidia(nomeTrim);
+    await _repository.excluirExercicioCustomizado(
+      nomeTrim,
+      removerHistorico: removerHistorico,
+    );
+
+    try {
+      final prefsString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizados,
+      );
+      if (prefsString != null) {
+        final List<dynamic> decoded = jsonDecode(prefsString);
+        final atualizados = decoded
+            .map(
+              (e) => {
+                'nome': (e['nome'] as String? ?? '').trim(),
+                'grupo': (e['grupo'] as String? ?? '').trim(),
+              },
+            )
+            .where((e) => e['nome']!.toLowerCase() != chave)
+            .toList();
+        await _preferencesService.salvarString(
+          PreferencesService.keyExerciciosCustomizados,
+          jsonEncode(atualizados),
+        );
+      }
+    } catch (_) {}
+
+    _exerciciosCustomizados.removeWhere(
+      (e) => (e['nome'] ?? '').trim().toLowerCase() == chave,
+    );
+    _exerciciosFichaPendentes.removeWhere(
+      (p) => p.nome.trim().toLowerCase() == chave,
+    );
+    _ultimasSeriesCache.remove(chave);
+    _recordesBaseCache.remove(chave);
+
+    await carregarExerciciosCustomizados();
+    await carregarFichas();
+    notifyListeners();
   }
 
   /// Funde/associa um exercício criado previamente ([nomeOrigem]) a um exercício alvo ([nomeDestino] e [grupoDestino]),
@@ -1118,8 +1336,17 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
+
   @override
   void dispose() {
+    _disposed = true;
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _sessaoTimer?.cancel();

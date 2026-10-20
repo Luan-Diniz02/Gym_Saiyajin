@@ -598,6 +598,55 @@ class TreinoRepository {
       return 0;
     }
   }
+
+  /// Remove um exercício personalizado das fichas e, opcionalmente, do histórico de treinos.
+  Future<void> excluirExercicioCustomizado(
+    String nome, {
+    bool removerHistorico = false,
+  }) async {
+    try {
+      final nomeTrim = nome.trim();
+      if (nomeTrim.isEmpty) return;
+
+      final db = await _databaseHelper.database;
+      await db.transaction((txn) async {
+        await txn.rawDelete(
+          '''
+          DELETE FROM ficha_exercicios
+          WHERE LOWER(TRIM(nome)) = LOWER(TRIM(?))
+          ''',
+          [nomeTrim],
+        );
+
+        if (removerHistorico) {
+          final exerciciosIdsRows = await txn.rawQuery(
+            '''
+            SELECT id FROM exercicios
+            WHERE LOWER(TRIM(nome)) = LOWER(TRIM(?))
+            ''',
+            [nomeTrim],
+          );
+          for (final row in exerciciosIdsRows) {
+            final exId = row['id'] as int?;
+            if (exId != null) {
+              await txn.delete(
+                'series',
+                where: 'exercicio_id = ?',
+                whereArgs: [exId],
+              );
+            }
+          }
+          await txn.rawDelete(
+            '''
+            DELETE FROM exercicios
+            WHERE LOWER(TRIM(nome)) = LOWER(TRIM(?))
+            ''',
+            [nomeTrim],
+          );
+        }
+      });
+    } catch (_) {}
+  }
 }
 
 class _RecordeAcumulador {
