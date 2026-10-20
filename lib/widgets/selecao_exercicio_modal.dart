@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/treino_controller.dart';
+import '../models/catalogo_exercicios.dart';
 import '../theme/app_colors.dart';
+import 'exercicio_midia_widget.dart';
 
 class SelecaoExercicioModal extends StatefulWidget {
   final TreinoController controller;
@@ -32,42 +34,8 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
     'ABDÔMEN',
   ];
 
-  final List<Map<String, String>> _exerciciosPadrao = [
-    // PEITO
-    {'nome': 'Supino Reto', 'grupo': 'PEITO'},
-    {'nome': 'Supino Inclinado', 'grupo': 'PEITO'},
-    {'nome': 'Supino Declinado', 'grupo': 'PEITO'},
-    {'nome': 'Crucifixo', 'grupo': 'PEITO'},
-    {'nome': 'Crossover', 'grupo': 'PEITO'},
-    {'nome': 'Voador', 'grupo': 'PEITO'},
-    // COSTAS
-    {'nome': 'Puxada Frontal', 'grupo': 'COSTAS'},
-    {'nome': 'Remada Curvada', 'grupo': 'COSTAS'},
-    {'nome': 'Remada Baixa', 'grupo': 'COSTAS'},
-    {'nome': 'Serrote', 'grupo': 'COSTAS'},
-    {'nome': 'Barra Fixa', 'grupo': 'COSTAS'},
-    // PERNAS
-    {'nome': 'Agachamento Livre', 'grupo': 'PERNAS'},
-    {'nome': 'Leg Press 45', 'grupo': 'PERNAS'},
-    {'nome': 'Cadeira Extensora', 'grupo': 'PERNAS'},
-    {'nome': 'Cadeira Flexora', 'grupo': 'PERNAS'},
-    {'nome': 'Mesa Flexora', 'grupo': 'PERNAS'},
-    {'nome': 'Panturrilha Máquina', 'grupo': 'PERNAS'},
-    {'nome': 'Elevacao Pélvica', 'grupo': 'PERNAS'},
-    // OMBROS
-    {'nome': 'Desenvolvimento Halteres', 'grupo': 'OMBROS'},
-    {'nome': 'Elevação Lateral', 'grupo': 'OMBROS'},
-    {'nome': 'Elevação Frontal', 'grupo': 'OMBROS'},
-    // BÍCEPS E TRÍCEPS
-    {'nome': 'Rosca Direta', 'grupo': 'BÍCEPS'},
-    {'nome': 'Rosca Martelo', 'grupo': 'BÍCEPS'},
-    {'nome': 'Tríceps Polia', 'grupo': 'TRÍCEPS'},
-    {'nome': 'Tríceps Testa', 'grupo': 'TRÍCEPS'},
-    {'nome': 'Tríceps Francês', 'grupo': 'TRÍCEPS'},
-    // ABDÔMEN
-    {'nome': 'Abdominal Supra', 'grupo': 'ABDÔMEN'},
-    {'nome': 'Prancha', 'grupo': 'ABDÔMEN'},
-  ];
+  final List<Map<String, String>> _exerciciosPadrao =
+      CatalogoExercicios.listaPadraoMap;
 
   String _normalizarGrupo(String valor) {
     return valor
@@ -107,7 +75,13 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
 
       if (termo.isEmpty) return true;
       final nome = (exercicio['nome'] ?? '').toLowerCase();
-      return nome.contains(termo) || grupo.toLowerCase().contains(termo);
+      final info = CatalogoExercicios.buscarPorNome(nome);
+      final equipamento = info?.equipamento.toLowerCase() ?? '';
+      final musculo = info?.musculoAlvo.toLowerCase() ?? '';
+      return nome.contains(termo) ||
+          grupo.toLowerCase().contains(termo) ||
+          equipamento.contains(termo) ||
+          musculo.contains(termo);
     }).toList();
   }
 
@@ -337,11 +311,94 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                             final ex = _exerciciosFiltrados[index];
                             final nome = ex['nome'] ?? '';
                             final grupo = ex['grupo'] ?? '';
+                            final info = CatalogoExercicios.buscarPorNome(nome);
+                            final isPadraoExato = _exerciciosPadrao.any(
+                              (p) => (p['nome'] ?? '').toLowerCase() == nome.toLowerCase(),
+                            );
+                            final subtitulo = info != null
+                                ? '$grupo • ${info.equipamento}'
+                                : '$grupo • Personalizado';
                             return ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text(grupo, style: const TextStyle(color: AppColors.primary, fontSize: 12)),
-                              trailing: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+                              contentPadding: const EdgeInsets.symmetric(vertical: 2),
+                              leading: ExercicioThumbnailWidget(
+                                nomeExercicio: nome,
+                                grupo: grupo,
+                                size: 46,
+                                borderRadius: 11,
+                                abrirModalAoTocar: true,
+                                exibirIndicadorGif: true,
+                              ),
+                              title: Text(
+                                nome,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: AppColors.textLight,
+                                ),
+                              ),
+                              subtitle: Text(
+                                subtitulo,
+                                style: TextStyle(
+                                  color: isPadraoExato ? AppColors.primary : AppColors.accent,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (!isPadraoExato) ...[
+                                    InkWell(
+                                      onTap: () async {
+                                        final fundido = await AssociarExercicioModal.mostrar(
+                                          context,
+                                          controller: widget.controller,
+                                          nomeOrigem: nome,
+                                          grupoOrigem: grupo,
+                                        );
+                                        if (fundido != null && mounted) {
+                                          setState(() {});
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.accent.withValues(alpha: 0.14),
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: AppColors.accent.withValues(alpha: 0.45),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.link_rounded,
+                                              color: AppColors.accent,
+                                              size: 14,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              'VINCULAR',
+                                              style: TextStyle(
+                                                color: AppColors.accent,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w900,
+                                                letterSpacing: 0.4,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                  const Icon(
+                                    Icons.add_circle_outline,
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
                               onTap: () {
                                 Navigator.pop(context);
                                 widget.onSelecionarExercicio(nome, grupo);
@@ -354,6 +411,328 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// Modal para associar/fundir um exercício criado previamente (customizado ou legado)
+/// com um exercício oficial do catálogo padrão sem perder histórico, PRs ou fichas.
+class AssociarExercicioModal extends StatefulWidget {
+  final TreinoController controller;
+  final String nomeOrigem;
+  final String grupoOrigem;
+
+  const AssociarExercicioModal({
+    super.key,
+    required this.controller,
+    required this.nomeOrigem,
+    required this.grupoOrigem,
+  });
+
+  static Future<InfoExercicioCatalogo?> mostrar(
+    BuildContext context, {
+    required TreinoController controller,
+    required String nomeOrigem,
+    required String grupoOrigem,
+  }) {
+    return showDialog<InfoExercicioCatalogo>(
+      context: context,
+      builder: (_) => AssociarExercicioModal(
+        controller: controller,
+        nomeOrigem: nomeOrigem,
+        grupoOrigem: grupoOrigem,
+      ),
+    );
+  }
+
+  @override
+  State<AssociarExercicioModal> createState() => _AssociarExercicioModalState();
+}
+
+class _AssociarExercicioModalState extends State<AssociarExercicioModal> {
+  String _termoBusca = '';
+  bool _processando = false;
+
+  InfoExercicioCatalogo? get _sugestaoAutomatica =>
+      CatalogoExercicios.buscarPorNome(widget.nomeOrigem);
+
+  List<InfoExercicioCatalogo> get _catalogoFiltrado {
+    final termo = _termoBusca.trim().toLowerCase();
+    return CatalogoExercicios.exerciciosPadrao.where((item) {
+      if (item.nome.toLowerCase() == widget.nomeOrigem.trim().toLowerCase()) {
+        return false;
+      }
+      if (termo.isEmpty) return true;
+      return item.nome.toLowerCase().contains(termo) ||
+          item.grupo.toLowerCase().contains(termo) ||
+          item.equipamento.toLowerCase().contains(termo) ||
+          item.musculoAlvo.toLowerCase().contains(termo);
+    }).toList();
+  }
+
+  Future<void> _confirmarFusao(InfoExercicioCatalogo destino) async {
+    setState(() => _processando = true);
+    await widget.controller.fundirExercicio(
+      nomeOrigem: widget.nomeOrigem,
+      nomeDestino: destino.nome,
+      grupoDestino: destino.grupo,
+    );
+    if (!mounted) return;
+    Navigator.pop(context, destino);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                '"${widget.nomeOrigem}" foi fundido a "${destino.nome}" (${destino.grupo}) mantendo todo o histórico!',
+                style: const TextStyle(
+                  color: AppColors.textLight,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.surface,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.cardBorder),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sugestao = _sugestaoAutomatica;
+    final lista = _catalogoFiltrado;
+
+    return Dialog(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: AppColors.cardBorder, width: 1),
+      ),
+      insetPadding: const EdgeInsets.all(20),
+      child: Container(
+        width: double.infinity,
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.82,
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.accent.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.link_rounded,
+                    color: AppColors.accent,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'ASSOCIAR AO CATÁLOGO PADRÃO',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.textLight,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: AppColors.textDimmed),
+                  onPressed: _processando ? null : () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.cardBorder),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Exercício atual: ${widget.nomeOrigem} (${widget.grupoOrigem})',
+                    style: const TextStyle(
+                      color: AppColors.textLight,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Escolha o exercício padrão correspondente abaixo. Todas as suas séries históricas, recordes (PRs) e fichas serão unificados sem perder nenhum progresso.',
+                    style: TextStyle(
+                      color: AppColors.textDimmed,
+                      fontSize: 11,
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (sugestao != null &&
+                sugestao.nome.toLowerCase() !=
+                    widget.nomeOrigem.trim().toLowerCase()) ...[
+              const SizedBox(height: 12),
+              const Text(
+                'SUGESTÃO AUTOMÁTICA',
+                style: TextStyle(
+                  color: AppColors.accent,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.accent.withValues(alpha: 0.45),
+                  ),
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 2,
+                  ),
+                  leading: ExercicioThumbnailWidget(
+                    nomeExercicio: sugestao.nome,
+                    grupo: sugestao.grupo,
+                    size: 42,
+                    borderRadius: 10,
+                    abrirModalAoTocar: true,
+                    exibirIndicadorGif: true,
+                  ),
+                  title: Text(
+                    sugestao.nome,
+                    style: const TextStyle(
+                      color: AppColors.textLight,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '${sugestao.grupo} • ${sugestao.equipamento}',
+                    style: const TextStyle(
+                      color: AppColors.accent,
+                      fontSize: 11,
+                    ),
+                  ),
+                  trailing: ElevatedButton(
+                    onPressed: _processando ? null : () => _confirmarFusao(sugestao),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accent,
+                      foregroundColor: AppColors.background,
+                      elevation: 0,
+                      visualDensity: VisualDensity.compact,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'UNIFICAR',
+                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            TextField(
+              onChanged: (valor) => setState(() => _termoBusca = valor),
+              style: const TextStyle(color: AppColors.textLight, fontSize: 13),
+              decoration: InputDecoration(
+                hintText: 'Buscar exercício padrão no catálogo...',
+                hintStyle: const TextStyle(color: AppColors.textDimmed, fontSize: 13),
+                prefixIcon: const Icon(Icons.search, color: AppColors.primary, size: 20),
+                filled: true,
+                fillColor: AppColors.background,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppColors.cardBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Flexible(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: lista.length,
+                separatorBuilder: (_, _) => const Divider(color: AppColors.background, height: 1),
+                itemBuilder: (context, index) {
+                  final item = lista[index];
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                    leading: ExercicioThumbnailWidget(
+                      nomeExercicio: item.nome,
+                      grupo: item.grupo,
+                      size: 42,
+                      borderRadius: 10,
+                      abrirModalAoTocar: true,
+                      exibirIndicadorGif: true,
+                    ),
+                    title: Text(
+                      item.nome,
+                      style: const TextStyle(
+                        color: AppColors.textLight,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${item.grupo} • ${item.equipamento}',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 11,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.link_rounded,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    onTap: _processando ? null : () => _confirmarFusao(item),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../theme/app_colors.dart';
 import '../controllers/treino_controller.dart';
+import '../models/catalogo_exercicios.dart';
 import '../models/exercicio.dart';
 import '../models/ficha_treino.dart';
 import '../models/serie.dart';
@@ -12,6 +13,7 @@ import '../widgets/celebracao_transformacao_modal.dart';
 import '../widgets/config_tempo_descanso_modal.dart';
 import '../widgets/cronometro_widget.dart';
 import '../widgets/compartilhar_card_modal.dart';
+import '../widgets/exercicio_midia_widget.dart';
 import '../widgets/gerenciar_fichas_modal.dart';
 import '../widgets/ki_aura_icon.dart';
 import '../widgets/modal_encerrar_treino.dart';
@@ -832,24 +834,13 @@ class _TreinoScreenState extends State<TreinoScreen> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: 26,
-                            height: 26,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.background,
-                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ),
+                          ExercicioThumbnailWidget(
+                            nomeExercicio: item.nome,
+                            grupo: item.grupo,
+                            size: 38,
+                            borderRadius: 10,
+                            abrirModalAoTocar: true,
+                            exibirIndicadorGif: true,
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -997,21 +988,34 @@ class _TreinoScreenState extends State<TreinoScreen> {
       return const SizedBox.shrink();
     }
 
+    final infoCatalogo = CatalogoExercicios.buscarPorNome(exercicioAtual.nome);
+    final isPadraoExato = CatalogoExercicios.exerciciosPadrao.any(
+      (p) => p.nome.toLowerCase() == exercicioAtual.nome.trim().toLowerCase(),
+    );
+
     return Column(
       children: [
-        Stack(
-          alignment: Alignment.topCenter,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48.0),
+            ExercicioThumbnailWidget(
+              nomeExercicio: exercicioAtual.nome,
+              grupo: exercicioAtual.grupo,
+              size: 48,
+              borderRadius: 12,
+              abrirModalAoTocar: true,
+              exibirIndicadorGif: true,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
               child: Column(
                 children: [
                   Text(
                     exercicioAtual.nome,
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 22,
                       fontWeight: FontWeight.w900,
-                      letterSpacing: 1.1,
+                      letterSpacing: 0.8,
                       color: AppColors.textLight,
                     ),
                     textAlign: TextAlign.center,
@@ -1039,52 +1043,92 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert, color: AppColors.textDimmed),
-                color: AppColors.surface,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: AppColors.cardBorder),
+            const SizedBox(width: 12),
+            SizedBox(
+              width: 48,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, color: AppColors.textDimmed),
+                  color: AppColors.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: AppColors.cardBorder),
+                  ),
+                  tooltip: 'Opções do exercício',
+                  onSelected: (value) {
+                    if (value == 'execucao' && infoCatalogo != null) {
+                      ExercicioDetalheModal.show(context, infoCatalogo);
+                    } else if (value == 'vincular') {
+                      AssociarExercicioModal.mostrar(
+                        context,
+                        controller: _controller,
+                        nomeOrigem: exercicioAtual.nome,
+                        grupoOrigem: exercicioAtual.grupo,
+                      );
+                    } else if (value == 'trocar') {
+                      _substituirExercicioAtual();
+                    } else if (value == 'excluir') {
+                      _confirmarRemocaoExercicio(exercicioAtual);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    if (infoCatalogo != null)
+                      const PopupMenuItem(
+                        value: 'execucao',
+                        child: Row(
+                          children: [
+                            Icon(Icons.play_circle_outline_rounded, size: 18, color: AppColors.primary),
+                            SizedBox(width: 10),
+                            Text(
+                              'Ver execução (GIF)',
+                              style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (!isPadraoExato)
+                      const PopupMenuItem(
+                        value: 'vincular',
+                        child: Row(
+                          children: [
+                            Icon(Icons.link_rounded, size: 18, color: AppColors.accent),
+                            SizedBox(width: 10),
+                            Text(
+                              'Vincular ao catálogo padrão',
+                              style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const PopupMenuItem(
+                      value: 'trocar',
+                      child: Row(
+                        children: [
+                          Icon(Icons.swap_horiz, size: 18, color: AppColors.accent),
+                          SizedBox(width: 10),
+                          Text(
+                            'Trocar exercício',
+                            style: TextStyle(color: AppColors.textLight, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'excluir',
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete_outline, size: 18, color: AppColors.danger),
+                          SizedBox(width: 10),
+                          Text(
+                            'Remover do treino',
+                            style: TextStyle(color: AppColors.danger, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                tooltip: 'Opções do exercício',
-                onSelected: (value) {
-                  if (value == 'trocar') {
-                    _substituirExercicioAtual();
-                  } else if (value == 'excluir') {
-                    _confirmarRemocaoExercicio(exercicioAtual);
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'trocar',
-                    child: Row(
-                      children: [
-                        Icon(Icons.swap_horiz, size: 18, color: AppColors.accent),
-                        SizedBox(width: 10),
-                        Text(
-                          'Trocar exercício',
-                          style: TextStyle(color: AppColors.textLight, fontSize: 13),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'excluir',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete_outline, size: 18, color: AppColors.danger),
-                        SizedBox(width: 10),
-                        Text(
-                          'Remover do treino',
-                          style: TextStyle(color: AppColors.danger, fontSize: 13),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ),
           ],

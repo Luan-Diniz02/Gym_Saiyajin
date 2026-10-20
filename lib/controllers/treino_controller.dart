@@ -886,6 +886,91 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// Funde/associa um exercício criado previamente ([nomeOrigem]) a um exercício alvo ([nomeDestino] e [grupoDestino]),
+  /// preservando todo o histórico de séries, recordes e fichas.
+  Future<int> fundirExercicio({
+    required String nomeOrigem,
+    required String nomeDestino,
+    required String grupoDestino,
+  }) async {
+    final origemTrim = nomeOrigem.trim();
+    final destinoTrim = nomeDestino.trim();
+    final grupoTrim = grupoDestino.trim();
+    if (origemTrim.isEmpty || destinoTrim.isEmpty || grupoTrim.isEmpty) {
+      return 0;
+    }
+
+    final chaveOrigem = origemTrim.toLowerCase();
+
+    final registrosAfetados = await _repository.fundirExercicio(
+      nomeOrigem: origemTrim,
+      nomeDestino: destinoTrim,
+      grupoDestino: grupoTrim,
+    );
+
+    // Atualiza lista de exercícios customizados salva nas preferências
+    try {
+      final prefsString = await _preferencesService.lerString(
+        PreferencesService.keyExerciciosCustomizados,
+      );
+      if (prefsString != null) {
+        final List<dynamic> decoded = jsonDecode(prefsString);
+        final atualizados = decoded
+            .map(
+              (e) => {
+                'nome': (e['nome'] as String? ?? '').trim(),
+                'grupo': (e['grupo'] as String? ?? '').trim(),
+              },
+            )
+            .where((e) => e['nome']!.toLowerCase() != chaveOrigem)
+            .toList();
+        await _preferencesService.salvarString(
+          PreferencesService.keyExerciciosCustomizados,
+          jsonEncode(atualizados),
+        );
+      }
+    } catch (_) {}
+
+    // Atualiza estado da sessão ativa caso o exercício esteja em andamento, concluído hoje ou na fila
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual != null && atual.nome.trim().toLowerCase() == chaveOrigem) {
+      _sessaoTreino.exercicioAtual = atual.copyWith(
+        nome: destinoTrim,
+        grupo: grupoTrim,
+      );
+    }
+
+    for (int i = 0; i < _sessaoTreino.exerciciosConcluidosHoje.length; i++) {
+      final ex = _sessaoTreino.exerciciosConcluidosHoje[i];
+      if (ex.nome.trim().toLowerCase() == chaveOrigem) {
+        _sessaoTreino.exerciciosConcluidosHoje[i] = ex.copyWith(
+          nome: destinoTrim,
+          grupo: grupoTrim,
+        );
+      }
+    }
+
+    for (int i = 0; i < _exerciciosFichaPendentes.length; i++) {
+      final pendente = _exerciciosFichaPendentes[i];
+      if (pendente.nome.trim().toLowerCase() == chaveOrigem) {
+        _exerciciosFichaPendentes[i] = pendente.copyWith(
+          nome: destinoTrim,
+          grupo: grupoTrim,
+        );
+      }
+    }
+
+    _ultimasSeriesCache.remove(chaveOrigem);
+    _recordesBaseCache.remove(chaveOrigem);
+
+    await carregarExerciciosCustomizados();
+    await carregarFichas();
+    await carregarSeriesAnteriores(destinoTrim);
+
+    notifyListeners();
+    return registrosAfetados;
+  }
+
   void _acumularDescansoAtual() {
     if (_isTimerRodando && _inicioDescansoAtual != null) {
       final agora = DateTime.now();

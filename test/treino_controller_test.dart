@@ -47,6 +47,27 @@ class FakeTreinoRepository extends Fake implements TreinoRepository {
   Future<void> salvarSessaoTreino(SessaoTreino sessao) async {
     ultimaSessaoSalva = sessao;
   }
+
+  @override
+  Future<int> fundirExercicio({
+    required String nomeOrigem,
+    required String nomeDestino,
+    required String grupoDestino,
+  }) async {
+    int count = 0;
+    for (int i = 0; i < fichasCadastradas.length; i++) {
+      final ficha = fichasCadastradas[i];
+      final novosItens = ficha.exercicios.map((ex) {
+        if (ex.nome.toLowerCase().trim() == nomeOrigem.toLowerCase().trim()) {
+          count++;
+          return ex.copyWith(nome: nomeDestino, grupo: grupoDestino);
+        }
+        return ex;
+      }).toList();
+      fichasCadastradas[i] = ficha.copyWith(exercicios: novosItens);
+    }
+    return count;
+  }
 }
 
 class FakePreferencesService extends Fake implements PreferencesService {
@@ -54,6 +75,8 @@ class FakePreferencesService extends Fake implements PreferencesService {
   Future<int?> lerInt(String key) async => null;
   @override
   Future<String?> lerString(String key) async => null;
+  @override
+  Future<void> salvarString(String key, String value) async {}
 }
 
 class FakeNotificationService extends Fake implements NotificationService {
@@ -279,6 +302,37 @@ void main() {
       expect(controller.calcularVolumeSessao(), equals(900.0));
       // Ki = (900 / 100) + (1 * 150) = 9 + 150 = 159
       expect(controller.calcularKiSessao(), equals(159));
+    });
+  });
+
+  group('TreinoController - Fusão / Associação de Exercícios Customizados', () {
+    test('Deve unificar exercício customizado em exercício padrão atualizando sessão e fichas', () async {
+      await controller.salvarFicha(
+        FichaTreino(
+          id: 1,
+          nome: 'Ficha Costas',
+          exercicios: [
+            FichaExercicioItem(
+              nome: 'Puxada Frontal',
+              grupo: 'COSTAS',
+              ordem: 0,
+              seriesPadrao: 4,
+            ),
+          ],
+        ),
+      );
+      controller.carregarFichaParaTreino(controller.fichas.first);
+      expect(controller.exercicioAtual?.nome, equals('Puxada Frontal'));
+
+      final afetados = await controller.fundirExercicio(
+        nomeOrigem: 'Puxada Frontal',
+        nomeDestino: 'Puxada Alta',
+        grupoDestino: 'COSTAS',
+      );
+
+      expect(afetados, greaterThanOrEqualTo(1));
+      expect(controller.exercicioAtual?.nome, equals('Puxada Alta'));
+      expect(controller.fichas.first.exercicios.first.nome, equals('Puxada Alta'));
     });
   });
 }

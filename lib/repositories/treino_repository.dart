@@ -556,6 +556,48 @@ class TreinoRepository {
       return null;
     }
   }
+
+  /// Funde/associa um exercício existente ([nomeOrigem]) com um exercício alvo ([nomeDestino] e [grupoDestino]),
+  /// atualizando todas as sessões históricas e todas as fichas salvas sem perder séries ou recordes.
+  Future<int> fundirExercicio({
+    required String nomeOrigem,
+    required String nomeDestino,
+    required String grupoDestino,
+  }) async {
+    final origemTrim = nomeOrigem.trim();
+    final destinoTrim = nomeDestino.trim();
+    final grupoTrim = grupoDestino.trim();
+    if (origemTrim.isEmpty || destinoTrim.isEmpty || grupoTrim.isEmpty) {
+      return 0;
+    }
+
+    try {
+      final db = await _databaseHelper.database;
+      return await db.transaction((txn) async {
+        final afetadosHistorico = await txn.rawUpdate(
+          '''
+          UPDATE exercicios
+          SET nome = ?, grupo = ?
+          WHERE LOWER(TRIM(nome)) = LOWER(TRIM(?))
+          ''',
+          [destinoTrim, grupoTrim, origemTrim],
+        );
+
+        final afetadosFichas = await txn.rawUpdate(
+          '''
+          UPDATE ficha_exercicios
+          SET nome = ?, grupo = ?
+          WHERE LOWER(TRIM(nome)) = LOWER(TRIM(?))
+          ''',
+          [destinoTrim, grupoTrim, origemTrim],
+        );
+
+        return afetadosHistorico + afetadosFichas;
+      });
+    } catch (_) {
+      return 0;
+    }
+  }
 }
 
 class _RecordeAcumulador {
