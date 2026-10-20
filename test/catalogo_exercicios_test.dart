@@ -7,8 +7,8 @@ import 'package:gym_saiyajin/widgets/exercicio_midia_widget.dart';
 
 void main() {
   group('CatalogoExercicios - Integridade do Catálogo Offline e Assets', () {
-    test('Deve conter 92 exercícios padrão com todos os metadados preenchidos', () {
-      expect(CatalogoExercicios.exerciciosPadrao.length, equals(92));
+    test('Deve conter 106 exercícios padrão com todos os metadados preenchidos', () {
+      expect(CatalogoExercicios.exerciciosPadrao.length, equals(106));
 
       for (final ex in CatalogoExercicios.exerciciosPadrao) {
         expect(ex.nome.isNotEmpty, isTrue, reason: 'Nome vazio');
@@ -94,6 +94,21 @@ void main() {
       expect(CatalogoExercicios.buscarPorNome('Tríceps Testa Polia')?.nome, equals('Tríceps Testa na Polia'));
       // Histórico legado com o nome antigo continua apontando para a nova versão
       expect(CatalogoExercicios.buscarPorNome('Tríceps Coice')?.nome, equals('Tríceps Coice Polia'));
+      // 14 Novos Exercícios (Top 10 + 4 Secundários)
+      expect(CatalogoExercicios.buscarPorNome('Panturrilha no Leg Press')?.codigoMidia, equals('1391-ykHcWme'));
+      expect(CatalogoExercicios.buscarPorNome('Stiff com Halteres')?.codigoMidia, equals('1459-rR0LJzx'));
+      expect(CatalogoExercicios.buscarPorNome('Supino Fechado')?.codigoMidia, equals('0030-J6Dx1Mu'));
+      expect(CatalogoExercicios.buscarPorNome('Tríceps Banco')?.codigoMidia, equals('0129-RrLske5'));
+      expect(CatalogoExercicios.buscarPorNome('Rosca Spider')?.codigoMidia, equals('0454-Ye5Qxb0'));
+      expect(CatalogoExercicios.buscarPorNome('Rosca Inversa')?.codigoMidia, equals('0080-xNrS20v'));
+      expect(CatalogoExercicios.buscarPorNome('Remada Alta na Polia')?.codigoMidia, equals('0246-cALKspW'));
+      expect(CatalogoExercicios.buscarPorNome('Puxada Máquina')?.codigoMidia, equals('0673-ecpY0rH'));
+      expect(CatalogoExercicios.buscarPorNome('Prancha Lateral')?.codigoMidia, equals('3544-5VXmnV5'));
+      expect(CatalogoExercicios.buscarPorNome('Flexão de Punho')?.codigoMidia, equals('0126-82LxxkW'));
+      expect(CatalogoExercicios.buscarPorNome('Abdominal na Máquina')?.codigoMidia, equals('1452-Wgaz7pm'));
+      expect(CatalogoExercicios.buscarPorNome('Rosca Scott na Máquina')?.codigoMidia, equals('0592-b6hQYMb'));
+      expect(CatalogoExercicios.buscarPorNome('Elevação Lateral na Máquina')?.codigoMidia, equals('0584-dRTfGZT'));
+      expect(CatalogoExercicios.buscarPorNome('Supino Declinado com Halteres')?.codigoMidia, equals('0301-DwhEmmE'));
     });
 
     test('correspondeBusca deve encontrar exercícios por sinônimos populares brasileiros', () {
@@ -106,6 +121,19 @@ void main() {
       expect(CatalogoExercicios.correspondeBusca('Tríceps Polia', 'triceps'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Tríceps Testa na Polia', 'triceps testa polia'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Crossover Polia Alta', 'crossover alto'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Panturrilha no Leg Press', 'panturrilha leg'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Stiff com Halteres', 'rdl halteres'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Supino Fechado', 'close grip'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Tríceps Banco', 'bench dip'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Rosca Spider', 'spider curl'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Rosca Inversa', 'reverse curl'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Puxada Máquina', 'puxada articulada'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Prancha Lateral', 'side plank'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Flexão de Punho', 'wrist curl'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Abdominal na Máquina', 'crunch maquina'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Rosca Scott na Máquina', 'rosca scott maquina'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Elevação Lateral na Máquina', 'elevacao lateral maquina'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Supino Declinado com Halteres', 'supino declinado halteres'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Supino Reto', 'peck deck'), isFalse);
     });
   });

@@ -67,10 +67,10 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
-- **Catálogo Offline de 92 Exercícios com Miniaturas, GIFs Sob Demanda & Sinônimos Brasileiros**:
+- **Catálogo Offline de 106 Exercícios com Miniaturas, GIFs Sob Demanda & Sinônimos Brasileiros**:
   - Miniaturas anatômicas em containers arredondados no modal de busca, na fila *Próximos da Ficha*, no *Gerenciador de Fichas*, no cabeçalho fixo do exercício ativo, nos cards do *Histórico* e de *Exercícios Concluídos*, no *Registro de Poder* e no *Gráfico de Progressão de Carga* (zero impacto de CPU/RAM na rolagem).
   - **Execução Animada Sob Demanda**: Toque diretamente na miniatura com indicador de play para abrir o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, sinergistas e instruções técnicas passo a passo em PT-BR — sem empurrar as séries para baixo durante o treino.
-  - **Exercícios Personalizados com Edição, Exclusão & Mídia Customizada**: Crie, edite (atualizando nome e grupo muscular em cascata nas sessões e fichas) ou exclua seus exercícios personalizados, podendo associar qualquer uma das **92 animações 100% offline do catálogo** ou enviar **fotos/GIFs próprios da Galeria ou Câmera** (`ExercicioCustomMidiaService`).
+  - **Exercícios Personalizados com Edição, Exclusão & Mídia Customizada**: Crie, edite (atualizando nome e grupo muscular em cascata nas sessões e fichas) ou exclua seus exercícios personalizados, podendo associar qualquer uma das **106 animações 100% offline do catálogo** ou enviar **fotos/GIFs próprios da Galeria ou Câmera** (`ExercicioCustomMidiaService`).
   - **Unificação de Exercícios Customizados**: Associe/funda exercícios criados anteriormente a qualquer exercício padrão do catálogo com 1 toque (`AssociarExercicioModal`), transferindo 100% do histórico de séries, recordes (PRs) e fichas sem perder progresso.
 - **Nome & Divisão do Treino**: Chips de seleção rápida padronizados (`Treino A`, `Treino B`, `Push`, `Pull`, `Legs`, etc.) ou nome customizado digitado pelo usuário. Registrado na sessão e estampado na timeline e no card social.
 - **Fichas / Templates Permanentes com Reordenação Drag-and-Drop**: Crie, edite, reordene exercícios clicando e arrastando (`ReorderableListView`) e configure a quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
@@ -157,7 +157,7 @@ gym_saiyajin/
 │   ├── database/                       # Helper do SQLite, PRAGMAs e migrações (v1 -> v3)
 │   │   └── db_helper.dart
 │   ├── models/                         # Entidades de domínio imutáveis com serialização
-│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 92 exercícios, músculos, assets e sinônimos
+│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 106 exercícios, músculos, assets e sinônimos
 │   │   ├── exercicio.dart
 │   │   ├── ficha_treino.dart
 │   │   ├── poder_luta.dart

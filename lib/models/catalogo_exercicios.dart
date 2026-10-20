@@ -30,7 +30,7 @@ class CatalogoExercicios {
   CatalogoExercicios._();
 
   static const List<InfoExercicioCatalogo> exerciciosPadrao = [
-    // ==================== PEITO (16) ====================
+    // ==================== PEITO (17) ====================
     InfoExercicioCatalogo(
       nome: 'Supino Reto',
       grupo: 'PEITO',
@@ -68,6 +68,19 @@ class CatalogoExercicios {
         'Prenda os pés no apoio do banco declinado e retraia as escápulas.',
         'Desça a barra controladamente até a porção inferior do esterno.',
         'Empurre de volta até a extensão sem travar bruscamente os cotovelos.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Supino Declinado com Halteres',
+      grupo: 'PEITO',
+      codigoMidia: '0301-DwhEmmE',
+      equipamento: 'Halteres / Banco Declinado',
+      musculoAlvo: 'Peitoral Inferior',
+      musculosSecundarios: ['Tríceps', 'Deltoide Anterior'],
+      instrucoes: [
+        'Prenda as pernas no apoio do banco declinado e segure os halteres na altura do peito inferior.',
+        'Empurre os halteres verticalmente convergindo suavemente no topo sem encostá-los.',
+        'Desça de forma controlada até sentir o alongamento da porção inferior do peitoral.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -238,7 +251,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== COSTAS (13) ====================
+    // ==================== COSTAS (14) ====================
     InfoExercicioCatalogo(
       nome: 'Puxada Alta',
       grupo: 'COSTAS',
@@ -250,6 +263,19 @@ class CatalogoExercicios {
         'Ajuste a altura do assento e prenda as coxas sob o apoio acolchoado, segurando a barra com pegada aberta pronada.',
         'Incline sutilmente o tronco para trás, estufe o peito e puxe a barra em direção à parte superior do peitoral.',
         'Pause brevemente contraindo as escápulas e retorne devagar até alongar os dorsais.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Puxada Máquina',
+      grupo: 'COSTAS',
+      codigoMidia: '0673-ecpY0rH',
+      equipamento: 'Máquina Articulada',
+      musculoAlvo: 'Latíssimo do Dorso (Dorsal)',
+      musculosSecundarios: ['Bíceps', 'Romboides', 'Redondo Maior'],
+      instrucoes: [
+        'Ajuste o assento para fixar bem as pernas sob o apoio acolchoado e empunhe as manoplas articuladas.',
+        'Puxe as alças para baixo com os cotovelos apontados para o quadril, contraindo fortemente a dorsal.',
+        'Retorne controlando a subida até o alongamento completo dos dorsais.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -408,7 +434,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== PERNAS (21) ====================
+    // ==================== PERNAS (23) ====================
     InfoExercicioCatalogo(
       nome: 'Agachamento Livre',
       grupo: 'PERNAS',
@@ -501,6 +527,19 @@ class CatalogoExercicios {
       ],
     ),
     InfoExercicioCatalogo(
+      nome: 'Panturrilha no Leg Press',
+      grupo: 'PERNAS',
+      codigoMidia: '1391-ykHcWme',
+      equipamento: 'Máquina (Leg Press)',
+      musculoAlvo: 'Panturrilhas (Gastrocnêmio & Sóleo)',
+      musculosSecundarios: ['Tibial Anterior (Estabilização)'],
+      instrucoes: [
+        'Posicione a ponta dos pés na borda inferior da plataforma do Leg Press com os calcanhares livres para fora.',
+        'Destrave a plataforma mantendo os joelhos destravados com microflexão fixa de proteção articular.',
+        'Empurre a plataforma com a ponta dos pés estendendo os tornozelos ao máximo e retorne descendo os calcanhares para alongar profundamente.',
+      ],
+    ),
+    InfoExercicioCatalogo(
       nome: 'Elevação Pélvica',
       grupo: 'PERNAS',
       codigoMidia: '1409-qKBpF7I',
@@ -524,6 +563,19 @@ class CatalogoExercicios {
         'Em pé com a barra nas mãos, mantenha os joelhos apenas destravados (semi-flexionados) e a coluna reta.',
         'Projete o quadril para trás deslizando a barra próxima às coxas e canelas até sentir forte alongamento no posterior.',
         'Retorne estendendo o quadril e contraindo glúteos e posteriores.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Stiff com Halteres',
+      grupo: 'PERNAS',
+      codigoMidia: '1459-rR0LJzx',
+      equipamento: 'Halteres',
+      musculoAlvo: 'Posterior de Coxa & Glúteos',
+      musculosSecundarios: ['Lombar', 'Core', 'Antebraço'],
+      instrucoes: [
+        'Em pé segurando os halteres à frente das coxas com pegada pronada ou neutra, mantenha os joelhos semi-flexionados.',
+        'Incline o tronco à frente empurrando o quadril para trás e descendo os halteres rentes às pernas.',
+        'Ao sentir o ponto de máximo alongamento dos isquiotibiais, empurre o quadril à frente contraindo os glúteos para retornar.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -682,7 +734,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== OMBROS (14) ====================
+    // ==================== OMBROS (16) ====================
     InfoExercicioCatalogo(
       nome: 'Desenvolvimento Halteres',
       grupo: 'OMBROS',
@@ -720,6 +772,19 @@ class CatalogoExercicios {
         'Fique em pé de lado para a polia baixa e segure o puxador com a mão mais afastada do aparelho.',
         'Com o cotovelo levemente flexionado, eleve o braço lateralmente até ficar paralelo ao solo.',
         'Segure um instante no topo e desça devagar aproveitando a tensão contínua do cabo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Elevação Lateral na Máquina',
+      grupo: 'OMBROS',
+      codigoMidia: '0584-dRTfGZT',
+      equipamento: 'Máquina Articulada',
+      musculoAlvo: 'Deltoide Lateral',
+      musculosSecundarios: ['Trapézio Superior', 'Supraspinhal'],
+      instrucoes: [
+        'Ajuste o assento para que o eixo da máquina fique alinhado com a articulação dos ombros e apoie os braços nos rolos acolchoados.',
+        'Eleve os braços lateralmente até a altura dos ombros contraindo os deltoides laterais.',
+        'Desça controlando a fase excêntrica sem deixar os pesos baterem.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -864,8 +929,21 @@ class CatalogoExercicios {
         'Desça devagar controlando o peso.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Remada Alta na Polia',
+      grupo: 'OMBROS',
+      codigoMidia: '0246-cALKspW',
+      equipamento: 'Polia Baixa',
+      musculoAlvo: 'Deltoide Lateral & Trapézio',
+      musculosSecundarios: ['Bíceps', 'Braquial', 'Antebraço'],
+      instrucoes: [
+        'Em pé de frente para a polia baixa, segure a barra com pegada na largura dos ombros.',
+        'Puxe a barra verticalmente rente ao corpo conduzindo o movimento pelos cotovelos elevados.',
+        'Ao atingir a altura do peito, pause brevemente e desça sob a tensão contínua do cabo.',
+      ],
+    ),
 
-    // ==================== BÍCEPS (11) ====================
+    // ==================== BÍCEPS (15) ====================
     InfoExercicioCatalogo(
       nome: 'Rosca Direta',
       grupo: 'BÍCEPS',
@@ -1006,8 +1084,86 @@ class CatalogoExercicios {
         'Flexione os cotovelos até a altura dos ombros e desça sob controle sem balançar a lombar.',
       ],
     ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Spider',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0454-Ye5Qxb0',
+      equipamento: 'Barra W / Banco Inclinado',
+      musculoAlvo: 'Bíceps Braquial (Cabeça Curta)',
+      musculosSecundarios: ['Braquial', 'Antebraço'],
+      instrucoes: [
+        'Apoie o peito no encosto de um banco inclinado a ~45° deixando os braços caírem verticalmente com a barra W.',
+        'Flexione os cotovelos erguendo a barra sem mover a parte superior dos braços nem tirar o peito do apoio.',
+        'Contraia o pico do bíceps no topo por 1 segundo e desça sob controle absoluto.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Scott na Máquina',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0592-b6hQYMb',
+      equipamento: 'Máquina Articulada',
+      musculoAlvo: 'Bíceps Braquial',
+      musculosSecundarios: ['Braquial', 'Braquiorradial'],
+      instrucoes: [
+        'Ajuste o assento para que as axilas fiquem bem encaixadas no topo do apoio acolchoado Scott.',
+        'Empunhe as manoplas articuladas e flexione os antebraços até a contração máxima.',
+        'Desça controladamente sem permitir que as placas de peso batam no final do curso.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Rosca Inversa',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0080-xNrS20v',
+      equipamento: 'Barra',
+      musculoAlvo: 'Braquiorradial & Antebraço',
+      musculosSecundarios: ['Braquial', 'Bíceps Braquial'],
+      instrucoes: [
+        'Em pé, segure a barra com pegada pronada (palmas voltadas para baixo) na largura dos ombros.',
+        'Mantendo os cotovelos fixos ao lado do corpo, flexione os braços puxando a barra em direção ao peito.',
+        'Desça devagar sentindo a forte solicitação dos músculos extensores do antebraço e braquiorradial.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Flexão de Punho',
+      grupo: 'BÍCEPS',
+      codigoMidia: '0126-82LxxkW',
+      equipamento: 'Barra / Banco',
+      musculoAlvo: 'Flexores do Antebraço',
+      musculosSecundarios: ['Músculos da Pegada'],
+      instrucoes: [
+        'Ajoelhe-se ao lado de um banco e apoie os antebraços sobre ele com os punhos projetados para fora e palmas para cima.',
+        'Segure a barra e deixe-a descer até as pontas dos dedos abrindo levemente as mãos.',
+        'Enrole os dedos e flexione os punhos para cima ao máximo, contraindo os antebraços.',
+      ],
+    ),
 
-    // ==================== TRÍCEPS (9) ====================
+    // ==================== TRÍCEPS (11) ====================
+    InfoExercicioCatalogo(
+      nome: 'Supino Fechado',
+      grupo: 'TRÍCEPS',
+      codigoMidia: '0030-J6Dx1Mu',
+      equipamento: 'Barra',
+      musculoAlvo: 'Tríceps Braquial',
+      musculosSecundarios: ['Peitoral Maior', 'Deltoide Anterior'],
+      instrucoes: [
+        'Deite-se no banco reto e segure a barra com pegada na largura dos ombros (cerca de 30 cm de distância).',
+        'Desça a barra mantendo os cotovelos colados ao tronco até tocar a linha média/baixa do peitoral.',
+        'Empurre a barra para cima estendendo os braços com foco na contração dos tríceps.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Tríceps Banco',
+      grupo: 'TRÍCEPS',
+      codigoMidia: '0129-RrLske5',
+      equipamento: 'Peso Corporal / Banco',
+      musculoAlvo: 'Tríceps Braquial',
+      musculosSecundarios: ['Deltoide Anterior', 'Peitoral Maior'],
+      instrucoes: [
+        'Apoie as mãos na borda de um banco plano com os dedos voltados para a frente e os pés apoiados no chão.',
+        'Desça o quadril flexionando os cotovelos para trás até formarem um ângulo de cerca de 90°.',
+        'Empurre o banco para estender os braços e retornar à posição inicial, mantendo as costas rentes ao banco.',
+      ],
+    ),
     InfoExercicioCatalogo(
       nome: 'Tríceps Polia',
       grupo: 'TRÍCEPS',
@@ -1124,7 +1280,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== ABDÔMEN (8) ====================
+    // ==================== ABDÔMEN (10) ====================
     InfoExercicioCatalogo(
       nome: 'Abdominal Supra',
       grupo: 'ABDÔMEN',
@@ -1165,6 +1321,19 @@ class CatalogoExercicios {
       ],
     ),
     InfoExercicioCatalogo(
+      nome: 'Prancha Lateral',
+      grupo: 'ABDÔMEN',
+      codigoMidia: '3544-5VXmnV5',
+      equipamento: 'Peso Corporal',
+      musculoAlvo: 'Oblíquos & Core',
+      musculosSecundarios: ['Quadrado Lombar', 'Glúteo Médio'],
+      instrucoes: [
+        'Deite-se de lado apoiando o antebraço no solo alinhado diretamente sob o ombro.',
+        'Eleve o quadril do chão até que o corpo forme uma linha reta dos tornozelos à cabeça.',
+        'Mantenha o abdômen e glúteos contraídos em isometria pelo tempo estipulado antes de trocar de lado.',
+      ],
+    ),
+    InfoExercicioCatalogo(
       nome: 'Abdominal Infra',
       grupo: 'ABDÔMEN',
       codigoMidia: '0620-WhuFnR7',
@@ -1201,6 +1370,19 @@ class CatalogoExercicios {
         'Ajoelhe-se diante da polia alta segurando a corda ao lado da cabeça.',
         'Flexione a coluna vertebral aproximando as costelas da pelve (sem sentar nos calcanhares).',
         'Retorne devagar alongando o abdômen contra a resistência do cabo.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Abdominal na Máquina',
+      grupo: 'ABDÔMEN',
+      codigoMidia: '1452-Wgaz7pm',
+      equipamento: 'Máquina Articulada',
+      musculoAlvo: 'Reto Abdominal',
+      musculosSecundarios: ['Oblíquos'],
+      instrucoes: [
+        'Ajuste o assento para que o ponto de rotação da máquina fique alinhado à curvatura da sua cintura e apoie os pés nos suportes.',
+        'Segure as alças acolchoadas e flexione a coluna contraindo fortemente o abdômen para puxar o peso.',
+        'Retorne sob controle total sentindo o abdômen alongar sem soltar a carga abruptamente.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -1341,6 +1523,35 @@ class CatalogoExercicios {
     'leg 45': 'leg press 45',
     'banco romano': 'extensao lombar',
     'hiperextensao': 'extensao lombar',
+    'panturrilha leg press': 'panturrilha no leg press',
+    'panturrilha leg': 'panturrilha no leg press',
+    'stiff halteres': 'stiff com halteres',
+    'stiff halter': 'stiff com halteres',
+    'rdl halteres': 'stiff com halteres',
+    'supino pegada fechada': 'supino fechado',
+    'close grip bench press': 'supino fechado',
+    'triceps no banco': 'triceps banco',
+    'mergulho banco': 'triceps banco',
+    'mergulho no banco': 'triceps banco',
+    'bench dip': 'triceps banco',
+    'spider curl': 'rosca spider',
+    'rosca aranha': 'rosca spider',
+    'rosca invertida': 'rosca inversa',
+    'rosca pronada': 'rosca inversa',
+    'reverse curl': 'rosca inversa',
+    'remada alta polia': 'remada alta na polia',
+    'remada alta cabo': 'remada alta na polia',
+    'puxada articulada': 'puxada maquina',
+    'puxada sentada maquina': 'puxada maquina',
+    'lat pulldown maquina': 'puxada maquina',
+    'side plank': 'prancha lateral',
+    'wrist curl': 'flexao de punho',
+    'antebraco': 'flexao de punho',
+    'abdominal maquina': 'abdominal na maquina',
+    'crunch maquina': 'abdominal na maquina',
+    'rosca scott maquina': 'rosca scott na maquina',
+    'elevacao lateral maquina': 'elevacao lateral na maquina',
+    'supino declinado halteres': 'supino declinado com halteres',
   };
 
   /// Retorna `true` se o [termo] digitado corresponde ao exercício [nomeExercicio]

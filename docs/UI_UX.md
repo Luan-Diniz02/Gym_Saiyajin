@@ -155,7 +155,7 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - **Filtro Rápido de Janela Temporal**: Alternância instantânea entre `ÚLTIMOS 10`, `3 MESES` e `TUDO`.
 - **Formulário Simétrico de Exercício Personalizado (`SelecaoExercicioModal`)**:
   - **Grid 4×2 de Grupos Musculares**: Os 8 grupos (`PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BÍCEPS`, `TRÍCEPS`, `ABDÔMEN`, `OUTROS`) são distribuídos em 2 linhas simétricas de 4 colunas (`Expanded`), evitando quebras irregulares de `Wrap`.
-  - **Seção de Mídia Unificada**: Permite vincular qualquer uma das **92 animações 100% offline do catálogo** (`SeletorMidiaCatalogoModal`) ou enviar **foto/GIF próprio da Galeria ou Câmera** por meio de 3 botões proporcionais lado a lado (`Catálogo`, `Galeria`, `Câmera`), além de suportar edição em cascata, exclusão e mesclagem de histórico (`AssociarExercicioModal`).
+  - **Seção de Mídia Unificada**: Permite vincular qualquer uma das **106 animações 100% offline do catálogo** (`SeletorMidiaCatalogoModal`) ou enviar **foto/GIF próprio da Galeria ou Câmera** por meio de 3 botões proporcionais lado a lado (`Catálogo`, `Galeria`, `Câmera`), além de suportar edição em cascata, exclusão e mesclagem de histórico (`AssociarExercicioModal`).
 
 ---
 
