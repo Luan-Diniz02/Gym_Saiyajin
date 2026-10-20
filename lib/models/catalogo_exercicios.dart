@@ -30,7 +30,7 @@ class CatalogoExercicios {
   CatalogoExercicios._();
 
   static const List<InfoExercicioCatalogo> exerciciosPadrao = [
-    // ==================== PEITO (15) ====================
+    // ==================== PEITO (16) ====================
     InfoExercicioCatalogo(
       nome: 'Supino Reto',
       grupo: 'PEITO',
@@ -120,6 +120,19 @@ class CatalogoExercicios {
         'Posicione as polias na altura mais baixa e fique no centro do crossover com um pé levemente à frente.',
         'Com os cotovelos semi-flexionados, puxe os puxadores de baixo para cima em arco até se encontrarem na altura do peito superior.',
         'Retorne devagar alongando o peitoral e mantendo a tensão contínua dos cabos.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Crossover Polia Alta',
+      grupo: 'PEITO',
+      codigoMidia: '1269-UKWTJWR',
+      equipamento: 'Polia Alta / Cabo',
+      musculoAlvo: 'Peitoral Inferior & Esternal',
+      musculosSecundarios: ['Deltoide Anterior', 'Tríceps'],
+      instrucoes: [
+        'Posicione as polias na regulagem alta e segure os pegadores com os braços estendidos em diagonal.',
+        'Com leve flexão nos cotovelos e tronco firme, empurre os cabos para baixo e para frente até as mãos se aproximarem ou cruzarem na linha da cintura.',
+        'Retorne controladamente sentindo o peitoral alongar sem perder a postura.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -994,7 +1007,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== TRÍCEPS (8) ====================
+    // ==================== TRÍCEPS (9) ====================
     InfoExercicioCatalogo(
       nome: 'Tríceps Polia',
       grupo: 'TRÍCEPS',
@@ -1095,6 +1108,19 @@ class CatalogoExercicios {
       instrucoes: [
         'De costas para a polia, segure a corda atrás da cabeça com os cotovelos apontados para frente/alto.',
         'Estenda os cotovelos projetando a corda à frente/acima até a contração total do tríceps.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Tríceps Testa na Polia',
+      grupo: 'TRÍCEPS',
+      codigoMidia: '1722-1xHyxys',
+      equipamento: 'Polia Alta (Corda)',
+      musculoAlvo: 'Tríceps Braquial (Cabeça Longa)',
+      musculosSecundarios: ['Deltoide Anterior (Estabilização)'],
+      instrucoes: [
+        'De costas para a polia alta, segure a corda atrás da cabeça com os cotovelos apontados para frente.',
+        'Dê um passo à frente com tronco levemente inclinado e estenda os antebraços à frente até a contração máxima do tríceps.',
+        'Retorne devagar flexionando os cotovelos e mantendo os braços firmes sob a tensão do cabo.',
       ],
     ),
 
@@ -1297,14 +1323,18 @@ class CatalogoExercicios {
     'crossover baixo': 'crossover polia baixa',
     'crucifixo polia baixa': 'crossover polia baixa',
     'cross over polia baixa': 'crossover polia baixa',
+    'crossover alto': 'crossover polia alta',
+    'cross over polia alta': 'crossover polia alta',
     'cross over': 'crossover',
     'triceps coice': 'triceps coice polia',
     'triceps coice halteres': 'triceps coice polia',
     'triceps kickback': 'triceps coice polia',
-    'triceps testa polia': 'triceps frances polia',
+    'triceps testa polia': 'triceps testa na polia',
+    'triceps testa cabo': 'triceps testa na polia',
+    'triceps testa corda': 'triceps testa na polia',
     'triceps corda na nuca': 'triceps frances polia',
-    'triceps overhead': 'triceps frances polia',
-    'extensao de triceps polia': 'triceps frances polia',
+    'triceps overhead': 'triceps testa na polia',
+    'extensao de triceps polia': 'triceps testa na polia',
     'triceps pulley': 'triceps polia',
     'triceps pulldown': 'triceps polia',
     'triceps barra': 'triceps polia',

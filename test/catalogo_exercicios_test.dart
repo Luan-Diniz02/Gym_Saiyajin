@@ -7,8 +7,8 @@ import 'package:gym_saiyajin/widgets/exercicio_midia_widget.dart';
 
 void main() {
   group('CatalogoExercicios - Integridade do Catálogo Offline e Assets', () {
-    test('Deve conter 90 exercícios padrão com todos os metadados preenchidos', () {
-      expect(CatalogoExercicios.exerciciosPadrao.length, equals(90));
+    test('Deve conter 92 exercícios padrão com todos os metadados preenchidos', () {
+      expect(CatalogoExercicios.exerciciosPadrao.length, equals(92));
 
       for (final ex in CatalogoExercicios.exerciciosPadrao) {
         expect(ex.nome.isNotEmpty, isTrue, reason: 'Nome vazio');
@@ -85,10 +85,13 @@ void main() {
     test('Novos exercícios populares no Brasil e substituição do Tríceps Coice pela versão na polia', () {
       expect(CatalogoExercicios.buscarPorNome('Crucifixo Inclinado Halteres')?.codigoMidia, equals('0319-ESOd5Pl'));
       expect(CatalogoExercicios.buscarPorNome('Crossover Polia Baixa')?.codigoMidia, equals('0179-FVmZVhk'));
+      expect(CatalogoExercicios.buscarPorNome('Crossover Polia Alta')?.codigoMidia, equals('1269-UKWTJWR'));
       expect(CatalogoExercicios.buscarPorNome('Glúteo Polia')?.codigoMidia, equals('0228-Kpajagk'));
       expect(CatalogoExercicios.buscarPorNome('Glúteo Polia')?.grupo, equals('PERNAS'));
       expect(CatalogoExercicios.buscarPorNome('Passada')?.codigoMidia, equals('1460-IZVHb27'));
       expect(CatalogoExercicios.buscarPorNome('Tríceps Coice Polia')?.codigoMidia, equals('0860-HEJ6DIX'));
+      expect(CatalogoExercicios.buscarPorNome('Tríceps Testa na Polia')?.codigoMidia, equals('1722-1xHyxys'));
+      expect(CatalogoExercicios.buscarPorNome('Tríceps Testa Polia')?.nome, equals('Tríceps Testa na Polia'));
       // Histórico legado com o nome antigo continua apontando para a nova versão
       expect(CatalogoExercicios.buscarPorNome('Tríceps Coice')?.nome, equals('Tríceps Coice Polia'));
     });
@@ -101,6 +104,8 @@ void main() {
       expect(CatalogoExercicios.correspondeBusca('Passada', 'avanço'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Glúteo Polia', 'caneleira'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Tríceps Polia', 'triceps'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Tríceps Testa na Polia', 'triceps testa polia'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Crossover Polia Alta', 'crossover alto'), isTrue);
       expect(CatalogoExercicios.correspondeBusca('Supino Reto', 'peck deck'), isFalse);
     });
   });
