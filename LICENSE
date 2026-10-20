@@ -21,14 +21,18 @@ e design de interface para exibição em portfólio profissional.
    - Qualquer menção, estudo ou citação deste projeto deve preservar integralmente os créditos de autoria e o 
      link original para o repositório de Luan Pereira Diniz.
 
-3. DECLARAÇÃO DE PROPRIEDADE INTELECTUAL DE TERCEIROS (FAIR USE):
-   - Os termos e elementos temáticos "Dragon Ball", "Dragon Ball Z", "Saiyajin", "Shenlong", "Sr. Kaioh", 
-     "Cápsula Hoi-Poi", bem como personagens e símbolos associados, são marcas registradas e propriedades 
-     intelectuais de Bird Studio, Akira Toriyama, Shueisha e Toei Animation.
-   - Este projeto consiste em um tributo esportivo independente e sem fins lucrativos, desenvolvido sob os 
-     princípios de Fair Use exclusivamente para fins didáticos, educacionais e de demonstração técnica em 
-     portfólio de engenharia de software. Não há qualquer afiliação comercial, endosso ou vínculo oficial com as 
-     empresas detentoras dos direitos da franquia.
+3. DECLARAÇÃO DE PROPRIEDADE INTELECTUAL DE TERCEIROS E ATRIBUIÇÃO DE MÍDIAS:
+   - Franquia Temática (Fair Use): Os termos e elementos temáticos "Dragon Ball", "Dragon Ball Z", "Saiyajin", 
+     "Shenlong", "Sr. Kaioh", "Cápsula Hoi-Poi", bem como personagens e símbolos associados, são marcas registradas 
+     e propriedades intelectuais de Bird Studio, Akira Toriyama, Shueisha e Toei Animation. Este projeto consiste em 
+     um tributo esportivo independente e sem fins lucrativos, desenvolvido sob os princípios de Fair Use exclusivamente 
+     para fins didáticos, educacionais e de demonstração técnica em portfólio de engenharia de software. Não há qualquer 
+     afiliação comercial, endosso ou vínculo oficial com as empresas detentoras dos direitos da franquia.
+   - Mídias Anatômicas de Exercícios (Resolução 180x180): As miniaturas estáticas (.jpg) e animações de execução (.gif) 
+     em resolução 180x180 localizadas em "assets/exercises/" são provenientes do repositório público 
+     "hasaneyldrm/exercises-dataset" (https://github.com/hasaneyldrm/exercises-dataset) e pertencem aos seus respectivos 
+     criadores originais, sendo redistribuídas em resolução 180x180 mediante a atribuição obrigatória de direitos autorais:
+     © Gym visual — https://gymvisual.com/
 
 4. ISENÇÃO DE RESPONSABILIDADE:
    - O SOFTWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" (AS IS), SEM QUALQUER GARANTIA EXPRESSA OU IMPLÍCITA. 
