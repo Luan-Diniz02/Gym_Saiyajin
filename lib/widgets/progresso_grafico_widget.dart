@@ -2,7 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/progresso_controller.dart';
+import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
+import 'exercicio_midia_widget.dart';
 
 class ProgressoGraficoWidget extends StatelessWidget {
   final ProgressoController controller;
@@ -26,6 +28,16 @@ class ProgressoGraficoWidget extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
+        final exercicioAtual = controller.exercicioFiltro;
+        final temExercicioValido =
+            exercicioAtual.isNotEmpty && exercicioAtual != 'Nenhum exercício';
+        final grupoAtual = controller.gruposExercicios[exercicioAtual] ?? '';
+        final totalPontos = controller.pontosDoGraficoFiltrado.length;
+        final indicesVisiveisX = ProgressoController.calcularIndicesVisiveisEixoX(
+          totalPontos,
+          maxLabels: 5,
+        );
+
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -57,7 +69,7 @@ class ProgressoGraficoWidget extends StatelessWidget {
                 onTap: () => _abrirModalSelecaoExercicio(context),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
                     color: AppColors.background,
                     borderRadius: BorderRadius.circular(12),
@@ -65,11 +77,21 @@ class ProgressoGraficoWidget extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.search, color: AppColors.primary, size: 20),
+                      if (temExercicioValido)
+                        ExercicioThumbnailWidget(
+                          nomeExercicio: exercicioAtual,
+                          grupo: grupoAtual,
+                          size: 36,
+                          borderRadius: 9,
+                          abrirModalAoTocar: true,
+                          exibirIndicadorGif: false,
+                        )
+                      else
+                        const Icon(Icons.search, color: AppColors.primary, size: 20),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          controller.exercicioFiltro,
+                          exercicioAtual,
                           style: const TextStyle(
                             color: AppColors.accent,
                             fontWeight: FontWeight.bold,
@@ -83,8 +105,62 @@ class ProgressoGraficoWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 28),
-              controller.pontosDoGraficoFiltrado.length < 2
+              const SizedBox(height: 10),
+
+              // Seletor Rápido de Período (Últimos 10 / 3 Meses / Tudo)
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.cardBorder),
+                ),
+                child: Row(
+                  children: PeriodoGrafico.values.map((periodo) {
+                    final isSel = controller.periodoGrafico == periodo;
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.mudarPeriodoGrafico(periodo),
+                        behavior: HitTestBehavior.opaque,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            color: isSel
+                                ? AppColors.primary.withValues(alpha: 0.16)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(
+                              color: isSel
+                                  ? AppColors.primary.withValues(alpha: 0.6)
+                                  : Colors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              periodo.label,
+                              style: TextStyle(
+                                color: isSel
+                                    ? AppColors.primary
+                                    : AppColors.textDimmed,
+                                fontSize: 10,
+                                fontWeight: isSel
+                                    ? FontWeight.w800
+                                    : FontWeight.w600,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              const SizedBox(height: 22),
+              totalPontos < 2
                   ? Container(
                       height: 200,
                       width: double.infinity,
@@ -113,31 +189,100 @@ class ProgressoGraficoWidget extends StatelessWidget {
                         ],
                       ),
                     )
-                  : SizedBox(
-                      height: 200,
-                      child: LineChart(
-                        LineChartData(
-                          gridData: FlGridData(
-                            show: true,
-                            drawVerticalLine: false,
-                            getDrawingHorizontalLine: (value) => FlLine(
-                              color: AppColors.textDimmed.withValues(alpha: 0.1),
-                              strokeWidth: 1,
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 12, top: 4),
+                      child: SizedBox(
+                        height: 205,
+                        child: LineChart(
+                          LineChartData(
+                            lineTouchData: LineTouchData(
+                              enabled: true,
+                              handleBuiltInTouches: true,
+                              touchTooltipData: LineTouchTooltipData(
+                                getTooltipColor: (_) => AppColors.background,
+                                tooltipBorder: const BorderSide(
+                                  color: AppColors.primary,
+                                  width: 1,
+                                ),
+                                tooltipBorderRadius: BorderRadius.circular(10),
+                                tooltipPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                fitInsideHorizontally: true,
+                                fitInsideVertically: true,
+                                getTooltipItems: (touchedSpots) {
+                                  return touchedSpots.map((spot) {
+                                    final idx = spot.x.toInt();
+                                    final pesoFormatado =
+                                        RecordePessoal.formatarPeso(spot.y);
+                                    final reps = (idx >= 0 &&
+                                            idx < controller.repsDoGrafico.length)
+                                        ? controller.repsDoGrafico[idx]
+                                        : null;
+                                    final dataCompleta = (idx >= 0 &&
+                                            idx <
+                                                controller
+                                                    .datasCompletasDoGrafico
+                                                    .length)
+                                        ? controller.datasCompletasDoGrafico[idx]
+                                        : '';
+
+                                    final textoCarga = (reps != null && reps > 0)
+                                        ? '$pesoFormatado kg × $reps'
+                                        : '$pesoFormatado kg';
+
+                                    return LineTooltipItem(
+                                      '$textoCarga\n',
+                                      const TextStyle(
+                                        color: AppColors.accent,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 12,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: dataCompleta,
+                                          style: const TextStyle(
+                                            color: AppColors.textDimmed,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList();
+                                },
+                              ),
                             ),
-                          ),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 24,
-                                interval: 1,
-                                getTitlesWidget: (value, meta) {
-                                  if (value.toInt() >= 0 && value.toInt() < controller.datasDoGrafico.length) {
+                            gridData: FlGridData(
+                              show: true,
+                              drawVerticalLine: false,
+                              getDrawingHorizontalLine: (value) => FlLine(
+                                color: AppColors.textDimmed.withValues(alpha: 0.1),
+                                strokeWidth: 1,
+                              ),
+                            ),
+                            titlesData: FlTitlesData(
+                              show: true,
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 26,
+                                  interval: 1,
+                                  getTitlesWidget: (value, meta) {
+                                    if (value != value.roundToDouble()) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    final idx = value.toInt();
+                                    if (idx < 0 ||
+                                        idx >= controller.datasDoGrafico.length ||
+                                        !indicesVisiveisX.contains(idx)) {
+                                      return const SizedBox.shrink();
+                                    }
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
                                       child: Text(
-                                        controller.datasDoGrafico[value.toInt()],
+                                        controller.datasDoGrafico[idx],
                                         style: const TextStyle(
                                           color: AppColors.textDimmed,
                                           fontSize: 10,
@@ -145,45 +290,59 @@ class ProgressoGraficoWidget extends StatelessWidget {
                                         ),
                                       ),
                                     );
-                                  }
-                                  return const SizedBox();
-                                },
+                                  },
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 40,
+                                  getTitlesWidget: (value, meta) {
+                                    return Text(
+                                      '${value.toInt()}kg',
+                                      style: const TextStyle(
+                                        color: AppColors.textDimmed,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
                               ),
                             ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 36,
-                                getTitlesWidget: (value, meta) {
-                                  return Text(
-                                    '${value.toInt()}kg',
-                                    style: const TextStyle(
-                                      color: AppColors.textDimmed,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                },
+                            borderData: FlBorderData(show: false),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: controller.pontosDoGraficoFiltrado,
+                                isCurved: true,
+                                preventCurveOverShooting: true,
+                                color: AppColors.primary,
+                                barWidth: 3.5,
+                                isStrokeCapRound: true,
+                                dotData: FlDotData(
+                                  show: true,
+                                  getDotPainter: (spot, percent, barData, index) {
+                                    return FlDotCirclePainter(
+                                      radius: totalPontos > 18 ? 2.8 : 3.8,
+                                      color: AppColors.primary,
+                                      strokeWidth: 1.5,
+                                      strokeColor: AppColors.background,
+                                    );
+                                  },
+                                ),
+                                belowBarData: BarAreaData(
+                                  show: true,
+                                  color: AppColors.primary.withValues(alpha: 0.15),
+                                ),
                               ),
-                            ),
-                            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            ],
                           ),
-                          borderData: FlBorderData(show: false),
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: controller.pontosDoGraficoFiltrado,
-                              isCurved: true,
-                              color: AppColors.primary,
-                              barWidth: 4,
-                              isStrokeCapRound: true,
-                              dotData: const FlDotData(show: true),
-                              belowBarData: BarAreaData(
-                                show: true,
-                                color: AppColors.primary.withValues(alpha: 0.15),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
@@ -372,6 +531,14 @@ class _ModalFiltroExercicioGraficoState extends State<_ModalFiltroExercicioGrafi
 
                         return ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          leading: ExercicioThumbnailWidget(
+                            nomeExercicio: nome,
+                            grupo: grupo,
+                            size: 38,
+                            borderRadius: 10,
+                            abrirModalAoTocar: true,
+                            exibirIndicadorGif: false,
+                          ),
                           title: Text(
                             nome,
                             style: TextStyle(

@@ -100,5 +100,15 @@ void main() {
       controller.atualizarMedidas(peso: 75.0, altura: 1.75, percentualGordura: 28.0);
       expect(controller.classificacaoGordura, 'ALTO');
     });
+
+    test('calcularIndicesVisiveisEixoX deve limitar rótulos de datas a no máximo maxLabels incluindo início e fim', () {
+      expect(ProgressoController.calcularIndicesVisiveisEixoX(0), isEmpty);
+      expect(ProgressoController.calcularIndicesVisiveisEixoX(4, maxLabels: 5), equals({0, 1, 2, 3}));
+      expect(ProgressoController.calcularIndicesVisiveisEixoX(12, maxLabels: 5), equals({0, 3, 6, 8, 11}));
+      final indices50 = ProgressoController.calcularIndicesVisiveisEixoX(50, maxLabels: 5);
+      expect(indices50.length, equals(5));
+      expect(indices50.contains(0), isTrue);
+      expect(indices50.contains(49), isTrue);
+    });
   });
 }

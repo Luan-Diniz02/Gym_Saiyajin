@@ -133,7 +133,7 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (112 Testes)
+## 🧪 4. Suíte de Testes Automatizados (113 Testes)
 
 O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
@@ -149,7 +149,7 @@ O repositório possui cobertura ampla de testes unitários, de widgets e de pers
 | [`test/treino_controller_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/treino_controller_test.dart) | Fluxo do Treino e Fichas | Carga anterior, substituição de aparelho ocupado, volume e bônus de Ki por PR. |
 | [`test/ficha_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/ficha_test.dart) | CRUD de Fichas e Templates | Criação, edição, enfileiramento e personalização de séries padrão. |
 | [`test/backup_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/backup_test.dart) | Exportação e Importação JSON | Mesclagem de dados, deduplicação e integridade de schema. |
-| [`test/imc_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/imc_test.dart) | Métricas Corporais | Cálculo de IMC nas 6 faixas da OMS e categorização de BF. |
+| [`test/imc_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/imc_test.dart) | Métricas Corporais & Eixo X do Gráfico | Cálculo de IMC nas 6 faixas da OMS, categorização de BF e algoritmo de espaçamento inteligente de datas no gráfico. |
 | [`test/dragon_radar_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_radar_icon_test.dart) | CustomPainter Radar do Dragão | Variação de 0 a 7 esferas dinâmicas, mira, dial metálico e shouldRepaint. |
 | [`test/capsule_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/capsule_icon_test.dart) | CustomPainter Cápsula Hoi-Poi | Cores personalizadas, dimensões, botão push trigger e shouldRepaint. |
 | [`test/caminho_serpente_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/caminho_serpente_test.dart) | Caminho da Serpente & Planeta Kaioh | Progressão senoidal, PlanetaKaiohIcon, sessões sempre expandidas e modal de ajuste de tempo. |

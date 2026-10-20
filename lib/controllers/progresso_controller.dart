@@ -6,10 +6,19 @@ import 'package:flutter/foundation.dart';
 import '../models/exercicio.dart';
 import '../models/poder_luta.dart';
 import '../models/recorde_pessoal.dart';
-import '../models/sessao_treino.dart';
 import '../models/serie.dart';
+import '../models/sessao_treino.dart';
 import '../repositories/treino_repository.dart';
 import '../services/preferences_service.dart';
+
+enum PeriodoGrafico {
+  ultimos10('ÚLTIMOS 10'),
+  tresMeses('3 MESES'),
+  tudo('TUDO');
+
+  final String label;
+  const PeriodoGrafico(this.label);
+}
 
 class ProgressoController extends ChangeNotifier {
   final TreinoRepository _repository;
@@ -49,15 +58,20 @@ class ProgressoController extends ChangeNotifier {
   int get totalRecordes => _recordesPessoais.length;
 
   String _exercicioFiltro = 'Nenhum exercício';
+  PeriodoGrafico _periodoGrafico = PeriodoGrafico.tudo;
   final List<String> _exerciciosDisponiveis = ['Nenhum exercício'];
   final List<FlSpot> _pontosDoGraficoFiltrado = [];
   final List<String> _datasDoGrafico = [];
+  final List<String> _datasCompletasDoGrafico = [];
+  final List<int?> _repsDoGrafico = [];
   List<SessaoTreino> _historicoCache = [];
 
   double get pesoAtual => _pesoAtual;
   double get altura => _altura;
   int get diasTreinadosNaSemana => _diasTreinadosNaSemana;
   int get metaDiasSemana => _metaDiasSemana;
+  PeriodoGrafico get periodoGrafico => _periodoGrafico;
+
   String get dataUltimaAtualizacaoFormatada {
     final data = _dataUltimaAtualizacaoPeso;
     if (data == null) return '--';
@@ -79,9 +93,30 @@ class ProgressoController extends ChangeNotifier {
   List<String> get exerciciosDisponiveis =>
       UnmodifiableListView(_exerciciosDisponiveis);
   List<String> get datasDoGrafico => UnmodifiableListView(_datasDoGrafico);
+  List<String> get datasCompletasDoGrafico =>
+      UnmodifiableListView(_datasCompletasDoGrafico);
+  List<int?> get repsDoGrafico => UnmodifiableListView(_repsDoGrafico);
 
   List<FlSpot> get pontosDoGraficoFiltrado =>
       UnmodifiableListView(_pontosDoGraficoFiltrado);
+
+  /// Calcula até [maxLabels] índices espaçados uniformemente no eixo X,
+  /// garantindo sempre o primeiro (0) e o último (total - 1) ponto.
+  static Set<int> calcularIndicesVisiveisEixoX(
+    int totalPontos, {
+    int maxLabels = 5,
+  }) {
+    if (totalPontos <= 0) return const {};
+    if (totalPontos <= maxLabels) {
+      return Set<int>.from(List<int>.generate(totalPontos, (i) => i));
+    }
+    final Set<int> indices = {};
+    for (int k = 0; k < maxLabels; k++) {
+      final idx = ((k * (totalPontos - 1)) / (maxLabels - 1)).round();
+      indices.add(idx);
+    }
+    return indices;
+  }
 
   double calcularIMC() => _pesoAtual / (_altura * _altura);
 
@@ -172,6 +207,8 @@ class ProgressoController extends ChangeNotifier {
     if (_exercicioFiltro == 'Nenhum exercício') {
       _pontosDoGraficoFiltrado.clear();
       _datasDoGrafico.clear();
+      _datasCompletasDoGrafico.clear();
+      _repsDoGrafico.clear();
       return;
     }
 
@@ -194,44 +231,104 @@ class ProgressoController extends ChangeNotifier {
             return dataA.compareTo(dataB);
           });
 
-    _pontosDoGraficoFiltrado.clear();
-    _datasDoGrafico.clear();
+    final List<({double peso, int? reps, DateTime? data})> registrosValidos = [];
 
-    for (int i = 0; i < sessoesComExercicio.length; i++) {
-      final sessao = sessoesComExercicio[i];
-      final double? pesoMaximo = _buscarPesoMaximo(
+    for (final sessao in sessoesComExercicio) {
+      final melhorSerie = _buscarMelhorSerie(
         sessao.exerciciosConcluidosHoje,
         _exercicioFiltro,
       );
-      if (pesoMaximo == null) continue;
+      if (melhorSerie == null) continue;
+      registrosValidos.add((
+        peso: melhorSerie.$1,
+        reps: melhorSerie.$2,
+        data: sessao.data,
+      ));
+    }
 
-      _pontosDoGraficoFiltrado.add(FlSpot(i.toDouble(), pesoMaximo));
+    // Aplica filtro de período selecionado
+    List<({double peso, int? reps, DateTime? data})> registrosRecortados;
+    switch (_periodoGrafico) {
+      case PeriodoGrafico.ultimos10:
+        if (registrosValidos.length > 10) {
+          registrosRecortados = registrosValidos.sublist(
+            registrosValidos.length - 10,
+          );
+        } else {
+          registrosRecortados = registrosValidos;
+        }
+      case PeriodoGrafico.tresMeses:
+        final dataReferencia =
+            registrosValidos.lastOrNull?.data ?? DateTime.now();
+        final dataCorte = dataReferencia.subtract(const Duration(days: 90));
+        final filtrados90d = registrosValidos
+            .where((r) => r.data == null || !r.data!.isBefore(dataCorte))
+            .toList();
+        // Caso o usuário tenha menos de 2 registros nos últimos 3 meses, exibe os últimos disponíveis (até 10)
+        if (filtrados90d.length < 2 && registrosValidos.length >= 2) {
+          registrosRecortados = registrosValidos.length > 10
+              ? registrosValidos.sublist(registrosValidos.length - 10)
+              : registrosValidos;
+        } else {
+          registrosRecortados = filtrados90d;
+        }
+      case PeriodoGrafico.tudo:
+        registrosRecortados = registrosValidos;
+    }
 
-      final data = sessao.data;
+    _pontosDoGraficoFiltrado.clear();
+    _datasDoGrafico.clear();
+    _datasCompletasDoGrafico.clear();
+    _repsDoGrafico.clear();
+
+    for (int i = 0; i < registrosRecortados.length; i++) {
+      final item = registrosRecortados[i];
+      _pontosDoGraficoFiltrado.add(FlSpot(i.toDouble(), item.peso));
+      _repsDoGrafico.add(item.reps);
+
+      final data = item.data;
       if (data == null) {
         _datasDoGrafico.add('--/--');
+        _datasCompletasDoGrafico.add('--/--/----');
       } else {
         final dia = data.day.toString().padLeft(2, '0');
         final mes = data.month.toString().padLeft(2, '0');
+        final ano = data.year.toString();
         _datasDoGrafico.add('$dia/$mes');
+        _datasCompletasDoGrafico.add('$dia/$mes/$ano');
       }
     }
   }
 
-  double? _buscarPesoMaximo(List<Exercicio> exercicios, String nomeExercicio) {
+  (double, int?)? _buscarMelhorSerie(
+    List<Exercicio> exercicios,
+    String nomeExercicio,
+  ) {
     final Iterable<Serie> series = exercicios
         .where((exercicio) => exercicio.nome == nomeExercicio)
         .expand((exercicio) => exercicio.seriesDetalhes);
 
     double? maximo;
+    int? melhReps;
     for (final serie in series) {
       final peso = serie.peso;
       if (peso == null) continue;
-      if (maximo == null || peso > maximo) {
+      if (maximo == null ||
+          peso > maximo ||
+          (peso == maximo && (serie.reps ?? 0) > (melhReps ?? 0))) {
         maximo = peso;
+        melhReps = serie.reps;
       }
     }
-    return maximo;
+    if (maximo == null) return null;
+    return (maximo, melhReps);
+  }
+
+  void mudarPeriodoGrafico(PeriodoGrafico novoPeriodo) {
+    if (_periodoGrafico == novoPeriodo) return;
+    _periodoGrafico = novoPeriodo;
+    _recalcularDadosGrafico();
+    notifyListeners();
   }
 
   void mudarExercicioFiltro(String novoExercicio) {

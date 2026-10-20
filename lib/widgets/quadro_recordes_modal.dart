@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/recorde_pessoal.dart';
 import '../theme/app_colors.dart';
 import 'dragon_ball_icon.dart';
+import 'exercicio_midia_widget.dart';
 import 'ki_aura_icon.dart';
 
 /// Modal estilizado para visualização dos Recordes Pessoais (PRs) / Hall da Fama.
@@ -36,7 +37,6 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
     'COSTAS',
     'PERNAS',
     'OMBROS',
-    'BRAÇOS',
     'BÍCEPS',
     'TRÍCEPS',
     'ABDÔMEN',
@@ -64,11 +64,7 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
           pr.exercicioNome.toLowerCase().contains(_filtroTexto);
 
       final matchGrupo = _grupoSelecionado == 'TODOS' ||
-          pr.grupo.toUpperCase().contains(_grupoSelecionado) ||
-          (_grupoSelecionado == 'BRAÇOS' &&
-              (pr.grupo.toUpperCase().contains('BÍCEPS') ||
-                  pr.grupo.toUpperCase().contains('TRÍCEPS') ||
-                  pr.grupo.toUpperCase().contains('ANTEBRAÇO')));
+          pr.grupo.toUpperCase().contains(_grupoSelecionado);
 
       return matchTexto && matchGrupo;
     }).toList();
@@ -314,10 +310,19 @@ class _QuadroRecordesModalState extends State<QuadroRecordesModal> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Nome do Exercício + Badge de Grupo
+          // Miniatura + Nome do Exercício + Badge de Grupo
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ExercicioThumbnailWidget(
+                nomeExercicio: pr.exercicioNome,
+                grupo: pr.grupo,
+                size: 38,
+                borderRadius: 10,
+                abrirModalAoTocar: true,
+                exibirIndicadorGif: false,
+              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   pr.exercicioNome,
