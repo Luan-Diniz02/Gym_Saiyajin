@@ -14,11 +14,15 @@ Este documento consolida e detalha o planejamento das próximas evoluções tem�
 graph TD
     A[Identidade Temática Esportiva] --> B[🧪 Câmara de Regeneração - Medical Machine]
     A --> C[🐍 Caminho da Serpente - Snake Way]
-    A --> D[☁️ Nuvem Voadora - Kinto-un]
+    A --> D[☁️ Nuvem Voadora - Kinto-un & Tipos de Série / RIR]
+    A --> E[🔥 Scouter Anatômico - Mapa de Calor Muscular]
+    A --> F[🏋️ Pesos do Sr. Kaioh - Calculadora de Anilhas]
 
     B --> B1[Recuperação Biológica no Cronômetro de Descanso - Concluído]
     C --> C1[Jornada de Disciplina Contínua na Timeline do Histórico - Concluído]
-    D --> D1[Mobilidade & Eficiência no Aquecimento / Deload - Backlog]
+    D --> D1[Séries de Aquecimento, Warm-up & RPE/RIR - Próxima Fase]
+    E --> E1[Telemetria de Volume Semanal por Músculo - Backlog]
+    F --> F1[Decomposição Visual de Carga na Barra - Backlog]
 ```
 
 ---
@@ -61,34 +65,68 @@ graph TD
 
 ---
 
-## ☁️ Proposta 3: A "Nuvem Voadora" (*Kinto-un*) na Gestão de Fichas & Mobilidade
+## ☁️ Proposta 3: A "Nuvem Voadora" (*Kinto-un*) & Tipos de Séries com Métrica de Esforço (RPE / RIR) [🚀 PRÓXIMA FASE]
 
 ### 1. Justificativa & Lore Canônica
-- A Nuvem Voadora exige pureza de intenções, leveza e agilidade.
-- **Aplicação no Treino**:
-  - Indicador de **Mobilidade, Aquecimento e Séries de Aquecimento/Warm-up**.
-  - No modal de Fichas e seleção de exercícios, séries marcadas como *Warm-up* (aquecimento neuromuscular) ou treinos de *Deload* (semana regenerativa) recebem a insígnia da Nuvem Voadora, indicando ausência de fadiga pesada e foco em fluidez de movimento.
+- A Nuvem Voadora (*Kinto-un*) representa leveza, pureza e fluidez de movimento sem peso ou fadiga destrutiva.
+- **Aplicação Fisiológica no Treino de Força**:
+  - **Séries de Aquecimento / Warm-up (Kinto-un)**: Séries preparatórias neuromusculares com cargas progressivas para lubrificação articular e recrutamento de unidades motoras sem gerar fadiga limitante.
+  - **Proteção de Métricas**: Séries marcadas com a insígnia da Nuvem Voadora não poluem o cálculo de 1RM estimado (Epley) nem geram falsos recordes de PRs.
+  - **Métrica de Esforço (RPE / RIR - Reps in Reserve)**: Seletor opcional de esforço subjetivo por série (ex: `@ RIR 2` ou `RPE 8`), fundamental para o treinamento de atletas intermediários e avançados que gerenciam a fadiga do sistema nervoso central (SNC).
+
+### 2. Especificação Técnica Pretendida
+- Componente vetorial `KintoUnIcon` no Canvas para badge visual dourado-suave.
+- Alternância de tipo de série na linha (`SerieRowWidget`): Normal (`N`), Aquecimento (`W`), Drop-set (`D`) e Falha Total (`F`).
+- Mini-seletor retrátil de RIR/RPE na linha da série sem comprometer o fluxo ágil de digitação de Carga $\times$ Repetições.
 
 ---
 
-## 🗓️ Tabela Comparativa & Status
+## 🔥 Proposta 4: O "Scouter Anatômico" (Mapa de Calor Muscular / Muscle Heatmap) [📋 BACKLOG]
+
+### 1. Justificativa & Lore Canônica
+- O Scouter dos Saiyajins é a ferramenta definitiva de telemetria biológica, capaz de detectar assinaturas de poder, assimetrias e níveis de energia dos guerreiros.
+- **Aplicação no Treino**:
+  - Visualização de **Mapa de Calor Corporal** (silhueta anatômica frontal e dorsal).
+  - O estresse mecânico e o volume semanal acumulado ($\sum \text{séries válidas} \times \text{grupo muscular}$) colorem os grupos anatômicos em tempo real: do cinza/azul neutro ao dourado (*Ativado*) e vermelho de alta demanda (*Sobrecarga*).
+
+### 2. Especificação Técnica Pretendida
+- Integração direta no `ProgressoScreen` ao lado do `PoderLutaCardWidget`.
+- Conexão matemática direta com o pilar de equilíbrio de grupos musculares da fórmula do Ki, alertando o guerreiro sobre pontos fracos (*lagging muscles*) da sua armadura.
+
+---
+
+## 🏋️ Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [📋 BACKLOG]
+
+### 1. Justificativa & Lore Canônica
+- Para treinar Goku sob gravidade ampliada de 10x, o Senhor Kaioh colocou pesadas braçadeiras de treinamento que forçaram a superação dos limites biológicos básicos.
+- **Aplicação no Treino**:
+  - Calculadora de anilhas (*Plate Calculator*) rápida para exercícios de barra livre (Supino, Agachamento, Levantamento Terra, Desenvolvimento).
+  - Ao tocar no campo de carga ou em um ícone de anilha na série, um modal visual exibe a decomposição exata das anilhas necessárias por lado (ex: Barra de 20 kg + 2 anilhas de 20 kg + 1 anilha de 10 kg por lado = 80 kg).
+
+---
+
+## 🗓️ Tabela Comparativa & Status do Roadmap
 
 | Proposta | Componente Principal | Onde Atua | Complexidade | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **🧪 Câmara de Regeneração** | `EscotilhaCamaraPainter` + Cronômetro | `TreinoScreen` (Tela de Treino) | Alta (Painter 3D + animação + sync) | **✅ CONCLUÍDO & TESTADO** |
 | **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
 | **⚡ Chamas de Ki** | `KiAuraIcon` + `KiAuraPainter` | `PoderLutaCardWidget` & `Recordes` | Média (Silhueta cel-shaded + glows) | **✅ CONCLUÍDO & TESTADO** |
-| **☁️ Nuvem Voadora** | `KintoUnIcon` + Badge de Aquecimento | `Fichas` & `SerieRowWidget` | Baixa/Média | **🚀 Próxima Prioridade** |
+| **☁️ Nuvem Voadora & RIR/RPE** | `KintoUnIcon` + Seletor de Tipo de Série | `SerieRowWidget` & `Fichas` | Média (Tipos de série + filtro de 1RM) | **🚀 Próxima Prioridade** |
+| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **📋 Backlog** |
+| **🏋️ Pesos do Sr. Kaioh** | `CalculadoraAnilhasModal` | `SerieRowWidget` / Campos de Carga | Baixa/Média (Algoritmo guloso de anilhas) | **📋 Backlog** |
 
 ---
 
 ## 📋 Próximos Passos de Execução Recomendados
 
-1. **Chamas de Ki (`KiAuraIcon`) [✅ CONCLUÍDO]**:
-   - Labareda vetorial canônica com cristas pontiagudas voltadas para cima, gradiente dinâmico de energia, núcleo superdenso (*inner core*) e micro-faíscas/sparks.
-   - Integração no pilar de Vigor Saiyajin e substituição definitiva de `Icons.bolt_rounded`.
-2. **Nuvem Voadora (`KintoUnIcon`) [🚀 Próxima Fase]**:
-   - Especificação e design do badge de séries de aquecimento (*warm-up*).
-   - Não interferir nos recordes nem nos cálculos de 1RM.
-
-
+1. **Fase 1: Nuvem Voadora & Tipos de Série com Métrica de Esforço (Kinto-un & RPE/RIR)**:
+   - Desenhar o `KintoUnIcon` vetorial em Canvas.
+   - Adicionar tag de tipo de série no modelo `Serie` (`tipo: normal | warmup | dropset | falha`).
+   - Ajustar o cálculo do Ki e estimativa de 1RM para ignorar séries marcadas como aquecimento (`warmup`).
+   - Adicionar seletor discreto e opcional de RIR/RPE.
+2. **Fase 2: Scouter Anatômico (Mapa de Calor Muscular)**:
+   - Criar silhuetas vetoriais anatômicas frontal e dorsal com mapeamento dos 6 grandes grupos musculares.
+   - Colorir regiões musculares dinamicamente com base nas séries concluídas nos últimos 7 dias.
+3. **Fase 3: Pesos Pesados do Senhor Kaioh (Calculadora de Anilhas)**:
+   - Implementar algoritmo guloso de seleção de anilhas configurável (anilhas de 25kg, 20kg, 15kg, 10kg, 5kg, 2.5kg, 1.25kg e peso da barra).

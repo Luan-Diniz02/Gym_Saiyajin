@@ -7,8 +7,8 @@ import 'package:gym_saiyajin/widgets/exercicio_midia_widget.dart';
 
 void main() {
   group('CatalogoExercicios - Integridade do Catálogo Offline e Assets', () {
-    test('Deve conter 88 exercícios padrão com todos os metadados preenchidos', () {
-      expect(CatalogoExercicios.exerciciosPadrao.length, equals(88));
+    test('Deve conter 90 exercícios padrão com todos os metadados preenchidos', () {
+      expect(CatalogoExercicios.exerciciosPadrao.length, equals(90));
 
       for (final ex in CatalogoExercicios.exerciciosPadrao) {
         expect(ex.nome.isNotEmpty, isTrue, reason: 'Nome vazio');
@@ -75,11 +75,33 @@ void main() {
       expect(CatalogoExercicios.buscarPorNome('Elevação Lateral Polia')?.codigoMidia, equals('0192-wEulIzp'));
       expect(CatalogoExercicios.buscarPorNome('Elevação Lateral (Polia)')?.codigoMidia, equals('0192-wEulIzp'));
       expect(CatalogoExercicios.buscarPorNome('Abdominal Declinado')?.codigoMidia, equals('0277-9Ap7miY'));
-      expect(CatalogoExercicios.buscarPorNome('Supino Reto Unilateral')?.codigoMidia, equals('0343-zGSIWQi'));
+      expect(CatalogoExercicios.buscarPorNome('Supino Reto Unilateral'), isNull);
       expect(CatalogoExercicios.buscarPorNome('Remada Unilateral (Máquina)')?.codigoMidia, equals('1356-OIFMAp1'));
       expect(CatalogoExercicios.buscarPorNome('Rosca Unilateral')?.codigoMidia, equals('0190-YTur5nR'));
       expect(CatalogoExercicios.buscarPorNome('Elevacao Pélvica')?.nome, equals('Elevação Pélvica'));
       expect(CatalogoExercicios.buscarPorNome('Exercício Inexistente XYZ'), isNull);
+    });
+
+    test('Novos exercícios populares no Brasil e substituição do Tríceps Coice pela versão na polia', () {
+      expect(CatalogoExercicios.buscarPorNome('Crucifixo Inclinado Halteres')?.codigoMidia, equals('0319-ESOd5Pl'));
+      expect(CatalogoExercicios.buscarPorNome('Crossover Polia Baixa')?.codigoMidia, equals('0179-FVmZVhk'));
+      expect(CatalogoExercicios.buscarPorNome('Glúteo Polia')?.codigoMidia, equals('0228-Kpajagk'));
+      expect(CatalogoExercicios.buscarPorNome('Glúteo Polia')?.grupo, equals('PERNAS'));
+      expect(CatalogoExercicios.buscarPorNome('Passada')?.codigoMidia, equals('1460-IZVHb27'));
+      expect(CatalogoExercicios.buscarPorNome('Tríceps Coice Polia')?.codigoMidia, equals('0860-HEJ6DIX'));
+      // Histórico legado com o nome antigo continua apontando para a nova versão
+      expect(CatalogoExercicios.buscarPorNome('Tríceps Coice')?.nome, equals('Tríceps Coice Polia'));
+    });
+
+    test('correspondeBusca deve encontrar exercícios por sinônimos populares brasileiros', () {
+      expect(CatalogoExercicios.correspondeBusca('Voador', 'peck deck'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Stiff', 'rdl'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Elevação Pélvica', 'hip thrust'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Puxada Alta', 'puxador'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Passada', 'avanço'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Glúteo Polia', 'caneleira'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Tríceps Polia', 'triceps'), isTrue);
+      expect(CatalogoExercicios.correspondeBusca('Supino Reto', 'peck deck'), isFalse);
     });
   });
 

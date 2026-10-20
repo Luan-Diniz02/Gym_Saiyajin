@@ -133,13 +133,13 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (113 Testes)
+## 🧪 4. Suíte de Testes Automatizados (115 Testes)
 
 O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
 | Arquivo de Teste | Área de Cobertura | Casos Chave |
 | :--- | :--- | :--- |
-| [`test/catalogo_exercicios_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/catalogo_exercicios_test.dart) | Catálogo Offline (88 Exercícios) & Mídias | Integridade dos 88 exercícios, existência de miniaturas `.jpg` e `.gif` locais, normalização de busca/sinônimos e modal de execução sob demanda. |
+| [`test/catalogo_exercicios_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/catalogo_exercicios_test.dart) | Catálogo Offline (90 Exercícios) & Mídias | Integridade dos 90 exercícios, existência de miniaturas `.jpg` e `.gif` locais, normalização de busca por sinônimos brasileiros e execução sob demanda. |
 | [`test/volume_sessao_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/volume_sessao_test.dart) | Volume e Séries Unificados | Simetria de cálculo do volume em sessões completas, séries não checadas e formatação com pontuação de milhar. |
 | [`test/compartilhar_card_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/compartilhar_card_test.dart) | Modal de Compartilhamento Social | Proporções (Stories/Feed), Presets (Slim, Scouter HUD, Rodapé), Cores e Ícones. |
 | [`test/dragon_ball_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_ball_icon_test.dart) | CustomPainter Esfera do Dragão | Dimensões, renderização de 1 a 7 estrelas e método `shouldRepaint`. |

@@ -729,6 +729,7 @@ class _SeletorMidiaCatalogoModalState extends State<SeletorMidiaCatalogoModal> {
         return false;
       }
       if (palavras.isEmpty) return true;
+      if (CatalogoExercicios.correspondeBusca(item.nome, _termo)) return true;
       final alvo = _semAcento(
         '${item.nome} ${item.equipamento} ${item.musculoAlvo} ${item.grupo}',
       );

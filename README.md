@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-113%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-115%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -56,7 +56,7 @@ A versão estável do aplicativo está pronta para instalação imediata no seu 
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (113 testes automatizados).
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (115 testes automatizados).
 - 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `EscotilhaCamaraPainter`) e ergonomia do Histórico e do Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente e a Câmara de Regeneração Médica.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
@@ -67,10 +67,10 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
-- **Catálogo Offline de 88 Exercícios com Miniaturas & GIFs Sob Demanda**:
+- **Catálogo Offline de 90 Exercícios com Miniaturas, GIFs Sob Demanda & Sinônimos Brasileiros**:
   - Miniaturas anatômicas em containers arredondados no modal de busca, na fila *Próximos da Ficha*, no *Gerenciador de Fichas*, no cabeçalho fixo do exercício ativo, nos cards do *Histórico* e de *Exercícios Concluídos*, no *Registro de Poder* e no *Gráfico de Progressão de Carga* (zero impacto de CPU/RAM na rolagem).
   - **Execução Animada Sob Demanda**: Toque diretamente na miniatura com indicador de play para abrir o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, sinergistas e instruções técnicas passo a passo em PT-BR — sem empurrar as séries para baixo durante o treino.
-  - **Exercícios Personalizados com Edição, Exclusão & Mídia Customizada**: Crie, edite (atualizando nome e grupo muscular em cascata nas sessões e fichas) ou exclua seus exercícios personalizados, podendo associar qualquer uma das **88 animações 100% offline do catálogo** ou enviar **fotos/GIFs próprios da Galeria ou Câmera** (`ExercicioCustomMidiaService`).
+  - **Exercícios Personalizados com Edição, Exclusão & Mídia Customizada**: Crie, edite (atualizando nome e grupo muscular em cascata nas sessões e fichas) ou exclua seus exercícios personalizados, podendo associar qualquer uma das **90 animações 100% offline do catálogo** ou enviar **fotos/GIFs próprios da Galeria ou Câmera** (`ExercicioCustomMidiaService`).
   - **Unificação de Exercícios Customizados**: Associe/funda exercícios criados anteriormente a qualquer exercício padrão do catálogo com 1 toque (`AssociarExercicioModal`), transferindo 100% do histórico de séries, recordes (PRs) e fichas sem perder progresso.
 - **Nome & Divisão do Treino**: Chips de seleção rápida padronizados (`Treino A`, `Treino B`, `Push`, `Pull`, `Legs`, etc.) ou nome customizado digitado pelo usuário. Registrado na sessão e estampado na timeline e no card social.
 - **Fichas / Templates Permanentes com Reordenação Drag-and-Drop**: Crie, edite, reordene exercícios clicando e arrastando (`ReorderableListView`) e configure a quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
@@ -157,7 +157,7 @@ gym_saiyajin/
 │   ├── database/                       # Helper do SQLite, PRAGMAs e migrações (v1 -> v3)
 │   │   └── db_helper.dart
 │   ├── models/                         # Entidades de domínio imutáveis com serialização
-│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 88 exercícios, músculos e assets
+│   │   ├── catalogo_exercicios.dart    # Catálogo offline de 90 exercícios, músculos, assets e sinônimos
 │   │   ├── exercicio.dart
 │   │   ├── ficha_treino.dart
 │   │   ├── poder_luta.dart
@@ -204,7 +204,7 @@ gym_saiyajin/
 │       ├── serie_anterior_chip.dart
 │       ├── serie_row_widget.dart
 │       └── status_barra_treino.dart
-├── test/                               # Suíte de 113 testes automatizados
+├── test/                               # Suíte de 115 testes automatizados
 │   ├── backup_test.dart
 │   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
@@ -241,7 +241,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (113 testes)
+# Executar a suíte completa de testes automatizados (115 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

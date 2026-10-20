@@ -84,6 +84,19 @@ class CatalogoExercicios {
       ],
     ),
     InfoExercicioCatalogo(
+      nome: 'Crucifixo Inclinado Halteres',
+      grupo: 'PEITO',
+      codigoMidia: '0319-ESOd5Pl',
+      equipamento: 'Halteres / Banco Inclinado',
+      musculoAlvo: 'Peitoral Superior (Clavicular)',
+      musculosSecundarios: ['Deltoide Anterior'],
+      instrucoes: [
+        'Ajuste o banco entre 30° e 45° e segure os halteres acima do peito com as palmas voltadas uma para a outra.',
+        'Com leve flexão fixa nos cotovelos, abra os braços em arco até sentir o alongamento da parte alta do peitoral.',
+        'Retorne pelo mesmo arco aproximando os halteres no topo sem deixá-los bater.',
+      ],
+    ),
+    InfoExercicioCatalogo(
       nome: 'Crossover',
       grupo: 'PEITO',
       codigoMidia: '0188-xLYSdtg',
@@ -94,6 +107,19 @@ class CatalogoExercicios {
         'Posicione-se no centro do crossover com um pé levemente à frente para estabilidade e tronco sutilmente inclinado.',
         'Com os cotovelos semi-flexionados, puxe os puxadores em arco até se encontrarem à frente do peito.',
         'Retorne devagar mantendo a tensão contínua dos cabos.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Crossover Polia Baixa',
+      grupo: 'PEITO',
+      codigoMidia: '0179-FVmZVhk',
+      equipamento: 'Polia Baixa / Cabo',
+      musculoAlvo: 'Peitoral Superior (Clavicular)',
+      musculosSecundarios: ['Deltoide Anterior', 'Bíceps (Estabilização)'],
+      instrucoes: [
+        'Posicione as polias na altura mais baixa e fique no centro do crossover com um pé levemente à frente.',
+        'Com os cotovelos semi-flexionados, puxe os puxadores de baixo para cima em arco até se encontrarem na altura do peito superior.',
+        'Retorne devagar alongando o peitoral e mantendo a tensão contínua dos cabos.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -133,32 +159,6 @@ class CatalogoExercicios {
         'Com o banco inclinado a 30°–45°, posicione os halteres na linha dos ombros.',
         'Empurre para cima mantendo os punhos firmes e cotovelos a ~45° do tronco.',
         'Desça até alongar bem a porção clavicular do peito.',
-      ],
-    ),
-    InfoExercicioCatalogo(
-      nome: 'Supino Reto Unilateral',
-      grupo: 'PEITO',
-      codigoMidia: '0343-zGSIWQi',
-      equipamento: 'Halter (Unilateral)',
-      musculoAlvo: 'Peitoral Maior & Estabilizadores',
-      musculosSecundarios: ['Tríceps', 'Deltoide Anterior', 'Core'],
-      instrucoes: [
-        'Deite-se no banco reto segurando um halter em uma das mãos e firme bem os pés no chão.',
-        'Desça o halter controladamente até a linha do peito mantendo o tronco estável sem girar.',
-        'Empurre de volta até o topo e repita com o outro braço.',
-      ],
-    ),
-    InfoExercicioCatalogo(
-      nome: 'Supino Inclinado Unilateral',
-      grupo: 'PEITO',
-      codigoMidia: '1281-rDAiRf9',
-      equipamento: 'Halter (Unilateral)',
-      musculoAlvo: 'Peitoral Superior',
-      musculosSecundarios: ['Deltoide Anterior', 'Tríceps', 'Core'],
-      instrucoes: [
-        'No banco inclinado a 30°–45°, segure um halter na linha do ombro e mantenha o abdômen firme.',
-        'Empurre verticalmente até estender o braço e desça controlando o alongamento.',
-        'Conclua as repetições de um lado antes de trocar.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -225,7 +225,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== COSTAS (8) ====================
+    // ==================== COSTAS (13) ====================
     InfoExercicioCatalogo(
       nome: 'Puxada Alta',
       grupo: 'COSTAS',
@@ -395,7 +395,7 @@ class CatalogoExercicios {
       ],
     ),
 
-    // ==================== PERNAS (15) ====================
+    // ==================== PERNAS (21) ====================
     InfoExercicioCatalogo(
       nome: 'Agachamento Livre',
       grupo: 'PERNAS',
@@ -524,6 +524,32 @@ class CatalogoExercicios {
         'Segure um halter em cada mão ao lado do corpo e dê um passo firme à frente.',
         'Desça o quadril flexionando ambos os joelhos até formarem cerca de 90°.',
         'Empurre o solo com o calcanhar da perna da frente para retornar.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Passada',
+      grupo: 'PERNAS',
+      codigoMidia: '1460-IZVHb27',
+      equipamento: 'Peso Corporal / Halteres',
+      musculoAlvo: 'Glúteos & Quadríceps',
+      musculosSecundarios: ['Isquiotibiais', 'Panturrilhas', 'Core'],
+      instrucoes: [
+        'Em pé (com ou sem halteres ao lado do corpo), dê um passo longo à frente mantendo o tronco ereto.',
+        'Desça até o joelho de trás quase tocar o solo, com ambos os joelhos em cerca de 90°.',
+        'Empurre pelo calcanhar da perna da frente e avance trazendo a perna de trás direto para o próximo passo, caminhando continuamente.',
+      ],
+    ),
+    InfoExercicioCatalogo(
+      nome: 'Glúteo Polia',
+      grupo: 'PERNAS',
+      codigoMidia: '0228-Kpajagk',
+      equipamento: 'Polia Baixa (Caneleira)',
+      musculoAlvo: 'Glúteo Máximo',
+      musculosSecundarios: ['Isquiotibiais', 'Core (Estabilização)'],
+      instrucoes: [
+        'Prenda a caneleira/tornozeleira da polia baixa no tornozelo e apoie as mãos na estrutura para estabilizar o tronco.',
+        'Com o joelho levemente flexionado, estenda o quadril levando a perna para trás e contraindo forte o glúteo no final.',
+        'Retorne de forma controlada sem arquear a lombar e conclua as repetições antes de trocar de perna.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -1022,16 +1048,16 @@ class CatalogoExercicios {
       ],
     ),
     InfoExercicioCatalogo(
-      nome: 'Tríceps Coice',
+      nome: 'Tríceps Coice Polia',
       grupo: 'TRÍCEPS',
-      codigoMidia: '0333-W6PxUkg',
-      equipamento: 'Halteres',
+      codigoMidia: '0860-HEJ6DIX',
+      equipamento: 'Polia Baixa',
       musculoAlvo: 'Tríceps Braquial',
       musculosSecundarios: ['Deltoide Posterior (Estabilização)'],
       instrucoes: [
-        'Incline o tronco à frente e eleve o braço até que fique paralelo ao chão, colado ao tronco.',
-        'Estenda o antebraço para trás até alinhar todo o braço e contraia o tríceps no topo.',
-        'Retorne devagar dobrando apenas o cotovelo.',
+        'Segure o puxador da polia baixa, incline o tronco à frente e mantenha o braço colado ao tronco, paralelo ao chão.',
+        'Estenda o antebraço para trás até alinhar todo o braço, contraindo o tríceps contra a tensão contínua do cabo.',
+        'Retorne devagar dobrando apenas o cotovelo, sem mover o ombro.',
       ],
     ),
     InfoExercicioCatalogo(
@@ -1239,7 +1265,77 @@ class CatalogoExercicios {
     'terra sumo': 'levantamento terra sumo',
     'russian twist': 'abdominal obliquo russian twist',
     'abdominal obliquo': 'abdominal obliquo russian twist',
+    // Sinônimos populares em academias brasileiras
+    'puxador': 'puxada alta',
+    'puxador frente': 'puxada alta',
+    'lat pulldown': 'puxada alta',
+    'peck deck fly': 'voador',
+    'fly maquina': 'voador',
+    'crucifixo maquina': 'voador',
+    'reverse fly': 'voador invertido',
+    'rdl': 'stiff',
+    'levantamento romano': 'stiff',
+    'peso morto romeno': 'stiff',
+    'terra romeno': 'stiff',
+    'hip thrust': 'elevacao pelvica',
+    'elevacao de quadril': 'elevacao pelvica',
+    'avanco': 'passada',
+    'avanco com halteres': 'passada',
+    'passada com halteres': 'passada',
+    'walking lunge': 'passada',
+    'lunge': 'afundo halteres',
+    'gluteo na polia': 'gluteo polia',
+    'gluteo cabo': 'gluteo polia',
+    'gluteo caneleira': 'gluteo polia',
+    'gluteo coice polia': 'gluteo polia',
+    'coice gluteo': 'gluteo polia',
+    'cable kickback gluteo': 'gluteo polia',
+    'extensao de quadril polia': 'gluteo polia',
+    'crucifixo inclinado': 'crucifixo inclinado halteres',
+    'crucifixo inclinado com halteres': 'crucifixo inclinado halteres',
+    'crucifixo reto': 'crucifixo',
+    'crossover baixo': 'crossover polia baixa',
+    'crucifixo polia baixa': 'crossover polia baixa',
+    'cross over polia baixa': 'crossover polia baixa',
+    'cross over': 'crossover',
+    'triceps coice': 'triceps coice polia',
+    'triceps coice halteres': 'triceps coice polia',
+    'triceps kickback': 'triceps coice polia',
+    'triceps testa polia': 'triceps frances polia',
+    'triceps corda na nuca': 'triceps frances polia',
+    'triceps overhead': 'triceps frances polia',
+    'extensao de triceps polia': 'triceps frances polia',
+    'triceps pulley': 'triceps polia',
+    'triceps pulldown': 'triceps polia',
+    'triceps barra': 'triceps polia',
+    'leg 45': 'leg press 45',
+    'banco romano': 'extensao lombar',
+    'hiperextensao': 'extensao lombar',
   };
+
+  /// Retorna `true` se o [termo] digitado corresponde ao exercício [nomeExercicio]
+  /// pelo nome (ignorando acentos) ou por algum sinônimo popular cadastrado.
+  ///
+  /// Ex.: `'peck deck'` encontra **Voador**, `'rdl'` encontra **Stiff** e
+  /// `'hip thrust'` encontra **Elevação Pélvica**.
+  static bool correspondeBusca(String nomeExercicio, String termo) {
+    final termoN = _normalizarChave(termo);
+    if (termoN.isEmpty) return true;
+
+    if (_normalizarChave(nomeExercicio).contains(termoN)) return true;
+
+    final info = buscarPorNome(nomeExercicio);
+    if (info == null) return false;
+    final chaveAlvo = _normalizarChave(info.nome);
+    if (chaveAlvo.contains(termoN)) return true;
+
+    for (final entry in _aliasesNormalizados.entries) {
+      if (entry.value == chaveAlvo && entry.key.contains(termoN)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   static final Map<String, InfoExercicioCatalogo> _mapaNormalizado = {
     for (final item in exerciciosPadrao) _normalizarChave(item.nome): item,

@@ -83,6 +83,7 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
       final equipamento = info?.equipamento.toLowerCase() ?? '';
       final musculo = info?.musculoAlvo.toLowerCase() ?? '';
       return nome.contains(termo) ||
+          CatalogoExercicios.correspondeBusca(nome, termo) ||
           grupo.toLowerCase().contains(termo) ||
           equipamento.contains(termo) ||
           musculo.contains(termo);
@@ -1165,6 +1166,7 @@ class _AssociarExercicioModalState extends State<AssociarExercicioModal> {
       }
       if (termo.isEmpty) return true;
       return item.nome.toLowerCase().contains(termo) ||
+          CatalogoExercicios.correspondeBusca(item.nome, termo) ||
           item.grupo.toLowerCase().contains(termo) ||
           item.equipamento.toLowerCase().contains(termo) ||
           item.musculoAlvo.toLowerCase().contains(termo);
