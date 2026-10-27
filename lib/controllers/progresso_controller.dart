@@ -20,6 +20,43 @@ enum PeriodoGrafico {
   const PeriodoGrafico(this.label);
 }
 
+enum PeriodoMapaMuscular {
+  seteDias(7, '7 DIAS'),
+  trintaDias(30, '30 DIAS');
+
+  final int dias;
+  final String label;
+  const PeriodoMapaMuscular(this.dias, this.label);
+}
+
+enum NivelAtivacaoMuscular {
+  inativo('SEM ESTÍMULO'),
+  manutencao('ATIVADO'),
+  ideal('ZONA IDEAL'),
+  altaDemanda('SOBRECARGA');
+
+  final String label;
+  const NivelAtivacaoMuscular(this.label);
+}
+
+class TelemetriaMuscular {
+  final String grupo;
+  final int seriesValidas;
+  final double volumeTotalKg;
+  final double maior1RM;
+  final NivelAtivacaoMuscular nivel;
+  final double intensidadeNormalizada;
+
+  const TelemetriaMuscular({
+    required this.grupo,
+    required this.seriesValidas,
+    required this.volumeTotalKg,
+    required this.maior1RM,
+    required this.nivel,
+    required this.intensidadeNormalizada,
+  });
+}
+
 class ProgressoController extends ChangeNotifier {
   final TreinoRepository _repository;
   final PreferencesService _preferencesService;
@@ -59,6 +96,8 @@ class ProgressoController extends ChangeNotifier {
 
   String _exercicioFiltro = 'Nenhum exercício';
   PeriodoGrafico _periodoGrafico = PeriodoGrafico.tudo;
+  PeriodoMapaMuscular _periodoMapaMuscular = PeriodoMapaMuscular.seteDias;
+  String? _grupoMuscularSelecionado;
   final List<String> _exerciciosDisponiveis = ['Nenhum exercício'];
   final List<FlSpot> _pontosDoGraficoFiltrado = [];
   final List<String> _datasDoGrafico = [];
@@ -71,6 +110,163 @@ class ProgressoController extends ChangeNotifier {
   int get diasTreinadosNaSemana => _diasTreinadosNaSemana;
   int get metaDiasSemana => _metaDiasSemana;
   PeriodoGrafico get periodoGrafico => _periodoGrafico;
+  PeriodoMapaMuscular get periodoMapaMuscular => _periodoMapaMuscular;
+  String? get grupoMuscularSelecionado => _grupoMuscularSelecionado;
+
+  static const List<String> gruposMuscularesCanonicos = [
+    'PEITO',
+    'COSTAS',
+    'PERNAS',
+    'OMBROS',
+    'BÍCEPS',
+    'TRÍCEPS',
+    'ABDÔMEN',
+  ];
+
+  /// Normaliza o nome de qualquer grupo muscular para uma das 7 chaves canônicas.
+  static String normalizarGrupoMuscular(String grupoRaw) {
+    final g = grupoRaw
+        .trim()
+        .toUpperCase()
+        .replaceAll('Í', 'I')
+        .replaceAll('Ú', 'U')
+        .replaceAll('Á', 'A')
+        .replaceAll('Ç', 'C')
+        .replaceAll('Ô', 'O')
+        .replaceAll('Ã', 'A')
+        .replaceAll('É', 'E');
+
+    if (g.contains('PEITO') || g.contains('PEITORAL')) return 'PEITO';
+    if (g.contains('COSTA') || g.contains('DORSAL') || g.contains('LOMBAR')) {
+      return 'COSTAS';
+    }
+    if (g.contains('PERNA') ||
+        g.contains('QUADRICEPS') ||
+        g.contains('GLUTE') ||
+        g.contains('POSTERIOR') ||
+        g.contains('PANTURRILHA') ||
+        g.contains('COXA')) {
+      return 'PERNAS';
+    }
+    if (g.contains('OMBRO') || g.contains('DELTOIDE') || g.contains('TRAPEZIO')) {
+      return 'OMBROS';
+    }
+    if (g.contains('BICEPS') || g.contains('ANTEBRACO')) return 'BÍCEPS';
+    if (g.contains('TRICEPS')) return 'TRÍCEPS';
+    if (g.contains('ABDOM') || g.contains('CORE')) return 'ABDÔMEN';
+    return grupoRaw.trim().toUpperCase();
+  }
+
+  void mudarPeriodoMapaMuscular(PeriodoMapaMuscular novoPeriodo) {
+    if (_periodoMapaMuscular == novoPeriodo) return;
+    _periodoMapaMuscular = novoPeriodo;
+    notifyListeners();
+  }
+
+  void selecionarGrupoMapaMuscular(String? grupo) {
+    if (_grupoMuscularSelecionado == grupo) {
+      _grupoMuscularSelecionado = null;
+    } else {
+      _grupoMuscularSelecionado = grupo;
+    }
+    notifyListeners();
+  }
+
+  /// Calcula a telemetria anatômica de séries válidas (excluindo aquecimentos)
+  /// por grupo muscular dentro da janela temporal selecionada.
+  Map<String, TelemetriaMuscular> calcularTelemetriaMuscular({
+    int? dias,
+    DateTime? dataReferencia,
+  }) {
+    final janelaDias = dias ?? _periodoMapaMuscular.dias;
+    final ref = dataReferencia ?? DateTime.now();
+    final hojeFim = DateTime(ref.year, ref.month, ref.day, 23, 59, 59);
+    final dataInicio = DateTime(ref.year, ref.month, ref.day)
+        .subtract(Duration(days: janelaDias - 1));
+
+    final Map<String, int> contagemSeries = {
+      for (final g in gruposMuscularesCanonicos) g: 0,
+    };
+    final Map<String, double> somaVolume = {
+      for (final g in gruposMuscularesCanonicos) g: 0.0,
+    };
+
+    for (final sessao in _historicoCache) {
+      final d = sessao.data;
+      if (d == null) continue;
+      if (d.isBefore(dataInicio) || d.isAfter(hojeFim)) continue;
+
+      for (final ex in sessao.exerciciosConcluidosHoje) {
+        final grupoKey = normalizarGrupoMuscular(ex.grupo);
+        if (!contagemSeries.containsKey(grupoKey)) continue;
+
+        for (final s in ex.seriesDetalhes) {
+          // Séries de aquecimento (warmup) não contam como séries válidas de trabalho
+          if (!s.concluida || s.isWarmup) continue;
+          final reps = s.reps ?? 0;
+          final peso = s.peso ?? 0.0;
+          if (reps <= 0) continue;
+
+          contagemSeries[grupoKey] = (contagemSeries[grupoKey] ?? 0) + 1;
+          if (peso > 0) {
+            somaVolume[grupoKey] = (somaVolume[grupoKey] ?? 0.0) + (peso * reps);
+          }
+        }
+      }
+    }
+
+    // Escala de referência proporcional à janela (1x para 7 dias, 4x para 30 dias)
+    final int fatorEscala = janelaDias >= 28 ? 4 : 1;
+    final int limiarIdeal = 6 * fatorEscala;
+    final int limiarSobrecarga = 13 * fatorEscala;
+    final int tetoVisual = 16 * fatorEscala;
+
+    final Map<String, TelemetriaMuscular> resultado = {};
+    for (final grupo in gruposMuscularesCanonicos) {
+      final int series = contagemSeries[grupo] ?? 0;
+      final double volume = somaVolume[grupo] ?? 0.0;
+      final double max1RM = _poderLuta.maiores1RMPorGrupo[grupo] ?? 0.0;
+
+      NivelAtivacaoMuscular nivel;
+      if (series <= 0) {
+        nivel = NivelAtivacaoMuscular.inativo;
+      } else if (series < limiarIdeal) {
+        nivel = NivelAtivacaoMuscular.manutencao;
+      } else if (series < limiarSobrecarga) {
+        nivel = NivelAtivacaoMuscular.ideal;
+      } else {
+        nivel = NivelAtivacaoMuscular.altaDemanda;
+      }
+
+      final double intensidade =
+          series <= 0 ? 0.0 : (series / tetoVisual).clamp(0.15, 1.0);
+
+      resultado[grupo] = TelemetriaMuscular(
+        grupo: grupo,
+        seriesValidas: series,
+        volumeTotalKg: volume,
+        maior1RM: max1RM,
+        nivel: nivel,
+        intensidadeNormalizada: intensidade,
+      );
+    }
+
+    return resultado;
+  }
+
+  /// Retorna a lista de grupos musculares negligenciados (0 séries no período)
+  /// para alertar o atleta sobre pontos fracos na armadura.
+  List<String> obterPontosFracosMusculares({
+    Map<String, TelemetriaMuscular>? telemetria,
+  }) {
+    final mapa = telemetria ?? calcularTelemetriaMuscular();
+    final temAlgumTreino = mapa.values.any((t) => t.seriesValidas > 0);
+    if (!temAlgumTreino) return const [];
+    return mapa.values
+        .where((t) => t.seriesValidas == 0)
+        .map((t) => t.grupo)
+        .toList();
+  }
 
   String get dataUltimaAtualizacaoFormatada {
     final data = _dataUltimaAtualizacaoPeso;
@@ -556,5 +752,17 @@ class ProgressoController extends ChangeNotifier {
     }
 
     return 0;
+  }
+
+  @visibleForTesting
+  void definirHistoricoParaTeste(
+    List<SessaoTreino> historico, {
+    PoderLuta? poderLuta,
+  }) {
+    _historicoCache = List<SessaoTreino>.from(historico);
+    if (poderLuta != null) {
+      _poderLuta = poderLuta;
+    }
+    notifyListeners();
   }
 }

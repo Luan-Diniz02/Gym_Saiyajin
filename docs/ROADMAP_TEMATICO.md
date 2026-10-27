@@ -86,17 +86,20 @@ graph TD
 
 ---
 
-## 🔥 Proposta 4: O "Scouter Anatômico" (Mapa de Calor Muscular / Muscle Heatmap) [📋 BACKLOG]
+## 🔥 Proposta 4: O "Scouter Anatômico" (Mapa de Calor Muscular / Muscle Heatmap) [✅ CONCLUÍDO]
 
 ### 1. Justificativa & Lore Canônica
 - O Scouter dos Saiyajins é a ferramenta definitiva de telemetria biológica, capaz de detectar assinaturas de poder, assimetrias e níveis de energia dos guerreiros.
 - **Aplicação no Treino**:
-  - Visualização de **Mapa de Calor Corporal** (silhueta anatômica frontal e dorsal).
-  - O estresse mecânico e o volume semanal acumulado ($\sum \text{séries válidas} \times \text{grupo muscular}$) colorem os grupos anatômicos em tempo real: do cinza/azul neutro ao dourado (*Ativado*) e vermelho de alta demanda (*Sobrecarga*).
+  - Visualização de **Mapa de Calor Corporal** (silhueta anatômica frontal e dorsal lado a lado em moldura HUD Scouter).
+  - O estresse mecânico e o volume acumulado ($\sum \text{séries válidas} \times \text{grupo muscular}$, excluindo séries de aquecimento) colorem os 7 grupos anatômicos canônicos (`PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BÍCEPS`, `TRÍCEPS`, `ABDÔMEN`) em tempo real: de **Sem Estímulo** (`#455A64` aço escuro) a **Ativado** (`#00E5FF` ciano bioelétrico), **Zona Ideal** (`#FFD700` ouro Super Saiyajin) e **Sobrecarga** (`#FF5252` rubro Kaioken).
 
-### 2. Especificação Técnica Pretendida
-- Integração direta no `ProgressoScreen` ao lado do `PoderLutaCardWidget`.
-- Conexão matemática direta com o pilar de equilíbrio de grupos musculares da fórmula do Ki, alertando o guerreiro sobre pontos fracos (*lagging muscles*) da sua armadura.
+### 2. Especificação Técnica Implementada
+- **Telemetria Fisiológica (`ProgressoController` & `TelemetriaMuscular`)**:
+  - Alternância de janela temporal entre **7 DIAS** e **30 DIAS** com escalonamento proporcional das faixas fisiológicas de hipertrofia (`6–12` séries/semana para Zona Ideal).
+  - Detecção automática de **Pontos Fracos na Armadura** (*lagging muscles*) e integração direta com o maior `1RM` estimado de cada grupo muscular.
+- **Renderização Anatômica Interativa (`ScouterAnatomicoWidget` & `muscle_mapper`)**:
+  - Silhuetas anatômicas Frontal (`AnatomyView.front`) e Dorsal (`AnatomyView.back`) em SVG via `MuscleMapper` (`DarkThemeAnatomyProvider`), com cabeçalho limpo **`MAPA DE CALOR MUSCULAR`**, seleção interativa por toque direto nos feixes musculares (`onMuscleTapped`) ou nos chips de telemetria rápida e painel detalhado de volume + 1RM.
 
 ---
 
@@ -118,8 +121,8 @@ graph TD
 | **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
 | **⚡ Chamas de Ki** | `KiAuraIcon` + `KiAuraPainter` | `PoderLutaCardWidget` & `Recordes` | Média (Silhueta cel-shaded + glows) | **✅ CONCLUÍDO & TESTADO** |
 | **☁️ Nuvem Voadora & RIR/RPE** | `KintoUnIcon` + Seletor de Tipo de Série | `SerieRowWidget`, `Historico` & `DB v4` | Média (Tipos de série + filtro de 1RM) | **✅ CONCLUÍDO & TESTADO** |
-| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **🚀 Próxima Prioridade** |
-| **🏋️ Pesos do Sr. Kaioh** | `CalculadoraAnilhasModal` | `SerieRowWidget` / Campos de Carga | Baixa/Média (Algoritmo guloso de anilhas) | **📋 Backlog** |
+| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **✅ CONCLUÍDO & TESTADO** |
+| **🏋️ Pesos do Sr. Kaioh** | `CalculadoraAnilhasModal` | `SerieRowWidget` / Campos de Carga | Baixa/Média (Algoritmo guloso de anilhas) | **🚀 Próxima Prioridade** |
 
 ---
 

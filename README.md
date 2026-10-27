@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-127%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-131%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -112,6 +112,9 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Registro de Poder (Quadro de Recordes)**:
   - Marcado com o ícone oficial da Esfera do Dragão (`DragonBallIcon`), cujas estrelas refletem dinamicamente os recordes conquistados (1 a 7 estrelas).
   - Lista detalhada de maiores cargas e 1RMs estimados com miniatura anatômica por exercício, busca instantânea e filtros musculares padronizados.
+- **Mapa de Calor Muscular Frontal & Dorsal (`muscle_mapper`)**:
+  - Telemetria biológica anatômica em SVG (`ScouterAnatomicoWidget` & `MuscleMapper`) que mapeia o volume de séries válidas (excluindo aquecimentos) nos 7 grupos musculares canônicos em janelas de **7 DIAS** ou **30 DIAS**.
+  - Colorização dinâmica em 4 estágios fisiológicos (*Sem Estímulo*, *Ativado* em ciano bioelétrico, *Zona Ideal* em ouro Super Saiyajin e *Sobrecarga* em rubro Kaioken), inspeção interativa por toque direto nos feixes musculares e alerta de pontos fracos (*lagging muscles*).
 - **Gráfico de Evolução de Cargas (`fl_chart`)**: Curva analítica de sobrecarga progressiva com miniatura do exercício selecionado, filtro rápido de período (`ÚLTIMOS 10`, `3 MESES`, `TUDO`), espaçamento inteligente de datas no eixo X (máximo de 5 rótulos sem sobreposição) e tooltip interativo (`carga × reps` + data completa).
 - **Cálculo de IMC & Metas Corporais**: Marcado com o ícone vetorial da Cápsula Hoi-Poi da Capsule Corp (`CapsuleIcon`), cálculo padrão OMS em 6 faixas e atalhos de atualização rápida.
 

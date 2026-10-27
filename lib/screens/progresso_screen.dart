@@ -8,6 +8,7 @@ import '../widgets/metricas_dashboard_widget.dart';
 import '../widgets/poder_luta_card_widget.dart';
 import '../widgets/progresso_grafico_widget.dart';
 import '../widgets/quadro_recordes_modal.dart';
+import '../widgets/scouter_anatomico_widget.dart';
 
 class ProgressoScreen extends StatefulWidget {
   final ProgressoController controller;
@@ -220,6 +221,8 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 ),
                 const SizedBox(height: 18),
                 _buildQuadroRecordesCard(),
+                const SizedBox(height: 24),
+                ScouterAnatomicoWidget(controller: _controller),
                 const SizedBox(height: 24),
                 ProgressoGraficoWidget(controller: _controller),
                 const SizedBox(height: 24),
