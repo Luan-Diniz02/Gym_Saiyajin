@@ -594,7 +594,10 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
   Widget _buildTimelineItem(HistoricoDia diaTreino, bool isUltimo) {
     final sessao = diaTreino.sessao;
     final exercicios = sessao.exerciciosConcluidosHoje;
-    final prsSessao = widget.progressoController?.obterPRsDaSessao(sessao) ?? 0;
+    final mapaPRs =
+        widget.progressoController?.obterMapaPRsDaSessao(sessao) ??
+        const <String, int>{};
+    final prsSessao = mapaPRs.length;
     final bool temPR = prsSessao > 0;
     final int totalSeries = sessao.totalSeries;
     final String volumeFormatado = sessao.volumeFormatado;
@@ -835,7 +838,14 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 50.0, bottom: 28.0),
               child: Column(
-                children: exercicios.map((ex) => HistoricoCardWidget(exercicio: ex)).toList(),
+                children: exercicios
+                    .map(
+                      (ex) => HistoricoCardWidget(
+                        exercicio: ex,
+                        indiceSeriePR: mapaPRs[ex.nome.trim().toLowerCase()],
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],

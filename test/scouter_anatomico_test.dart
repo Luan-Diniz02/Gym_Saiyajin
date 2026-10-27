@@ -7,6 +7,7 @@ import 'package:gym_saiyajin/models/serie.dart';
 import 'package:gym_saiyajin/models/sessao_treino.dart';
 import 'package:gym_saiyajin/repositories/treino_repository.dart';
 import 'package:gym_saiyajin/services/preferences_service.dart';
+import 'package:gym_saiyajin/widgets/historico_card_widget.dart';
 import 'package:gym_saiyajin/widgets/scouter_anatomico_widget.dart';
 import 'package:muscle_mapper/muscle_mapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -237,5 +238,106 @@ void main() {
 
       expect(controller.periodoMapaMuscular, PeriodoMapaMuscular.trintaDias);
     });
+  });
+
+  group('Identificação de PR por Exercício e Série Ápice no Histórico', () {
+    test('obterMapaPRsDaSessao identifica a série ápice (Opção A) de cada exercício', () {
+      final sessaoAnterior = SessaoTreino(
+        id: 1,
+        nomeTreino: 'Push Base',
+        data: DateTime(2026, 10, 20),
+        exerciciosConcluidosHoje: [
+          Exercicio(
+            nome: 'Desenvolvimento Halteres',
+            grupo: 'Ombros',
+            seriesDetalhes: [
+              Serie(peso: 16, reps: 8, concluida: true),
+            ],
+          ),
+        ],
+      );
+
+      final sessaoAlvo = SessaoTreino(
+        id: 2,
+        nomeTreino: 'Push PR',
+        data: DateTime(2026, 10, 26),
+        exerciciosConcluidosHoje: [
+          Exercicio(
+            nome: 'Desenvolvimento Halteres',
+            grupo: 'Ombros',
+            seriesDetalhes: [
+              Serie(peso: 16, reps: 12, concluida: true), // Supera 1RM anterior
+              Serie(peso: 16, reps: 8, concluida: true),
+              Serie(peso: 18, reps: 8, concluida: true), // Série Ápice (índice 2)
+            ],
+          ),
+        ],
+      );
+
+      controller.definirHistoricoParaTeste([sessaoAnterior, sessaoAlvo]);
+
+      final mapaPRs = controller.obterMapaPRsDaSessao(sessaoAlvo);
+      expect(mapaPRs['desenvolvimento halteres'], 2);
+      expect(controller.obterPRsDaSessao(sessaoAlvo), 1);
+    });
+
+    testWidgets(
+      'HistoricoCardWidget alterna badge PR entre cabeçalho recolhido e série ápice expandida e exibe rótulos por tipo',
+      (tester) async {
+        final exercicio = Exercicio(
+          nome: 'Desenvolvimento Halteres',
+          grupo: 'OMBROS',
+          seriesDetalhes: [
+            Serie(peso: 10, reps: 15, concluida: true, tipo: 'warmup'),
+            Serie(peso: 16, reps: 12, concluida: true, tipo: 'normal'),
+            Serie(peso: 18, reps: 8, concluida: true, tipo: 'normal'),
+            Serie(peso: 12, reps: 10, concluida: true, tipo: 'dropset'),
+          ],
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: HistoricoCardWidget(
+                  exercicio: exercicio,
+                  indiceSeriePR: 2,
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Com o card recolhido, o badge PR do exercício está visível no cabeçalho
+        expect(
+          find.byKey(const Key('badge-pr-exercicio-Desenvolvimento Halteres')),
+          findsOneWidget,
+        );
+
+        // Expande o card para ver as séries
+        await tester.tap(find.text('Desenvolvimento Halteres'));
+        await tester.pumpAndSettle();
+
+        // Com o card expandido (Alternativa A), o badge PR sai do cabeçalho e fica apenas na série ápice
+        expect(
+          find.byKey(const Key('badge-pr-exercicio-Desenvolvimento Halteres')),
+          findsNothing,
+        );
+        expect(
+          find.byKey(const Key('badge-pr-serie-Desenvolvimento Halteres-2')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('badge-pr-serie-Desenvolvimento Halteres-1')),
+          findsNothing,
+        );
+
+        // Verifica a padronização de rótulos de séries (Opção 2)
+        expect(find.text('Aquecimento'), findsOneWidget);
+        expect(find.text('Série 1'), findsOneWidget);
+        expect(find.text('Série 2'), findsOneWidget);
+        expect(find.text('Drop-set'), findsOneWidget);
+      },
+    );
   });
 }

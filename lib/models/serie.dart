@@ -96,6 +96,24 @@ class Serie {
   /// Indica se é uma série normal de trabalho.
   bool get isNormal => tipoEnum == TipoSerie.normal;
 
+  /// Retorna o rótulo descritivo da série para exibição no Histórico e Exercícios Concluídos:
+  /// - `warmup` -> `'Aquecimento'`
+  /// - `normal` -> `'Série $numeroSerieTrabalho'`
+  /// - `dropset` -> `'Drop-set'`
+  /// - `falha` -> `'Falha'`
+  String obterRotuloHistorico(int numeroSerieTrabalho) {
+    switch (tipoEnum) {
+      case TipoSerie.warmup:
+        return 'Aquecimento';
+      case TipoSerie.normal:
+        return 'Série $numeroSerieTrabalho';
+      case TipoSerie.dropset:
+        return 'Drop-set';
+      case TipoSerie.falha:
+        return 'Falha';
+    }
+  }
+
   /// Calcula o RPE (Rate of Perceived Exertion) equivalente ao RIR registrado (`10 - RIR`).
   double? get rpe {
     if (rir == null) return null;

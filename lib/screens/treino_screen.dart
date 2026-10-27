@@ -1319,7 +1319,6 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 ),
                 child: Column(
                   children: detalhes.asMap().entries.map((entry) {
-                    int serieIndex = entry.key + 1;
                     final Serie serieData = entry.value;
                     final int numTrabalho = Serie.calcularNumeroSerieTrabalho(
                       detalhes,
@@ -1371,7 +1370,7 @@ class _TreinoScreenState extends State<TreinoScreen> {
                                       ),
                               ),
                               Text(
-                                'Série $serieIndex',
+                                serieData.obterRotuloHistorico(numTrabalho),
                                 style: const TextStyle(
                                   color: AppColors.textDimmed,
                                   fontSize: 14,

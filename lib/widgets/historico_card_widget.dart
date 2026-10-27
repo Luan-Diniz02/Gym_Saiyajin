@@ -3,16 +3,28 @@ import 'package:flutter/material.dart';
 import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../theme/app_colors.dart';
+import 'dragon_ball_icon.dart';
 import 'exercicio_midia_widget.dart';
 import 'kinto_un_icon.dart';
 
-class HistoricoCardWidget extends StatelessWidget {
+class HistoricoCardWidget extends StatefulWidget {
   final Exercicio exercicio;
+  final int? indiceSeriePR;
 
   const HistoricoCardWidget({
     super.key,
     required this.exercicio,
+    this.indiceSeriePR,
   });
+
+  @override
+  State<HistoricoCardWidget> createState() => _HistoricoCardWidgetState();
+}
+
+class _HistoricoCardWidgetState extends State<HistoricoCardWidget> {
+  bool _isExpanded = false;
+
+  bool get _temPR => widget.indiceSeriePR != null;
 
   Color _corPorTipo(TipoSerie tipo) {
     switch (tipo) {
@@ -25,6 +37,35 @@ class HistoricoCardWidget extends StatelessWidget {
       case TipoSerie.falha:
         return AppColors.danger;
     }
+  }
+
+  Widget _buildBadgePR({Key? badgeKey}) {
+    return Container(
+      key: badgeKey,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFF9800).withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+        ),
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DragonBallIcon(size: 10, stars: 1),
+          SizedBox(width: 4),
+          Text(
+            'PR',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFFFFB300),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildIndicadorCircularSerie(Serie serie, int numeroSerieTrabalho) {
@@ -77,6 +118,7 @@ class HistoricoCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final exercicio = widget.exercicio;
     final List<Serie> detalhes = exercicio.seriesDetalhes;
 
     return Container(
@@ -84,7 +126,11 @@ class HistoricoCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(
+          color: _temPR
+              ? const Color(0xFFFFB300).withValues(alpha: 0.35)
+              : AppColors.cardBorder,
+        ),
       ),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -92,6 +138,9 @@ class HistoricoCardWidget extends StatelessWidget {
           iconColor: AppColors.primary,
           collapsedIconColor: AppColors.textDimmed,
           tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          onExpansionChanged: (expanded) {
+            setState(() => _isExpanded = expanded);
+          },
           leading: ExercicioThumbnailWidget(
             nomeExercicio: exercicio.nome,
             grupo: exercicio.grupo,
@@ -110,7 +159,10 @@ class HistoricoCardWidget extends StatelessWidget {
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 6.0),
-            child: Row(
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 4,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -128,7 +180,6 @@ class HistoricoCardWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
                 Text(
                   '${detalhes.length} SÉRIES',
                   style: const TextStyle(
@@ -137,6 +188,11 @@ class HistoricoCardWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                // Alternativa A: exibe o badge PR no cabeçalho apenas quando recolhido
+                if (_temPR && !_isExpanded)
+                  _buildBadgePR(
+                    badgeKey: Key('badge-pr-exercicio-${exercicio.nome}'),
+                  ),
               ],
             ),
           ),
@@ -152,8 +208,8 @@ class HistoricoCardWidget extends StatelessWidget {
               ),
               child: Column(
                 children: detalhes.asMap().entries.map((entry) {
-                  final int serieIndex = entry.key + 1;
                   final Serie serieData = entry.value;
+                  final bool isSeriePR = widget.indiceSeriePR == entry.key;
                   final int numTrabalho = Serie.calcularNumeroSerieTrabalho(
                     detalhes,
                     entry.key,
@@ -171,12 +227,25 @@ class HistoricoCardWidget extends StatelessWidget {
                               numTrabalho,
                             ),
                             Text(
-                              'Série $serieIndex',
-                              style: const TextStyle(
-                                color: AppColors.textDimmed,
+                              serieData.obterRotuloHistorico(numTrabalho),
+                              style: TextStyle(
+                                color: isSeriePR
+                                    ? AppColors.textLight
+                                    : AppColors.textDimmed,
+                                fontWeight: isSeriePR
+                                    ? FontWeight.w700
+                                    : FontWeight.normal,
                                 fontSize: 14,
                               ),
                             ),
+                            if (isSeriePR) ...[
+                              const SizedBox(width: 8),
+                              _buildBadgePR(
+                                badgeKey: Key(
+                                  'badge-pr-serie-${exercicio.nome}-${entry.key}',
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                         Row(

@@ -638,6 +638,13 @@ class ProgressoController extends ChangeNotifier {
   /// Calcula quantos recordes pessoais (PRs) foram superados em uma sessão específica,
   /// reconstituindo cronologicamente o histórico até o momento daquela sessão.
   int obterPRsDaSessao(SessaoTreino sessaoAlvo) {
+    return obterMapaPRsDaSessao(sessaoAlvo).length;
+  }
+
+  /// Retorna um mapa associando o nome normalizado (lowercase/trimmed) de cada
+  /// exercício que bateu PR na [sessaoAlvo] ao índice (`0-based`) da série ápice
+  /// que conquistou aquele recorde (Opção A).
+  Map<String, int> obterMapaPRsDaSessao(SessaoTreino sessaoAlvo) {
     final poolSessoes = List<SessaoTreino>.from(_historicoCache);
     final jaContem = poolSessoes.any(
       (s) =>
@@ -650,7 +657,7 @@ class ProgressoController extends ChangeNotifier {
       poolSessoes.add(sessaoAlvo);
     }
 
-    if (poolSessoes.isEmpty) return 0;
+    if (poolSessoes.isEmpty) return const {};
 
     // Ordena o histórico cronologicamente crescente
     poolSessoes.sort((a, b) {
@@ -672,15 +679,20 @@ class ProgressoController extends ChangeNotifier {
               sessao.data!.isAtSameMomentAs(sessaoAlvo.data!));
 
       if (isSessaoAlvo) {
-        int prsNaSessao = 0;
+        final Map<String, int> mapaPRs = {};
 
         for (final ex in sessaoAlvo.exerciciosConcluidosHoje) {
           final chave = ex.nome.trim().toLowerCase();
           final previo = recordesPrevios[chave];
 
           if (previo != null) {
-            bool bateuPR = false;
-            for (final s in ex.seriesDetalhes) {
+            int? indiceSerieApice;
+            double apicePeso = 0.0;
+            int apiceReps = 0;
+            double apice1RM = 0.0;
+
+            for (int i = 0; i < ex.seriesDetalhes.length; i++) {
+              final s = ex.seriesDetalhes[i];
               if (!s.concluida ||
                   s.isWarmup ||
                   s.peso == null ||
@@ -699,16 +711,33 @@ class ProgressoController extends ChangeNotifier {
                 baseReps: previo.$2,
                 base1RM: previo.$3,
               )) {
-                bateuPR = true;
-                break;
+                final umRM = RecordePessoal.calcular1RM(p, r);
+                final ehNovaApice =
+                    indiceSerieApice == null ||
+                    RecordePessoal.bateuCarga(
+                      peso: p,
+                      reps: r,
+                      baseCarga: apicePeso,
+                      baseReps: apiceReps,
+                    ) ||
+                    (p == apicePeso && umRM > apice1RM) ||
+                    (apicePeso <= previo.$1 && umRM > apice1RM);
+
+                if (ehNovaApice) {
+                  indiceSerieApice = i;
+                  apicePeso = p;
+                  apiceReps = r;
+                  apice1RM = umRM;
+                }
               }
             }
-            if (bateuPR) {
-              prsNaSessao++;
+
+            if (indiceSerieApice != null) {
+              mapaPRs[chave] = indiceSerieApice;
             }
           }
         }
-        return prsNaSessao;
+        return mapaPRs;
       }
 
       // Atualiza os recordes prévios acumulados para os próximos treinos
@@ -751,7 +780,7 @@ class ProgressoController extends ChangeNotifier {
       }
     }
 
-    return 0;
+    return const {};
   }
 
   @visibleForTesting
