@@ -21,8 +21,8 @@ graph TD
     B --> B1[Recuperação Biológica no Cronômetro de Descanso - Concluído]
     C --> C1[Jornada de Disciplina Contínua na Timeline do Histórico - Concluído]
     D --> D1[Séries de Aquecimento, Warm-up & RPE/RIR - Concluído]
-    E --> E1[Telemetria de Volume Semanal por Músculo - Próxima Fase]
-    F --> F1[Decomposição Visual de Carga na Barra - Backlog]
+    E --> E1[Telemetria de Volume Semanal por Músculo - Concluído]
+    F --> F1[Decomposição Visual de Carga na Barra - Próxima Fase]
 ```
 
 ---
@@ -98,8 +98,12 @@ graph TD
 - **Telemetria Fisiológica (`ProgressoController` & `TelemetriaMuscular`)**:
   - Alternância de janela temporal entre **7 DIAS** e **30 DIAS** com escalonamento proporcional das faixas fisiológicas de hipertrofia (`6–12` séries/semana para Zona Ideal).
   - Detecção automática de **Pontos Fracos na Armadura** (*lagging muscles*) e integração direta com o maior `1RM` estimado de cada grupo muscular.
-- **Renderização Anatômica Interativa (`ScouterAnatomicoWidget` & `muscle_mapper`)**:
-  - Silhuetas anatômicas Frontal (`AnatomyView.front`) e Dorsal (`AnatomyView.back`) em SVG via `MuscleMapper` (`DarkThemeAnatomyProvider`), com cabeçalho limpo **`MAPA DE CALOR MUSCULAR`**, seleção interativa por toque direto nos feixes musculares (`onMuscleTapped`) ou nos chips de telemetria rápida e painel detalhado de volume + 1RM.
+- **Renderização Anatômica Interativa em Dupla Camada (`ScouterAnatomicoWidget` & `muscle_mapper`)**:
+  - Silhuetas anatômicas Frontal (`AnatomyView.front`) e Dorsal (`AnatomyView.back`) em SVG via `MuscleMapper` (`DarkThemeAnatomyProvider`), com sobreposição de linhas internas (`_OverlayLinhasAnatomicas`) que normaliza `stroke-width="3.49"` (Frontal) e `stroke-width="3.55"` (Dorsal) para `2.2` em branco/prata translúcido, garantindo nitidez idêntica mesmo quando os grupos musculares adjacentes estão acesos.
+  - Cabeçalho limpo **`MAPA DE CALOR MUSCULAR`**, legenda e chips de telemetria sem o sufixo `"s"` para evitar ambiguidade com segundos (`0`, `1-5`, `6-12`, `13+`), seleção interativa por toque direto nos feixes musculares (`onMuscleTapped`) e painel detalhado de volume + 1RM.
+- **Identificação de PR por Exercício e Série Ápice no Histórico (`HistoricoCardWidget`)**:
+  - Cálculo cronológico (`ProgressoController.obterMapaPRsDaSessao`) que identifica a série ápice vencedora de cada exercício na sessão.
+  - Transição inteligente do badge `[🟠 PR]`: visível no cabeçalho do exercício quando recolhido e transferido exclusivamente para a linha da série ápice quando expandido, acompanhado de rótulos descritivos padronizados (`Aquecimento`, `Série X`, `Drop-set`, `Falha`).
 
 ---
 
@@ -121,20 +125,16 @@ graph TD
 | **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
 | **⚡ Chamas de Ki** | `KiAuraIcon` + `KiAuraPainter` | `PoderLutaCardWidget` & `Recordes` | Média (Silhueta cel-shaded + glows) | **✅ CONCLUÍDO & TESTADO** |
 | **☁️ Nuvem Voadora & RIR/RPE** | `KintoUnIcon` + Seletor de Tipo de Série | `SerieRowWidget`, `Historico` & `DB v4` | Média (Tipos de série + filtro de 1RM) | **✅ CONCLUÍDO & TESTADO** |
-| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **✅ CONCLUÍDO & TESTADO** |
+| **🔥 Scouter Anatômico** | `ScouterAnatomicoWidget` (`MuscleMapper` SVG) | `ProgressoScreen` (Dashboard) | Média/Alta (SVG em dupla camada + telemetria) | **✅ CONCLUÍDO & TESTADO** |
 | **🏋️ Pesos do Sr. Kaioh** | `CalculadoraAnilhasModal` | `SerieRowWidget` / Campos de Carga | Baixa/Média (Algoritmo guloso de anilhas) | **🚀 Próxima Prioridade** |
 
 ---
 
 ## 📋 Próximos Passos de Execução Recomendados
 
-1. **Fase 1: Nuvem Voadora & Tipos de Série com Métrica de Esforço (Kinto-un & RPE/RIR)**:
-   - Desenhar o `KintoUnIcon` vetorial em Canvas.
-   - Adicionar tag de tipo de série no modelo `Serie` (`tipo: normal | warmup | dropset | falha`).
-   - Ajustar o cálculo do Ki e estimativa de 1RM para ignorar séries marcadas como aquecimento (`warmup`).
-   - Adicionar seletor discreto e opcional de RIR/RPE.
-2. **Fase 2: Scouter Anatômico (Mapa de Calor Muscular)**:
-   - Criar silhuetas vetoriais anatômicas frontal e dorsal com mapeamento dos 6 grandes grupos musculares.
-   - Colorir regiões musculares dinamicamente com base nas séries concluídas nos últimos 7 dias.
-3. **Fase 3: Pesos Pesados do Senhor Kaioh (Calculadora de Anilhas)**:
+1. **[✅ Concluído] Fase 1: Nuvem Voadora & Tipos de Série com Métrica de Esforço (Kinto-un & RPE/RIR)**:
+   - `KintoUnIcon` vetorial em Canvas, classificação biomecânica (`normal | warmup | dropset | falha`), blindagem de 1RM/PRs para séries de aquecimento e seletor retrátil de RIR/RPE.
+2. **[✅ Concluído] Fase 2: Scouter Anatômico (Mapa de Calor Muscular) & PRs por Série no Histórico**:
+   - Silhuetas anatômicas Frontal e Dorsal em SVG (`muscle_mapper`) em dupla camada para nitidez de contorno, janelas de 7 e 30 dias, alerta de pontos fracos e identificação da série ápice de PR no Histórico.
+3. **[🚀 Próxima Fase] Fase 3: Pesos Pesados do Senhor Kaioh (Calculadora de Anilhas)**:
    - Implementar algoritmo guloso de seleção de anilhas configurável (anilhas de 25kg, 20kg, 15kg, 10kg, 5kg, 2.5kg, 1.25kg e peso da barra).

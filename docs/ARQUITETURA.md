@@ -14,8 +14,8 @@ O **Gym Saiyajin** é estruturado sobre princípios sólidos de arquitetura limp
 graph TD
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
-        Widgets[Widgets Reutilizáveis & Modais]
-        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, EscotilhaCamaraPainter]
+        Widgets[Widgets Reutilizáveis, Modais & ScouterAnatomicoWidget]
+        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, KiAuraIcon, KintoUnIcon, EscotilhaCamaraPainter]
     end
 
     subgraph ControllersLayer ["Camada de Controle & Estado"]
@@ -59,9 +59,9 @@ graph TD
 
 ---
 
-## 💾 2. Banco de Dados SQLite (Schema & Migrações)
+## 💾 2. Banco de Dados SQLite (Schema v4 & Migrações)
 
-O banco de dados relacional é gerenciado pela classe [`DbHelper`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/database/db_helper.dart), armazenado no arquivo `gym_saiyajin.db`.
+O banco de dados relacional é gerenciado pela classe [`DatabaseHelper`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/database/db_helper.dart), armazenado no arquivo `gym_saiyajin.db`.
 
 ### Configurações de Integridade:
 - **`PRAGMA foreign_keys = ON;`**: Ativado via callback `onConfigure`, garantindo integridade referencial estrita e exclusões automáticas em cascata (`ON DELETE CASCADE`).
@@ -93,6 +93,8 @@ erDiagram
         real peso
         int reps
         int concluida
+        string tipo
+        int rir
     }
 
     FICHAS {
@@ -116,7 +118,9 @@ erDiagram
   - Adição das colunas de telemetria temporal `duracao_segundos INTEGER DEFAULT 0` e `descanso_total_segundos INTEGER DEFAULT 0` na tabela `sessoes`.
 - **Versão 2 $\to$ 3**:
   - Criação das tabelas de templates e rotinas permanentes `fichas` e `ficha_exercicios` (com `series_padrao INTEGER DEFAULT 3` e chave estrangeira `CASCADE`).
-  - Criação de índices de busca rápida (`idx_sessoes_data`, `idx_exercicios_sessao`, `idx_series_exercicio`, `idx_ficha_exercicios_ficha`).
+  - Criação de índices de busca rápida (`idx_exercicios_sessao_id`, `idx_series_exercicio_id`, `idx_ficha_exercicios_ficha_id`).
+- **Versão 3 $\to$ 4**:
+  - Adição idempotente das colunas biomecânicas `tipo TEXT NOT NULL DEFAULT 'normal'` (`normal`, `warmup`, `dropset`, `falha`) e `rir INTEGER` (*Reps in Reserve*) na tabela `series`.
 
 ---
 
@@ -133,13 +137,15 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (115 Testes)
+## 🧪 4. Suíte de Testes Automatizados (133 Testes)
 
 O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
 | Arquivo de Teste | Área de Cobertura | Casos Chave |
 | :--- | :--- | :--- |
 | [`test/catalogo_exercicios_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/catalogo_exercicios_test.dart) | Catálogo Offline (106 Exercícios) & Mídias | Integridade dos 106 exercícios, existência de miniaturas `.jpg` e `.gif` locais, normalização de busca por sinônimos brasileiros e execução sob demanda. |
+| [`test/scouter_anatomico_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/scouter_anatomico_test.dart) | Mapa de Calor Muscular & PRs por Série | Telemetria de volume em 7/30 dias, `ScouterAnatomicoWidget` (`MuscleMapper`), detecção de série ápice de PR no Histórico, transição recolhido/expandido do badge PR e rótulos descritivos de séries. |
+| [`test/kinto_un_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/kinto_un_icon_test.dart) | Nuvem Voadora (`KintoUnIcon`) & Tipos de Série / RIR | Renderização vetorial do `KintoUnIcon`, ciclo de tipos (`normal`, `warmup`, `dropset`, `falha`), blindagem de 1RM para aquecimentos e migração SQLite v3 $\to$ v4. |
 | [`test/volume_sessao_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/volume_sessao_test.dart) | Volume e Séries Unificados | Simetria de cálculo do volume em sessões completas, séries não checadas e formatação com pontuação de milhar. |
 | [`test/compartilhar_card_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/compartilhar_card_test.dart) | Modal de Compartilhamento Social | Proporções (Stories/Feed), Presets (Slim, Scouter HUD, Rodapé), Cores e Ícones. |
 | [`test/dragon_ball_icon_test.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/test/dragon_ball_icon_test.dart) | CustomPainter Esfera do Dragão | Dimensões, renderização de 1 a 7 estrelas e método `shouldRepaint`. |

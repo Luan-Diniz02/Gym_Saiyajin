@@ -174,8 +174,8 @@ No arquivo `test/catalogo_exercicios_test.dart`:
 
 1. **Atualize o número total de exercícios:**
    ```dart
-   test('Deve conter 91 exercícios padrão com todos os metadados preenchidos', () {
-     expect(CatalogoExercicios.exerciciosPadrao.length, equals(91));
+   test('Deve conter 106 exercícios padrão com todos os metadados preenchidos', () {
+     expect(CatalogoExercicios.exerciciosPadrao.length, equals(106));
      ...
    });
    ```

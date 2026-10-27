@@ -104,6 +104,11 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - **Zero impacto na largura horizontal**: não empurra nem espreme os campos de Peso e Reps em celulares estreitos (360dp).
   - **Visual Dark Outline**: Mantém fundo escuro `#14161E` com borda fina dourada e sombra preta. Quando o círculo da série é concluído e ganha preenchimento amarelo brilhante, o micro-badge escuro por cima cria um **contraste de alto relevo nítido e elegante**, sem se fundir na cor de fundo.
   - **Ícone Vetorial Nativo**: Exibe a mini Esfera do Dragão de 1 estrela `DragonBallIcon(size: 10, stars: 1)` na série ativa que quebrou recorde.
+- **Classificação Biomecânica Interativa (`TipoSerie`)**:
+  - Toque curto no indicador circular alterna ciclicamente entre **Série de Trabalho** (`N` / numeração sequencial `1, 2, 3...`), **Aquecimento** (`W` / ícone vetorial `KintoUnIcon` dourado que blinda o 1RM e impede falsos PRs), **Drop-set** (`D` laranja Saiyajin) e **Falha Total** (`F` rubro Kaioken, atribuindo automaticamente `RIR 0 • RPE 10`).
+  - Toque longo abre um modal descritivo com a função fisiológica de cada tipo de série.
+- **Seletor Retrátil de Esforço (`RIR / RPE`)**:
+  - Pill compacto na base da série que expande horizontalmente os chips de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.
 
 ### 2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (`CronometroWidget`)
 - **Estética de Escotilha Industrial de Namekusei**:
@@ -121,12 +126,18 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Botões satélites `+/- 15s` para correções rápidas sem digitação.
   - Grade simétrica 3×2 de atalhos rápidos (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
 
-### 3. Linha do Tempo & Cabeçalho de Sessão (`HistoricoScreen`)
+### 3. Linha do Tempo, Identificação de PRs & Rótulos de Séries (`HistoricoScreen` & `HistoricoCardWidget`)
 - **Alinhamento em Linha Única Fluida**:
   - Reúne em um único `Wrap` horizontal: **Data do Treino** (`21/09/2026`), **Tag de Divisão/Nome** (`[ COSTAS E BÍCEPS ]`) com fundo escuro e borda âmbar, e o **Badge Dourado de PRs** (`[ ✪ 2 PRs ]`) estilizado com a Esfera do Dragão.
   - Alinhamento à direita exclusivo para o **Menu Popup Unificado (`⋮`)**, eliminando múltiplos botões avulsos na tela e reduzindo drasticamente a sobrecarga cognitiva.
-- **Sessões Sempre Expandidas**:
-  - Elimina a fadiga de toques múltiplos e acordes fechados: ao navegar pela timeline, todas as sessões já apresentam sua lista completa de exercícios e séries abertas, permitindo inspeção instantânea ao deslizar a tela.
+- **Transição Inteligente do Badge `[🟠 PR]` no Card de Exercício**:
+  - **Card Recolhido**: Exibe o badge `[🟠 PR]` (`DragonBallIcon(size: 11, stars: 1)`) no subtítulo do cabeçalho do exercício ao lado de `[GRUPO] X SÉRIES`, permitindo escanear instantaneamente quais exercícios bateram recorde naquela sessão sem precisar abrir todos os cards.
+  - **Card Expandido**: O badge do cabeçalho desaparece automaticamente e o `[🟠 PR]` é exibido **exclusivamente na linha da série ápice** vencedora daquele exercício, evitando redundância visual de dois badges próximos.
+- **Padronização de Rótulos de Séries (Estilo Hevy)**:
+  - Tanto no Histórico (`HistoricoCardWidget`) quanto nos Exercícios Concluídos da Tela de Treino (`TreinoScreen`), cada linha exibe seu rótulo descritivo real (`Serie.obterRotuloHistorico`) sincronizado com o indicador circular:
+    - `(☁️) Aquecimento` para séries preparatórias;
+    - `(1) Série 1`, `(2) Série 2`, ... apenas para séries de trabalho (`normal`);
+    - `(D) Drop-set` e `(F) Falha` para séries de intensidade avançada.
 - **Nó Uniforme de Calendário**:
   - Nó circular com `Icons.calendar_month` em laranja Saiyajin com sombra e borda suave em todos os marcos da timeline.
 - **Métricas de Sessão em Caixa Alta**:
@@ -156,6 +167,15 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
 - **Formulário Simétrico de Exercício Personalizado (`SelecaoExercicioModal`)**:
   - **Grid 4×2 de Grupos Musculares**: Os 8 grupos (`PEITO`, `COSTAS`, `PERNAS`, `OMBROS`, `BÍCEPS`, `TRÍCEPS`, `ABDÔMEN`, `OUTROS`) são distribuídos em 2 linhas simétricas de 4 colunas (`Expanded`), evitando quebras irregulares de `Wrap`.
   - **Seção de Mídia Unificada**: Permite vincular qualquer uma das **106 animações 100% offline do catálogo** (`SeletorMidiaCatalogoModal`) ou enviar **foto/GIF próprio da Galeria ou Câmera** por meio de 3 botões proporcionais lado a lado (`Catálogo`, `Galeria`, `Câmera`), além de suportar edição em cascata, exclusão e mesclagem de histórico (`AssociarExercicioModal`).
+
+### 6. Mapa de Calor Muscular Frontal & Dorsal (`ScouterAnatomicoWidget`)
+- **Cabeçalho Direto & Janela Temporal (`7 DIAS` / `30 DIAS`)**:
+  - Título em caixa alta **`MAPA DE CALOR MUSCULAR`** acompanhado do seletor de período (`7 DIAS` ou `30 DIAS`), ajustando proporcionalmente as metas fisiológicas de séries semanais/mensais.
+- **Renderização SVG em Dupla Camada para Nitidez de Contorno (`muscle_mapper`)**:
+  - **Camada 1 (`DarkThemeAnatomyProvider`)**: Colore os grupos musculares ativos e renderiza os músculos em repouso em cinza-azulado visível (`#2D3748`) sobre o fundo escuro do card.
+  - **Camada 2 (`_OverlayLinhasAnatomicas`)**: Sobrepõe exclusivamente os contornos anatômicos internos (`fill-opacity:0`) normalizando `stroke-width="3.49"` (Frontal) e `stroke-width="3.55"` (Dorsal) para `2.2` em branco/prata translúcido (`stroke-opacity="0.45"`), garantindo que todas as divisões musculares permaneçam nítidas em ambas as vistas mesmo quando múltiplos grupos adjacentes estão iluminados em amarelo/ciano/vermelho.
+- **Notação Limpa de Séries**:
+  - Legenda (`0`, `1-5`, `6-12`, `13+`) e chips de telemetria sem o sufixo `"s"`, eliminando qualquer ambiguidade visual com a unidade de tempo (*segundos*).
 
 ---
 
@@ -322,6 +342,13 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
   - Micro-centelhas e faíscas afiadas flutuantes em formato losangular ao redor da chama (*Sparks*).
   - Suporte completo a customização dinâmica de cores por transformação Saiyajin (Ouro SSJ, Kaio-ken/Vermelho, Ciano Guerreiro Z, Roxo, etc.).
 - **Papel na Interface**: Representação oficial do pilar de Vigor Saiyajin no `PoderLutaCardWidget` e estado inerte no `QuadroRecordesModal`, eliminando o ícone genérico de raio (`Icons.bolt`).
+
+### `KintoUnIcon` & `KintoUnPainter`
+- **Renderização**:
+  - Silhueta cel-shaded da Nuvem Voadora (*Kinto-un*) com cúpulas macias volumétricas e cauda aerodinâmica afilada à esquerda.
+  - Gradiente dourado luminoso (`#FFF59D` $\to$ `#FFD700` $\to$ `#FFA000`) com contorno âmbar escuro e brilho especular superior.
+  - Suporte configurável a halo difuso (`showGlow`) e linhas horizontais de vento/velocidade (`showTrail`).
+- **Papel na Interface**: Insígnia oficial das séries de **Aquecimento** no indicador circular de `SerieRowWidget`, `HistoricoCardWidget` e `TreinoScreen`.
 
 ---
 

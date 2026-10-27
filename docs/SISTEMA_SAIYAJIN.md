@@ -123,19 +123,28 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
 - **Uso Oficial**:
   - Visual temático do cronômetro circular de descanso (`CronometroWidget`), contextualizando a recuperação biológica dos guerreiros como a Câmara de Cura/Regeneração Médica de Dragon Ball Z.
 
+### `KintoUnIcon`
+- **Arquivo**: [`lib/widgets/kinto_un_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/kinto_un_icon.dart)
+- **Renderização**:
+  - Silhueta cel-shaded da Nuvem Voadora (*Kinto-un*) com cúpulas volumétricas, gradiente dourado (`#FFF59D` $\to$ `#FFD700` $\to$ `#FFA000`), rastro aerodinâmico e halo de Ki opcional.
+- **Uso Oficial**:
+  - Marcador de séries de **Aquecimento** (`tipo: 'warmup'`), indicando recrutamento neuromuscular preparatório sem poluir recordes.
+
 ---
 
-## 📊 4. Estimativa de 1RM (Fórmula de Epley Refinada)
+## 📊 4. Estimativa de 1RM (Fórmula de Epley Refinada) & Série Ápice de PR
 
 Para mensurar recordes e calcular o Poder de Luta sem forçar o praticante a testar cargas máximas perigosas com 1 repetição, o app adota a fórmula de Epley com salvaguardas fisiológicas:
 
 $$1\text{RM} = \begin{cases} 
 \text{peso} & \text{se } \text{reps} = 1 \\
 \text{peso} \times \left(1 + \frac{\text{reps}}{30}\right) & \text{se } 2 \le \text{reps} \le 15 \\
-0 & \text{se } \text{peso} \le 0 \text{ ou } \text{reps} \le 0
+0 & \text{se } \text{peso} \le 0 \text{ ou } \text{reps} \le 0 \text{ ou } \text{tipo} = \text{'warmup'}
 \end{cases}$$
 
+- **Blindagem de Séries de Aquecimento (`warmup`)**: Séries marcadas como aquecimento são automaticamente excluídas do cálculo de 1RM, da detecção de PRs e do pilar de Força Base do Poder de Luta.
 - **Teto Estatístico de 15 Repetições**: Séries com mais de 15 reps medem primordialmente resistência muscular localizada (RML) e não força máxima neuromuscular; portanto, a fórmula limita o multiplicador em 15 para prevenir distorções hiperbólicas nos cálculos de 1RM.
+- **Identificação da Série Ápice da Sessão (`obterMapaPRsDaSessao`)**: Ao reconstruir cronologicamente o histórico, caso múltiplas séries de um mesmo exercício superem o recorde anterior na mesma sessão, o sistema destaca como `[🟠 PR]` unicamente a **série ápice** (aquela que atingiu o novo topo absoluto de carga ou 1RM do exercício naquele treino), mantendo correspondência 1-para-1 com o contador de PRs da sessão.
 - **Formatação Limpa**: Valores inteiros são apresentados sem casas decimais (`120 kg`), enquanto frações preservam uma casa decimal (`102.5 kg`).
 
 ---
@@ -191,7 +200,20 @@ No treinamento esportivo do **Gym Saiyajin**, essa aura simboliza o **Vigor e a 
 
 ---
 
-## 🛡️ 7. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore
+## 🔥 7. Mapa de Calor Muscular & Telemetria Fisiológica (`ScouterAnatomicoWidget`)
+
+Para orientar a distribuição equilibrada do volume de treinamento e evitar pontos fracos (*lagging muscles*) ou sobretreinamento localizado, o Dashboard de Progresso integra um **Mapa de Calor Muscular Frontal e Dorsal** baseado em séries válidas (excluindo aquecimentos):
+
+| Estágio Fisiológico | Volume (7 Dias) | Volume (30 Dias) | Cor no Mapa | Significado no Treinamento |
+| :--- | :---: | :---: | :--- | :--- |
+| **Sem Estímulo** | `0` séries | `0` séries | `#2D3748` (Cinza-azulado) | Grupo muscular em repouso total na janela selecionada. |
+| **Ativado** | `1–5` séries | `1–23` séries | `#00E5FF` (Ciano bioelétrico) | Volume de manutenção ou estímulo inicial de recrutamento. |
+| **Zona Ideal** | `6–12` séries | `24–48` séries | `#FFD700` (Ouro Super Saiyajin) | Faixa ótima de volume semanal/mensal para hipertrofia. |
+| **Sobrecarga** | `13+` séries | `49+` séries | `#FF5252` (Rubro Kaioken) | Alto volume acumulado; requer atenção à recuperação articular e do SNC. |
+
+---
+
+## 🛡️ 8. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore
 
 Para que o **Gym Saiyajin** mantenha credibilidade inabalável como aplicativo de musculação sério, todo o sistema opera sob o princípio de **Fisiologia em Primeiro Lugar**:
 
