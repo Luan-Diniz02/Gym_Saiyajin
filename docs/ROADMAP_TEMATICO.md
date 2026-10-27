@@ -20,8 +20,8 @@ graph TD
 
     B --> B1[Recuperação Biológica no Cronômetro de Descanso - Concluído]
     C --> C1[Jornada de Disciplina Contínua na Timeline do Histórico - Concluído]
-    D --> D1[Séries de Aquecimento, Warm-up & RPE/RIR - Próxima Fase]
-    E --> E1[Telemetria de Volume Semanal por Músculo - Backlog]
+    D --> D1[Séries de Aquecimento, Warm-up & RPE/RIR - Concluído]
+    E --> E1[Telemetria de Volume Semanal por Músculo - Próxima Fase]
     F --> F1[Decomposição Visual de Carga na Barra - Backlog]
 ```
 
@@ -65,19 +65,24 @@ graph TD
 
 ---
 
-## ☁️ Proposta 3: A "Nuvem Voadora" (*Kinto-un*) & Tipos de Séries com Métrica de Esforço (RPE / RIR) [🚀 PRÓXIMA FASE]
+## ☁️ Proposta 3: A "Nuvem Voadora" (*Kinto-un*) & Tipos de Séries com Métrica de Esforço (RPE / RIR) [✅ CONCLUÍDO]
 
 ### 1. Justificativa & Lore Canônica
 - A Nuvem Voadora (*Kinto-un*) representa leveza, pureza e fluidez de movimento sem peso ou fadiga destrutiva.
 - **Aplicação Fisiológica no Treino de Força**:
   - **Séries de Aquecimento / Warm-up (Kinto-un)**: Séries preparatórias neuromusculares com cargas progressivas para lubrificação articular e recrutamento de unidades motoras sem gerar fadiga limitante.
   - **Proteção de Métricas**: Séries marcadas com a insígnia da Nuvem Voadora não poluem o cálculo de 1RM estimado (Epley) nem geram falsos recordes de PRs.
-  - **Métrica de Esforço (RPE / RIR - Reps in Reserve)**: Seletor opcional de esforço subjetivo por série (ex: `@ RIR 2` ou `RPE 8`), fundamental para o treinamento de atletas intermediários e avançados que gerenciam a fadiga do sistema nervoso central (SNC).
+  - **Métrica de Esforço (RPE / RIR - Reps in Reserve)**: Seletor opcional de esforço subjetivo por série (ex: `RIR 2 • RPE 8`), fundamental para o treinamento de atletas intermediários e avançados que gerenciam a fadiga do sistema nervoso central (SNC).
 
-### 2. Especificação Técnica Pretendida
-- Componente vetorial `KintoUnIcon` no Canvas para badge visual dourado-suave.
-- Alternância de tipo de série na linha (`SerieRowWidget`): Normal (`N`), Aquecimento (`W`), Drop-set (`D`) e Falha Total (`F`).
-- Mini-seletor retrátil de RIR/RPE na linha da série sem comprometer o fluxo ágil de digitação de Carga $\times$ Repetições.
+### 2. Implementação Final Entregue
+- **Componente Vetorial `KintoUnIcon` (`KintoUnPainter`)**:
+  - Renderização em Canvas puro da Nuvem Voadora cel-shaded com gradiente dourado suave (`#FFD700` $\to$ `#FFA000`), rastro aerodinâmico e halo de Ki.
+- **Classificação Biomecânica de Séries (`TipoSerie` & `SerieRowWidget`)**:
+  - Toque rápido no indicador circular da série alterna ciclicamente entre **Normal** (`N` / índice numérico), **Aquecimento Kinto-un** (`W` / `KintoUnIcon`), **Drop-set** (`D` ciano bioelétrico) e **Falha Total** (`F` rubro com atribuição automática de `RIR 0 / RPE 10`); toque longo abre modal explicativo de seleção direta.
+- **Seletor Retrátil de Esforço (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`)**:
+  - Pill compacto na base da linha de série que expande horizontalmente os chips de RIR/RPE sem comprometer a digitação rápida de `Peso × Reps`.
+- **Persistência SQLite v4 & Blindagem de PRs**:
+  - Migração automática do banco (`v3` $\to$ `v4`) adicionando `tipo` e `rir` à tabela `series`, suporte integral no backup JSON e filtragem automática de séries `warmup` nos cálculos de 1RM, PRs em tempo real e gráficos de progressão.
 
 ---
 
@@ -112,8 +117,8 @@ graph TD
 | **🧪 Câmara de Regeneração** | `EscotilhaCamaraPainter` + Cronômetro | `TreinoScreen` (Tela de Treino) | Alta (Painter 3D + animação + sync) | **✅ CONCLUÍDO & TESTADO** |
 | **🐍 Caminho da Serpente** | Barra Senoidal + `PlanetaKaiohIcon` + Odômetro | `HistoricoScreen` (Tela de Histórico) | Alta (Painter senoidal + métricas) | **✅ CONCLUÍDO & TESTADO** |
 | **⚡ Chamas de Ki** | `KiAuraIcon` + `KiAuraPainter` | `PoderLutaCardWidget` & `Recordes` | Média (Silhueta cel-shaded + glows) | **✅ CONCLUÍDO & TESTADO** |
-| **☁️ Nuvem Voadora & RIR/RPE** | `KintoUnIcon` + Seletor de Tipo de Série | `SerieRowWidget` & `Fichas` | Média (Tipos de série + filtro de 1RM) | **🚀 Próxima Prioridade** |
-| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **📋 Backlog** |
+| **☁️ Nuvem Voadora & RIR/RPE** | `KintoUnIcon` + Seletor de Tipo de Série | `SerieRowWidget`, `Historico` & `DB v4` | Média (Tipos de série + filtro de 1RM) | **✅ CONCLUÍDO & TESTADO** |
+| **🔥 Scouter Anatômico** | `MuscleHeatmapPainter` (Frontal / Dorsal) | `ProgressoScreen` (Dashboard) | Média/Alta (Geometria vetorial + mapeamento) | **🚀 Próxima Prioridade** |
 | **🏋️ Pesos do Sr. Kaioh** | `CalculadoraAnilhasModal` | `SerieRowWidget` / Campos de Carga | Baixa/Média (Algoritmo guloso de anilhas) | **📋 Backlog** |
 
 ---

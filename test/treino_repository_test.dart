@@ -21,7 +21,7 @@ void main() {
     db = await databaseFactoryFfi.openDatabase(
       inMemoryDatabasePath,
       options: OpenDatabaseOptions(
-        version: 3,
+        version: 4,
         onConfigure: (db) async {
           await db.execute('PRAGMA foreign_keys = ON;');
         },
@@ -40,7 +40,7 @@ void main() {
   });
 
   group('TreinoRepository - Sessões de Treino', () {
-    test('deve salvar e recuperar uma sessão de treino completa', () async {
+    test('deve salvar e recuperar uma sessão de treino completa com tipo e rir', () async {
       final sessao = SessaoTreino(
         data: DateTime(2026, 9, 23, 10, 0),
         nomeTreino: 'Treino A - Super Saiyajin',
@@ -51,16 +51,16 @@ void main() {
             nome: 'Supino Reto',
             grupo: 'Peito',
             seriesDetalhes: [
-              Serie(peso: 80.0, reps: 10, concluida: true),
-              Serie(peso: 90.0, reps: 8, concluida: true),
-              Serie(peso: 100.0, reps: 5, concluida: true),
+              Serie(peso: 50.0, reps: 12, concluida: true, tipo: 'warmup', rir: 4),
+              Serie(peso: 80.0, reps: 10, concluida: true, tipo: 'normal', rir: 2),
+              Serie(peso: 100.0, reps: 5, concluida: true, tipo: 'falha', rir: 0),
             ],
           ),
           Exercicio(
             nome: 'Desenvolvimento Militar',
             grupo: 'Ombros',
             seriesDetalhes: [
-              Serie(peso: 50.0, reps: 8, concluida: true),
+              Serie(peso: 50.0, reps: 8, concluida: true, tipo: 'dropset', rir: 1),
             ],
           ),
         ],
@@ -80,11 +80,17 @@ void main() {
       final supino = salva.exerciciosConcluidosHoje.firstWhere((e) => e.nome == 'Supino Reto');
       expect(supino.grupo, 'Peito');
       expect(supino.seriesDetalhes.length, 3);
-      expect(supino.seriesDetalhes[0].peso, 80.0);
-      expect(supino.seriesDetalhes[0].reps, 10);
+      expect(supino.seriesDetalhes[0].peso, 50.0);
+      expect(supino.seriesDetalhes[0].reps, 12);
       expect(supino.seriesDetalhes[0].concluida, isTrue);
+      expect(supino.seriesDetalhes[0].tipo, 'warmup');
+      expect(supino.seriesDetalhes[0].rir, 4);
+      expect(supino.seriesDetalhes[1].tipo, 'normal');
+      expect(supino.seriesDetalhes[1].rir, 2);
       expect(supino.seriesDetalhes[2].peso, 100.0);
       expect(supino.seriesDetalhes[2].reps, 5);
+      expect(supino.seriesDetalhes[2].tipo, 'falha');
+      expect(supino.seriesDetalhes[2].rir, 0);
     });
 
     test('deve lançar ArgumentError ao tentar salvar série com peso ou reps nulos', () async {
@@ -168,8 +174,8 @@ void main() {
               nome: 'Barra Fixa',
               grupo: 'Costas',
               seriesDetalhes: [
-                Serie(peso: 10.0, reps: 10, concluida: true),
-                Serie(peso: 15.0, reps: 8, concluida: true),
+                Serie(peso: 10.0, reps: 10, concluida: true, tipo: 'warmup', rir: 3),
+                Serie(peso: 15.0, reps: 8, concluida: true, tipo: 'normal', rir: 1),
               ],
             ),
           ],
@@ -180,12 +186,67 @@ void main() {
       expect(ultimasSeries.length, 2);
       expect(ultimasSeries[0].peso, 10.0);
       expect(ultimasSeries[0].reps, 10);
+      expect(ultimasSeries[0].tipo, 'warmup');
+      expect(ultimasSeries[0].rir, 3);
       expect(ultimasSeries[1].peso, 15.0);
       expect(ultimasSeries[1].reps, 8);
+      expect(ultimasSeries[1].tipo, 'normal');
+      expect(ultimasSeries[1].rir, 1);
+    });
+
+    test('deve migrar schema de v3 para v4 preservando séries e adicionando tipo e rir', () async {
+      final dbV3 = await databaseFactoryFfi.openDatabase(
+        inMemoryDatabasePath,
+        options: OpenDatabaseOptions(
+          version: 3,
+          singleInstance: false,
+          onCreate: (d, _) async {
+            await d.execute('''
+              CREATE TABLE sessoes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                data TEXT NOT NULL,
+                nome_treino TEXT,
+                duracao_segundos INTEGER DEFAULT 0,
+                descanso_total_segundos INTEGER DEFAULT 0
+              )
+            ''');
+            await d.execute('''
+              CREATE TABLE exercicios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                sessao_id INTEGER NOT NULL,
+                nome TEXT NOT NULL,
+                grupo TEXT NOT NULL
+              )
+            ''');
+            await d.execute('''
+              CREATE TABLE series (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                exercicio_id INTEGER NOT NULL,
+                peso REAL NOT NULL,
+                reps INTEGER NOT NULL,
+                concluida INTEGER NOT NULL
+              )
+            ''');
+          },
+        ),
+      );
+
+      await dbV3.insert('sessoes', {'data': '2026-09-01T10:00:00.000'});
+      await dbV3.insert('exercicios', {'sessao_id': 1, 'nome': 'Supino Reto', 'grupo': 'PEITO'});
+      await dbV3.insert('series', {'exercicio_id': 1, 'peso': 80.0, 'reps': 10, 'concluida': 1});
+
+      await DatabaseHelper.upgradeSchema(dbV3, 3, 4);
+
+      final rows = await dbV3.query('series');
+      expect(rows.length, 1);
+      expect(rows.first['tipo'], 'normal');
+      expect(rows.first['rir'], isNull);
+
+      await dbV3.close();
     });
   });
 
-  group('TreinoRepository - Recordes Pessoais (PRs)', () {
+  group('TreinoRepository - Recordes Pessoais (PRs) e Proteção Kinto-un', () {
     test('deve calcular e retornar recordes pessoais detalhados agregados', () async {
       await repository.salvarSessaoTreino(
         SessaoTreino(
@@ -230,6 +291,37 @@ void main() {
       expect(recordeAgachamento.umRepMaxEstimado, 133.3);
       expect(recordeAgachamento.peso1RM, 100.0);
       expect(recordeAgachamento.reps1RM, 10);
+    });
+
+    test('séries de aquecimento (warmup / Kinto-un) não devem poluir 1RM nem PRs', () async {
+      await repository.salvarSessaoTreino(
+        SessaoTreino(
+          data: DateTime(2026, 9, 20),
+          nomeTreino: 'Treino com Kinto-un',
+          exerciciosConcluidosHoje: [
+            Exercicio(
+              nome: 'Supino Reto',
+              grupo: 'Peito',
+              seriesDetalhes: [
+                // Série marcada como warmup mesmo com carga alta não deve contar como PR
+                Serie(peso: 150.0, reps: 10, concluida: true, tipo: 'warmup'),
+                // Série de trabalho real
+                Serie(peso: 90.0, reps: 8, concluida: true, tipo: 'normal'),
+              ],
+            ),
+          ],
+        ),
+      );
+
+      final recordes = await repository.buscarRecordesPessoais();
+      expect(recordes.length, 1);
+      expect(recordes.first.cargaMaxima, 90.0);
+      expect(recordes.first.repsCargaMaxima, 8);
+
+      final prHistorico = await repository.buscarRecordeHistoricoExercicio('Supino Reto');
+      expect(prHistorico, isNotNull);
+      expect(prHistorico!.cargaMaxima, 90.0);
+      expect(prHistorico.repsCargaMaxima, 8);
     });
 
     test('deve buscar recorde histórico prévio de um exercício', () async {

@@ -16,6 +16,7 @@ import '../widgets/compartilhar_card_modal.dart';
 import '../widgets/exercicio_midia_widget.dart';
 import '../widgets/gerenciar_fichas_modal.dart';
 import '../widgets/ki_aura_icon.dart';
+import '../widgets/kinto_un_icon.dart';
 import '../widgets/modal_encerrar_treino.dart';
 import '../widgets/selecao_exercicio_modal.dart';
 import '../widgets/serie_row_widget.dart';
@@ -1320,20 +1321,90 @@ class _TreinoScreenState extends State<TreinoScreen> {
                   children: detalhes.asMap().entries.map((entry) {
                     int serieIndex = entry.key + 1;
                     final Serie serieData = entry.value;
+                    final int numTrabalho = Serie.calcularNumeroSerieTrabalho(
+                      detalhes,
+                      entry.key,
+                    );
+                    final Color corIndicador = serieData.isWarmup
+                        ? const Color(0xFFFFD700)
+                        : (serieData.isDropset
+                            ? AppColors.primary
+                            : (serieData.isFalha
+                                ? AppColors.danger
+                                : AppColors.accent));
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Série $serieIndex',
-                            style: const TextStyle(
-                              color: AppColors.textDimmed,
-                              fontSize: 14,
-                            ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 24,
+                                height: 24,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  color: corIndicador.withValues(alpha: 0.14),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: corIndicador,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: serieData.isWarmup
+                                    ? const KintoUnIcon(
+                                        size: 14,
+                                        showGlow: false,
+                                        showTrail: false,
+                                      )
+                                    : Text(
+                                        serieData.isNormal
+                                            ? '$numTrabalho'
+                                            : serieData.tipoEnum.sigla,
+                                        style: TextStyle(
+                                          color: corIndicador,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                              ),
+                              Text(
+                                'Série $serieIndex',
+                                style: const TextStyle(
+                                  color: AppColors.textDimmed,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                           Row(
                             children: [
+                              if (serieData.rir != null) ...[
+                                Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 1.5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surface,
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: AppColors.cardBorder,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    serieData.rirLabel!,
+                                    style: const TextStyle(
+                                      color: AppColors.textDimmed,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
                               Text(
                                 '${serieData.reps ?? '-'} reps',
                                 style: const TextStyle(

@@ -311,6 +311,7 @@ class ProgressoController extends ChangeNotifier {
     double? maximo;
     int? melhReps;
     for (final serie in series) {
+      if (serie.isWarmup) continue;
       final peso = serie.peso;
       if (peso == null) continue;
       if (maximo == null ||
@@ -485,6 +486,7 @@ class ProgressoController extends ChangeNotifier {
             bool bateuPR = false;
             for (final s in ex.seriesDetalhes) {
               if (!s.concluida ||
+                  s.isWarmup ||
                   s.peso == null ||
                   s.reps == null ||
                   s.peso! <= 0 ||
@@ -522,6 +524,7 @@ class ProgressoController extends ChangeNotifier {
 
         for (final s in ex.seriesDetalhes) {
           if (!s.concluida ||
+              s.isWarmup ||
               s.peso == null ||
               s.reps == null ||
               s.peso! <= 0 ||

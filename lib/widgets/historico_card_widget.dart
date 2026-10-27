@@ -4,6 +4,7 @@ import '../models/exercicio.dart';
 import '../models/serie.dart';
 import '../theme/app_colors.dart';
 import 'exercicio_midia_widget.dart';
+import 'kinto_un_icon.dart';
 
 class HistoricoCardWidget extends StatelessWidget {
   final Exercicio exercicio;
@@ -12,6 +13,67 @@ class HistoricoCardWidget extends StatelessWidget {
     super.key,
     required this.exercicio,
   });
+
+  Color _corPorTipo(TipoSerie tipo) {
+    switch (tipo) {
+      case TipoSerie.normal:
+        return AppColors.accent;
+      case TipoSerie.warmup:
+        return const Color(0xFFFFD700);
+      case TipoSerie.dropset:
+        return AppColors.primary;
+      case TipoSerie.falha:
+        return AppColors.danger;
+    }
+  }
+
+  Widget _buildIndicadorCircularSerie(Serie serie, int numeroSerieTrabalho) {
+    final tipo = serie.tipoEnum;
+    final cor = _corPorTipo(tipo);
+
+    return Container(
+      width: 24,
+      height: 24,
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: cor.withValues(alpha: 0.14),
+        shape: BoxShape.circle,
+        border: Border.all(color: cor, width: 1.5),
+      ),
+      alignment: Alignment.center,
+      child: tipo == TipoSerie.warmup
+          ? const KintoUnIcon(size: 14, showGlow: false, showTrail: false)
+          : Text(
+              tipo == TipoSerie.normal ? '$numeroSerieTrabalho' : tipo.sigla,
+              style: TextStyle(
+                color: cor,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+    );
+  }
+
+  Widget _buildTagRir(Serie serie) {
+    if (serie.rir == null) return const SizedBox.shrink();
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.cardBorder),
+      ),
+      child: Text(
+        serie.rirLabel!,
+        style: const TextStyle(
+          color: AppColors.textDimmed,
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,17 +154,34 @@ class HistoricoCardWidget extends StatelessWidget {
                 children: detalhes.asMap().entries.map((entry) {
                   final int serieIndex = entry.key + 1;
                   final Serie serieData = entry.value;
+                  final int numTrabalho = Serie.calcularNumeroSerieTrabalho(
+                    detalhes,
+                    entry.key,
+                  );
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Série $serieIndex',
-                          style: const TextStyle(color: AppColors.textDimmed, fontSize: 14),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildIndicadorCircularSerie(
+                              serieData,
+                              numTrabalho,
+                            ),
+                            Text(
+                              'Série $serieIndex',
+                              style: const TextStyle(
+                                color: AppColors.textDimmed,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                         Row(
                           children: [
+                            _buildTagRir(serieData),
                             Text(
                               '${serieData.reps ?? '-'} reps',
                               style: const TextStyle(

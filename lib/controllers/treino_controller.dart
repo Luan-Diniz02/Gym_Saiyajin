@@ -637,6 +637,48 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// Atualiza a classificação da série (`normal`, `warmup`, `dropset`, `falha`).
+  /// Séries de aquecimento (*Kinto-un* / `warmup`) são excluídas do cálculo de PR e 1RM.
+  void atualizarTipoSerie(int index, String novoTipo) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return;
+    }
+
+    final serie = atual.seriesDetalhes[index];
+    final eraFalha = serie.isFalha;
+    final tipoNormalizado = TipoSerie.fromCodigo(novoTipo);
+    serie.tipo = tipoNormalizado.codigo;
+    if (tipoNormalizado == TipoSerie.falha) {
+      serie.rir = 0;
+    } else if (eraFalha && serie.rir == 0) {
+      serie.rir = null;
+    }
+    _reavaliarRecordesExercicio(atual.nome, atual.grupo, atual.seriesDetalhes);
+    notifyListeners();
+  }
+
+  /// Alterna ciclicamente o tipo da série (`normal` -> `warmup` -> `dropset` -> `falha` -> `normal`).
+  void alternarTipoSerie(int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return;
+    }
+    final proximo = atual.seriesDetalhes[index].tipoEnum.proximo;
+    atualizarTipoSerie(index, proximo.codigo);
+  }
+
+  /// Atualiza ou limpa a métrica subjetiva de esforço RIR (Reps in Reserve) da série.
+  void atualizarRirSerie(int index, int? novoRir) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return;
+    }
+
+    atual.seriesDetalhes[index].rir = novoRir?.clamp(0, 4);
+    notifyListeners();
+  }
+
   bool preencherSerieComAnterior(int index) {
     final atual = _sessaoTreino.exercicioAtual;
     if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
@@ -698,7 +740,8 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     if (index < 0 || index >= atual.seriesDetalhes.length) return false;
 
     final serie = atual.seriesDetalhes[index];
-    if (serie.peso == null ||
+    if (serie.isWarmup ||
+        serie.peso == null ||
         serie.reps == null ||
         serie.peso! <= 0 ||
         serie.reps! <= 0) {
@@ -734,6 +777,7 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
 
     for (final s in series) {
       if (!s.concluida ||
+          s.isWarmup ||
           s.peso == null ||
           s.reps == null ||
           s.peso! <= 0 ||

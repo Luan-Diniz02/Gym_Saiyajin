@@ -42,6 +42,8 @@ class TreinoRepository {
               'peso': serie.peso,
               'reps': serie.reps,
               'concluida': serie.concluida ? 1 : 0,
+              'tipo': serie.tipo,
+              'rir': serie.rir,
             });
           }
         }
@@ -96,6 +98,8 @@ class TreinoRepository {
           peso: (row['peso'] as num).toDouble(),
           reps: (row['reps'] as num).toInt(),
           concluida: ((row['concluida'] as num).toInt()) == 1,
+          tipo: (row['tipo'] as String?) ?? 'normal',
+          rir: (row['rir'] as num?)?.toInt(),
         ));
       }
 
@@ -232,6 +236,8 @@ class TreinoRepository {
                 'peso': serie.peso ?? 0.0,
                 'reps': serie.reps ?? 0,
                 'concluida': serie.concluida ? 1 : 0,
+                'tipo': serie.tipo,
+                'rir': serie.rir,
               });
             }
           }
@@ -273,6 +279,8 @@ class TreinoRepository {
         peso: (row['peso'] as num?)?.toDouble(),
         reps: (row['reps'] as num?)?.toInt(),
         concluida: ((row['concluida'] as num?)?.toInt() ?? 0) == 1,
+        tipo: (row['tipo'] as String?) ?? 'normal',
+        rir: (row['rir'] as num?)?.toInt(),
       )).toList();
     } catch (_) {
       return [];
@@ -448,6 +456,7 @@ class TreinoRepository {
         JOIN exercicios e ON s.exercicio_id = e.id
         JOIN sessoes sess ON e.sessao_id = sess.id
         WHERE s.concluida = 1 
+          AND (s.tipo IS NULL OR s.tipo != 'warmup')
           AND s.peso IS NOT NULL 
           AND s.peso > 0 
           AND s.reps IS NOT NULL 
@@ -518,6 +527,7 @@ class TreinoRepository {
         JOIN sessoes sess ON e.sessao_id = sess.id
         WHERE LOWER(TRIM(e.nome)) = LOWER(TRIM(?))
           AND s.concluida = 1 
+          AND (s.tipo IS NULL OR s.tipo != 'warmup')
           AND s.peso IS NOT NULL 
           AND s.peso > 0 
           AND s.reps IS NOT NULL 

@@ -28,7 +28,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -69,11 +69,36 @@ class DatabaseHelper {
 
       await db.execute('CREATE INDEX IF NOT EXISTS idx_ficha_exercicios_ficha_id ON ficha_exercicios (ficha_id)');
     }
+    if (oldVersion < 4) {
+      final tableInfo = await db.rawQuery('PRAGMA table_info(series);');
+      final colNames = tableInfo
+          .map((c) => (c['name'] as String? ?? '').toLowerCase())
+          .toSet();
+      if (!colNames.contains('tipo')) {
+        await db.execute(
+          "ALTER TABLE series ADD COLUMN tipo TEXT NOT NULL DEFAULT 'normal';",
+        );
+      }
+      if (!colNames.contains('rir')) {
+        await db.execute(
+          'ALTER TABLE series ADD COLUMN rir INTEGER;',
+        );
+      }
+    }
   }
 
   /// Cria todo o schema de tabelas e índices em uma instância de Database (útil para testes unitários).
   static Future<void> createSchema(Database db) async {
-    await instance._createDB(db, 3);
+    await instance._createDB(db, 4);
+  }
+
+  /// Executa a migração incremental em uma instância de Database (útil para testes unitários).
+  static Future<void> upgradeSchema(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
+    await instance._onUpgradeDB(db, oldVersion, newVersion);
   }
 
   Future _createDB(Database db, int version) async {
@@ -104,6 +129,8 @@ class DatabaseHelper {
         peso REAL NOT NULL,
         reps INTEGER NOT NULL,
         concluida INTEGER NOT NULL,
+        tipo TEXT NOT NULL DEFAULT 'normal',
+        rir INTEGER,
         FOREIGN KEY (exercicio_id) REFERENCES exercicios (id) ON DELETE CASCADE
       )
     ''');

@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-115%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-127%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -76,7 +76,10 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Fichas / Templates Permanentes com Reordenação Drag-and-Drop**: Crie, edite, reordene exercícios clicando e arrastando (`ReorderableListView`) e configure a quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
 - **Aparelho Ocupado? Substituição Ágil**: Toque no botão de troca (`Swap`) para substituir um exercício da fila por outro do mesmo grupo muscular sem alterar a ficha base.
 - **Carga Anterior Inteligente (Sobrecarga Progressiva)**: O app busca o histórico do exercício e sugere a última carga e reps nos campos (`hintText`) e na linha de apoio. Tocar no check com campos vazios auto-preenche a série com os valores anteriores.
-- **Séries com Ergonomia Avançada**: Alinhamento simétrico, fluxo contínuo de teclado (`Next` pula para reps, `Done` conclui a série), micro-badge dinâmico `PR ⚡` em tempo real e remoção rápida de séries via gesto de deslizar (*Swipe*).
+- **Séries com Ergonomia Avançada, Nuvem Voadora (*Kinto-un*) & Esforço (RIR/RPE)**:
+  - Alinhamento simétrico, fluxo contínuo de teclado (`Next` pula para reps, `Done` conclui a série), micro-badge dinâmico `PR ⚡` em tempo real e remoção rápida de séries via gesto de deslizar (*Swipe*).
+  - **Classificação Biomecânica de Séries**: Toque no círculo da série para alternar entre **Série de Trabalho** (`N`), **Aquecimento / Kinto-un** (`W` com ícone vetorial `KintoUnIcon` que blinda o cálculo de 1RM e evita falsos PRs), **Drop-set** (`D`) e **Falha Total** (`F`).
+  - **Métrica de Esforço Retrátil (`RIR / RPE`)**: Seletor compacto de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) integrado à linha da série sem comprometer a velocidade de digitação.
 - **Escotilha da Câmara de Regeneração Médica (*Medical Machine / Cápsula de Namekusei*)**:
   - Cronômetro de descanso estilizado como a escotilha de inspeção blindada da câmara médica de Dragon Ball Z: aro exterior em liga de titânio escuro com **8 rebites prateados chanfrados**, anel de fluido bioenergético em **Ouro Super Saiyajin e Âmbar** (`#FFD700` $\to$ `#FF8C00`), micro-bolhas de oxigênio com física de subida contínua e silhueta imersiva da máscara respiratória submersa no fundo.
   - **Sincronização Matemática Exata**: Eliminação do delay de 1s via arredondamento teto (`ceil`), garantindo que o cronômetro regressivo e o contador de descanso acumulado permaneçam 100% espelhados segundo a segundo.
