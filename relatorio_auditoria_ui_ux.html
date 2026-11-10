@@ -1,0 +1,1144 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica completa e interativa do Gym Saiyajin — Arquitetura, Design System, UI/UX, Gamificação e Engenharia Flutter.">
+      
+      
+        <meta name="author" content="Luan Pereira Diniz">
+      
+      
+        <link rel="canonical" href="https://luan-diniz02.github.io/Gym_Saiyajin/relatorio_auditoria_ui_ux.html">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="images/shenlong_logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Relatorio auditoria ui ux - Gym Saiyajin — Documentação Técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-visao-geral-e-impressoes-iniciais" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-header__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gym Saiyajin — Documentação Técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Relatorio auditoria ui ux
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏠 Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ARQUITETURA.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏛️ Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="UI_UX.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎨 Design System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ⚡ Sistema Ki
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📸 Social & Cards
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏋️ Catálogo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📜 Roadmap
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-nav__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    Gym Saiyajin — Documentação Técnica
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ARQUITETURA.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏛️ Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="UI_UX.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Sistema Ki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📸 Social & Cards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏋️ Catálogo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral-e-impressoes-iniciais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão Geral e Impressões Iniciais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pontos-fortes-identificados-uiux-highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pontos Fortes Identificados (UI/UX Highlights)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-matriz-de-severidade-dos-apontamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Matriz de Severidade dos Apontamentos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-analise-detalhada-dos-problemas-e-solucoes-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Análise Detalhada dos Problemas e Soluções Recomendadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Análise Detalhada dos Problemas e Soluções Recomendadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ux-01-exclusao-acidental-de-series-via-dismissible-sem-confirmacao-ou-undo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-02-acao-rapida-de-auto-preenchimento-orfa-preencherseriecomanterior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 UX-02: Ação Rápida de Auto-preenchimento Órfã (preencherSerieComAnterior)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-03-falta-de-controle-de-saida-popscope-e-risco-de-perda-de-treino-ativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 UX-03: Falta de Controle de Saída (PopScope) e Risco de Perda de Treino Ativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-04-alerta-de-descanso-invasivo-barrierdismissible-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 UX-04: Alerta de Descanso Invasivo (barrierDismissible: false)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-05-flicker-de-estado-vazio-falta-de-loading-states-nos-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-06-editor-de-fichas-com-ergonomia-deficiente-e-sem-reordenacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ux-07-valores-padrao-arbitrarios-69kg-170m-criam-diagnostico-fantasma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-01-ui-02-consistencia-visual-tema-global-e-text-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-plano-de-acao-recomendado-roadmap-de-melhorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Plano de Ação Recomendado (Roadmap de Melhorias)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Plano de Ação Recomendado (Roadmap de Melhorias)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-correcoes-criticas-seguranca-de-dados-e-friccao-de-treino" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Correções Críticas (Segurança de Dados e Fricção de Treino)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-polimento-de-usabilidade-e-ergonomia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Polimento de Usabilidade e Ergonomia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-padronizacao-visual-e-acessibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Padronização Visual e Acessibilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Relatório de Auditoria UI/UX — Gym Saiyajin</h1>
+</p>
+
+<blockquote>
+<p><strong>Projeto</strong>: <code>gym_saiyajin</code><br />
+<strong>Objetivo</strong>: Avaliação aprofundada de Design, Usabilidade, Arquitetura de Interface, Acessibilidade e Experiência do Usuário (UX) no ecossistema Flutter.<br />
+<strong>Especialidade</strong>: UI/UX para Flutter Applications &amp; Fitness Systems.</p>
+</blockquote>
+<hr />
+<h2 id="1-visao-geral-e-impressoes-iniciais">1. Visão Geral e Impressões Iniciais</h2>
+<p>O <strong>Gym Saiyajin</strong> apresenta uma identidade visual temática (<strong>Dragon Ball Z / Fitness</strong>) altamente criativa, imersiva e consistente com a proposta de gamificação do treino:
+- <strong>Câmara de Regeneração Namekusei</strong> estilizada para o cronômetro de descanso;
+- <strong>Caminho da Serpente</strong> com curva senoidal procedural para progressão de volume histórico rumo ao Planeta do Sr. Kaioh;
+- <strong>Radar do Dragão</strong> para monitoramento da meta semanal de treinos;
+- <strong>Cápsula Hoi-Poi</strong> para composição corporal / IMC / %BF;
+- <strong>Esferas do Dragão</strong> indicando Recordes Pessoais batidos (PRs);
+- <strong>Scouter e Patamares de Transformação</strong> (Classe Baixa até Instinto Superior) vinculados ao cálculo de Ki acumulado.</p>
+<p>Apesar da excelente direção de arte e do ótimo uso de haptics (<code>HapticFeedback</code>), a auditoria identificou <strong>fricções ergonômicas críticas na rotina de academia</strong>, <strong>estados de loading ausentes (Empty State Flash)</strong>, <strong>riscos de perda acidental de dados</strong> e <strong>oportunidades de padronização arquitetural do Material Design 3</strong>.</p>
+<hr />
+<h2 id="2-pontos-fortes-identificados-uiux-highlights">2. Pontos Fortes Identificados (UI/UX Highlights)</h2>
+<ol>
+<li><strong>Feedback Multissensorial Imersivo</strong>:</li>
+<li>Uso cirúrgico de <code>HapticFeedback.lightImpact()</code>, <code>selectionClick()</code> e <code>heavyImpact()</code> ao interagir com cronômetro, séries, transformações e botões.</li>
+<li>Integração de alarme sonoro (<code>FlutterRingtonePlayer</code>) e vibração adaptativa (<code>Vibration</code>) para o término do descanso.</li>
+<li><strong>Design System Temático Customizado</strong>:</li>
+<li>Ícones e ilustrações vetoriais procedurais usando <code>CustomPainter</code> (<code>EscotilhaCamaraPainter</code>, <code>CaminhoSerpenteProgressBar</code>, <code>DragonRadarIcon</code>, <code>DragonBallIcon</code>, <code>CapsuleIcon</code>, <code>ScouterIcon</code>, <code>PlanetaKaiohPainter</code>), eliminando rasterização borrada e mantendo o bundle leve.</li>
+<li><strong>Card Studio de Compartilhamento Social</strong>:</li>
+<li><code>CompartilharCardModal</code> oferece suporte a Stories (9:16) e Feed (1:1), personalização com foto real do usuário, 3 presets de layout (Slim, HUD Scouter e Minimalista) e renderização em imagem sem travamentos via <code>RepaintBoundary</code>.</li>
+<li><strong>Entrada de Dados com Formatação Adaptada ao Brasil</strong>:</li>
+<li>Formatação que aceita vírgula ou ponto para casas decimais no peso (<code>_pesoInputFormatter</code>), essencial para teclados numéricos brasileiros.</li>
+<li><strong>Preservação de Estado entre Abas</strong>:</li>
+<li>Uso de <code>IndexedStack</code> na navegação inferior, permitindo ao usuário consultar o histórico ou gráficos sem perder o treino em andamento.</li>
+</ol>
+<hr />
+<h2 id="3-matriz-de-severidade-dos-apontamentos">3. Matriz de Severidade dos Apontamentos</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Categoria</th>
+<th>Descrição do Apontamento</th>
+<th style="text-align: center;">Severidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UX-01</strong></td>
+<td>Ergonomia / Dados</td>
+<td>Exclusão de série por arrasto (Dismissible) sem diálogo de confirmação e sem botão de "Desfazer"</td>
+<td style="text-align: center;">🔴 <strong>Crítico</strong></td>
+</tr>
+<tr>
+<td><strong>UX-02</strong></td>
+<td>Fluxo de Treino</td>
+<td>Método <code>preencherSerieComAnterior</code> implementado no controller, mas não conectado à UI (usuário é forçado a redigitar tudo)</td>
+<td style="text-align: center;">🔴 <strong>Crítico</strong></td>
+</tr>
+<tr>
+<td><strong>UX-03</strong></td>
+<td>Navegação / Sistema</td>
+<td>Ausência de <code>PopScope</code>: toque no botão "Voltar" do Android minimiza/fecha o app sem salvar o treino</td>
+<td style="text-align: center;">🔴 <strong>Crítico</strong></td>
+</tr>
+<tr>
+<td><strong>UX-04</strong></td>
+<td>Usabilidade / Interrupção</td>
+<td>Dialog de fim de descanso com <code>barrierDismissible: false</code> bloqueia todo o app com modal intrusivo</td>
+<td style="text-align: center;">🟡 <strong>Médio</strong></td>
+</tr>
+<tr>
+<td><strong>UX-05</strong></td>
+<td>Loading States</td>
+<td>Falta de flag de carregamento assíncrono gerando "flash" de tela vazia (Empty State Flicker) no Histórico e Progresso</td>
+<td style="text-align: center;">🟡 <strong>Médio</strong></td>
+</tr>
+<tr>
+<td><strong>UX-06</strong></td>
+<td>Gestão de Fichas</td>
+<td>Falta de reordenação arrastável (<code>ReorderableListView</code>) no editor de fichas e alvos de toque abaixo de 48dp</td>
+<td style="text-align: center;">🟡 <strong>Médio</strong></td>
+</tr>
+<tr>
+<td><strong>UX-07</strong></td>
+<td>Dados Padrão / Onboarding</td>
+<td>Valores arbitrários hardcoded (69.0 kg / 1.70 m) criam falso diagnóstico inicial de IMC para novos usuários</td>
+<td style="text-align: center;">🟡 <strong>Médio</strong></td>
+</tr>
+<tr>
+<td><strong>UI-01</strong></td>
+<td>Consistência Visual</td>
+<td>Proliferação de cores hexadecimais hardcoded fora de <code>AppColors</code> e ausência de suporte/configuração a <code>ThemeData</code> global</td>
+<td style="text-align: center;">🟢 <strong>Baixo</strong></td>
+</tr>
+<tr>
+<td><strong>UI-02</strong></td>
+<td>Tipografia / Acessibilidade</td>
+<td>TextFields e botões com alturas rígidas (<code>height: 44</code>) suscetíveis a corte de texto com Text Scaling alto</td>
+<td style="text-align: center;">🟢 <strong>Baixo</strong></td>
+</tr>
+<tr>
+<td><strong>UI-03</strong></td>
+<td>Identidade Visual</td>
+<td>Falta de tipografia customizada temática (ex: Bebas Neue / Orbitron) para enriquecer o visual anime arcade</td>
+<td style="text-align: center;">💡 <strong>Sugestão</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-analise-detalhada-dos-problemas-e-solucoes-recomendadas">4. Análise Detalhada dos Problemas e Soluções Recomendadas</h2>
+<hr />
+<h3 id="ux-01-exclusao-acidental-de-series-via-dismissible-sem-confirmacao-ou-undo">🔴 UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/widgets/serie_row_widget.dart</code> (Linhas 306-345)</li>
+<li><strong>Cenário Real de Uso</strong>: O atleta está na academia com mãos suadas ou descansando entre séries. Ao tentar fazer o scroll vertical da lista de séries, acidentalmente faz um leve gesto horizontal para a esquerda.</li>
+<li><strong>Impacto</strong>: O widget <code>Dismissible</code> apaga a série instantaneamente do exercício atual. A SnackBar emitida não contém nenhuma <code>SnackBarAction</code> ("Desfazer"). O peso e repetições digitados são perdidos para sempre.</li>
+<li><strong>Trecho Problemático</strong>:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">return</span><span class="w"> </span><span class="n">Dismissible</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nl">key:</span><span class="w"> </span><span class="n">ValueKey</span><span class="p">(</span><span class="s1">'serie_</span><span class="si">${</span><span class="n">nomeExercicioAtual</span><span class="si">}</span><span class="s1">_</span><span class="si">${</span><span class="n">serie</span><span class="p">.</span><span class="n">hashCode</span><span class="si">}</span><span class="s1">_</span><span class="si">${</span><span class="n">widget</span><span class="p">.</span><span class="n">index</span><span class="si">}</span><span class="s1">'</span><span class="p">),</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nl">direction:</span><span class="w"> </span><span class="n">DismissDirection</span><span class="p">.</span><span class="n">endToStart</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="c1">// ⚠️ Falta confirmDismiss!</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nl">onDismissed:</span><span class="w"> </span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">widget</span><span class="p">.</span><span class="n">controller</span><span class="p">.</span><span class="n">removerSerie</span><span class="p">(</span><span class="n">widget</span><span class="p">.</span><span class="n">index</span><span class="p">);</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">ScaffoldMessenger</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">context</span><span class="p">).</span><span class="n">showSnackBar</span><span class="p">(</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="n">SnackBar</span><span class="p">(</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="nl">content:</span><span class="w"> </span><span class="n">Text</span><span class="p">(</span><span class="s1">'Série </span><span class="si">${</span><span class="n">widget</span><span class="p">.</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="si">}</span><span class="s1"> removida.'</span><span class="p">),</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="nl">duration:</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Duration</span><span class="p">(</span><span class="nl">seconds:</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="c1">// ⚠️ Sem ação de desfazer!</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="p">),</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">);</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nl">child:</span><span class="w"> </span><span class="n">cardConteudo</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">);</span>
+</span></code></pre></div></li>
+<li><strong>Solução Recomendada</strong>:</li>
+<li>Adicionar <code>confirmDismiss</code> exigindo confirmação caso a série contenha peso ou repetições preenchidos;</li>
+<li>Implementar suporte a restauração no <code>TreinoController</code> e adicionar botão <code>SnackBarAction(label: 'DESFAZER', onPressed: ...)</code> na SnackBar.</li>
+</ul>
+<hr />
+<h3 id="ux-02-acao-rapida-de-auto-preenchimento-orfa-preencherseriecomanterior">🔴 UX-02: Ação Rápida de Auto-preenchimento Órfã (<code>preencherSerieComAnterior</code>)</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/controllers/treino_controller.dart</code> (Linhas 614-637) vs <code>lib/widgets/serie_row_widget.dart</code> (Linhas 102-110, 215-265)</li>
+<li><strong>Problema de UX</strong>: Nos principais apps de musculação do mercado (Hevy, Strong, RepCount), o usuário pode copiar os valores da última sessão com um único toque. No Gym Saiyajin, o controller possui a lógica pronta:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">preencherSerieComAnterior</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+  Porém, na tela, o método <strong>nunca é chamado</strong>. O usuário visualiza o peso e repetições anteriores apenas como texto de dica cinza (<code>hintText</code>), mas tocar no hint não preenche nada. O usuário é obrigado a abrir o teclado numérico e digitar manualmente os mesmos valores todas as vezes.</li>
+<li><strong>Solução Recomendada</strong>:</li>
+<li>Tornar o toque no <code>hintText</code> ou adicionar um botão de atalho rápido (ex: ícone de histórico / chip "Repetir anterior") que acione <code>controller.preencherSerieComAnterior(widget.index)</code>.</li>
+<li>Sincronizar imediatamente os <code>TextEditingController</code> dos campos de peso e repetições.</li>
+</ul>
+<hr />
+<h3 id="ux-03-falta-de-controle-de-saida-popscope-e-risco-de-perda-de-treino-ativo">🔴 UX-03: Falta de Controle de Saída (<code>PopScope</code>) e Risco de Perda de Treino Ativo</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/main.dart</code> (Linhas 119-147)</li>
+<li><strong>Problema de UX</strong>: No Android, o botão/gesto nativo de "Voltar" (Back gesture) encerra ou minimiza o app imediatamente caso o usuário esteja em qualquer aba.</li>
+<li><strong>Cenário de Risco</strong>: O usuário está na metade de um treino volumoso (4 exercícios feitos, 1 em andamento), navega até a aba "Progresso" para checar uma carga antiga, e aperta o botão voltar esperando retornar à aba "Treino". Em vez disso, o app fecha.</li>
+<li><strong>Solução Recomendada</strong>:
+  Envolver o <code>Scaffold</code> de <code>TelaBase</code> com <code>PopScope</code>:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">PopScope</span><span class="p">(</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nl">canPop:</span><span class="w"> </span><span class="n">_indiceAtual</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">_treinoController</span><span class="p">.</span><span class="n">temExercicioEmAndamento</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_treinoController</span><span class="p">.</span><span class="n">exerciciosConcluidosHoje</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nl">onPopInvokedWithResult:</span><span class="w"> </span><span class="p">(</span><span class="n">didPop</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">)</span><span class="w"> </span><span class="kd">async</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">didPop</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_indiceAtual</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="n">setState</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_indiceAtual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// Retorna primeiro à aba Treino</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="c1">// Se há treino em andamento, alerta o usuário antes de sair</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="kd">final</span><span class="w"> </span><span class="n">sair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">await</span><span class="w"> </span><span class="n">_mostrarDialogoConfirmarSaidaTreino</span><span class="p">();</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sair</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">mounted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="n">SystemNavigator</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nl">child:</span><span class="w"> </span><span class="n">Scaffold</span><span class="p">(...),</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">)</span>
+</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="ux-04-alerta-de-descanso-invasivo-barrierdismissible-false">🟡 UX-04: Alerta de Descanso Invasivo (<code>barrierDismissible: false</code>)</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/screens/treino_screen.dart</code> (Linhas 76-128)</li>
+<li><strong>Problema de UX</strong>: Quando o cronômetro atinge 00:00, o app dispara vibração, som e abre um <code>AlertDialog</code> com <code>barrierDismissible: false</code>:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">_mostrarDialogoDescansoFinalizado</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="n">showDialog</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nl">context:</span><span class="w"> </span><span class="n">context</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nl">barrierDismissible:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="c1">// ⚠️ Bloqueio total da UI</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nl">builder:</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">AlertDialog</span><span class="p">(</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nl">title:</span><span class="w"> </span><span class="n">Text</span><span class="p">(</span><span class="s1">'REGENERAÇÃO CONCLUÍDA!'</span><span class="p">),</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nl">actions:</span><span class="w"> </span><span class="p">[</span><span class="n">ElevatedButton</span><span class="p">(</span><span class="nl">child:</span><span class="w"> </span><span class="n">Text</span><span class="p">(</span><span class="s1">'BORA!'</span><span class="p">),</span><span class="w"> </span><span class="nl">onPressed:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Navigator</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">context</span><span class="p">))],</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p">),</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="p">);</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div>
+  Se o usuário estiver no meio de uma anotação, escolhendo um exercício no modal de busca ou ajustando as fichas, o diálogo abre por cima, toma o foco e exige que o atleta pare o que estiver fazendo para tocar no botão "BORA!".</li>
+<li><strong>Solução Recomendada</strong>:
+  Substituir o <code>AlertDialog</code> bloqueante por uma <strong>notificação in-app não intrusiva</strong> (Banner deslizante no topo ou SnackBar flutuante elegante) que desapareça sozinha em 4 segundos ou com um toque, sem bloquear a digitação e a visualização do treino.</li>
+</ul>
+<hr />
+<h3 id="ux-05-flicker-de-estado-vazio-falta-de-loading-states-nos-controllers">🟡 UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)</h3>
+<ul>
+<li><strong>Arquivos</strong>: <code>lib/controllers/historico_controller.dart</code> e <code>lib/controllers/progresso_controller.dart</code></li>
+<li><strong>Problema de UX</strong>:</li>
+<li><code>_sessoesTreino</code> inicia como lista vazia <code>[]</code>.</li>
+<li>Ao abrir o app, <code>HistoricoScreen</code> avalia <code>historico.isEmpty</code> e monta a ilustração com o texto: <code>"NENHUM TREINO REGISTRADO AINDA - O caminho de um guerreiro começa..."</code>.</li>
+<li>Milissegundos depois, o SQLite termina de ler o banco e notifica os ouvintes, fazendo a lista de treinos saltar na tela de forma abrupta.</li>
+<li>O mesmo ocorre no <code>ProgressoScreen</code>: o radar e os gráficos exibem valores de fallback antes do término da leitura.</li>
+<li><strong>Solução Recomendada</strong>:
+  Adicionar a propriedade <code>bool _isLoading = true;</code> em ambos os controllers. Na interface:</li>
+<li>Exibir um <strong>Skeleton Shimmer</strong> ou um <code>CircularProgressIndicator</code> temático (Ki Orb pulsante) enquanto <code>isLoading</code> for <code>true</code>.</li>
+<li>Exibir o <code>_buildEmptyState()</code> <strong>apenas se</strong> <code>!isLoading &amp;&amp; historico.isEmpty</code>.</li>
+</ul>
+<hr />
+<h3 id="ux-06-editor-de-fichas-com-ergonomia-deficiente-e-sem-reordenacao">🟡 UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/widgets/gerenciar_fichas_modal.dart</code> (Linhas 973-1109)</li>
+<li><strong>Problemas Identificados</strong>:</li>
+<li><strong>Sem Drag &amp; Drop</strong>: Enquanto na tela principal os próximos exercícios da ficha podem ser reordenados com arrasto (<code>ReorderableListView</code>), no editor de fichas a lista é um <code>ListView.separated</code> estático. Para trocar a ordem, o usuário precisa deletar exercícios e adicioná-los novamente.</li>
+<li><strong>Touch Targets de 28dp</strong>: Os botões de stepper <code>[-]</code> e <code>[+]</code> e o botão de exclusão da linha utilizam:
+     <code>constraints: const BoxConstraints(minWidth: 28, minHeight: 28)</code>
+     Isso viola as diretrizes de acessibilidade (mínimo de 48x48 dp para toque confortável sem erros).</li>
+<li><strong>Solução Recomendada</strong>:</li>
+<li>Migrar para <code>ReorderableListView</code> com <code>ReorderableDragStartListener</code>.</li>
+<li>Aumentar a área de clique para o padrão ergonômico de pelo menos 44x44 dp ou 48x48 dp.</li>
+</ul>
+<hr />
+<h3 id="ux-07-valores-padrao-arbitrarios-69kg-170m-criam-diagnostico-fantasma">🟡 UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma</h3>
+<ul>
+<li><strong>Arquivo</strong>: <code>lib/controllers/progresso_controller.dart</code> (Linhas 24-28, 86-98)</li>
+<li><strong>Problema de UX</strong>:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">double</span><span class="w"> </span><span class="n">_pesoAtual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">69.0</span><span class="p">;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">double</span><span class="w"> </span><span class="n">_altura</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.70</span><span class="p">;</span>
+</span></code></pre></div>
+  Se um usuário acabou de instalar o aplicativo e vai até a aba de Progresso, ele visualiza imediatamente:</li>
+<li>Peso: <code>69.0 kg</code></li>
+<li>IMC: <code>23.9</code> - <code>PESO NORMAL</code>
+  Essa métrica é fictícia. Não reflete a realidade do atleta e pode induzir ao erro.</li>
+<li><strong>Solução Recomendada</strong>:
+  Permitir <code>double? _pesoAtual;</code> e <code>double? _altura;</code>.
+  Se forem nulos, exibir um banner acolhedor no card de IMC:
+  <code>"Toque para cadastrar seu peso e altura e acompanhar sua evolução física"</code>.</li>
+</ul>
+<hr />
+<h3 id="ui-01-ui-02-consistencia-visual-tema-global-e-text-scaling">🟢 UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling</h3>
+<ul>
+<li><strong>Arquivos</strong>: <code>lib/theme/app_colors.dart</code>, <code>lib/main.dart</code> e múltiplos widgets em <code>lib/widgets/</code></li>
+<li><strong>Problemas</strong>:</li>
+<li>Cores pontuais como <code>Color(0xFF00E676)</code>, <code>Color(0xFFFFD700)</code>, <code>Color(0xFFFF9E00)</code>, <code>Color(0xFF13141B)</code>, <code>Color(0xFF0F1015)</code> estão instanciadas diretamente nos widgets em vez de referenciar <code>AppColors</code>.</li>
+<li>O <code>ThemeData</code> no <code>main.dart</code> não centraliza estilos de botões, inputs e dialogs. Cada modal define manualmente seu próprio <code>shape</code>, <code>borderRadius</code> e <code>borderSide</code>, gerando variações invisíveis (raios de 12, 14, 16, 18, 20, 24).</li>
+<li>Em <code>SerieRowWidget</code>, o campo de texto possui <code>SizedBox(height: 44, child: TextField(...))</code>. Caso o usuário ative tamanhos de fontes aumentados nas configurações de acessibilidade do smartphone (Dynamic Font Scaling), o texto é cortado verticalmente.</li>
+</ul>
+<hr />
+<h2 id="5-plano-de-acao-recomendado-roadmap-de-melhorias">5. Plano de Ação Recomendado (Roadmap de Melhorias)</h2>
+<h3 id="fase-1-correcoes-criticas-seguranca-de-dados-e-friccao-de-treino">Fase 1: Correções Críticas (Segurança de Dados e Fricção de Treino)</h3>
+<ol>
+<li>Conectar o método <code>preencherSerieComAnterior</code> na UI de <code>SerieRowWidget</code> (ao tocar no hint ou via chip "Repetir anterior").</li>
+<li>Adicionar confirmação no <code>Dismissible</code> de séries e botão <code>DESFAZER</code> na <code>SnackBar</code>.</li>
+<li>Implementar <code>PopScope</code> no <code>TelaBase</code> protegendo sessões em andamento contra saídas acidentais.</li>
+</ol>
+<h3 id="fase-2-polimento-de-usabilidade-e-ergonomia">Fase 2: Polimento de Usabilidade e Ergonomia</h3>
+<ol>
+<li>Substituir o <code>AlertDialog</code> bloqueante de descanso concluído por um banner animado suave no topo da tela.</li>
+<li>Adicionar estado <code>isLoading</code> e Shimmer Skeleton no Histórico e no Progresso para eliminar o piscar da tela vazia.</li>
+<li>Atualizar o <code>_FichaEditorBottomSheet</code> para usar <code>ReorderableListView</code> e elevar os botões de controle para 44-48dp de área de toque.</li>
+<li>Tratar peso e altura iniciais como nulos para convidar o novo usuário a preencher seus dados.</li>
+</ol>
+<h3 id="fase-3-padronizacao-visual-e-acessibilidade">Fase 3: Padronização Visual e Acessibilidade</h3>
+<ol>
+<li>Centralizar todas as cores avulsas em <code>AppColors</code> e configurar <code>ThemeData</code> global (InputDecoration, Dialogs, Cards).</li>
+<li>Ajustar <code>contentPadding</code> dinâmico nos inputs para suportar fontes ampliadas de acessibilidade sem overflow.</li>
+<li>Opcional: Adicionar uma fonte temática futurista/arcade no <code>pubspec.yaml</code> para números de cronômetro, Ki e cargas.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

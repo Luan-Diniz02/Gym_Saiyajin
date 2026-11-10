@@ -1,0 +1,1616 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica completa e interativa do Gym Saiyajin — Arquitetura, Design System, UI/UX, Gamificação e Engenharia Flutter.">
+      
+      
+        <meta name="author" content="Luan Pereira Diniz">
+      
+      
+        <link rel="canonical" href="https://luan-diniz02.github.io/Gym_Saiyajin/SISTEMA_SAIYAJIN.html">
+      
+      
+        <link rel="prev" href="UI_UX.html">
+      
+      
+        <link rel="next" href="COMPARTILHAMENTO_SOCIAL.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="images/shenlong_logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>⚡ Sistema Ki - Gym Saiyajin — Documentação Técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-a-formula-hibrida-do-poder-de-luta-ki" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-header__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gym Saiyajin — Documentação Técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ⚡ Sistema Ki
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏠 Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ARQUITETURA.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏛️ Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="UI_UX.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎨 Design System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ⚡ Sistema Ki
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📸 Social & Cards
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏋️ Catálogo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📜 Roadmap
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-nav__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    Gym Saiyajin — Documentação Técnica
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ARQUITETURA.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏛️ Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="UI_UX.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Sistema Ki
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="SISTEMA_SAIYAJIN.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Sistema Ki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-a-formula-hibrida-do-poder-de-luta-ki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 1. A Fórmula Híbrida do Poder de Luta (Ki)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧮 1. A Fórmula Híbrida do Poder de Luta (Ki)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decomposicao-dos-3-pilares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decomposição dos 3 Pilares:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-patamares-de-poder-transformacoes-canonicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        👑 2. Patamares de Poder &amp; Transformações Canônicas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="👑 2. Patamares de Poder &amp; Transformações Canônicas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#destaque-visual-do-super-saiyajin-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Destaque Visual do Super Saiyajin 2:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-componentes-vetoriais-nativos-custompainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 3. Componentes Vetoriais Nativos (CustomPainter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 3. Componentes Vetoriais Nativos (CustomPainter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dragonballicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonBallIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoutericon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScouterIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dragonradaricon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonRadarIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capsuleicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CapsuleIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planetakaiohicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanetaKaiohIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escotilhacamarapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EscotilhaCamaraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kintounicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KintoUnIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estimativa-de-1rm-formula-de-epley-refinada-serie-apice-de-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 4. Estimativa de 1RM (Fórmula de Epley Refinada) &amp; Série Ápice de PR
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-o-caminho-da-serpente-odometro-de-ferro-1000000-km" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐍 5. O Caminho da Serpente &amp; Odômetro de Ferro (1.000.000 km)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐍 5. O Caminho da Serpente &amp; Odômetro de Ferro (1.000.000 km)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-a-formula-dos-quilometros-de-ferro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. A Fórmula dos Quilômetros de Ferro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-marcos-narrativos-canonicos-lore-por-porcentagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Marcos Narrativos Canônicos (Lore por Porcentagem)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-apresentacao-visual-no-historico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Apresentação Visual no Histórico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-a-aura-de-ki-saiyajin-kiauraicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚡ 6. A Aura de Ki Saiyajin (KiAuraIcon)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚡ 6. A Aura de Ki Saiyajin (KiAuraIcon)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-lore-conceito-fisiologico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Lore &amp; Conceito Fisiológico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-especificacao-visual-cel-shaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Especificação Visual Cel-Shaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-mapa-de-calor-muscular-telemetria-fisiologica-scouteranatomicowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔥 7. Mapa de Calor Muscular &amp; Telemetria Fisiológica (ScouterAnatomicoWidget)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-blindagem-tematica-fisiologia-esportiva-como-alicerce-da-lore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ 8. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📸 Social & Cards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏋️ Catálogo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-a-formula-hibrida-do-poder-de-luta-ki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 1. A Fórmula Híbrida do Poder de Luta (Ki)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧮 1. A Fórmula Híbrida do Poder de Luta (Ki)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decomposicao-dos-3-pilares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decomposição dos 3 Pilares:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-patamares-de-poder-transformacoes-canonicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        👑 2. Patamares de Poder &amp; Transformações Canônicas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="👑 2. Patamares de Poder &amp; Transformações Canônicas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#destaque-visual-do-super-saiyajin-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Destaque Visual do Super Saiyajin 2:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-componentes-vetoriais-nativos-custompainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 3. Componentes Vetoriais Nativos (CustomPainter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 3. Componentes Vetoriais Nativos (CustomPainter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dragonballicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonBallIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoutericon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScouterIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dragonradaricon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonRadarIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capsuleicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CapsuleIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planetakaiohicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanetaKaiohIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escotilhacamarapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EscotilhaCamaraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kintounicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KintoUnIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estimativa-de-1rm-formula-de-epley-refinada-serie-apice-de-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 4. Estimativa de 1RM (Fórmula de Epley Refinada) &amp; Série Ápice de PR
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-o-caminho-da-serpente-odometro-de-ferro-1000000-km" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐍 5. O Caminho da Serpente &amp; Odômetro de Ferro (1.000.000 km)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐍 5. O Caminho da Serpente &amp; Odômetro de Ferro (1.000.000 km)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-a-formula-dos-quilometros-de-ferro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. A Fórmula dos Quilômetros de Ferro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-marcos-narrativos-canonicos-lore-por-porcentagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Marcos Narrativos Canônicos (Lore por Porcentagem)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-apresentacao-visual-no-historico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Apresentação Visual no Histórico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-a-aura-de-ki-saiyajin-kiauraicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚡ 6. A Aura de Ki Saiyajin (KiAuraIcon)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚡ 6. A Aura de Ki Saiyajin (KiAuraIcon)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-lore-conceito-fisiologico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Lore &amp; Conceito Fisiológico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-especificacao-visual-cel-shaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Especificação Visual Cel-Shaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-mapa-de-calor-muscular-telemetria-fisiologica-scouteranatomicowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔥 7. Mapa de Calor Muscular &amp; Telemetria Fisiológica (ScouterAnatomicoWidget)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-blindagem-tematica-fisiologia-esportiva-como-alicerce-da-lore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ 8. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Sistema Saiyajin & Progressão de Poder (Ki)</h1>
+</p>
+
+<p>O <strong>Gym Saiyajin</strong> combina o rigor do treinamento de força e hipertrofia com uma temática autêntica, sóbria e canônica do universo Dragon Ball. O sistema de gamificação foi desenhado para incentivar a consistência, a sobrecarga progressiva e a superação contínua de recordes pessoais, mantendo sempre uma apresentação esportiva de alto nível sem poluição visual ou excesso de emojis infantis.</p>
+<hr />
+<h2 id="1-a-formula-hibrida-do-poder-de-luta-ki">🧮 1. A Fórmula Híbrida do Poder de Luta (Ki)</h2>
+<p>O Poder de Luta do guerreiro é dinâmico e reflete tanto a <strong>força bruta</strong> quanto o <strong>volume acumulado</strong> e a <strong>frequência de superação</strong>:</p>
+<div class="arithmatex">\[\text{Poder de Luta (Ki)} = \text{Força Base} + \text{Vigor Saiyajin} + \text{Limites Superados}\]</div>
+<div class="arithmatex">\[\text{Poder de Luta (Ki)} = \left(\sum \text{Maior 1RM Estimado por Grupo Muscular} \times 10\right) + \left(\frac{\text{Volume Total Histórico}}{100}\right) + (\text{PRs Batidos} \times 150)\]</div>
+<h3 id="decomposicao-dos-3-pilares">Decomposição dos 3 Pilares:</h3>
+<ol>
+<li><strong>Força Base (<span class="arithmatex">\(\sum \text{Maior 1RM} \times 10\)</span>)</strong>:</li>
+<li>Para cada um dos 6 grupos musculares principais (<em>Peito, Costas, Pernas, Ombros, Braços, Abdômen</em>), o sistema identifica o exercício com a maior estimativa de repetição máxima (1RM).</li>
+<li>
+<p>A soma desses maiores 1RMs é multiplicada por <strong>10</strong>. Esse pilar garante que a evolução na intensidade absoluta dos exercícios fundamentais (supinos, agachamentos, terras, desenvolvimentos) impulsione diretamente o patamar do atleta.</p>
+</li>
+<li>
+<p><strong>Vigor Saiyajin (<span class="arithmatex">\(\frac{\text{Volume Histórico}}{100}\)</span>)</strong>:</p>
+</li>
+<li>Volume total levantado em toda a jornada pelo atleta:
+     $<span class="arithmatex">\(\text{Volume} = \sum (\text{peso} \times \text{repetições})\)</span>$</li>
+<li>
+<p>Dividido por <strong>100</strong>. Premia a consistência, a resistência neuromuscular à fadiga e a capacidade de trabalho acumulada nas incontáveis sessões de ferro contra a gravidade.</p>
+</li>
+<li>
+<p><strong>Limites Superados (<span class="arithmatex">\(\text{PRs} \times 150\)</span>)</strong>:</p>
+</li>
+<li>Cada novo Recorde Pessoal (PR) conquistado (seja por carga absoluta ou por 1RM estimado) concede <strong>+150 de Ki permanente</strong>.</li>
+<li>Bônus imediato: ao finalizar uma sessão com PRs, o card comemorativo e o card de encerramento destacam o ganho instantâneo de Ki.</li>
+</ol>
+<hr />
+<h2 id="2-patamares-de-poder-transformacoes-canonicas">👑 2. Patamares de Poder &amp; Transformações Canônicas</h2>
+<p>O Ki acumulado determina o <strong>Patamar de Poder</strong> do guerreiro, desbloqueando auras visuais, cores de destaque e subtítulos épicos na interface:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Patamar</th>
+<th style="text-align: left;">Faixa de Ki</th>
+<th style="text-align: left;">Cor do Badge</th>
+<th style="text-align: left;">Lente do Scouter</th>
+<th style="text-align: left;">Subtítulo Épico Oficial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Classe Baixa</strong></td>
+<td style="text-align: left;">0 – 999</td>
+<td style="text-align: left;"><code>#9E9E9E</code> (Cinza neutro)</td>
+<td style="text-align: left;"><code>#9E9E9E</code></td>
+<td style="text-align: left;"><em>Início da jornada do guerreiro</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Guerreiro Z</strong></td>
+<td style="text-align: left;">1.000 – 3.999</td>
+<td style="text-align: left;"><code>#4FC3F7</code> (Azul Celeste)</td>
+<td style="text-align: left;"><code>#4FC3F7</code></td>
+<td style="text-align: left;"><em>Defensor em treinamento constante</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Elite Saiyajin</strong></td>
+<td style="text-align: left;">4.000 – 7.999</td>
+<td style="text-align: left;"><code>#FF5252</code> (Vermelho concentrado)</td>
+<td style="text-align: left;"><code>#FF5252</code></td>
+<td style="text-align: left;"><em>Aura vermelha de poder concentrado</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin</strong></td>
+<td style="text-align: left;">8.000 – 14.999</td>
+<td style="text-align: left;"><code>#FFD700</code> (Dourado clássico)</td>
+<td style="text-align: left;"><code>#FFD700</code></td>
+<td style="text-align: left;"><em>O lendário guerreiro dourado despertou</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin 2</strong></td>
+<td style="text-align: left;">15.000 – 29.999</td>
+<td style="text-align: left;"><code>#FF9E00</code> (Âmbar elétrico)</td>
+<td style="text-align: left;"><code>#00E5FF</code> (Ciano elétrico)</td>
+<td style="text-align: left;"><em>A fúria que rompeu a barreira do Super Saiyajin</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin 3</strong></td>
+<td style="text-align: left;">30.000 – 49.999</td>
+<td style="text-align: left;"><code>#FF6D00</code> (Laranja cósmico)</td>
+<td style="text-align: left;"><code>#FF6D00</code></td>
+<td style="text-align: left;"><em>A força colossal que faz o universo estremecer</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instinto Superior</strong></td>
+<td style="text-align: left;">50.000+</td>
+<td style="text-align: left;"><code>#FFFFFF</code> (Prata celestial)</td>
+<td style="text-align: left;"><code>#80D8FF</code> (Azul divino)</td>
+<td style="text-align: left;"><em>O estado divino onde o corpo age por puro instinto</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="destaque-visual-do-super-saiyajin-2">Destaque Visual do Super Saiyajin 2:</h3>
+<ul>
+<li><strong>Card e Borda Harmonizados</strong>: Borda externa do card em gradiente âmbar elétrico <code>#FF9E00</code>, proporcionando uma transição visual límpida e nobre entre o ouro do SSJ1 e o fogo do SSJ3.</li>
+<li><strong>Lente do Scouter em Ciano Elétrico (<code>#00E5FF</code>)</strong>: Em alusão aos raios bioelétricos característicos do SSJ2, o visor holográfico do <code>ScouterIcon</code> assume a tonalidade ciano, criando um contraste estético esportivo impecável sem poluir as molduras.</li>
+</ul>
+<hr />
+<h2 id="3-componentes-vetoriais-nativos-custompainter">🎨 3. Componentes Vetoriais Nativos (CustomPainter)</h2>
+<p>Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de ícones vetoriais proprietários desenhados diretamente no Canvas do Flutter:</p>
+<h3 id="dragonballicon"><code>DragonBallIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/dragon_ball_icon.dart"><code>lib/widgets/dragon_ball_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Esfera com gradiente radial âmbar/laranja profundo (<code>#FFB703</code> <span class="arithmatex">\(\to\)</span> <code>#FB8500</code>).</li>
+<li>Brilho especular translúcido simétrico simulando reflexo de cristal/acrílico.</li>
+<li>Estrelas vermelhas de 5 pontas desenhadas matematicamente com funções trigonométricas (<span class="arithmatex">\(\cos/\sin\)</span> a cada <span class="arithmatex">\(72^\circ\)</span>) e facetas 3D rubi.</li>
+<li>Suporte procedural completo a qualquer constelação de <strong>1 a 7 estrelas</strong>: 1 (centro), 2 (diagonal), 3 (triângulo), 4 (losango do Vovô Gohan), 5 (quincunce), 6 (grade 2x3) e 7 (anel circular com centro).</li>
+<li><strong>Gamificação Oficial dos PRs</strong>:</li>
+<li><strong>Correspondência Direta</strong>: No modal de encerramento do treino e no card social, o número de estrelas reflete o total de PRs batidos no dia (1 PR = Esfera de 1 Estrela ⭐, até 7 PRs = Esfera de 7 Estrelas ⭐⭐⭐⭐⭐⭐⭐).</li>
+<li><strong>Na Série em Andamento</strong>: A tag de PR ativo em tempo real exibe uma mini Esfera do Dragão de 1 estrela.</li>
+<li><strong>No Quadro de Recordes</strong>: A esfera do card e cabeçalho adapta suas estrelas de acordo com a quantidade total de recordes históricos registrados.</li>
+</ul>
+<h3 id="scoutericon"><code>ScouterIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/scouter_icon.dart"><code>lib/widgets/scouter_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Haste ergonômica auricular com detalhes de parafusos e juntas mecânicas.</li>
+<li>Arco superior angular com textura de liga metálica.</li>
+<li>Lente translúcida frontal chanfrada em acrílico holográfico reativa à transformação.</li>
+<li>Retículo de mira/alvo interno digital e linhas de telemetria estilizadas.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Carimbo tecnológico de telemetria no modo de compartilhamento <strong>Scouter HUD</strong>.</li>
+<li>Identificador visual da transformação atual do guerreiro no modal de level-up e painel de Ki.</li>
+</ul>
+<h3 id="dragonradaricon"><code>DragonRadarIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/dragon_radar_icon.dart"><code>lib/widgets/dragon_radar_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Bisel metálico chanfrado prateado e dial clássico de cronômetro no topo.</li>
+<li>Visor CRT verde militar escuro com retículo de grade de coordenadas ortogonais.</li>
+<li>Seta norteadora rubi central e mira amarela.</li>
+<li>Esferas do Dragão dinâmicas (<code>dots: 0..7</code>) piscando com halo e núcleo luminosos.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Gamificação da <strong>Meta Semanal</strong> no Dashboard de Progresso (cada dia ativo de treino na semana ilumina uma Esfera do Dragão no radar).</li>
+</ul>
+<h3 id="capsuleicon"><code>CapsuleIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/capsule_icon.dart"><code>lib/widgets/capsule_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.</li>
+<li>Botão metálico de acionamento no topo (<em>push trigger</em> com haste cilíndrica e anel de retenção).</li>
+<li>Faixas coloridas vibrantes (com suporte a azul clássico Capsule Corp, laranja Saiyajin, verde e vermelho).</li>
+<li>Faixa central preta técnica com o logotipo circular canônico da Capsule Corp (monograma em "C" concêntrico).</li>
+<li>Orientação isométrica dinâmica (~35°) e iluminação 3D longitudinal com sombra projetada.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Representação oficial do card de <strong>Composição Corporal e Medidas</strong> (IMC e Percentual de Gordura) no Dashboard de Progresso.</li>
+</ul>
+<h3 id="planetakaiohicon"><code>PlanetaKaiohIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/planeta_kaioh_icon.dart"><code>lib/widgets/planeta_kaioh_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Planeta esférico cel-shaded com gradiente volumétrico 3D em verde musgo/esmeralda.</li>
+<li>Estrada anelar circular pavimentada com curvatura elíptica em torno do pequeno astro.</li>
+<li>O clássico carro conversível vintage esportivo vermelho do Sr. Kaioh estacionado sobre a pista.</li>
+<li>Casa em domo clássica bege com teto marrom tradicional e anexo lateral de garagem.</li>
+<li>Bosques de árvores com copas em relevo ao longo do contorno do planeta.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Ponto de chegada supremo e meta final na barra de progresso do <strong>Caminho da Serpente</strong> (<code>CaminhoSerpenteProgressBar</code>).</li>
+</ul>
+<h3 id="escotilhacamarapainter"><code>EscotilhaCamaraPainter</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/escotilha_camara_painter.dart"><code>lib/widgets/escotilha_camara_painter.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Aro exterior circular em liga metálica escura chanfrada em 3D com 8 rebites industriais prateados simétricos.</li>
+<li>Anel de fluido bioenergético com gradiente Ouro Super Saiyajin e Laranja Ki (<code>#FFD700</code> <span class="arithmatex">\(\to\)</span> <code>#FF8C00</code>).</li>
+<li>Vidro escurecido com fluido de Ki submarino profundo e reflexo curvo de curvatura acrílica.</li>
+<li>Silhueta sutil da máscara de oxigênio submersa ao fundo com grelha de ar e mangueiras sanfonadas.</li>
+<li>Micro-bolhas procedurais de oxigênio em subida senoidal contínua.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Visual temático do cronômetro circular de descanso (<code>CronometroWidget</code>), contextualizando a recuperação biológica dos guerreiros como a Câmara de Cura/Regeneração Médica de Dragon Ball Z.</li>
+</ul>
+<h3 id="kintounicon"><code>KintoUnIcon</code></h3>
+<ul>
+<li><strong>Arquivo</strong>: <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/kinto_un_icon.dart"><code>lib/widgets/kinto_un_icon.dart</code></a></li>
+<li><strong>Renderização</strong>:</li>
+<li>Silhueta cel-shaded da Nuvem Voadora (<em>Kinto-un</em>) com cúpulas volumétricas, gradiente dourado (<code>#FFF59D</code> <span class="arithmatex">\(\to\)</span> <code>#FFD700</code> <span class="arithmatex">\(\to\)</span> <code>#FFA000</code>), rastro aerodinâmico e halo de Ki opcional.</li>
+<li><strong>Uso Oficial</strong>:</li>
+<li>Marcador de séries de <strong>Aquecimento</strong> (<code>tipo: 'warmup'</code>), indicando recrutamento neuromuscular preparatório sem poluir recordes.</li>
+</ul>
+<hr />
+<h2 id="4-estimativa-de-1rm-formula-de-epley-refinada-serie-apice-de-pr">📊 4. Estimativa de 1RM (Fórmula de Epley Refinada) &amp; Série Ápice de PR</h2>
+<p>Para mensurar recordes e calcular o Poder de Luta sem forçar o praticante a testar cargas máximas perigosas com 1 repetição, o app adota a fórmula de Epley com salvaguardas fisiológicas:</p>
+<div class="arithmatex">\[1\text{RM} = \begin{cases} 
+\text{peso} &amp; \text{se } \text{reps} = 1 \\
+\text{peso} \times \left(1 + \frac{\text{reps}}{30}\right) &amp; \text{se } 2 \le \text{reps} \le 15 \\
+0 &amp; \text{se } \text{peso} \le 0 \text{ ou } \text{reps} \le 0 \text{ ou } \text{tipo} = \text{'warmup'}
+\end{cases}\]</div>
+<ul>
+<li><strong>Blindagem de Séries de Aquecimento (<code>warmup</code>)</strong>: Séries marcadas como aquecimento são automaticamente excluídas do cálculo de 1RM, da detecção de PRs e do pilar de Força Base do Poder de Luta.</li>
+<li><strong>Teto Estatístico de 15 Repetições</strong>: Séries com mais de 15 reps medem primordialmente resistência muscular localizada (RML) e não força máxima neuromuscular; portanto, a fórmula limita o multiplicador em 15 para prevenir distorções hiperbólicas nos cálculos de 1RM.</li>
+<li><strong>Identificação da Série Ápice da Sessão (<code>obterMapaPRsDaSessao</code>)</strong>: Ao reconstruir cronologicamente o histórico, caso múltiplas séries de um mesmo exercício superem o recorde anterior na mesma sessão, o sistema destaca como <code>[🟠 PR]</code> unicamente a <strong>série ápice</strong> (aquela que atingiu o novo topo absoluto de carga ou 1RM do exercício naquele treino), mantendo correspondência 1-para-1 com o contador de PRs da sessão.</li>
+<li><strong>Formatação Limpa</strong>: Valores inteiros são apresentados sem casas decimais (<code>120 kg</code>), enquanto frações preservam uma casa decimal (<code>102.5 kg</code>).</li>
+</ul>
+<hr />
+<h2 id="5-o-caminho-da-serpente-odometro-de-ferro-1000000-km">🐍 5. O Caminho da Serpente &amp; Odômetro de Ferro (1.000.000 km)</h2>
+<p>Na lore canônica de Dragon Ball Z, o <strong>Caminho da Serpente</strong> (<em>Snake Way</em>) tem exatamente 1 milhão de quilômetros de extensão e paira sobre as nuvens do Outro Mundo, conectando o Palácio de Enma Daioh ao Planeta do Senhor Kaioh. Representa a prova máxima de disciplina física e resiliência mental que Goku enfrentou para obter o treinamento dos Deuses.</p>
+<p>No <strong>Gym Saiyajin</strong>, a constância de meses e anos na academia é traduzida diretamente na travessia dessa estrada mística:</p>
+<h3 id="a-a-formula-dos-quilometros-de-ferro">A. A Fórmula dos Quilômetros de Ferro</h3>
+<div class="arithmatex">\[\text{Distância no Caminho (km)} = \left(\frac{\text{Volume Total em kg}}{10}\right) + (\text{Minutos Totais de Treino} \times 2)\]</div>
+<ul>
+<li>Cada <strong>10 kg</strong> erguidos no acumulado de todos os treinos equivalem a <strong>1 km</strong> percorrido no Caminho.</li>
+<li>Cada <strong>1 minuto</strong> sob esforço ativo de ferro e recuperação soma <strong>2 km</strong> adicionais de marcha.</li>
+<li>A <strong>Meta Absoluta</strong> é fixada em <strong>1.000.000 km</strong>, premiando a consistência ininterrupta no estilo de vida do ferro.</li>
+</ul>
+<h3 id="b-marcos-narrativos-canonicos-lore-por-porcentagem">B. Marcos Narrativos Canônicos (Lore por Porcentagem)</h3>
+<p>De acordo com a distância percorrida (<span class="arithmatex">\(\frac{\text{km}}{1.000.000} \times 100\)</span>), o guerreiro atinge marcos canônicos exibidos no card expansível do histórico:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Faixa (%) / Distância</th>
+<th style="text-align: left;">Marco Narrativo Oficial</th>
+<th style="text-align: left;">Lore de Dragon Ball Z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>0.0% – 4.9%</strong> (&lt; 50.000 km)</td>
+<td style="text-align: left;"><em>Cauda da Serpente (Início da Jornada)</em></td>
+<td style="text-align: left;">O guerreiro recebe a permissão especial de Enma Daioh e inicia a corrida épica sobre a cauda da serpente.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5.0% – 19.9%</strong> (50.000 – 199.999 km)</td>
+<td style="text-align: left;"><em>Região das Nuvens Amarelas</em></td>
+<td style="text-align: left;">Vencendo os primeiros trechos sinuosos sobre o manto dourado do Outro Mundo; o corpo começa a forjar resistência.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>20.0% – 49.9%</strong> (200.000 – 499.999 km)</td>
+<td style="text-align: left;"><em>Palácio da Princesa Serpente</em></td>
+<td style="text-align: left;">Resistindo às distrações, preguiça e tentações de abandonar o caminho sagrado da força.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>50.0% – 79.9%</strong> (500.000 – 799.999 km)</td>
+<td style="text-align: left;"><em>Fim do Nevoeiro do Outro Mundo</em></td>
+<td style="text-align: left;">Metade do caminho superada com sucesso; o nevoeiro se dissipa revelando a disciplina de ferro inabalável.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>80.0% – 99.9%</strong> (800.000 – 999.999 km)</td>
+<td style="text-align: left;"><em>Cabeça da Serpente (Aterrissagem Iminente)</em></td>
+<td style="text-align: left;">A cabeça da serpente desponta nas alturas; o campo de gravidade de 10x do planeta já começa a ser sentido.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>100.0%+</strong> (≥ 1.000.000 km)</td>
+<td style="text-align: left;"><em>Planeta do Sr. Kaioh (Travessia Concluída!)</em></td>
+<td style="text-align: left;">O guerreiro alcança o pequeno planeta sagrado e está pronto para o Treino com Pesos Divinos!</td>
+</tr>
+</tbody>
+</table>
+<h3 id="c-apresentacao-visual-no-historico">C. Apresentação Visual no Histórico</h3>
+<p align="center">
+  <img src="images/caminho_serpente.png" width="55%" alt="Card do Caminho da Serpente no Histórico" />
+</p>
+
+<ul>
+<li><strong>Barra Senoidal Contínua (<code>CaminhoSerpenteProgressBar</code>)</strong>: Ondulação suave de seno (<span class="arithmatex">\(2.5\)</span> ciclos), drop shadows espaciais, aura de Ki que se desloca com o avanço e o <code>PlanetaKaiohIcon</code> ancorado na chegada.</li>
+<li><strong>Interatividade &amp; Ocultação Inteligente</strong>: A barra permanece sempre visível para impacto estético instantâneo, enquanto os números analíticos (odômetro numérico, texto do marco e os 3 cards de carga, tempo e sessões) expandem ou recolhem suavemente ao toque.</li>
+</ul>
+<hr />
+<h2 id="6-a-aura-de-ki-saiyajin-kiauraicon">⚡ 6. A Aura de Ki Saiyajin (<code>KiAuraIcon</code>)</h2>
+<h3 id="a-lore-conceito-fisiologico">A. Lore &amp; Conceito Fisiológico</h3>
+<p>Em Dragon Ball Z, o <strong>Ki</strong> (気) é a força vital que emana do espírito e dos músculos do lutador. Quando um guerreiro eleva seu poder ao extremo ou atinge novas transformações, o Ki transborda na forma de uma <strong>Aura Flamejante</strong> (<em>Ki Aura</em>) que envolve todo o corpo com labaredas verticais afiadas e faíscas elétricas.</p>
+<p>No treinamento esportivo do <strong>Gym Saiyajin</strong>, essa aura simboliza o <strong>Vigor e a Capacidade de Trabalho Neuromuscular</strong> gerados através do acúmulo contínuo de repetições e volume de carga.</p>
+<h3 id="b-especificacao-visual-cel-shaded">B. Especificação Visual Cel-Shaded</h3>
+<ul>
+<li><strong>Silhueta de Fogo Ascendente</strong>: Labaredas esguias com pontas agudas voltadas para o alto (<em>upward energy flames</em>), pico central dominante e cristas dinâmicas bilaterais.</li>
+<li><strong>Camadas de Profundidade</strong>:</li>
+<li><em>Halo Difuso (Glow)</em>: Emissão luminosa perimétrica em desfoque gaussiano suave.</li>
+<li><em>Casca Principal</em>: Gradiente energético da cor primária para a secundária com contorno iluminado.</li>
+<li><em>Núcleo Superdenso (Inner Core)</em>: Chama interna clara simulando compressão máxima de plasma e energia.</li>
+<li><em>Sparks de Alta Tensão</em>: Faíscas e relâmpagos pontiagudos flutuando nas laterais.</li>
+<li><strong>Harmonização de Transformações</strong>: Cores adaptáveis dinamicamente às transformações Saiyajin (Classe Baixa, Guerreiro Z, Elite Saiyajin, Super Saiyajin 1/2/3).</li>
+</ul>
+<hr />
+<h2 id="7-mapa-de-calor-muscular-telemetria-fisiologica-scouteranatomicowidget">🔥 7. Mapa de Calor Muscular &amp; Telemetria Fisiológica (<code>ScouterAnatomicoWidget</code>)</h2>
+<p align="center">
+  <img src="images/mapa_calor.png" width="55%" alt="Mapa de Calor Muscular Frontal e Dorsal" />
+</p>
+
+<p>Para orientar a distribuição equilibrada do volume de treinamento e evitar pontos fracos (<em>lagging muscles</em>) ou sobretreinamento localizado, o Dashboard de Progresso integra um <strong>Mapa de Calor Muscular Frontal e Dorsal</strong> baseado em séries válidas (excluindo aquecimentos):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Estágio Fisiológico</th>
+<th style="text-align: center;">Volume (7 Dias)</th>
+<th style="text-align: center;">Volume (30 Dias)</th>
+<th style="text-align: left;">Cor no Mapa</th>
+<th style="text-align: left;">Significado no Treinamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Sem Estímulo</strong></td>
+<td style="text-align: center;"><code>0</code> séries</td>
+<td style="text-align: center;"><code>0</code> séries</td>
+<td style="text-align: left;"><code>#2D3748</code> (Cinza-azulado)</td>
+<td style="text-align: left;">Grupo muscular em repouso total na janela selecionada.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ativado</strong></td>
+<td style="text-align: center;"><code>1–5</code> séries</td>
+<td style="text-align: center;"><code>1–23</code> séries</td>
+<td style="text-align: left;"><code>#00E5FF</code> (Ciano bioelétrico)</td>
+<td style="text-align: left;">Volume de manutenção ou estímulo inicial de recrutamento.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zona Ideal</strong></td>
+<td style="text-align: center;"><code>6–12</code> séries</td>
+<td style="text-align: center;"><code>24–48</code> séries</td>
+<td style="text-align: left;"><code>#FFD700</code> (Ouro Super Saiyajin)</td>
+<td style="text-align: left;">Faixa ótima de volume semanal/mensal para hipertrofia.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sobrecarga</strong></td>
+<td style="text-align: center;"><code>13+</code> séries</td>
+<td style="text-align: center;"><code>49+</code> séries</td>
+<td style="text-align: left;"><code>#FF5252</code> (Rubro Kaioken)</td>
+<td style="text-align: left;">Alto volume acumulado; requer atenção à recuperação articular e do SNC.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-blindagem-tematica-fisiologia-esportiva-como-alicerce-da-lore">🛡️ 8. Blindagem Temática: Fisiologia Esportiva como Alicerce da Lore</h2>
+<p>Para que o <strong>Gym Saiyajin</strong> mantenha credibilidade inabalável como aplicativo de musculação sério, todo o sistema opera sob o princípio de <strong>Fisiologia em Primeiro Lugar</strong>:</p>
+<ol>
+<li><strong>Anti-Caricatura</strong>: Elementos de anime nunca viram piadas infantis ou gritos desconectados na tela. O tom do guerreiro é estoico, focado na autossuperação, disciplina e no silêncio concentrado da Sala do Tempo.</li>
+<li><strong>Equivalência Biológica Real</strong>:</li>
+<li><strong>Câmara de Cura</strong> = Recuperação celular de ATP-CP, tamponamento de <span class="arithmatex">\(H^+\)</span> e restauração de glicogênio muscular.</li>
+<li><strong>Caminho da Serpente</strong> = Princípio da Continuidade e Sobrecarga Progressiva acumulada ao longo de meses e anos.</li>
+<li><strong>Cápsulas Hoi-Poi</strong> = Engenharia de precisão para modularização de rotinas e templates de treino.</li>
+<li><strong>Ki &amp; Patamares</strong> = Capacidade neuromuscular composta (força máxima 1RM <span class="arithmatex">\(\times\)</span> volume total de repetições).</li>
+<li><strong>Ergonomia Intocável</strong>: Os inputs de carga em kg, repetições e o cronômetro têm prioridade visual máxima sobre quaisquer adornos estéticos.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

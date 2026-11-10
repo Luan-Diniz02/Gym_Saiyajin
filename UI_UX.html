@@ -1,0 +1,2048 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica completa e interativa do Gym Saiyajin — Arquitetura, Design System, UI/UX, Gamificação e Engenharia Flutter.">
+      
+      
+        <meta name="author" content="Luan Pereira Diniz">
+      
+      
+        <link rel="canonical" href="https://luan-diniz02.github.io/Gym_Saiyajin/UI_UX.html">
+      
+      
+        <link rel="prev" href="ARQUITETURA.html">
+      
+      
+        <link rel="next" href="SISTEMA_SAIYAJIN.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="images/shenlong_logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>🎨 Design System - Gym Saiyajin — Documentação Técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-principios-fundamentais-de-ux" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-header__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gym Saiyajin — Documentação Técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🎨 Design System
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏠 Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ARQUITETURA.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏛️ Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="UI_UX.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎨 Design System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ⚡ Sistema Ki
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📸 Social & Cards
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏋️ Catálogo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📜 Roadmap
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-nav__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    Gym Saiyajin — Documentação Técnica
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ARQUITETURA.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏛️ Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Design System
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="UI_UX.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-principios-fundamentais-de-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏛️ 1. Princípios Fundamentais de UX
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏛️ 1. Princípios Fundamentais de UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ergonomia-sob-fadiga-fisica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Ergonomia sob Fadiga Física
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fluxo-de-input-de-cargas-ultrarrapido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Fluxo de Input de Cargas Ultrarrápido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-feedback-haptico-e-sonoro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Feedback Háptico e Sonoro
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-design-tokens-cores-appcolors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 2. Design Tokens &amp; Cores (AppColors)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 2. Design Tokens &amp; Cores (AppColors)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paleta-dos-patamares-de-poder-transformacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paleta dos Patamares de Poder (Transformações)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-anatomia-visual-dos-componentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📱 3. Anatomia Visual dos Componentes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📱 3. Anatomia Visual dos Componentes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-serie-row-serierowwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Série Row (SerieRowWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-escotilha-da-camara-de-regeneracao-cronometro-de-descanso-cronometrowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (CronometroWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-linha-do-tempo-identificacao-de-prs-rotulos-de-series-historicoscreen-historicocardwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Linha do Tempo, Identificação de PRs &amp; Rótulos de Séries (HistoricoScreen &amp; HistoricoCardWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-modal-de-edicao-de-sessoes-salvas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Modal de Edição de Sessões Salvas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-miniaturas-fixas-execucao-sob-demanda-gestao-de-exercicios-personalizados-exerciciothumbnailwidget-seletormidiacatalogomodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Miniaturas Fixas, Execução Sob Demanda &amp; Gestão de Exercícios Personalizados (ExercicioThumbnailWidget &amp; SeletorMidiaCatalogoModal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-mapa-de-calor-muscular-frontal-dorsal-scouteranatomicowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Mapa de Calor Muscular Frontal &amp; Dorsal (ScouterAnatomicoWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estudio-de-compartilhamento-social-ux-imersiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📸 4. Estúdio de Compartilhamento Social (UX Imersiva)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📸 4. Estúdio de Compartilhamento Social (UX Imersiva)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#as-3-solucoes-de-presets-graficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        As 3 Soluções de Presets Gráficos:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="As 3 Soluções de Presets Gráficos:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-slim-classico-espelho-de-musculacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Slim Clássico (Espelho de Musculação)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-scouter-hud-telemetria-saiyajin-stealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Scouter HUD (Telemetria Saiyajin Stealth)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rodape-minimalista-ancorado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Rodapé Minimalista (Ancorado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipografia-de-alto-contraste-nativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipografia de Alto Contraste Nativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-componentes-vetoriais-proprietarios-custompainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔮 5. Componentes Vetoriais Proprietários (CustomPainter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔮 5. Componentes Vetoriais Proprietários (CustomPainter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dragonballicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonBallIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoutericon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScouterIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dragonradaricon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonRadarIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capsuleicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CapsuleIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planetakaiohicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanetaKaiohIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caminhoserpenteprogressbar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CaminhoSerpenteProgressBar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escotilhacamarapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EscotilhaCamaraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiauraicon-kiaurapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KiAuraIcon &amp; KiAuraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kintounicon-kintounpainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KintoUnIcon &amp; KintoUnPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-diretrizes-de-protecao-de-layout-acessibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ 6. Diretrizes de Proteção de Layout &amp; Acessibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-manifesto-de-identidade-seriedade-esportiva-vs-tematica-saiyajin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fisiologia-e-ergonomia-sempre-em-primeiro-lugar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fisiologia e Ergonomia Sempre em Primeiro Lugar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-lore-canonica-como-metafora-de-alta-tecnologia-fisiologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Lore Canônica como Metáfora de Alta Tecnologia &amp; Fisiologia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tom-de-voz-marcial-e-estoico-anti-caricatura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tom de Voz Marcial e Estoico (Anti-Caricatura)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-estetica-visual-dark-tech-esportivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Estética Visual "Dark Tech Esportivo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Sistema Ki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📸 Social & Cards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏋️ Catálogo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-principios-fundamentais-de-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏛️ 1. Princípios Fundamentais de UX
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏛️ 1. Princípios Fundamentais de UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ergonomia-sob-fadiga-fisica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Ergonomia sob Fadiga Física
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fluxo-de-input-de-cargas-ultrarrapido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Fluxo de Input de Cargas Ultrarrápido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-feedback-haptico-e-sonoro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Feedback Háptico e Sonoro
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-design-tokens-cores-appcolors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 2. Design Tokens &amp; Cores (AppColors)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎨 2. Design Tokens &amp; Cores (AppColors)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paleta-dos-patamares-de-poder-transformacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paleta dos Patamares de Poder (Transformações)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-anatomia-visual-dos-componentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📱 3. Anatomia Visual dos Componentes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📱 3. Anatomia Visual dos Componentes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-serie-row-serierowwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Série Row (SerieRowWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-escotilha-da-camara-de-regeneracao-cronometro-de-descanso-cronometrowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (CronometroWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-linha-do-tempo-identificacao-de-prs-rotulos-de-series-historicoscreen-historicocardwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Linha do Tempo, Identificação de PRs &amp; Rótulos de Séries (HistoricoScreen &amp; HistoricoCardWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-modal-de-edicao-de-sessoes-salvas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Modal de Edição de Sessões Salvas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-miniaturas-fixas-execucao-sob-demanda-gestao-de-exercicios-personalizados-exerciciothumbnailwidget-seletormidiacatalogomodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Miniaturas Fixas, Execução Sob Demanda &amp; Gestão de Exercícios Personalizados (ExercicioThumbnailWidget &amp; SeletorMidiaCatalogoModal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-mapa-de-calor-muscular-frontal-dorsal-scouteranatomicowidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Mapa de Calor Muscular Frontal &amp; Dorsal (ScouterAnatomicoWidget)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estudio-de-compartilhamento-social-ux-imersiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📸 4. Estúdio de Compartilhamento Social (UX Imersiva)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📸 4. Estúdio de Compartilhamento Social (UX Imersiva)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#as-3-solucoes-de-presets-graficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        As 3 Soluções de Presets Gráficos:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="As 3 Soluções de Presets Gráficos:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-slim-classico-espelho-de-musculacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Slim Clássico (Espelho de Musculação)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-scouter-hud-telemetria-saiyajin-stealth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Scouter HUD (Telemetria Saiyajin Stealth)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rodape-minimalista-ancorado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Rodapé Minimalista (Ancorado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipografia-de-alto-contraste-nativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipografia de Alto Contraste Nativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-componentes-vetoriais-proprietarios-custompainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔮 5. Componentes Vetoriais Proprietários (CustomPainter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔮 5. Componentes Vetoriais Proprietários (CustomPainter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dragonballicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonBallIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoutericon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScouterIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dragonradaricon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DragonRadarIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capsuleicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CapsuleIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planetakaiohicon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PlanetaKaiohIcon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caminhoserpenteprogressbar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CaminhoSerpenteProgressBar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escotilhacamarapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EscotilhaCamaraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiauraicon-kiaurapainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KiAuraIcon &amp; KiAuraPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kintounicon-kintounpainter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KintoUnIcon &amp; KintoUnPainter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-diretrizes-de-protecao-de-layout-acessibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ 6. Diretrizes de Proteção de Layout &amp; Acessibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-manifesto-de-identidade-seriedade-esportiva-vs-tematica-saiyajin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fisiologia-e-ergonomia-sempre-em-primeiro-lugar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fisiologia e Ergonomia Sempre em Primeiro Lugar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-lore-canonica-como-metafora-de-alta-tecnologia-fisiologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Lore Canônica como Metáfora de Alta Tecnologia &amp; Fisiologia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tom-de-voz-marcial-e-estoico-anti-caricatura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tom de Voz Marcial e Estoico (Anti-Caricatura)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-estetica-visual-dark-tech-esportivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Estética Visual "Dark Tech Esportivo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Design System, Ergonomia & UI/UX</h1>
+</p>
+
+<p>O <strong>Gym Saiyajin</strong> foi projetado sob uma premissa fundamental de design esportivo mobile: <strong>a interface precisa funcionar com perfeição e clareza no ambiente real da academia</strong>, onde o atleta está ofegante, com as mãos suadas, sob fadiga muscular intensa, luzes adversas e com pouco tempo para interações lentas ou botões diminutos.</p>
+<p>A identidade visual combina o rigor e a sobriedade dos principais aplicativos de alto rendimento (<em>Hevy</em>, <em>Nike Training Club</em>, <em>Adidas Running</em>) com a temática épica e motivacional de <strong>Dragon Ball Z</strong>, evitando qualquer tom infantilizado em favor de uma estética dark minimalista, nobre e funcional.</p>
+<hr />
+<h2 id="1-principios-fundamentais-de-ux">🏛️ 1. Princípios Fundamentais de UX</h2>
+<pre class="mermaid"><code>graph TD
+    A[Princípios de UX] --&gt; B[Ergonomia sob Fadiga]
+    A --&gt; C[Velocidade de Input]
+    A --&gt; D[Proteção contra Erros]
+    A --&gt; E[Feedback Háptico &amp; Visual]
+
+    B --&gt; B1[Alvos de toque mínimos de 44-48dp]
+    B --&gt; B2[Zero rolagem desnecessária no treino]
+
+    C --&gt; C1[Fluxo contínuo de teclado Next -&gt; Done]
+    C --&gt; C2[Preenchimento em 1 toque da Carga Anterior]
+
+    D --&gt; D1[Confirmação em encerramento com pendências]
+    D --&gt; D2[Swipe protegido para deletar séries]
+
+    E --&gt; E1[Vibração háptica de seleção e impacto]
+    E --&gt; E2[Micro-badges de PRs em tempo real]</code></pre>
+<h3 id="1-ergonomia-sob-fadiga-fisica">1. Ergonomia sob Fadiga Física</h3>
+<ul>
+<li><strong>Zonas de Toque Amplas</strong>: Todos os botões primários e seletores respeitam o padrão mínimo de <strong>44×44 dp a 48×48 dp</strong>, garantindo que o dedo acerte o alvo mesmo com tremor muscular pós-série.</li>
+<li><strong>Leitura Instantânea em Espelho</strong>: Valores numéricos essenciais (carga, repetições, cronômetro de descanso) utilizam tipografia de alto contraste com peso <code>w800</code> a <code>w900</code>, permitindo que o atleta leia a tela a um braço de distância enquanto descansa no banco.</li>
+</ul>
+<h3 id="2-fluxo-de-input-de-cargas-ultrarrapido">2. Fluxo de Input de Cargas Ultrarrápido</h3>
+<ul>
+<li><strong>Navegação Contínua de Foco</strong>: O campo de <strong>Peso</strong> possui ação de teclado <code>TextInputAction.next</code>, pulando o cursor imediatamente para o campo de <strong>Reps</strong>; o campo de Reps possui ação <code>TextInputAction.done</code>, que valida e conclui a série imediatamente (<em>check</em>), mantendo a fluidez sem exigir toques manuais adicionais.</li>
+<li><strong>Estabilidade de Foco Blindada</strong>: Os controllers de texto preservam o foco e o estado interno contra rebuilds automáticos provocados por ticks periódicos do cronômetro regressivo.</li>
+<li><strong>Sugestão de Carga Anterior (Progressive Overload)</strong>: Ao iniciar qualquer exercício, os valores da última sessão concluída são apresentados suavemente como <code>hintText</code> e em uma linha discreta de apoio. Caso o atleta toque no botão de check com os inputs vazios, o app preenche automaticamente a série com a carga anterior.</li>
+</ul>
+<h3 id="3-feedback-haptico-e-sonoro">3. Feedback Háptico e Sonoro</h3>
+<ul>
+<li><strong>Impacto Tátil (<code>vibration</code>)</strong>: Ações determinantes (concluir série, bater recorde, alternar entre modos, disparar o cronômetro) ativam feedbacks hápticos nativos (<code>HapticFeedback.selectionClick</code>, <code>mediumImpact</code> e <code>heavyImpact</code>).</li>
+<li><strong>Sinalização Sonora de Fim de Descanso</strong>: Alerta nativo de alarme via <code>flutter_ringtone_player</code> com cancelamento atômico, garantindo que o atleta saiba exatamente a hora de iniciar a próxima série mesmo com fones de ouvido ou com o celular no chão.</li>
+</ul>
+<hr />
+<h2 id="2-design-tokens-cores-appcolors">🎨 2. Design Tokens &amp; Cores (<code>AppColors</code>)</h2>
+<p>A paleta é construída sobre uma base <strong>OLED True Dark</strong>, minimizando o consumo de bateria durante treinos longos e eliminando o ofuscamento visual em ambientes escuros de academia:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                      PALETA PRINCIPAL                       │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├───────────────────┬─────────────────────────────────────────┤
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ Background        │ #000000 (Preto profundo OLED)           │
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│ Surface           │ #1E1E1E (Elevação de cards e painéis)   │
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│ Card Border       │ #2C2C2C (Bordas sutis com 1px)          │
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ Primary (Saiyajin)│ #FF8C00 (Laranja Ki vibrante)           │
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│ Accent (Ouro SSJ) │ #FFD700 (Dourado Super Saiyajin / PRs)  │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│ Text Light        │ #FFFFFF (Texto primário de alta leitura)│
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ Text Dimmed       │ #AAAAAA (Rótulos e legendas auxiliares) │
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│ Text Muted        │ #757575 (Textos terciários/desativados) │
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│ Success           │ #00E676 (Verde de conclusão)            │
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ Danger            │ #FF4444 (Vermelho de perigo/exclusão)   │
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>└───────────────────┴─────────────────────────────────────────┘
+</span></code></pre></div>
+<h3 id="paleta-dos-patamares-de-poder-transformacoes">Paleta dos Patamares de Poder (Transformações)</h3>
+<p>Cada nível de Ki possui uma identidade cromática exclusiva aplicada em auras, badges, bordas e na lente do Scouter:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Patamar</th>
+<th style="text-align: left;">Cor Principal</th>
+<th style="text-align: left;">Hex</th>
+<th style="text-align: left;">Lente do Scouter</th>
+<th style="text-align: left;">Significado Semiótico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Classe Baixa</strong></td>
+<td style="text-align: left;">Cinza Neutro</td>
+<td style="text-align: left;"><code>#757575</code></td>
+<td style="text-align: left;"><code>#757575</code></td>
+<td style="text-align: left;">O guerreiro no início da sua escalada de força.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Guerreiro Z</strong></td>
+<td style="text-align: left;">Verde Namekusei</td>
+<td style="text-align: left;"><code>#4CAF50</code></td>
+<td style="text-align: left;"><code>#4CAF50</code></td>
+<td style="text-align: left;">Vitalidade, consistência e disciplina em evolução.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Elite Saiyajin</strong></td>
+<td style="text-align: left;">Azul Príncipe</td>
+<td style="text-align: left;"><code>#2196F3</code></td>
+<td style="text-align: left;"><code>#2196F3</code></td>
+<td style="text-align: left;">Foco inabalável e intensidade de guerreiro nato.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin</strong></td>
+<td style="text-align: left;">Ouro Clássico</td>
+<td style="text-align: left;"><code>#FFD700</code></td>
+<td style="text-align: left;"><code>#FFD700</code></td>
+<td style="text-align: left;">A explosão lendária de força e quebra de barreiras.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin 2</strong></td>
+<td style="text-align: left;">Âmbar Elétrico</td>
+<td style="text-align: left;"><code>#FF9E00</code></td>
+<td style="text-align: left;"><code>#00E5FF</code> (Ciano)</td>
+<td style="text-align: left;">Borda âmbar com lente ciano em alusão aos raios bioelétricos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Super Saiyajin 3</strong></td>
+<td style="text-align: left;">Laranja Vulcânico</td>
+<td style="text-align: left;"><code>#FF5722</code></td>
+<td style="text-align: left;"><code>#FF5722</code></td>
+<td style="text-align: left;">Potência máxima que estremece a estrutura física.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instinto Superior</strong></td>
+<td style="text-align: left;">Prata Celestial</td>
+<td style="text-align: left;"><code>#E0E6ED</code></td>
+<td style="text-align: left;"><code>#80D8FF</code></td>
+<td style="text-align: left;">Maestria técnica e estado divino de reflexos puros.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-anatomia-visual-dos-componentes">📱 3. Anatomia Visual dos Componentes</h2>
+<h3 id="1-serie-row-serierowwidget">1. Série Row (<code>SerieRowWidget</code>)</h3>
+<p align="center">
+  <img src="images/series_input.png" width="45%" alt="Anatomia Simétrica das Séries e Ergonomia sob Fadiga" />
+</p>
+
+<p>A linha de execução da série é a unidade mais utilizada do aplicativo, demandando simetria milimétrica:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────┐
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│  ┌─────┐   PESO (KG)        REPS                            │
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│  │PR ⚡│   ┌────────────┐   ┌────────────┐   ┌────────────┐ │
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  │ (1) │   │     80     │   │     10     │   │     ✓      │ │
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  └─────┘   └────────────┘   └────────────┘   └────────────┘ │
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  [Stack]   [Input Núm.]     [Input Núm.]     [Botão Check]  │
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└─────────────────────────────────────────────────────────────┘
+</span></code></pre></div>
+<ul>
+<li><strong>Micro-Badge de PR em <code>Stack(clipBehavior: Clip.none)</code></strong>:</li>
+<li>Posicionado <code>top: -8</code> diretamente acima do círculo da série.</li>
+<li><strong>Zero impacto na largura horizontal</strong>: não empurra nem espreme os campos de Peso e Reps em celulares estreitos (360dp).</li>
+<li><strong>Visual Dark Outline</strong>: Mantém fundo escuro <code>#14161E</code> com borda fina dourada e sombra preta. Quando o círculo da série é concluído e ganha preenchimento amarelo brilhante, o micro-badge escuro por cima cria um <strong>contraste de alto relevo nítido e elegante</strong>, sem se fundir na cor de fundo.</li>
+<li><strong>Ícone Vetorial Nativo</strong>: Exibe a mini Esfera do Dragão de 1 estrela <code>DragonBallIcon(size: 10, stars: 1)</code> na série ativa que quebrou recorde.</li>
+<li><strong>Classificação Biomecânica Interativa (<code>TipoSerie</code>)</strong>:</li>
+<li>Toque curto no indicador circular alterna ciclicamente entre <strong>Série de Trabalho</strong> (<code>N</code> / numeração sequencial <code>1, 2, 3...</code>), <strong>Aquecimento</strong> (<code>W</code> / ícone vetorial <code>KintoUnIcon</code> dourado que blinda o 1RM e impede falsos PRs), <strong>Drop-set</strong> (<code>D</code> laranja Saiyajin) e <strong>Falha Total</strong> (<code>F</code> rubro Kaioken, atribuindo automaticamente <code>RIR 0 • RPE 10</code>).</li>
+<li>Toque longo abre um modal descritivo com a função fisiológica de cada tipo de série.</li>
+<li><strong>Seletor Retrátil de Esforço (<code>RIR / RPE</code>)</strong>:</li>
+<li>Pill compacto na base da série que expande horizontalmente os chips de <em>Reps in Reserve</em> (<code>RIR 0</code> a <code>RIR 4+</code> / <code>RPE 10</code> a <code>RPE 6</code>) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.</li>
+</ul>
+<h3 id="2-escotilha-da-camara-de-regeneracao-cronometro-de-descanso-cronometrowidget">2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (<code>CronometroWidget</code>)</h3>
+<p align="center">
+  <img src="images/demo_descanso_camara.gif" width="45%" alt="Demonstração da Câmara de Regeneração e Cronômetro de Descanso" />
+</p>
+
+<ul>
+<li><strong>Estética de Escotilha Industrial de Namekusei</strong>:</li>
+<li><strong>Aro Metálico de Titânio</strong>: Moldura circular escura chanfrada em 3D com <strong>8 rebites prateados chanfrados</strong> simétricos com fenda e ponto de reflexo.</li>
+<li><strong>Anel de Fluido Bioenergético Saiyajin</strong>: Arco de progresso em gradiente de <strong>Ouro Super Saiyajin e Laranja Ki</strong> (<code>#FFD700</code> <span class="arithmatex">\(\to\)</span> <code>#FF8C00</code>), com halo luminescente (<em>glow</em>) ativo enquanto o cronômetro roda.</li>
+<li><strong>Efervescência &amp; Micro-Bolhas Animadas</strong>: Bolhas de oxigênio procedurais subindo continuamente pelo líquido com oscilação senoidal lateral. A animação é executada <strong>exclusivamente enquanto o timer está contando</strong>, economizando 100% de bateria e CPU em repouso ou pausa.</li>
+<li><strong>Silhueta Submersa da Máscara</strong>: Silhueta discreta em tom âmbar da máscara respiratória com grelha e mangueiras sanfonadas ao fundo da câmara, conferindo profundidade sem prejudicar a leitura dos dígitos.</li>
+<li><strong>Sincronização Matemática Exata (Eliminação do Delay de 1s)</strong>:</li>
+<li>Eliminação do truncamento de <code>Duration.inSeconds</code> via cálculo com teto (<code>ceil</code>), assegurando que <span class="arithmatex">\(\lceil \text{tempoRestante} \rceil + \lfloor \text{tempoDecorrido} \rfloor = \text{tempoTotal}\)</span>.</li>
+<li>Ao iniciar um descanso de 120s (<code>02:00</code>), ele permanece em <code>02:00</code> pelo primeiro segundo completo e desce em sincronia milissegundo a milissegundo com o contador de descanso acumulado.</li>
+<li><strong>Telemetria Médica &amp; Dígitos</strong>:</li>
+<li>Chip superior de status dinâmico: <code>REGENERAÇÃO</code> com LED pulsante dourado quando ativo, <code>PAUSADO</code> em âmbar e <code>CÂMARA DE CURA</code> em repouso.</li>
+<li>Dígitos numéricos em grande escala (<code>38dp</code>, peso 900) com sombra luminescente para leitura imediata no espelho.</li>
+<li><strong>Modal de Ajuste de Tempo</strong>:</li>
+<li>Botões satélites <code>+/- 15s</code> para correções rápidas sem digitação.</li>
+<li>Grade simétrica 3×2 de atalhos rápidos (<code>00:45</code>, <code>1:00</code>, <code>1:30</code>, <code>2:00</code>, <code>3:00</code>, <code>4:00</code>).</li>
+</ul>
+<h3 id="3-linha-do-tempo-identificacao-de-prs-rotulos-de-series-historicoscreen-historicocardwidget">3. Linha do Tempo, Identificação de PRs &amp; Rótulos de Séries (<code>HistoricoScreen</code> &amp; <code>HistoricoCardWidget</code>)</h3>
+<ul>
+<li><strong>Alinhamento em Linha Única Fluida</strong>:</li>
+<li>Reúne em um único <code>Wrap</code> horizontal: <strong>Data do Treino</strong> (<code>21/09/2026</code>), <strong>Tag de Divisão/Nome</strong> (<code>[ COSTAS E BÍCEPS ]</code>) com fundo escuro e borda âmbar, e o <strong>Badge Dourado de PRs</strong> (<code>[ ✪ 2 PRs ]</code>) estilizado com a Esfera do Dragão.</li>
+<li>Alinhamento à direita exclusivo para o <strong>Menu Popup Unificado (<code>⋮</code>)</strong>, eliminando múltiplos botões avulsos na tela e reduzindo drasticamente a sobrecarga cognitiva.</li>
+<li><strong>Transição Inteligente do Badge <code>[🟠 PR]</code> no Card de Exercício</strong>:</li>
+<li><strong>Card Recolhido</strong>: Exibe o badge <code>[🟠 PR]</code> (<code>DragonBallIcon(size: 11, stars: 1)</code>) no subtítulo do cabeçalho do exercício ao lado de <code>[GRUPO] X SÉRIES</code>, permitindo escanear instantaneamente quais exercícios bateram recorde naquela sessão sem precisar abrir todos os cards.</li>
+<li><strong>Card Expandido</strong>: O badge do cabeçalho desaparece automaticamente e o <code>[🟠 PR]</code> é exibido <strong>exclusivamente na linha da série ápice</strong> vencedora daquele exercício, evitando redundância visual de dois badges próximos.</li>
+<li><strong>Padronização de Rótulos de Séries (Estilo Hevy)</strong>:</li>
+<li>Tanto no Histórico (<code>HistoricoCardWidget</code>) quanto nos Exercícios Concluídos da Tela de Treino (<code>TreinoScreen</code>), cada linha exibe seu rótulo descritivo real (<code>Serie.obterRotuloHistorico</code>) sincronizado com o indicador circular:<ul>
+<li><code>(☁️) Aquecimento</code> para séries preparatórias;</li>
+<li><code>(1) Série 1</code>, <code>(2) Série 2</code>, ... apenas para séries de trabalho (<code>normal</code>);</li>
+<li><code>(D) Drop-set</code> e <code>(F) Falha</code> para séries de intensidade avançada.</li>
+</ul>
+</li>
+<li><strong>Nó Uniforme de Calendário</strong>:</li>
+<li>Nó circular com <code>Icons.calendar_month</code> em laranja Saiyajin com sombra e borda suave em todos os marcos da timeline.</li>
+<li><strong>Métricas de Sessão em Caixa Alta</strong>:</li>
+<li>Tipografia de impacto esportivo e espaçamento balanceado:
+    <code>6 EXERCÍCIOS • 23 SÉRIES • VOLUME: 8224 kg • 1 min • 1 min</code></li>
+</ul>
+<h3 id="4-modal-de-edicao-de-sessoes-salvas">4. Modal de Edição de Sessões Salvas</h3>
+<ul>
+<li><strong>Campos Editáveis</strong>:</li>
+<li>Data da sessão (com seletor nativo <code>DatePicker</code>).</li>
+<li>Nome / Divisão do treino com campo de texto e sugestões rápidas.</li>
+<li>Duração total do treino e tempo acumulado de descanso.</li>
+<li><strong>Steppers Ergonômicos (+/- 5 min)</strong>:</li>
+<li>Botões dedicados <code>[-] 5 min</code> e <code>[+] 5 min</code> com alvos de toque generosos (mínimo de 44dp), alinhados à mesma convenção do cronômetro da tela de treino.</li>
+<li><strong>Salvaguarda Fisiológica</strong>:</li>
+<li>O sistema impede matematicamente que o tempo de descanso ultrapasse a duração total do treino (<code>descanso &lt;= duracao</code>), prevenindo inconsistências em relatórios analíticos e nos cálculos do Caminho da Serpente.</li>
+</ul>
+<h3 id="5-miniaturas-fixas-execucao-sob-demanda-gestao-de-exercicios-personalizados-exerciciothumbnailwidget-seletormidiacatalogomodal">5. Miniaturas Fixas, Execução Sob Demanda &amp; Gestão de Exercícios Personalizados (<code>ExercicioThumbnailWidget</code> &amp; <code>SeletorMidiaCatalogoModal</code>)</h3>
+<ul>
+<li><strong>Estabilidade de Layout no Cabeçalho do Exercício Ativo</strong>:</li>
+<li>A miniatura (<code>52×52 dp</code>) permanece ancorada na lateral esquerda do card do exercício ativo na <code>TreinoScreen</code>, garantindo posição fixa independentemente de o nome do exercício ocupar 1 ou 2 linhas.</li>
+<li>O indicador circular de <em>play</em> integrado sobre o canto inferior direito da miniatura elimina a necessidade de botões redundantes de texto (<em>"Ver Execução"</em>), preservando a limpeza visual.</li>
+<li><strong>Execução Animada Sob Demanda (<code>ExercicioDetalheModal</code>)</strong>:</li>
+<li>Ao tocar em qualquer miniatura (na Tela de Treino, na fila de próximos, no Gerenciador de Fichas, no Histórico, no Registro de Poder, no Gráfico de Progressão ou no seletor), abre-se o modal com o <strong>GIF animado (<code>180×180</code>)</strong>, equipamento, músculo alvo, músculos sinergistas e instruções técnicas passo a passo em português.</li>
+<li><strong>Gráfico de Progressão de Carga (<code>ProgressoGraficoWidget</code>)</strong>:</li>
+<li><strong>Espaçamento Inteligente no Eixo X</strong>: Limita dinamicamente a exibição a no máximo <strong>5 datas uniformemente espaçadas</strong> (garantindo sempre a primeira e a última sessão), prevenindo sobreposição visual independentemente da quantidade de treinos acumulados.</li>
+<li><strong>Tooltip Interativo Completo</strong>: Ao tocar sobre qualquer ponto da curva, exibe o balão com a <strong>carga máxima e repetições</strong> (<code>110 kg × 8</code>) e a <strong>data completa</strong> (<code>30/09/2026</code>).</li>
+<li><strong>Filtro Rápido de Janela Temporal</strong>: Alternância instantânea entre <code>ÚLTIMOS 10</code>, <code>3 MESES</code> e <code>TUDO</code>.</li>
+<li><strong>Formulário Simétrico de Exercício Personalizado (<code>SelecaoExercicioModal</code>)</strong>:</li>
+<li><strong>Grid 4×2 de Grupos Musculares</strong>: Os 8 grupos (<code>PEITO</code>, <code>COSTAS</code>, <code>PERNAS</code>, <code>OMBROS</code>, <code>BÍCEPS</code>, <code>TRÍCEPS</code>, <code>ABDÔMEN</code>, <code>OUTROS</code>) são distribuídos em 2 linhas simétricas de 4 colunas (<code>Expanded</code>), evitando quebras irregulares de <code>Wrap</code>.</li>
+<li><strong>Seção de Mídia Unificada</strong>: Permite vincular qualquer uma das <strong>106 animações 100% offline do catálogo</strong> (<code>SeletorMidiaCatalogoModal</code>) ou enviar <strong>foto/GIF próprio da Galeria ou Câmera</strong> por meio de 3 botões proporcionais lado a lado (<code>Catálogo</code>, <code>Galeria</code>, <code>Câmera</code>), além de suportar edição em cascata, exclusão e mesclagem de histórico (<code>AssociarExercicioModal</code>).</li>
+</ul>
+<h3 id="6-mapa-de-calor-muscular-frontal-dorsal-scouteranatomicowidget">6. Mapa de Calor Muscular Frontal &amp; Dorsal (<code>ScouterAnatomicoWidget</code>)</h3>
+<ul>
+<li><strong>Cabeçalho Direto &amp; Janela Temporal (<code>7 DIAS</code> / <code>30 DIAS</code>)</strong>:</li>
+<li>Título em caixa alta <strong><code>MAPA DE CALOR MUSCULAR</code></strong> acompanhado do seletor de período (<code>7 DIAS</code> ou <code>30 DIAS</code>), ajustando proporcionalmente as metas fisiológicas de séries semanais/mensais.</li>
+<li><strong>Renderização SVG em Dupla Camada para Nitidez de Contorno (<code>muscle_mapper</code>)</strong>:</li>
+<li><strong>Camada 1 (<code>DarkThemeAnatomyProvider</code>)</strong>: Colore os grupos musculares ativos e renderiza os músculos em repouso em cinza-azulado visível (<code>#2D3748</code>) sobre o fundo escuro do card.</li>
+<li><strong>Camada 2 (<code>_OverlayLinhasAnatomicas</code>)</strong>: Sobrepõe exclusivamente os contornos anatômicos internos (<code>fill-opacity:0</code>) normalizando <code>stroke-width="3.49"</code> (Frontal) e <code>stroke-width="3.55"</code> (Dorsal) para <code>2.2</code> em branco/prata translúcido (<code>stroke-opacity="0.45"</code>), garantindo que todas as divisões musculares permaneçam nítidas em ambas as vistas mesmo quando múltiplos grupos adjacentes estão iluminados em amarelo/ciano/vermelho.</li>
+<li><strong>Notação Limpa de Séries</strong>:</li>
+<li>Legenda (<code>0</code>, <code>1-5</code>, <code>6-12</code>, <code>13+</code>) e chips de telemetria sem o sufixo <code>"s"</code>, eliminando qualquer ambiguidade visual com a unidade de tempo (<em>segundos</em>).</li>
+</ul>
+<hr />
+<h2 id="4-estudio-de-compartilhamento-social-ux-imersiva">📸 4. Estúdio de Compartilhamento Social (UX Imersiva)</h2>
+<p>O gerador de cartões sociais foi construído com arquitetura de estúdio em tela cheia (<code>Dialog.fullscreen</code>), eliminando qualquer sensação de caixa flutuante espremida:</p>
+<pre class="mermaid"><code>graph TD
+    A[Estúdio de Compartilhamento] --&gt; B[Header Fixo]
+    A --&gt; C[Área Central Flexível FittedBox]
+    A --&gt; D[Dock Inferior de Controles SafeArea]
+
+    B --&gt; B1[Fechar X]
+    B --&gt; B2[COMPARTILHE SEU PROGRESSO]
+    B --&gt; B3[Botão COMPARTILHAR Dourado]
+
+    C --&gt; C1[Card Stories 9:16 ou Feed 1:1]
+    C --&gt; C2[Adaptação dinâmica sem cortes em qualquer tela]
+
+    D --&gt; D1[Linha 1: Seletor de Presets com Setas, Indicador de Dots e Swipe]
+    D --&gt; D2[Linha 2: Seletor de Proporção Stories vs Feed 44dp]
+    D --&gt; D3[Linha 3: Ações de Foto Câmera, Galeria, Remover 46dp]
+    D --&gt; D4[Linha 4: Campo @handle 46dp com botão de limpar e Done]</code></pre>
+<h3 id="as-3-solucoes-de-presets-graficos">As 3 Soluções de Presets Gráficos:</h3>
+<h4 id="1-slim-classico-espelho-de-musculacao">1. Slim Clássico (Espelho de Musculação)</h4>
+<ul>
+<li><strong>Desobstrução Total do Físico</strong>: Apenas o badge da divisão fica centralizado no topo. As métricas esportivas (<code>Duração</code>, <code>Volume</code>, <code>Séries</code>) ficam na base, logo acima da marca <code>GYM SAIYAJIN</code> e da data/@handle.</li>
+<li><strong>PRs Contextuais Sem Ruído Visual</strong>: Quando há recordes pessoais batidos na sessão, uma 4ª métrica <code>PR</code> / <code>PRs</code> (singular ou plural) aparece na base, usando exatamente o mesmo componente tipográfico das outras métricas — sem ícones, sem elementos decorativos extras. Filosofia: a informação existe, mas não compete com a foto.</li>
+<li><strong>Benefício de UX</strong>: Deixa <strong>100% da área da cabeça, rosto e peitoral desimpedidos</strong>, valorizando a foto real tirada no espelho.</li>
+</ul>
+<h4 id="2-scouter-hud-telemetria-saiyajin-stealth">2. Scouter HUD (Telemetria Saiyajin Stealth)</h4>
+<ul>
+<li><strong>Topo</strong>: Divisão do treino no canto esquerdo e Carimbo Scouter holográfico no canto direito (<code>+X Ki</code> com lente vetorial <code>ScouterIcon</code> reativa à transformação e patamar).</li>
+<li><strong>Moldura Neutra &amp; Foco na Foto</strong>: Tanto o carimbo quanto o dock inferior utilizam bordas neutras ultrafinas (<code>Colors.white18</code>) e vidro fumê translúcido, eliminando contornos neon invasivos para que a foto do físico seja o centro das atenções.</li>
+<li><strong>Dock de Telemetria Unificada na Base</strong>: Um único container translúcido unindo métricas, contagem contextual de PRs obtidos na sessão (<code>DragonBallIcon</code> com <code>1 PR</code> / <code>2 PRs</code>), divisor fino e a marca com data/@handle.</li>
+</ul>
+<h4 id="3-rodape-minimalista-ancorado">3. Rodapé Minimalista (Ancorado)</h4>
+<ul>
+<li><strong>Topo e Centro 100% Limpos</strong>: Toda a informação é consolidada em um dock translúcido ancorado na base com cantos arredondados, margens seguras para Instagram Stories e tipografia em branco puro com sombra (evitando blocos de cor saturada concorrentes).</li>
+<li><strong>Suporte a PRs e Badge Neutro</strong>: Exibe a divisão do treino em branco puro, o patamar em chip fosco discreto e a contagem contextual de PRs.</li>
+</ul>
+<h4 id="tipografia-de-alto-contraste-nativa">Tipografia de Alto Contraste Nativa</h4>
+<ul>
+<li>Padronizada em <strong>branco puro (<code>Colors.white</code>)</strong> com sombra multinível preta quádrupla (<code>Shadow</code>), garantindo leitura cristalina em qualquer foto (seja com iluminação clara ou sombra profunda).</li>
+</ul>
+<hr />
+<h2 id="5-componentes-vetoriais-proprietarios-custompainter">🔮 5. Componentes Vetoriais Proprietários (CustomPainter)</h2>
+<p>Substituímos o uso de emojis convencionais por arte vetorial matemática renderizada via código direto no Canvas:</p>
+<h3 id="dragonballicon"><code>DragonBallIcon</code></h3>
+<p align="center">
+  <img src="images/icons/preview_dragon_ball_1star.png" width="85" alt="Dragon Ball 1 Estrela" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_ball_4stars.png" width="85" alt="Dragon Ball 4 Estrelas (Goku)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_ball_7stars.png" width="85" alt="Dragon Ball 7 Estrelas" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Esfera com gradiente radial esférico âmbar/laranja profundo (<code>#FFB703</code> <span class="arithmatex">\(\to\)</span> <code>#FB8500</code>).</li>
+<li>Brilho especular translúcido simulando reflexo de cristal/acrílico.</li>
+<li>Estrelas vermelhas de 5 pontas desenhadas matematicamente com funções trigonométricas (<span class="arithmatex">\(\cos/\sin\)</span> a cada <span class="arithmatex">\(72^\circ\)</span>).</li>
+<li>Suporte procedural de <strong>1 a 7 estrelas</strong>, distribuídas dinamicamente em anel e centro.</li>
+<li><strong>Papel na Interface</strong>: Marcador de prestígio de Recordes Pessoais (PRs) no card social e no Quadro de Recordes.</li>
+</ul>
+<h3 id="scoutericon"><code>ScouterIcon</code></h3>
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Haste auricular ergonômica com pinos e juntas mecânicas.</li>
+<li>Lente translúcida frontal chanfrada em acrílico com cores reativas à transformação ativa.</li>
+<li>Retículo de mira/alvo interno digital e linhas de telemetria estilizadas.</li>
+<li><strong>Papel na Interface</strong>: Identificador de telemetria no modo Scouter HUD e ícone de Ki na finalização do treino.</li>
+</ul>
+<h3 id="dragonradaricon"><code>DragonRadarIcon</code></h3>
+<p align="center">
+  <img src="images/icons/preview_dragon_radar_1dot.png" width="95" alt="Radar com 1 Esfera" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_radar_3dots.png" width="95" alt="Radar com 3 Esferas" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_dragon_radar_7dots.png" width="95" alt="Radar Completo (7 Esferas)" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Gabinete metálico circular com bisel prateado chanfrado e botão de cronômetro superior (dial).</li>
+<li>Visor CRT/LCD verde esmeralda com grade ortogonal de coordenadas e arco especular de vidro curvo.</li>
+<li>Cursor central com triângulo rubi direcionador e retículo em cruz amarelo.</li>
+<li>Esferas do Dragão luminosas dinâmicas rastreadas na tela (<code>dots</code>, de 0 a 7) com brilho âmbar radial.</li>
+<li><strong>Papel na Interface</strong>: Gamificação da frequência semanal no card de Meta Semanal (cada dia treinado na semana acende uma esfera no radar).</li>
+</ul>
+<h3 id="capsuleicon"><code>CapsuleIcon</code></h3>
+<p align="center">
+  <img src="images/icons/preview_capsule_blue.png" width="80" alt="Cápsula Hoi-Poi Azul (Capsule Corp)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_orange.png" width="80" alt="Cápsula Hoi-Poi Laranja (Saiyajin)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_green.png" width="80" alt="Cápsula Hoi-Poi Verde" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_capsule_red.png" width="80" alt="Cápsula Hoi-Poi Vermelha" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.</li>
+<li>Botão metálico de acionamento no topo (<em>push trigger</em> com haste cilíndrica e anel de retenção).</li>
+<li>Faixas coloridas vibrantes (com suporte a azul clássico Capsule Corp, laranja Saiyajin, verde e vermelho).</li>
+<li>Faixa central preta técnica com o logotipo circular canônico da Capsule Corp (monograma em "C" concêntrico).</li>
+<li>Orientação isométrica dinâmica (~35°) e iluminação 3D longitudinal com sombra projetada.</li>
+<li><strong>Papel na Interface</strong>: Representação oficial do card de Composição Corporal e Medidas (IMC e Percentual de Gordura) no Dashboard de Progresso.</li>
+</ul>
+<h3 id="planetakaiohicon"><code>PlanetaKaiohIcon</code></h3>
+<p align="center">
+  <img src="images/icons/preview_planeta_kaioh.png" width="115" alt="Planeta do Sr. Kaioh" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Mini-planeta esférico cel-shaded com gradiente radial verde grama com iluminação volumétrica 3D (<code>#7CB342</code> <span class="arithmatex">\(\to\)</span> <code>#33691E</code>).</li>
+<li>Estrada anelar circular branca com perspectiva curvada em torno do equador do planeta.</li>
+<li>O lendário carro conversível vintage esportivo vermelho do Sr. Kaioh estacionado sobre a pista.</li>
+<li>Casa principal esférica em domo bege com telhado marrom tradicional e anexo/garagem lateral.</li>
+<li>Copas densas de árvores arredondadas distribuídas na borda e atmosfera sutil translúcida.</li>
+<li><strong>Papel na Interface</strong>: Destino épico no final do Caminho da Serpente em <code>CaminhoSerpenteProgressBar</code>.</li>
+</ul>
+<h3 id="caminhoserpenteprogressbar"><code>CaminhoSerpenteProgressBar</code></h3>
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Curva senoidal matemática contínua e suave (<span class="arithmatex">\(y = \text{midY} - A \cdot \sin(t \cdot 2.5 \cdot 2\pi)\)</span>) simulando a serpente que serpenteia pelo Outro Mundo.</li>
+<li>Fundo com nuvens celestiais douradas e drop shadow conferindo profundidade espacial.</li>
+<li>Ponto de Ki dinâmico do guerreiro com aura brilhante proporcional à porcentagem percorrida rumo a 1.000.000 km.</li>
+<li>Ponto de chegada ornamentado diretamente com o <code>PlanetaKaiohPainter</code>.</li>
+<li>Selo marcial oficial do Senhor Kaioh (<strong>界王</strong>) em tipografia destacada com aro dourado no topo do card.</li>
+</ul>
+<h3 id="escotilhacamarapainter"><code>EscotilhaCamaraPainter</code></h3>
+<p align="center">
+  <img src="images/icons/preview_escotilha_camara_ativa.png" width="115" alt="Escotilha em Atividade" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_escotilha_camara_repouso.png" width="115" alt="Escotilha em Repouso" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_cronometro_completo.png" width="115" alt="Cronômetro Completo" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Aro circular exterior em liga escura de titânio chanfrada em 3D com <strong>8 rebites prateados chanfrados</strong> simétricos com fenda e ponto de reflexo especular.</li>
+<li>Anel de fluido bioenergético em gradiente <strong>Ouro Super Saiyajin e Âmbar</strong> (<code>#FFD700</code> <span class="arithmatex">\(\to\)</span> <code>#FF8C00</code>), com halo luminescente (<em>glow</em>) ativo enquanto o cronômetro roda.</li>
+<li>Vidro escurecido com fluido de Ki translúcido em profundidade e reflexo curvo de curvatura acrílica.</li>
+<li>Silhueta sutil da máscara de oxigênio submersa ao fundo com grelha e mangueiras sanfonadas.</li>
+<li>Micro-bolhas procedurais de oxigênio subindo continuamente com oscilação senoidal lateral.</li>
+<li><strong>Papel na Interface</strong>: Renderização da escotilha da câmara de regeneração no cronômetro circular de descanso (<code>CronometroWidget</code>) na Tela de Treino.</li>
+</ul>
+<h3 id="kiauraicon-kiaurapainter"><code>KiAuraIcon</code> &amp; <code>KiAuraPainter</code></h3>
+<p align="center">
+  <img src="images/icons/preview_ki_aura_gold.png" width="85" alt="Ki Aura Ouro SSJ" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_red.png" width="85" alt="Ki Aura Vermelho Kaio-ken" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_cyan.png" width="85" alt="Ki Aura Ciano SSJ2/Deus" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/icons/preview_ki_aura_purple.png" width="85" alt="Ki Aura Roxo Destruição" />
+</p>
+
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Silhueta canônica de labareda de Ki com línguas de fogo ascendentes e pontiagudas (<em>upward energy tongues</em>), com pico central proeminente e cristas laterais afiadas.</li>
+<li>Gradiente vertical de energia com contorno de realce luminoso.</li>
+<li>Núcleo interno de alta densidade luminosa (<em>Inner Core</em>) quase branco, simulando superconcentração de poder.</li>
+<li>Halo difuso externo (<em>Outer Glow</em>) em <code>MaskFilter.blur</code> para efeito de irradiação energética.</li>
+<li>Micro-centelhas e faíscas afiadas flutuantes em formato losangular ao redor da chama (<em>Sparks</em>).</li>
+<li>Suporte completo a customização dinâmica de cores por transformação Saiyajin (Ouro SSJ, Kaio-ken/Vermelho, Ciano Guerreiro Z, Roxo, etc.).</li>
+<li><strong>Papel na Interface</strong>: Representação oficial do pilar de Vigor Saiyajin no <code>PoderLutaCardWidget</code> e estado inerte no <code>QuadroRecordesModal</code>, eliminando o ícone genérico de raio (<code>Icons.bolt</code>).</li>
+</ul>
+<h3 id="kintounicon-kintounpainter"><code>KintoUnIcon</code> &amp; <code>KintoUnPainter</code></h3>
+<ul>
+<li><strong>Renderização</strong>:</li>
+<li>Silhueta cel-shaded da Nuvem Voadora (<em>Kinto-un</em>) com cúpulas macias volumétricas e cauda aerodinâmica afilada à esquerda.</li>
+<li>Gradiente dourado luminoso (<code>#FFF59D</code> <span class="arithmatex">\(\to\)</span> <code>#FFD700</code> <span class="arithmatex">\(\to\)</span> <code>#FFA000</code>) com contorno âmbar escuro e brilho especular superior.</li>
+<li>Suporte configurável a halo difuso (<code>showGlow</code>) e linhas horizontais de vento/velocidade (<code>showTrail</code>).</li>
+<li><strong>Papel na Interface</strong>: Insígnia oficial das séries de <strong>Aquecimento</strong> no indicador circular de <code>SerieRowWidget</code>, <code>HistoricoCardWidget</code> e <code>TreinoScreen</code>.</li>
+</ul>
+<hr />
+<h2 id="6-diretrizes-de-protecao-de-layout-acessibilidade">🛡️ 6. Diretrizes de Proteção de Layout &amp; Acessibilidade</h2>
+<ol>
+<li><strong>Proteção Contra Barras do Sistema (<code>SafeArea</code> &amp; <code>viewInsets</code>)</strong>:</li>
+<li>Todo modal e tela implementa margens dinâmicas de <code>SafeArea</code>, garantindo que a barra de navegação de 3 botões ou a linha gestual do Android nunca sobreponha botões ou inputs de texto.</li>
+<li><strong>Prevenção de Truncamento de Nomes</strong>:</li>
+<li>Todos os títulos longos de exercícios e rotinas utilizam <code>Expanded</code> e <code>Flexible</code> com <code>TextOverflow.ellipsis</code> ou modo expandido com quebra de linha permitida.</li>
+<li><strong>Ocultação Condicional de Badges Zerados</strong>:</li>
+<li>No modal de encerramento do treino, métricas contextuais como PRs só são renderizadas quando presentes (<code>totalPrs &gt; 0</code>). Caso contrário, o elemento é ocultado e a métrica de Volume preenche 100% da largura, preservando a harmonia sem exibir "0 PRs (+0 Ki)".</li>
+<li><strong>Internacionalização Numérica dos Pesos</strong>:</li>
+<li>Cargas inteiras são exibidas sem decimais (<code>100 kg</code>), e cargas fracionárias exibem apenas uma casa decimal limpa (<code>12.5 kg</code>).</li>
+<li>Volumes e pontuações de Ki acima de 1.000 são pontuados automaticamente (<code>27.080 kg</code>, <code>+15.200 Ki</code>).</li>
+</ol>
+<hr />
+<h2 id="7-manifesto-de-identidade-seriedade-esportiva-vs-tematica-saiyajin">🥋 7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin</h2>
+<p>O <strong>Gym Saiyajin</strong> é, primordialmente, uma <strong>ferramenta de musculação e performance de força real</strong>. A aplicação de temáticas de anime no design de software corre um risco crônico e documentado: a <strong>caricatura infantilizada</strong>, na qual piadas internas, slogans gritados ou excesso de referências transformam a ferramenta em um brinquedo, gerando constrangimento ao ser utilizado no ambiente da academia.</p>
+<p>Para blindar o aplicativo contra qualquer caricatura e manter a máxima sofisticação técnica, foram estabelecidas quatro diretrizes irrevogáveis de produto:</p>
+<pre class="mermaid"><code>graph TD
+    A[Identidade Gym Saiyajin] --&gt; B[1. Fisiologia &amp; Ergonomia em 1º Lugar]
+    A --&gt; C[2. Lore Canônica como Fisiologia &amp; Tech]
+    A --&gt; D[3. Tom de Voz Marcial &amp; Estoico]
+    A --&gt; E[4. Estética Dark Tech Esportivo]
+
+    B --&gt; B1[Dados brutos inalterados: Carga, Reps, 1RM, Volume]
+    C --&gt; C1[Câmara = Recuperação de ATP; Serpente = Constância]
+    D --&gt; D1[Sem gritos de anime ou piadas; comunicação enxuta e firme]
+    E --&gt; E1[Zero rostos/stickers; apenas símbolos vetoriais industriais]</code></pre>
+<h3 id="1-fisiologia-e-ergonomia-sempre-em-primeiro-lugar">1. Fisiologia e Ergonomia Sempre em Primeiro Lugar</h3>
+<ul>
+<li><strong>Termos Técnicos Preservados</strong>: A tela de treino nunca substitui os termos essenciais da musculação por gírias. <strong>Carga (kg)</strong>, <strong>Reps</strong>, <strong>Volume</strong>, <strong>1RM (Fórmula de Epley Refinada)</strong>, <strong>Séries</strong> e <strong>Tempo de Descanso</strong> permanecem explícitos e destacados.</li>
+<li><strong>Leitura em Situação de Exaustão</strong>: Um atleta ofegante entre séries pesadas não pode perder tempo decifrando metáforas lúdicas. A telemetria esportiva é prioridade absoluta.</li>
+</ul>
+<h3 id="2-lore-canonica-como-metafora-de-alta-tecnologia-fisiologia">2. Lore Canônica como Metáfora de Alta Tecnologia &amp; Fisiologia</h3>
+<p>Em vez de magia mística descontextualizada, os elementos de Dragon Ball Z são mapeados diretamente para a ciência do treinamento de força:
+- <strong>Câmara de Regeneração Médica</strong>: Representa a biotecnologia de cura de tecidos, tamponamento de íons <span class="arithmatex">\(H^+\)</span> e restauração dos estoques de fosfocreatina (ATP-CP).
+- <strong>Caminho da Serpente</strong>: Representa a jornada de constância e disciplina de anos; a meta de 1.000.000 km é um odômetro real de hipertrofia acumulada.
+- <strong>Cápsulas Hoi-Poi</strong>: Representa a engenharia da Capsule Corp compactando fichas e rotinas completas em estojos organizados.
+- <strong>Poder de Luta (Ki)</strong>: Uma pontuação composta por força máxima nos 6 grupos musculares e capacidade total de trabalho.</p>
+<h3 id="3-tom-de-voz-marcial-e-estoico-anti-caricatura">3. Tom de Voz Marcial e Estoico (Anti-Caricatura)</h3>
+<ul>
+<li><strong>O que é estritamente proibido</strong>:</li>
+<li>Gritos de anime em caixa alta exagerados (<em>"KAMEHAMEHA!"</em>, <em>"VOU TE DESTRUIR!"</em>).</li>
+<li>Troca de nomes de exercícios por golpes (<em>ex: proibir "Supino Genki Dama"</em>).</li>
+<li>Citações infantis ou ofensivas fora de contexto (<em>"Você é um verme"</em>).</li>
+<li><strong>O que é adotado</strong>:</li>
+<li>Comunicação firme, concisa e disciplinada (inspirada no foco de Goku e Vegeta na Sala do Tempo, ou Piccolo meditando): <em>"Regeneração Concluída"</em>, <em>"Prepare-se para a próxima série"</em>, <em>"Encerrar Batalha"</em>, <em>"Consolide seus ganhos"</em>.</li>
+</ul>
+<h3 id="4-estetica-visual-dark-tech-esportivo">4. Estética Visual "Dark Tech Esportivo"</h3>
+<ul>
+<li><strong>Zero Stickers de Personagens</strong>: O app não exibe ilustrações literais de rostos de anime na interface de treino.</li>
+<li><strong>Ícones Cel-Shaded Vetoriais Nativos</strong>: Todos os ícones (<code>CapsuleIcon</code>, <code>KiAuraIcon</code>, <code>DragonBallIcon</code>, <code>ScouterIcon</code>, <code>PlanetaKaiohIcon</code>) são geométricos, limpos e renderizados diretamente no Canvas do Flutter com acabamento industrial.</li>
+<li><strong>Percepção Visual Externa</strong>: Qualquer pessoa a 1 metro de distância na academia enxerga uma interface escura, elegante, moderna e de alto padrão (semelhante a dashboards da Garmin, Strava ou Strong).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

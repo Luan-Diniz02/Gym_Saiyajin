@@ -1,0 +1,1430 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica completa e interativa do Gym Saiyajin — Arquitetura, Design System, UI/UX, Gamificação e Engenharia Flutter.">
+      
+      
+        <meta name="author" content="Luan Pereira Diniz">
+      
+      
+        <link rel="canonical" href="https://luan-diniz02.github.io/Gym_Saiyajin/AUDITORIA_CONSOLIDADA.html">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="images/shenlong_logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>🥋 Relatório Consolidado de Auditoria Técnica — Gym Saiyajin - Gym Saiyajin — Documentação Técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#relatorio-consolidado-de-auditoria-tecnica-gym-saiyajin" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-header__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gym Saiyajin — Documentação Técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🥋 Relatório Consolidado de Auditoria Técnica — Gym Saiyajin
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏠 Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ARQUITETURA.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏛️ Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="UI_UX.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎨 Design System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ⚡ Sistema Ki
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📸 Social & Cards
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏋️ Catálogo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📜 Roadmap
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Gym Saiyajin — Documentação Técnica" class="md-nav__button md-logo" aria-label="Gym Saiyajin — Documentação Técnica" data-md-component="logo">
+      
+  <img src="images/shenlong_logo.png" alt="logo">
+
+    </a>
+    Gym Saiyajin — Documentação Técnica
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Luan-Diniz02/Gym_Saiyajin
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ARQUITETURA.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏛️ Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="UI_UX.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Design System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="SISTEMA_SAIYAJIN.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Sistema Ki
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="COMPARTILHAMENTO_SOCIAL.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📸 Social & Cards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="GUIA_CATALOGO_EXERCICIOS.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏋️ Catálogo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ROADMAP_TEMATICO.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sumario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📑 Sumário
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral-executiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão Geral Executiva
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-eixo-1-auditoria-de-ui-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Eixo 1: Auditoria de UI &amp; UX
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Eixo 1: Auditoria de UI &amp; UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-pontos-fortes-notaveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Pontos Fortes Notáveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-diagnostico-de-atritos-e-riscos-classificados-por-severidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Diagnóstico de Atritos e Riscos (Classificados por Severidade)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-eixo-2-documentacao-tecnica-vs-estado-real-do-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Eixo 2: Documentação Técnica vs. Estado Real do Código
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Eixo 2: Documentação Técnica vs. Estado Real do Código">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-tabela-de-discrepancias-documentacao-vs-codigo-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Tabela de Discrepâncias Documentação vs. Código Real
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eixo-3-diagnostico-e-solucao-do-icone-de-notificacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Eixo 3: Diagnóstico e Solução do Ícone de Notificação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Eixo 3: Diagnóstico e Solução do Ícone de Notificação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-causa-raiz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-solucao-definitiva-passo-a-passo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Solução Definitiva Passo a Passo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Solução Definitiva Passo a Passo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-1-criar-o-vector-drawable-monocromatico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1: Criar o Vector Drawable Monocromático
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-2-atualizar-libservicesnotification_servicedart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2: Atualizar lib/services/notification_service.dart
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-eixo-4-boas-praticas-arquitetura-e-engenharia-de-software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-panorama-de-cobertura-de-testes-coveragelcovinfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Panorama de Cobertura de Testes (coverage/lcov.info)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-vulnerabilidades-criticas-de-codigo-e-memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Vulnerabilidades Críticas de Código e Memória
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 Vulnerabilidades Críticas de Código e Memória">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-vazamento-de-listener-memory-leak-em-treinoscreen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Vazamento de Listener (Memory Leak) em TreinoScreen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-vazamento-de-texteditingcontroller-em-progressoscreen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Vazamento de TextEditingController em ProgressoScreen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-vazamento-de-textura-gpu-em-cardshareservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Vazamento de Textura GPU em CardShareService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-gargalo-de-renderizacao-rebuild-completo-da-tela-a-cada-1-segundo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Gargalo de Renderização: Rebuild Completo da Tela a Cada 1 Segundo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-tratamento-de-excecoes-silencioso-catch-all-swallow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Tratamento de Exceções Silencioso ("Catch-All Swallow")
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-caminho-absoluto-hardcoded-em-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Caminho Absoluto Hardcoded em Teste
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-matriz-de-priorizacao-impacto-vs-esforco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Matriz de Priorização (Impacto vs. Esforço)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Matriz de Priorização (Impacto vs. Esforço)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classificacao-moscow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classificação MoSCoW:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-plano-de-acao-e-roadmap-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Plano de Ação e Roadmap Técnico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Plano de Ação e Roadmap Técnico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-correcoes-imediatas-bugfix-de-notificacao-memoria-e-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Correções Imediatas (Bugfix de Notificação, Memória e Testes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-seguranca-de-dados-e-usabilidade-uiux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Segurança de Dados e Usabilidade (UI/UX)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-alinhamento-da-documentacao-e-higienizacao-do-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Alinhamento da Documentação e Higienização do Projeto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-4-otimizacao-de-arquitetura-e-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4: Otimização de Arquitetura e Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="relatorio-consolidado-de-auditoria-tecnica-gym-saiyajin">🥋 Relatório Consolidado de Auditoria Técnica — Gym Saiyajin</h1>
+<p><strong>Projeto:</strong> <code>gym_saiyajin</code><br />
+<strong>Data:</strong> 23 de Setembro de 2026<br />
+<strong>Status do Projeto:</strong> Estável (87/87 testes passando, <code>dart analyze</code> sem erros de compilação)<br />
+<strong>Objetivo:</strong> Consolidação detalhada dos 4 eixos de validação do aplicativo:
+1. Auditoria de Interface (UI) e Experiência do Usuário (UX).
+2. Sincronização entre a Documentação Técnica e o Código Real.
+3. Diagnóstico e Resolução do Ícone Ausente na Barra de Notificações do Android.
+4. Auditoria de Boas Práticas de Programação, Arquitetura e Engenharia de Software.</p>
+<hr />
+<h2 id="sumario">📑 Sumário</h2>
+<ol>
+<li><a href="#1-visao-geral-executiva">Visão Geral Executiva</a></li>
+<li><a href="#2-eixo-1-auditoria-de-ui-ux">Eixo 1: Auditoria de UI &amp; UX</a></li>
+<li><a href="#3-eixo-2-documentacao-tecnica-vs-estado-real-do-codigo">Eixo 2: Documentação Técnica vs. Estado Real do Código</a></li>
+<li><a href="#4-eixo-3-diagnostico-e-solucao-do-icone-de-notificacao">Eixo 3: Diagnóstico e Solução do Ícone de Notificação</a></li>
+<li><a href="#5-eixo-4-boas-praticas-arquitetura-e-engenharia-de-software">Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software</a></li>
+<li><a href="#6-matriz-de-priorizacao-impacto-vs-esforco">Matriz de Priorização (Impacto vs. Esforço)</a></li>
+<li><a href="#7-plano-de-acao-e-roadmap-tecnico">Plano de Ação e Roadmap Técnico</a></li>
+</ol>
+<hr />
+<h2 id="1-visao-geral-executiva">1. Visão Geral Executiva</h2>
+<p>O aplicativo <strong>Gym Saiyajin</strong> apresenta uma fundação sólida e criativa, combinando gamificação imersiva do universo Dragon Ball com rastreamento sério de musculação e hipertrofia. A suíte automatizada conta com <strong>87 testes unitários e de widget com 100% de sucesso</strong>, e os componentes gráficos são predominantemente vetoriais (<code>CustomPainter</code>), garantindo leveza e renderização fluida.</p>
+<p>Entretanto, o crescimento do projeto acumulou débitos técnicos em quatro frentes principais:
+- <strong>UI/UX</strong>: Riscos de perda acidental de dados em gestos de arrastar (<code>Dismissible</code> sem desfazer) e ações úteis prontas no controller que não estão acessíveis na tela.
+- <strong>Documentação</strong>: Defasagem na fórmula matemática do <em>Caminho da Serpente</em> (que difere em até 20x do código), contagem de testes e listagem de arquivos.
+- <strong>Notificações</strong>: Incompatibilidade técnica entre o <code>AdaptiveIconDrawable</code> do Android 8.0+ / fundo opaco do ícone do launcher com as exigências de máscara alfa monocromática da barra de status do Android.
+- <strong>Boas Práticas e Arquitetura</strong>: Vazamento de memória (<em>memory leaks</em>) em listeners e controllers de texto, rebuilds de 1s na tela principal inteira e classes monolíticas acima de 1.000 linhas.</p>
+<hr />
+<h2 id="2-eixo-1-auditoria-de-ui-ux">2. Eixo 1: Auditoria de UI &amp; UX</h2>
+<h3 id="21-pontos-fortes-notaveis">2.1 Pontos Fortes Notáveis</h3>
+<ul>
+<li><strong>Identidade Temática Integrada</strong>:</li>
+<li><em>Câmara de Regeneração Namekusei</em> (<code>cronometro_widget.dart</code>): Anel animado procedural em ouro/laranja representando a recuperação celular.</li>
+<li><em>Caminho da Serpente</em> (<code>caminho_serpente_progress_bar.dart</code>): Gamificação da progressão de volume até o planeta do Sr. Kaioh (meta de 1.000.000 km).</li>
+<li><em>Esferas do Dragão</em>: Indicador de Recordes Pessoais batidos (1 a 7 estrelas procedurais).</li>
+<li><strong>Card Studio de Compartilhamento Social</strong> (<code>compartilhar_card_modal.dart</code>): Geração nativa em 9:16 (Stories) e 1:1 (Feed) com sombras quádruplas e excelente legibilidade sobre qualquer fotografia.</li>
+<li><strong>Feedback Tátil</strong>: Emprego de vibrações hápticas (<code>HapticFeedback.mediumImpact()</code>, <code>selectionClick()</code>) em ações essenciais de treino.</li>
+</ul>
+<h3 id="22-diagnostico-de-atritos-e-riscos-classificados-por-severidade">2.2 Diagnóstico de Atritos e Riscos (Classificados por Severidade)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ID</th>
+<th style="text-align: center;">Severidade</th>
+<th style="text-align: left;">Componente Afetado</th>
+<th style="text-align: left;">Problema Identificado</th>
+<th style="text-align: left;">Impacto no Usuário</th>
+<th style="text-align: left;">Solução Proposta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>UX-01</strong></td>
+<td style="text-align: center;">🔴 <strong>Alta</strong></td>
+<td style="text-align: left;"><code>lib/widgets/serie_row_widget.dart</code> (L24)</td>
+<td style="text-align: left;"><code>Dismissible</code> apaga a série ao menor deslize sem <code>confirmDismiss</code> e a SnackBar não tem botão "Desfazer".</td>
+<td style="text-align: left;">Perda irreversível de dados registrados durante o cansaço do treino.</td>
+<td style="text-align: left;">Adicionar <code>confirmDismiss</code> com <code>AlertDialog</code> ou incluir <code>SnackBarAction(label: 'DESFAZER')</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-02</strong></td>
+<td style="text-align: center;">🔴 <strong>Alta</strong></td>
+<td style="text-align: left;"><code>lib/controllers/treino_controller.dart</code> (L470)</td>
+<td style="text-align: left;">O método <code>preencherSerieComAnterior(index)</code> existe no controller, mas não possui nenhum gatilho na interface.</td>
+<td style="text-align: left;">O usuário enxerga a sugestão no <code>hintText</code>, mas precisa redigitar manualmente os valores a cada série.</td>
+<td style="text-align: left;">Permitir toque no <code>hintText</code> ou adicionar botão de auto-preenchimento ao lado dos campos de texto.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-03</strong></td>
+<td style="text-align: center;">🔴 <strong>Alta</strong></td>
+<td style="text-align: left;"><code>lib/main.dart</code> (L107)</td>
+<td style="text-align: left;">Falta de tratamento com <code>PopScope</code> na tela principal.</td>
+<td style="text-align: left;">Pressionar "Voltar" no Android encerra a aplicação sem confirmação durante um treino ativo.</td>
+<td style="text-align: left;">Envolver a tela em <code>PopScope(canPop: !treinoAtivo, onPopInvokedWithResult: ...)</code> com diálogo de confirmação.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-04</strong></td>
+<td style="text-align: center;">🟡 <strong>Média</strong></td>
+<td style="text-align: left;"><code>lib/screens/treino_screen.dart</code> (L104)</td>
+<td style="text-align: left;">Modal de término de descanso possui <code>barrierDismissible: false</code>.</td>
+<td style="text-align: left;">Bloqueia a tela inteira quando o tempo zera, obrigando o usuário a largar o peso para tocar no botão "BORA!".</td>
+<td style="text-align: left;">Permitir toque fora para dispensar ou fechar automaticamente após 4 segundos de aviso sonoro/háptico.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-05</strong></td>
+<td style="text-align: center;">🟡 <strong>Média</strong></td>
+<td style="text-align: left;"><code>lib/controllers/historico_controller.dart</code></td>
+<td style="text-align: left;">Falta de sinalizador <code>isLoading</code>. Controllers iniciam com listas vazias.</td>
+<td style="text-align: left;">Exibe instantaneamente o estado <em>"Nenhum treino registrado"</em> antes de carregar o SQLite, causando "flash" visual incômodo.</td>
+<td style="text-align: left;">Expor <code>bool isLoading</code> e exibir um <em>Shimmer</em> ou <em>Spinner</em> durante o carregamento inicial.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-06</strong></td>
+<td style="text-align: center;">🟡 <strong>Média</strong></td>
+<td style="text-align: left;"><code>lib/widgets/gerenciar_fichas_modal.dart</code></td>
+<td style="text-align: left;">Botões de ajuste de séries padrão possuem apenas 28dp de altura/largura.</td>
+<td style="text-align: left;">Viola a recomendação mínima de acessibilidade de 48dp da Google Material Design, dificultando o toque.</td>
+<td style="text-align: left;">Aumentar a área de clique para no mínimo 44–48dp.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UX-07</strong></td>
+<td style="text-align: center;">🟡 <strong>Média</strong></td>
+<td style="text-align: left;"><code>lib/controllers/progresso_controller.dart</code></td>
+<td style="text-align: left;">Medidas default de 69 kg e 1.70 m pré-carregadas.</td>
+<td style="text-align: left;">Usuário recém-instalado vê gráficos e IMC calculados com dados fictícios.</td>
+<td style="text-align: left;">Iniciar com valores zerados/nulos e exibir banner amigável: <em>"Cadastre suas medidas para ativar o scouter"</em>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UI-01</strong></td>
+<td style="text-align: center;">🟢 <strong>Baixa</strong></td>
+<td style="text-align: left;">Vários arquivos em <code>lib/widgets/</code></td>
+<td style="text-align: left;">Cores hexadecimais soltas no código em vez de centralizadas no <code>ThemeData</code> ou <code>AppColors</code>.</td>
+<td style="text-align: left;">Inconsistência na manutenção do design system e temas futuros.</td>
+<td style="text-align: left;">Centralizar todos os tokens em <code>AppColors</code> e padronizar o <code>ThemeData</code> global.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UI-02</strong></td>
+<td style="text-align: center;">🟢 <strong>Baixa</strong></td>
+<td style="text-align: left;"><code>inputs</code> em modais</td>
+<td style="text-align: left;">Alturas fixas em <code>Container(height: 44)</code>.</td>
+<td style="text-align: left;">Risco de corte de texto caso o usuário ative a escala de fontes ampliada nas configurações do Android.</td>
+<td style="text-align: left;">Utilizar preenchimento por <code>padding</code> interno flexível.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-eixo-2-documentacao-tecnica-vs-estado-real-do-codigo">3. Eixo 2: Documentação Técnica vs. Estado Real do Código</h2>
+<p>A documentação do repositório é rica e detalhada, porém apresenta <strong>discrepâncias quantitativas e conceituais</strong> causadas pela evolução acelerada do código.</p>
+<h3 id="31-tabela-de-discrepancias-documentacao-vs-codigo-real">3.1 Tabela de Discrepâncias Documentação vs. Código Real</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tópico</th>
+<th style="text-align: left;">O que a Documentação diz</th>
+<th style="text-align: left;">O que o Código realmente faz</th>
+<th style="text-align: left;">Impacto &amp; Correção Necessária</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Fórmula do Caminho da Serpente</strong></td>
+<td style="text-align: left;"><code>docs/SISTEMA_SAIYAJIN.md</code> (L145):<br>$<span class="arithmatex">\(\text{km} = \frac{\text{Volume}}{100} + \frac{\text{Minutos}}{10}\)</span><span class="arithmatex">\(&lt;br&gt;(\)</span>100\text{ kg} = 1\text{ km}$, <span class="arithmatex">\(10\text{ min} = 1\text{ km}\)</span>).</td>
+<td style="text-align: left;"><code>lib/controllers/historico_controller.dart</code> (L88):<br>$<span class="arithmatex">\(\text{km} = \frac{\text{Volume}}{10} + (\text{Minutos} \times 2)\)</span><span class="arithmatex">\(&lt;br&gt;(\)</span>10\text{ kg} = 1\text{ km}$, <span class="arithmatex">\(1\text{ min} = 2\text{ km}\)</span>).</td>
+<td style="text-align: left;"><strong>Crítico:</strong> A fórmula real é <strong>10x a 20x mais rápida</strong> que o documento. Atualizar o <code>SISTEMA_SAIYAJIN.md</code> para refletir o código testado.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Marcos do Caminho da Serpente</strong></td>
+<td style="text-align: left;"><code>docs/SISTEMA_SAIYAJIN.md</code> (L157):<br>Começa no "Palácio de Enma Daioh" e cita "Cauda Final da Serpente" a 75%.</td>
+<td style="text-align: left;"><code>lib/controllers/historico_controller.dart</code> (L98):<br>Começa na <em>"Cauda da Serpente"</em> e termina na <em>"Cabeça da Serpente (Aterrissagem Iminente)"</em>.</td>
+<td style="text-align: left;">Ajustar a tabela de marcos e os nomes narrativos em <code>docs/SISTEMA_SAIYAJIN.md</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Versões de SDK</strong></td>
+<td style="text-align: left;"><code>README.md</code> (L8):<br>Exibe badge <code>Flutter &gt;= 3.11.4</code>.</td>
+<td style="text-align: left;"><code>pubspec.yaml</code> (L6):<br><code>environment.sdk: ^3.11.4</code> refere-se ao <strong>Dart SDK</strong>. O framework instalado é <strong>Flutter 3.41.6</strong>.</td>
+<td style="text-align: left;">Corrigir badge e pré-requisitos para <code>Flutter &gt;= 3.22.0</code> e <code>Dart &gt;= 3.11.4</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Contagem de Testes</strong></td>
+<td style="text-align: left;"><code>README.md</code>:<br>Linha 11 diz 87, Linha 165 diz 71 e Linha 195 diz 67.</td>
+<td style="text-align: left;">Execução de <code>flutter test</code>: exatamente <strong>87 testes</strong> passam com sucesso.</td>
+<td style="text-align: left;">Unificar todas as citações do <code>README.md</code> no valor real de <strong>87 testes</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arquivos em <code>lib/widgets/</code></strong></td>
+<td style="text-align: left;"><code>README.md</code> (L146):<br>Lista apenas 18 arquivos.</td>
+<td style="text-align: left;">Existem <strong>24 arquivos</strong> em <code>lib/widgets/</code>.</td>
+<td style="text-align: left;">Adicionar os 6 widgets faltantes na árvore do README (<code>caminho_serpente_progress_bar</code>, <code>ki_aura_icon</code>, <code>modal_editar_sessao</code>, etc.).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arquivos em <code>test/</code></strong></td>
+<td style="text-align: left;"><code>README.md</code> (L165):<br>Lista apenas 12 arquivos.</td>
+<td style="text-align: left;">Existem <strong>16 arquivos</strong> em <code>test/</code>.</td>
+<td style="text-align: left;">Adicionar os 4 arquivos faltantes (<code>caminho_serpente_test</code>, <code>cronometro_widget_test</code>, <code>ki_aura_icon_test</code>, <code>render_preview_test</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arquivo <code>docs/UI_UX.md</code></strong></td>
+<td style="text-align: left;">Omitido da árvore de documentação do <code>README.md</code>.</td>
+<td style="text-align: left;">O arquivo existe e é referenciado em links.</td>
+<td style="text-align: left;">Incluir <code>docs/UI_UX.md</code> na árvore de documentação do README.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Migrações SQLite (<code>onUpgrade</code>)</strong></td>
+<td style="text-align: left;"><code>docs/ARQUITETURA.md</code> (L109):<br>Diz que <code>fichas</code> foi criada na v2 e índices na v3.</td>
+<td style="text-align: left;"><code>lib/database/db_helper.dart</code> (L31):<br>v2 adicionou duração de treino; v3 criou <code>fichas</code> e índices.</td>
+<td style="text-align: left;">Corrigir a seção de migrações em <code>ARQUITETURA.md</code> para refletir o <code>_onUpgradeDB</code> real.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dependência <code>flutter_svg</code></strong></td>
+<td style="text-align: left;">Não mencionada no stack tecnológico do README.</td>
+<td style="text-align: left;">Consta em <code>pubspec.yaml</code> (L16), mas não possui nenhum import em <code>lib/</code>.</td>
+<td style="text-align: left;">Remover dependência órfã de <code>pubspec.yaml</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tokens de Cores</strong></td>
+<td style="text-align: left;"><code>docs/UI_UX.md</code> (L50):<br>Background <code>#0E0F14</code>, Surface <code>#14161E</code>.</td>
+<td style="text-align: left;"><code>lib/theme/app_colors.dart</code>:<br>Background <code>#000000</code>, Surface <code>#1E1E1E</code>.</td>
+<td style="text-align: left;">Alinhar a tabela de tokens com os valores reais da classe <code>AppColors</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-eixo-3-diagnostico-e-solucao-do-icone-de-notificacao">4. Eixo 3: Diagnóstico e Solução do Ícone de Notificação</h2>
+<h3 id="41-causa-raiz">4.1 Causa Raiz</h3>
+<p>Ao disparar a notificação de fim de descanso da <em>Câmara de Regeneração</em>, o Android exibe um quadrado em branco ou simplesmente omite o ícone na barra de status superior. A causa é 100% técnica no nível do subsistema nativo do Android:</p>
+<pre class="mermaid"><code>flowchart TD
+    A["NotificationService dispara notificação"] --&gt; B["AndroidInitializationSettings('@mipmap/ic_launcher')"]
+    B --&gt; C{"Resolução no Android 8.0+ (API 26+)"}
+    C --&gt;|Carrega ic_launcher.xml| D["AdaptiveIconDrawable"]
+    D --&gt; E["NotificationManager REJEITA AdaptiveIcon"]
+    E --&gt; F["❌ Ícone Ausente / Espaço Transparente Vazio"]
+    C --&gt;|Fallback para PNG legado| G["ic_launcher.png (Fundo opaco #121214)"]
+    G --&gt; H["Regra de Alpha-Mask (Android 5.0 Lollipop+)"]
+    H --&gt; I["Todos os canais de cor são descartados"]
+    I --&gt; J["Pixels 100% opacos preenchidos com branco sólido"]
+    J --&gt; K["❌ 'White Box' (Caixa branca sem silhueta)"]</code></pre>
+<ol>
+<li><strong>Incompatibilidade com Adaptive Icons</strong>: A barra de status colapsada do Android (<code>setSmallIcon</code>) não suporta <code>&lt;adaptive-icon&gt;</code> (que combina foreground e background separados). O <code>NotificationManager</code> exige um <code>BitmapDrawable</code> ou <code>VectorDrawable</code> simples.</li>
+<li><strong>Máscara Alfa Monocromática Obrigatória (API 21+)</strong>: O Android ignora canais de cor (RGB) no Small Icon da barra de status. Onde há transparência (<code>alpha = 0</code>), o Android deixa o fundo passar. Onde há opacidade (<code>alpha &gt; 0</code>), o Android pinta de branco sólido. Como o <code>ic_launcher.png</code> tem um quadrado de fundo preto opaco, o desenho inteiro vira uma caixa branca sólida.</li>
+</ol>
+<hr />
+<h3 id="42-solucao-definitiva-passo-a-passo">4.2 Solução Definitiva Passo a Passo</h3>
+<h4 id="passo-1-criar-o-vector-drawable-monocromatico">Passo 1: Criar o Vector Drawable Monocromático</h4>
+<p>Criar o arquivo <code>android/app/src/main/res/drawable/ic_notification.xml</code>:
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">&lt;vector</span><span class="w"> </span><span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="na">android:width=</span><span class="s">"24dp"</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="na">android:height=</span><span class="s">"24dp"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="na">android:viewportWidth=</span><span class="s">"24"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="na">android:viewportHeight=</span><span class="s">"24"</span><span class="nt">&gt;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="cm">&lt;!-- Silhueta monocromática com fundo 100% transparente: Chama de Ki Saiyajin --&gt;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">&lt;path</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="na">android:fillColor=</span><span class="s">"#FFFFFFFF"</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="na">android:pathData=</span><span class="s">"M12,2C11.5,4.5 10.5,6.5 8.5,8C9.5,8.5 10,9.5 9.5,10.8C9,12 8,13 7,14C8.2,14.2 9,15 8.8,16.5C8.5,18.5 6.5,19.5 5,19C6.5,21.5 9,22 12,22C15,22 17.5,21.5 19,19C17.5,19.5 15.5,18.5 15.2,16.5C15,15 15.8,14.2 17,14C16,13 15,12 14.5,10.8C14,9.5 14.5,8.5 15.5,8C13.5,6.5 12.5,4.5 12,2Z"</span><span class="nt">/&gt;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nt">&lt;/vector&gt;</span>
+</span></code></pre></div></p>
+<h4 id="passo-2-atualizar-libservicesnotification_servicedart">Passo 2: Atualizar <code>lib/services/notification_service.dart</code></h4>
+<p>Ajustar o <code>init()</code> e o método <code>agendarNotificacaoDescanso()</code>:
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 1. No init():</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">const</span><span class="w"> </span><span class="n">androidSettings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AndroidInitializationSettings</span><span class="p">(</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s1">'@drawable/ic_notification'</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">);</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">// 2. Em agendarNotificacaoDescanso():</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">const</span><span class="w"> </span><span class="n">detalhes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NotificationDetails</span><span class="p">(</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nl">android:</span><span class="w"> </span><span class="n">AndroidNotificationDetails</span><span class="p">(</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="s1">'descanso_channel_v2'</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="s1">'Descanso'</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nl">channelDescription:</span><span class="w"> </span><span class="s1">'Notificacoes para fim do descanso e regeneracao'</span><span class="p">,</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nl">importance:</span><span class="w"> </span><span class="n">Importance</span><span class="p">.</span><span class="n">max</span><span class="p">,</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nl">priority:</span><span class="w"> </span><span class="n">Priority</span><span class="p">.</span><span class="n">high</span><span class="p">,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nl">playSound:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="nl">enableVibration:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nl">autoCancel:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nl">category:</span><span class="w"> </span><span class="n">AndroidNotificationCategory</span><span class="p">.</span><span class="n">alarm</span><span class="p">,</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nl">visibility:</span><span class="w"> </span><span class="n">NotificationVisibility</span><span class="p">.</span><span class="n">public</span><span class="p">,</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="nl">icon:</span><span class="w"> </span><span class="s1">'@drawable/ic_notification'</span><span class="p">,</span><span class="w"> </span><span class="c1">// Small Icon na barra de status</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="nl">color:</span><span class="w"> </span><span class="n">Color</span><span class="p">(</span><span class="mh">0xFFFF9800</span><span class="p">),</span><span class="w"> </span><span class="c1">// Cor Âmbar Saiyajin no cabeçalho</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="nl">largeIcon:</span><span class="w"> </span><span class="n">DrawableResourceAndroidBitmap</span><span class="p">(</span><span class="s1">'@mipmap/ic_launcher'</span><span class="p">),</span><span class="w"> </span><span class="c1">// Ícone oficial colorido no corpo</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="p">),</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="nl">iOS:</span><span class="w"> </span><span class="n">DarwinNotificationDetails</span><span class="p">(),</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">  </span><span class="nl">macOS:</span><span class="w"> </span><span class="n">DarwinNotificationDetails</span><span class="p">(),</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="p">);</span>
+</span></code></pre></div></p>
+<p><strong>Resultado após a correção:</strong>
+- <strong>Barra de status superior</strong>: Silhueta vetorial da Chama de Ki perfeitamente nítida em qualquer aparelho.
+- <strong>Gaveta de notificações expandida</strong>: O logo colorido oficial do Shenlong aparece como <code>largeIcon</code> em alta resolução ao lado do texto, com o badge tingido em Âmbar Saiyajin.</p>
+<hr />
+<h2 id="5-eixo-4-boas-praticas-arquitetura-e-engenharia-de-software">5. Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software</h2>
+<h3 id="51-panorama-de-cobertura-de-testes-coveragelcovinfo">5.1 Panorama de Cobertura de Testes (<code>coverage/lcov.info</code>)</h3>
+<ul>
+<li><strong>Total:</strong> <strong>2.896 / 4.259 linhas cobertas (68,0%)</strong></li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Modelos de Domínio (serie, sessao, poder_luta):  ████████████████████ 98%
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>CustomPainters (ki_aura, escotilha, radar):       ████████████████████ 99%
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Widgets Complexos (cronometro, card_studio):     ██████████████████░░ 91%
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>TreinoController:                                 █████████████░░░░░░░ 63.6%
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>HistoricoController:                              ██████████████░░░░░░ 69.9%
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>NotificationService:                              ████████░░░░░░░░░░░░ 40.4%
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>ProgressoController:                              ███░░░░░░░░░░░░░░░░░ 17.1%
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>TreinoRepository / DatabaseHelper:                ░░░░░░░░░░░░░░░░░░░░ 0.0% (Crítico)
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Telas / Modais UI:                                ░░░░░░░░░░░░░░░░░░░░ 0.0%
+</span></code></pre></div>
+<hr />
+<h3 id="52-vulnerabilidades-criticas-de-codigo-e-memoria">5.2 Vulnerabilidades Críticas de Código e Memória</h3>
+<h4 id="1-vazamento-de-listener-memory-leak-em-treinoscreen">1. Vazamento de Listener (<em>Memory Leak</em>) em <code>TreinoScreen</code></h4>
+<ul>
+<li><strong>Localização:</strong> <code>lib/screens/treino_screen.dart</code> (L46)</li>
+<li><strong>Problema:</strong> No <code>initState()</code>, executa <code>_controller.addListener(_onControllerChanged)</code>. No entanto, o <code>_TreinoScreenState</code> <strong>não possui o método <code>dispose()</code></strong> com <code>_controller.removeListener(...)</code>.</li>
+<li><strong>Risco:</strong> O controller mantém a referência viva de todo o State da tela na memória.</li>
+</ul>
+<h4 id="2-vazamento-de-texteditingcontroller-em-progressoscreen">2. Vazamento de <code>TextEditingController</code> em <code>ProgressoScreen</code></h4>
+<ul>
+<li><strong>Localização:</strong> <code>lib/screens/progresso_screen.dart</code> (L32-L38)</li>
+<li><strong>Problema:</strong> Três instâncias de <code>TextEditingController</code> (<code>pesoController</code>, <code>alturaController</code>, <code>gorduraController</code>) são criadas dentro da função ao abrir o modal e nunca recebem <code>.dispose()</code>.</li>
+</ul>
+<h4 id="3-vazamento-de-textura-gpu-em-cardshareservice">3. Vazamento de Textura GPU em <code>CardShareService</code></h4>
+<ul>
+<li><strong>Localização:</strong> <code>lib/services/card_share_service.dart</code> (L21)</li>
+<li><strong>Problema:</strong> <code>final ui.Image image = await boundary.toImage(pixelRatio: 3.0);</code> gera uma textura pesada em GPU. Como <code>ui.Image</code> implementa <code>Disposable</code>, a ausência de <code>image.dispose()</code> retém memória nativa a cada compartilhamento.</li>
+</ul>
+<h4 id="4-gargalo-de-renderizacao-rebuild-completo-da-tela-a-cada-1-segundo">4. Gargalo de Renderização: Rebuild Completo da Tela a Cada 1 Segundo</h4>
+<ul>
+<li><strong>Localização:</strong> <code>lib/controllers/treino_controller.dart</code> vs <code>lib/screens/treino_screen.dart</code> (L159)</li>
+<li><strong>Problema:</strong> O timer da sessão emite <code>notifyListeners()</code> a cada 1s. A tela inteira de <code>TreinoScreen</code> (1.300 linhas de código de UI) está embrulhada em um único <code>ListenableBuilder(listenable: _controller)</code>.</li>
+<li><strong>Risco:</strong> A cada segundo, o Flutter reconstrói toda a árvore de widgets, gerando desperdício contínuo de processamento e bateria. O cronômetro deveria ser isolado via <code>ValueNotifier&lt;int&gt;</code> apenas nos widgets de exibição de tempo.</li>
+</ul>
+<h4 id="5-tratamento-de-excecoes-silencioso-catch-all-swallow">5. Tratamento de Exceções Silencioso ("Catch-All Swallow")</h4>
+<ul>
+<li><strong>Localização:</strong> 7 ocorrências em <code>TreinoController</code>, 5 em <code>TreinoRepository</code> e 2 em <code>CardShareService</code>.</li>
+<li><strong>Problema:</strong> Blocos <code>try { ... } catch (_) {}</code> vazios que engolem exceções de I/O, SQLite ou JSON sem registrar log ou notificar o usuário.</li>
+</ul>
+<h4 id="6-caminho-absoluto-hardcoded-em-teste">6. Caminho Absoluto Hardcoded em Teste</h4>
+<ul>
+<li><strong>Localização:</strong> <code>test/render_preview_test.dart</code> (L14)</li>
+<li><strong>Problema:</strong> <code>const outputDir = 'C:/Users/luand/.gemini/antigravity/brain/...';</code></li>
+<li><strong>Risco:</strong> Quebra a compilação e execução da suíte em ambientes de CI/CD (GitHub Actions, macOS, Linux).</li>
+</ul>
+<hr />
+<h2 id="6-matriz-de-priorizacao-impacto-vs-esforco">6. Matriz de Priorização (Impacto vs. Esforço)</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>        ▲ ALTO
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>        │   [UX-01] Undo/Confirm exclusão de série      [ICONE] Correção do ícone de notificação
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        │   [MEM-01] Corrigir memory leaks (dispose)    [REBUILD] Isolar ticker de 1s da tela
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        │   [DOC-01] Corrigir fórmula do Caminho       [PR-01] Unificar regra triplicada de PRs
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>IMPACTO │
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        │   [DOC-02] Sincronizar SDK e árvore README   [TEST-01] Testes no TreinoRepository
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        │   [LINT-01] Ativar regras estritas de lint   [ARCH-01] Modularizar God Classes (&gt;1000L)
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        │
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        ▼ BAIXO
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        └─────────────────────────────────────────────────────────────────────────────►
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>          BAIXO                                                          ALTO
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>                                       ESFORÇO
+</span></code></pre></div>
+<h3 id="classificacao-moscow">Classificação MoSCoW:</h3>
+<ul>
+<li><strong>Must Have (Imprescindível / Imediato)</strong>:</li>
+<li>Criação do asset vetorial <code>ic_notification.xml</code> e configuração do <code>NotificationService</code>.</li>
+<li>Correção dos Memory Leaks (<code>TreinoScreen.dispose</code>, <code>ProgressoScreen</code> controllers, <code>image.dispose</code>).</li>
+<li>Prevenção de perda de dados: <code>confirmDismiss</code> ou SnackBar com "Desfazer" na exclusão de séries ([UX-01]).</li>
+<li>Adicionar <code>PopScope</code> no <code>lib/main.dart</code> ([UX-03]).</li>
+<li>Remoção do caminho hardcoded de preview em <code>test/render_preview_test.dart</code>.</li>
+<li><strong>Should Have (Importante / Curto Prazo)</strong>:</li>
+<li>Conectar a ação rápida de auto-preenchimento de séries órfã ([UX-02]).</li>
+<li>Isolar o <code>Timer.periodic</code> de 1s para não reconstruir toda a <code>TreinoScreen</code>.</li>
+<li>Sincronizar <code>docs/SISTEMA_SAIYAJIN.md</code> e <code>README.md</code> com a fórmula e arquivos reais.</li>
+<li>Remover dependência órfã <code>flutter_svg</code> do <code>pubspec.yaml</code>.</li>
+<li><strong>Could Have (Melhorias Futuras / Médio Prazo)</strong>:</li>
+<li>Modularizar <code>CompartilharCardModal</code> (1.590 linhas) e <code>TreinoScreen</code> (1.300 linhas).</li>
+<li>Centralizar cálculo de PRs/1RM em uma classe de domínio dedicada.</li>
+<li>Adicionar testes unitários com SQLite em memória (<code>sqflite_common_ffi</code>) para <code>TreinoRepository</code>.</li>
+</ul>
+<hr />
+<h2 id="7-plano-de-acao-e-roadmap-tecnico">7. Plano de Ação e Roadmap Técnico</h2>
+<h3 id="fase-1-correcoes-imediatas-bugfix-de-notificacao-memoria-e-testes">Fase 1: Correções Imediatas (Bugfix de Notificação, Memória e Testes)</h3>
+<ul>
+<li>[x] Criar <code>android/app/src/main/res/drawable/ic_notification.xml</code> (vetor monocromático com transparência alfa).</li>
+<li>[x] Atualizar <code>lib/services/notification_service.dart</code> com o novo ícone, cor âmbar (#FF9800) e <code>largeIcon</code> Shenlong colorido.</li>
+<li>[x] Confirmado <code>dispose()</code> no <code>_TreinoScreenState</code> com <code>_controller.removeListener</code> (linha 488).</li>
+<li>[x] Adicionar <code>dispose()</code> nos <code>TextEditingController</code> de <code>_abrirModalAtualizarMedidas()</code> em <code>ProgressoScreen</code>.</li>
+<li>[x] Chamar <code>image.dispose()</code> no <code>CardShareService</code> em bloco <code>finally</code>.</li>
+<li>[x] Corrigir o caminho hardcoded em <code>test/render_preview_test.dart</code> com fallback para diretório temporário do sistema.</li>
+</ul>
+<h3 id="fase-2-seguranca-de-dados-e-usabilidade-uiux">Fase 2: Segurança de Dados e Usabilidade (UI/UX)</h3>
+<ul>
+<li>[x] Implementar confirmação com AlertDialog ao excluir série no <code>serie_row_widget.dart</code> ([UX-01]).</li>
+<li>[x] Validado fluxo de auto-preenchimento ao concluir série com campos vazios ([UX-02]).</li>
+<li>[x] Adicionar <code>PopScope</code> na tela base para alertar sobre treino em andamento antes de sair ([UX-03]).</li>
+<li>[x] Alterar o modal de descanso para não bloquear a tela inteira (<code>barrierDismissible: true</code>) ([UX-04]).</li>
+<li>[x] Adicionar indicador <code>isLoading</code> no Histórico para eliminar flash visual ([UX-05]).</li>
+<li>[x] Ampliar touch targets na gestão de fichas de 28dp para 44dp ([UX-06]).</li>
+</ul>
+<h3 id="fase-3-alinhamento-da-documentacao-e-higienizacao-do-projeto">Fase 3: Alinhamento da Documentação e Higienização do Projeto</h3>
+<ul>
+<li>[x] Atualizar fórmula e marcos em <code>docs/SISTEMA_SAIYAJIN.md</code>.</li>
+<li>[x] Atualizar <code>README.md</code> (versão do Flutter/Dart, contagem de 92 testes e listagem completa de widgets e testes).</li>
+<li>[x] Remover dependência órfã <code>flutter_svg</code> de <code>pubspec.yaml</code> e atualizar descrição do projeto.</li>
+<li>[x] Alinhar tokens de cores em <code>docs/UI_UX.md</code> com <code>AppColors</code>.</li>
+<li>[x] Alinhar histórico de migrações SQLite e matriz de testes em <code>docs/ARQUITETURA.md</code>.</li>
+</ul>
+<h3 id="fase-4-otimizacao-de-arquitetura-e-performance">Fase 4: Otimização de Arquitetura e Performance</h3>
+<ul>
+<li>[x] Isolar a reatividade do cronômetro de treino para evitar rebuilds de 1s na tela inteira.</li>
+<li>[x] Refatorar regras de PRs/1RM para uma entidade unificada.</li>
+<li>[x] Expandir cobertura de testes para a camada de persistência com <code>sqflite_common_ffi</code>.</li>
+</ul>
+<hr />
+<p><em>Relatório consolidado gerado automaticamente pela suíte de subagentes especializados.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
