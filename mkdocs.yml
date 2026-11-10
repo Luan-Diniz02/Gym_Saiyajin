@@ -1,0 +1,86 @@
+site_name: "Gym Saiyajin — Documentação Técnica"
+site_url: "https://luan-diniz02.github.io/Gym_Saiyajin/"
+repo_url: "https://github.com/Luan-Diniz02/Gym_Saiyajin"
+repo_name: "Luan-Diniz02/Gym_Saiyajin"
+site_description: "Documentação técnica completa e interativa do Gym Saiyajin — Arquitetura, Design System, UI/UX, Gamificação e Engenharia Flutter."
+site_author: "Luan Pereira Diniz"
+use_directory_urls: false
+
+hooks:
+  - hooks/sync_readme.py
+
+theme:
+  name: material
+  language: pt-BR
+  logo: images/shenlong_logo.png
+  favicon: images/shenlong_logo.png
+  font:
+    text: Plus Jakarta Sans
+    code: JetBrains Mono
+  palette:
+    # Modo Escuro (Slate - Padrão Saiyajin)
+    - scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Mudar para modo claro
+    # Modo Claro (Default)
+    - scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Mudar para modo escuro
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - 🏠 Início: index.md
+  - 🏛️ Arquitetura: ARQUITETURA.md
+  - 🎨 Design System: UI_UX.md
+  - ⚡ Sistema Ki: SISTEMA_SAIYAJIN.md
+  - 📸 Social & Cards: COMPARTILHAMENTO_SOCIAL.md
+  - 🏋️ Catálogo: GUIA_CATALOGO_EXERCICIOS.md
+  - 📜 Roadmap: ROADMAP_TEMATICO.md
+
+not_in_nav: |
+  AUDITORIA_CONSOLIDADA.md
+  relatorio_auditoria_ui_ux.md

@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.2.0"><img src="https://img.shields.io/badge/Release-v2.2.0-FF8C00?logo=github&logoColor=white" alt="Release v2.2.0" /></a>
+  <a href="https://luan-diniz02.github.io/Gym_Saiyajin/"><img src="https://img.shields.io/badge/Docs-MkDocs%20Material-FF8C00?logo=materialformkdocs&logoColor=white" alt="Docs" /></a>
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
@@ -54,6 +55,14 @@ A versão estável do aplicativo está pronta para instalação imediata no seu 
 
 ## 📚 Documentação Especializada
 
+<p align="center">
+  <a href="https://luan-diniz02.github.io/Gym_Saiyajin/">
+    <img src="https://img.shields.io/badge/Acessar_Portal_Web-MkDocs_Material-FF8C00?style=for-the-badge&logo=materialformkdocs&logoColor=white" alt="Portal de Documentação MkDocs" />
+  </a>
+</p>
+
+> 🌐 **Portal Interativo Online**: Acesse a documentação técnica completa com navegação por abas, busca instantânea e renderização matemática via GitHub Pages em **[luan-diniz02.github.io/Gym_Saiyajin](https://luan-diniz02.github.io/Gym_Saiyajin/)**.
+
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
 - 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite (v4) com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (133 testes automatizados).
@@ -68,6 +77,13 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 ## 🚀 Funcionalidades Principais
 
 ### 🏋️ Treino em Tempo Real
+
+<p align="center">
+  <img src="docs/images/demo_treino_series.gif" width="31%" alt="Demonstração do Treino e Catálogo" />
+  <img src="docs/images/series_input.png" width="31%" alt="Anatomia Simétrica das Séries e PR" />
+  <img src="docs/images/demo_descanso_camara.gif" width="31%" alt="Escotilha da Câmara de Regeneração" />
+</p>
+
 - **Catálogo Offline de 106 Exercícios com Miniaturas, GIFs Sob Demanda & Sinônimos Brasileiros**:
   - Miniaturas anatômicas em containers arredondados no modal de busca, na fila *Próximos da Ficha*, no *Gerenciador de Fichas*, no cabeçalho fixo do exercício ativo, nos cards do *Histórico* e de *Exercícios Concluídos*, no *Registro de Poder* e no *Gráfico de Progressão de Carga* (zero impacto de CPU/RAM na rolagem).
   - **Execução Animada Sob Demanda**: Toque diretamente na miniatura com indicador de play para abrir o modal com o **GIF animado (`180×180`)**, equipamento, músculo alvo, sinergistas e instruções técnicas passo a passo em PT-BR — sem empurrar as séries para baixo durante o treino.
@@ -75,6 +91,9 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
   - **Unificação de Exercícios Customizados**: Associe/funda exercícios criados anteriormente a qualquer exercício padrão do catálogo com 1 toque (`AssociarExercicioModal`), transferindo 100% do histórico de séries, recordes (PRs) e fichas sem perder progresso.
 - **Nome & Divisão do Treino**: Chips de seleção rápida padronizados (`Treino A`, `Treino B`, `Push`, `Pull`, `Legs`, etc.) ou nome customizado digitado pelo usuário. Registrado na sessão e estampado na timeline e no card social.
 - **Fichas / Templates Permanentes com Reordenação Drag-and-Drop**: Crie, edite, reordene exercícios clicando e arrastando (`ReorderableListView`) e configure a quantidade de séries padrão por exercício (`[-] X [+]`). Enfileiramento em 1 toque.
+  <p align="center">
+    <img src="docs/images/demo_catalogo_fichas.gif" width="40%" alt="Fichas de Treino com Reordenação Drag-and-Drop" />
+  </p>
 - **Aparelho Ocupado? Substituição Ágil**: Toque no botão de troca (`Swap`) para substituir um exercício da fila por outro do mesmo grupo muscular sem alterar a ficha base.
 - **Carga Anterior Inteligente (Sobrecarga Progressiva)**: O app busca o histórico do exercício e sugere a última carga e reps nos campos (`hintText`) e na linha de apoio. Tocar no check com campos vazios auto-preenche a série com os valores anteriores.
 - **Séries com Ergonomia Avançada, Nuvem Voadora (*Kinto-un*) & Esforço (RIR/RPE)**:
@@ -92,6 +111,11 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Encerramento Protegido & Celebração de Conquistas**: Confirmação segura, cálculo imediato do Ki ganho na sessão com bônus de $+150$ Ki por PR conquistado e disparo do modal de compartilhamento.
 
 ### 📜 Histórico de Sessões & Caminho da Serpente
+
+<p align="center">
+  <img src="docs/images/caminho_serpente.png" width="55%" alt="Card do Caminho da Serpente no Histórico" />
+</p>
+
 - **Caminho da Serpente (*Snake Way*)**:
   - Barra de progresso senoidal contínua com curvas suaves de alta fidelidade matemática, nuvens celestiais do Outro Mundo, aura de Ki do guerreiro e o Planeta do Senhor Kaioh vetorial (`PlanetaKaiohIcon`) na chegada. Sempre visível no card.
   - Card interativo com Kanji Kaioh oficial (**界王**) e alternância de dados analíticos: odômetro de ferro (meta épica de 1.000.000 km), marcos de lore canônica e métricas consolidadas (*Carga Total*, *Tempo Total* e *Sessões*).
@@ -108,6 +132,11 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Exclusão Segura**: Confirmação modal com exclusão em cascata transacional (`ON DELETE CASCADE`) no SQLite.
 
 ### 📈 Dashboard de Progresso & Métricas
+
+<p align="center">
+  <img src="docs/images/mapa_calor.png" width="55%" alt="Mapa de Calor Muscular Frontal e Dorsal" />
+</p>
+
 - **Medidor de Poder de Luta (Ki) & Transformações**:
   - Pontuação híbrida unindo força máxima nos 6 grupos musculares, quilometragem de volume histórico e bônus de recordes.
   - Escala canônica de patamares: *Classe Baixa* $\to$ *Guerreiro Z* $\to$ *Elite Saiyajin* $\to$ *Super Saiyajin* $\to$ *Super Saiyajin 2* $\to$ *Super Saiyajin 3* $\to$ *Instinto Superior*.
@@ -123,6 +152,13 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Cálculo de IMC & Metas Corporais**: Marcado com o ícone vetorial da Cápsula Hoi-Poi da Capsule Corp (`CapsuleIcon`), cálculo padrão OMS em 6 faixas e atalhos de atualização rápida.
 
 ### 📱 Compartilhamento Social de Alta Performance
+
+<p align="center">
+  <img src="docs/images/preset_slim_classico.png" width="31%" alt="Preset Slim Clássico" />
+  <img src="docs/images/preset_scouter_hud.png" width="31%" alt="Preset Scouter HUD" />
+  <img src="docs/images/preset_rodape_minimalista.png" width="31%" alt="Preset Rodapé Minimalista" />
+</p>
+
 - **Proporções Flexíveis**: Alternância entre `STORIES (9:16)` (Instagram Stories / WhatsApp Status) e `FEED (1:1)` (Instagram Feed / WhatsApp Chat).
 - **Presets de Overlay**:
   - **Slim Clássico**: Minimalista, divisão e troféu de PRs com DragonBallIcon no topo, e 3 métricas de impacto (Volume, Séries, Duração) na base, valorizando 100% da foto.
@@ -154,6 +190,9 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 
 ```text
 gym_saiyajin/
+├── .github/
+│   └── workflows/
+│       └── deploy-docs.yml             # Pipeline de CI/CD para deploy no GitHub Pages
 ├── docs/                               # Documentação técnica especializada
 │   ├── ARQUITETURA.md                  # Camadas, SQLite (v4), migrações e testes
 │   ├── UI_UX.md                        # Design System, ergonomia, CustomPainters e Heatmap
@@ -161,7 +200,13 @@ gym_saiyajin/
 │   ├── COMPARTILHAMENTO_SOCIAL.md      # Presets, proporções 9:16/1:1 e exportação
 │   ├── GUIA_CATALOGO_EXERCICIOS.md     # Curadoria e inclusão de exercícios offline (180x180)
 │   ├── ROADMAP_TEMATICO.md             # Propostas canônicas concluídas e backlog
+│   ├── stylesheets/                    # Estilos customizados (Laranja & Ouro Saiyajin)
+│   │   └── extra.css
+│   ├── javascripts/                    # Configurações de renderização (MathJax)
+│   │   └── mathjax.js
 │   └── images/                         # Assets visuais da documentação
+├── hooks/                              # Lifecycle Hooks do MkDocs (Docs-as-Code)
+│   └── sync_readme.py                  # Sincronização automática e sem perdas (UTF-8)
 ├── lib/
 │   ├── main.dart                       # Ponto de entrada, PopScope e navegação base
 │   ├── controllers/                    # Gerenciamento de estado reativo (ChangeNotifier)
@@ -243,6 +288,7 @@ gym_saiyajin/
 │   ├── treino_controller_test.dart
 │   ├── treino_repository_test.dart
 │   └── volume_sessao_test.dart
+├── mkdocs.yml                          # Configuração do portal MkDocs Material
 ├── pubspec.yaml
 └── README.md
 ```

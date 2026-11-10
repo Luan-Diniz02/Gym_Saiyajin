@@ -1,0 +1,446 @@
+/* ==========================================================================
+   Gym Saiyajin — High-Tech Dark Design System (Material for MkDocs)
+   Inspiração: Vercel / Linear / Supabase com Paleta Canônica Saiyajin
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens Globais & Paleta de Cores
+   -------------------------------------------------------------------------- */
+:root {
+  --saiyajin-orange:       #FF8C00;
+  --saiyajin-orange-light: #FFA333;
+  --saiyajin-orange-dark:  #CC7000;
+  --saiyajin-gold:         #FFD700;
+  --saiyajin-gold-glow:    rgba(255, 215, 0, 0.25);
+  --saiyajin-orange-glow:  rgba(255, 140, 0, 0.20);
+
+  /* Material Tokens */
+  --md-primary-fg-color:        #FF8C00;
+  --md-primary-fg-color--light: #FFA333;
+  --md-primary-fg-color--dark:  #CC7000;
+  --md-accent-fg-color:         #FFD700;
+  --md-accent-fg-color--transparent: rgba(255, 215, 0, 0.15);
+}
+
+/* Modo Escuro (Slate - High-Tech Obsidian) */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:         #0D1117;
+  --md-default-bg-color--light:   #161B22;
+  --md-default-bg-color--lighter: #21262D;
+  --md-default-fg-color:         #E6EDF3;
+  --md-default-fg-color--light:  #8B949E;
+  --md-default-fg-color--lighter:#6E7681;
+  --md-text-color:               #E6EDF3;
+  --md-code-bg-color:            #161B22;
+}
+
+/* --------------------------------------------------------------------------
+   2. Cabeçalho Glassmorphism & Barra Superior
+   -------------------------------------------------------------------------- */
+.md-header {
+  background-color: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 140, 0, 0.18) !important;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.md-header__title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.md-header__button.md-logo {
+  padding: 0.2rem;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2.2rem;
+  width: auto;
+  border-radius: 6px;
+  filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.35));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.md-header__button.md-logo:hover img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.6));
+}
+
+/* --------------------------------------------------------------------------
+   3. Caixa de Busca Futurista
+   -------------------------------------------------------------------------- */
+.md-search__inner {
+  border-radius: 8px;
+}
+
+.md-search__form {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md-search__form:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 140, 0, 0.4) !important;
+}
+
+.md-search__form:focus-within {
+  background-color: rgba(22, 27, 34, 0.95) !important;
+  border-color: var(--saiyajin-orange) !important;
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2) !important;
+}
+
+.md-search__input {
+  color: #F0F6FC !important;
+}
+
+.md-search__input::placeholder {
+  color: #8B949E !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Barra de Abas (Navigation Tabs & Scroll Affordance)
+   -------------------------------------------------------------------------- */
+.md-tabs {
+  background-color: rgba(18, 22, 30, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+}
+
+/* Container com rolagem horizontal suave */
+.md-tabs__list {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar visível suavemente na barra de abas ao passar o cursor */
+.md-tabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.md-tabs::-webkit-scrollbar-track {
+  background: rgba(13, 17, 23, 0.6);
+}
+
+.md-tabs::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.35);
+  border-radius: 2px;
+}
+
+.md-tabs:hover::-webkit-scrollbar-thumb {
+  background: var(--saiyajin-orange);
+}
+
+.md-tabs__item {
+  flex-shrink: 0;
+}
+
+.md-tabs__link {
+  color: #94A3B8 !important;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.md-tabs__link:hover {
+  color: var(--saiyajin-orange-light) !important;
+  opacity: 1;
+  background-color: rgba(255, 140, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}
+
+.md-tabs__item--active .md-tabs__link,
+.md-tabs__link--active {
+  color: var(--saiyajin-gold) !important;
+  opacity: 1 !important;
+  font-weight: 700;
+  border-bottom: 2px solid var(--saiyajin-orange) !important;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero Section & Logotipo Central (Efeito Glow de Ki)
+   -------------------------------------------------------------------------- */
+.md-typeset p[align="center"] img[alt*="Logo"],
+.md-typeset p[align="center"] img[alt*="Shenlong"] {
+  border-radius: 12px;
+  filter: drop-shadow(0 8px 24px rgba(255, 140, 0, 0.35));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.35s ease;
+}
+
+.md-typeset p[align="center"] img[alt*="Logo"]:hover,
+.md-typeset p[align="center"] img[alt*="Shenlong"]:hover {
+  transform: translateY(-3px) scale(1.05);
+  filter: drop-shadow(0 12px 36px rgba(255, 215, 0, 0.6));
+}
+
+.md-typeset h1[align="center"] {
+  background: linear-gradient(135deg, #FFFFFF 20%, #FFD700 70%, #FF8C00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 2.4rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.md-typeset p[align="center"] strong {
+  color: #C9D1D9;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 720px;
+  display: inline-block;
+}
+
+/* Badges do Hero */
+.md-typeset p[align="center"] a img,
+.md-typeset p[align="center"] > img {
+  border-radius: 4px;
+  margin: 3px 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-typeset p[align="center"] a:hover img {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   6. Screenshots do App (Moldura de Dispositivo & Elevação 3D)
+   -------------------------------------------------------------------------- */
+.md-typeset img[alt*="Tela"],
+.md-typeset img[alt*="Histórico"],
+.md-typeset img[alt*="Progresso"] {
+  border-radius: 20px !important;
+  border: 2px solid rgba(255, 140, 0, 0.25) !important;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 140, 0, 0.12) !important;
+  margin: 0.8rem 0.5rem !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.md-typeset img[alt*="Tela"]:hover,
+.md-typeset img[alt*="Histórico"]:hover,
+.md-typeset img[alt*="Progresso"]:hover {
+  transform: translateY(-6px) scale(1.025) !important;
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 215, 0, 0.35) !important;
+  border-color: var(--saiyajin-gold) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Tipografia, Títulos & Hierarquia Visual
+   -------------------------------------------------------------------------- */
+.md-typeset h1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #F0F6FC;
+}
+
+.md-typeset h2 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #FFA333;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+  padding-bottom: 0.4rem;
+  margin-top: 2.2rem;
+  position: relative;
+}
+
+.md-typeset h2::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, #FF8C00, #FFD700);
+}
+
+.md-typeset h3 {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+/* Links em geral */
+.md-typeset a {
+  color: #FFA333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.md-typeset a:hover {
+  color: #FFD700;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 215, 0, 0.5);
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Tabelas Temáticas & Design System Vetorial
+   -------------------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(22, 27, 34, 0.6);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.md-typeset table:not([class]) th {
+  background: rgba(255, 140, 0, 0.12) !important;
+  color: #FFD700 !important;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.25);
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+}
+
+.md-typeset table:not([class]) td {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.md-typeset table:not([class]) tr:hover td {
+  background-color: rgba(255, 140, 0, 0.05);
+}
+
+/* Ícones vetoriais da tabela */
+.md-typeset table img[src*="preview_"] {
+  border-radius: 10px;
+  padding: 4px;
+  background: rgba(13, 17, 23, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.md-typeset table img[src*="preview_"]:hover {
+  transform: scale(1.12);
+  border-color: #FF8C00;
+  box-shadow: 0 0 12px rgba(255, 140, 0, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   9. Admonitions, Callouts & Blocos de Código
+   -------------------------------------------------------------------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left-width: 4px;
+}
+
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  border-left-color: var(--saiyajin-orange);
+}
+
+.md-typeset .admonition.note,
+.md-typeset details.note {
+  border-left-color: var(--saiyajin-gold);
+}
+
+.md-typeset pre > code {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   10. TOC (Índice da Direita) & Menus Laterais
+   -------------------------------------------------------------------------- */
+.md-nav__link {
+  font-size: 0.82rem;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.md-nav__link:hover {
+  color: var(--saiyajin-orange-light) !important;
+}
+
+.md-nav__link--active {
+  color: var(--saiyajin-gold) !important;
+  font-weight: 600;
+}
+
+.md-sidebar .md-nav--secondary .md-nav__link--active {
+  border-left: 2px solid var(--saiyajin-orange);
+  padding-left: 0.5rem;
+}
+
+/* TOC (Índice da Direita) refinado e legível */
+.md-sidebar--secondary .md-nav__item {
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+
+.md-sidebar--secondary .md-nav__link {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #8B949E;
+}
+
+.md-sidebar--secondary .md-nav__link:hover {
+  color: var(--saiyajin-gold) !important;
+}
+
+/* Scrollbar ultrafina e discreta */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(13, 17, 23, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.25);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 140, 0, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   11. Otimização de Layout & Diagramas Mermaid
+   -------------------------------------------------------------------------- */
+/* Oculta sidebar primária redundante em desktop (a navegação já é por abas) */
+@media screen and (min-width: 76.25em) {
+  .md-sidebar--primary {
+    display: none;
+  }
+}
+
+/* Diagramas Mermaid com fundo dark e borda Saiyajin */
+.mermaid svg {
+  border-radius: 12px;
+  background: rgba(18, 22, 30, 0.7) !important;
+  border: 1px solid rgba(255, 140, 0, 0.2);
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Links dentro de tabelas */
+.md-typeset table:not([class]) a {
+  color: #FFA333 !important;
+  font-weight: 600;
+}
+
+.md-typeset table:not([class]) a:hover {
+  color: #FFD700 !important;
+}
+

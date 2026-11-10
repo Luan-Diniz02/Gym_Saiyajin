@@ -29,3 +29,15 @@ doc/api/
 # IDEs
 .idea/
 *.iml
+
+# MkDocs
+site/
+docs/index.md
+__pycache__/
+*.pyc
+
+# Raw video recordings (converted to optimized web GIFs)
+docs/images/*.mp4
+
+
+

@@ -87,6 +87,11 @@ Cada nível de Ki possui uma identidade cromática exclusiva aplicada em auras, 
 ## 📱 3. Anatomia Visual dos Componentes
 
 ### 1. Série Row (`SerieRowWidget`)
+
+<p align="center">
+  <img src="images/series_input.png" width="45%" alt="Anatomia Simétrica das Séries e Ergonomia sob Fadiga" />
+</p>
+
 A linha de execução da série é a unidade mais utilizada do aplicativo, demandando simetria milimétrica:
 
 ```text
@@ -111,6 +116,11 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Pill compacto na base da série que expande horizontalmente os chips de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.
 
 ### 2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (`CronometroWidget`)
+
+<p align="center">
+  <img src="images/demo_descanso_camara.gif" width="45%" alt="Demonstração da Câmara de Regeneração e Cronômetro de Descanso" />
+</p>
+
 - **Estética de Escotilha Industrial de Namekusei**:
   - **Aro Metálico de Titânio**: Moldura circular escura chanfrada em 3D com **8 rebites prateados chanfrados** simétricos com fenda e ponto de reflexo.
   - **Anel de Fluido Bioenergético Saiyajin**: Arco de progresso em gradiente de **Ouro Super Saiyajin e Laranja Ki** (`#FFD700` $\to$ `#FF8C00`), com halo luminescente (*glow*) ativo enquanto o cronômetro roda.

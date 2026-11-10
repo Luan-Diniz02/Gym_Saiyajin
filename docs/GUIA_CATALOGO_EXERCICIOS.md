@@ -1,4 +1,12 @@
-# Guia Técnico: Inclusão e Curadoria de Exercícios no Catálogo Offline
+<p align="center">
+  <img src="images/shenlong_logo.png" width="120" alt="Gym Saiyajin Logo" />
+  <br>
+  <h1 align="center">Guia Técnico: Catálogo de Exercícios Offline & Fichas</h1>
+</p>
+
+<p align="center">
+  <img src="images/demo_catalogo_fichas.gif" width="45%" alt="Demonstração do Catálogo de Exercícios e Fichas de Treino" />
+</p>
 
 Este documento detalha o procedimento operacional padrão (SOP) para pesquisar, baixar mídias, cadastrar metadados e validar novos exercícios no catálogo 100% offline do **Gym Saiyajin**, utilizando como base o repositório aberto [`hasaneyldrm/exercises-dataset`](https://github.com/hasaneyldrm/exercises-dataset) (mídias © Gym Visual).
 

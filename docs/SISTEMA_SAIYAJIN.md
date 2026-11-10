@@ -177,6 +177,11 @@ De acordo com a distância percorrida ($\frac{\text{km}}{1.000.000} \times 100$)
 | **100.0%+** (≥ 1.000.000 km) | *Planeta do Sr. Kaioh (Travessia Concluída!)* | O guerreiro alcança o pequeno planeta sagrado e está pronto para o Treino com Pesos Divinos! |
 
 ### C. Apresentação Visual no Histórico
+
+<p align="center">
+  <img src="images/caminho_serpente.png" width="55%" alt="Card do Caminho da Serpente no Histórico" />
+</p>
+
 - **Barra Senoidal Contínua (`CaminhoSerpenteProgressBar`)**: Ondulação suave de seno ($2.5$ ciclos), drop shadows espaciais, aura de Ki que se desloca com o avanço e o `PlanetaKaiohIcon` ancorado na chegada.
 - **Interatividade & Ocultação Inteligente**: A barra permanece sempre visível para impacto estético instantâneo, enquanto os números analíticos (odômetro numérico, texto do marco e os 3 cards de carga, tempo e sessões) expandem ou recolhem suavemente ao toque.
 
@@ -201,6 +206,10 @@ No treinamento esportivo do **Gym Saiyajin**, essa aura simboliza o **Vigor e a 
 ---
 
 ## 🔥 7. Mapa de Calor Muscular & Telemetria Fisiológica (`ScouterAnatomicoWidget`)
+
+<p align="center">
+  <img src="images/mapa_calor.png" width="55%" alt="Mapa de Calor Muscular Frontal e Dorsal" />
+</p>
 
 Para orientar a distribuição equilibrada do volume de treinamento e evitar pontos fracos (*lagging muscles*) ou sobretreinamento localizado, o Dashboard de Progresso integra um **Mapa de Calor Muscular Frontal e Dorsal** baseado em séries válidas (excluindo aquecimentos):
 

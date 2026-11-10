@@ -25,6 +25,12 @@ O modal permite alternar instantaneamente entre dois formatos de exportação:
 
 O atleta dispõe de 3 estilos de composição gráfica que podem ser alternados com um único toque:
 
+<p align="center">
+  <img src="images/preset_slim_classico.png" width="31%" alt="Preset Slim Clássico" />
+  <img src="images/preset_scouter_hud.png" width="31%" alt="Preset Scouter HUD" />
+  <img src="images/preset_rodape_minimalista.png" width="31%" alt="Preset Rodapé Minimalista" />
+</p>
+
 ```mermaid
 graph TD
     A[Sessão Finalizada] --> B[CompartilharCardModal]
@@ -61,6 +67,10 @@ graph TD
 ---
 
 ## 🎨 3. Controles & Customização
+
+<p align="center">
+  <img src="images/demo_compartilhar_social.gif" width="40%" alt="Demonstração do Modal de Compartilhamento Social" />
+</p>
 
 No painel inferior do estúdio em tela cheia (com `SafeArea` e pré-visualização adaptativa via `FittedBox`), o guerreiro tem acesso direto a:
 
