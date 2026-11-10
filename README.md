@@ -31,7 +31,7 @@ Todos os elementos temáticos foram construídos com `CustomPainter` vetorial ma
 
 | Câmara de Regeneração | Chamas de Ki (Aura) | Planeta do Sr. Kaioh | Radar do Dragão | Esfera do Dragão | Cápsula Hoi-Poi |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| <img src="docs/images/icons/preview_escotilha_camara_ativa.png" width="90" /> | <img src="docs/images/icons/preview_ki_aura_gold.png" width="90" /> | <img src="docs/images/icons/preview_planeta_kaioh.png" width="90" /> | <img src="docs/images/icons/preview_dragon_radar_7dots.png" width="90" /> | <img src="docs/images/icons/preview_dragon_ball_4stars.png" width="90" /> | <img src="docs/images/icons/preview_capsule_blue.png" width="90" /> |
+| <img src="docs/images/icons/preview_escotilha_camara_ativa.png" width="90" alt="Câmara de Regeneração Médica com Escotilha e Micro-Bolhas" /> | <img src="docs/images/icons/preview_ki_aura_gold.png" width="90" alt="Aura de Ki Super Saiyajin Dourada" /> | <img src="docs/images/icons/preview_planeta_kaioh.png" width="90" alt="Planeta do Senhor Kaioh Vetorial" /> | <img src="docs/images/icons/preview_dragon_radar_7dots.png" width="90" alt="Radar do Dragão com 7 Esferas Ativas" /> | <img src="docs/images/icons/preview_dragon_ball_4stars.png" width="90" alt="Esfera do Dragão de 4 Estrelas (Goku / Vovô Gohan)" /> | <img src="docs/images/icons/preview_capsule_blue.png" width="90" alt="Cápsula Hoi-Poi Azul da Capsule Corp" /> |
 | Escotilha com micro-bolhas | Vigor e transformações | Marco de 1.000.000 km | Meta semanal de treino | Recordes batidos (PRs) | Composição corporal |
 
 ---

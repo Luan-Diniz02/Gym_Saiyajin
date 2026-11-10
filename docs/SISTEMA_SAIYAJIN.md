@@ -58,7 +58,7 @@ O Ki acumulado determina o **Patamar de Poder** do guerreiro, desbloqueando aura
 Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de ícones vetoriais proprietários desenhados diretamente no Canvas do Flutter:
 
 ### `DragonBallIcon`
-- **Arquivo**: [`lib/widgets/dragon_ball_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/dragon_ball_icon.dart)
+- **Arquivo**: [`lib/widgets/dragon_ball_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/dragon_ball_icon.dart)
 - **Renderização**:
   - Esfera com gradiente radial âmbar/laranja profundo (`#FFB703` $\to$ `#FB8500`).
   - Brilho especular translúcido simétrico simulando reflexo de cristal/acrílico.
@@ -70,7 +70,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - **No Quadro de Recordes**: A esfera do card e cabeçalho adapta suas estrelas de acordo com a quantidade total de recordes históricos registrados.
 
 ### `ScouterIcon`
-- **Arquivo**: [`lib/widgets/scouter_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/scouter_icon.dart)
+- **Arquivo**: [`lib/widgets/scouter_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/scouter_icon.dart)
 - **Renderização**:
   - Haste ergonômica auricular com detalhes de parafusos e juntas mecânicas.
   - Arco superior angular com textura de liga metálica.
@@ -81,7 +81,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - Identificador visual da transformação atual do guerreiro no modal de level-up e painel de Ki.
 
 ### `DragonRadarIcon`
-- **Arquivo**: [`lib/widgets/dragon_radar_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/dragon_radar_icon.dart)
+- **Arquivo**: [`lib/widgets/dragon_radar_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/dragon_radar_icon.dart)
 - **Renderização**:
   - Bisel metálico chanfrado prateado e dial clássico de cronômetro no topo.
   - Visor CRT verde militar escuro com retículo de grade de coordenadas ortogonais.
@@ -91,7 +91,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - Gamificação da **Meta Semanal** no Dashboard de Progresso (cada dia ativo de treino na semana ilumina uma Esfera do Dragão no radar).
 
 ### `CapsuleIcon`
-- **Arquivo**: [`lib/widgets/capsule_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/capsule_icon.dart)
+- **Arquivo**: [`lib/widgets/capsule_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/capsule_icon.dart)
 - **Renderização**:
   - Cápsula Hoi-Poi cilíndrica com calotas hemisféricas peroladas em branco/prata com reflexo curvo de vidro.
   - Botão metálico de acionamento no topo (*push trigger* com haste cilíndrica e anel de retenção).
@@ -102,7 +102,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - Representação oficial do card de **Composição Corporal e Medidas** (IMC e Percentual de Gordura) no Dashboard de Progresso.
 
 ### `PlanetaKaiohIcon`
-- **Arquivo**: [`lib/widgets/planeta_kaioh_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/planeta_kaioh_icon.dart)
+- **Arquivo**: [`lib/widgets/planeta_kaioh_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/planeta_kaioh_icon.dart)
 - **Renderização**:
   - Planeta esférico cel-shaded com gradiente volumétrico 3D em verde musgo/esmeralda.
   - Estrada anelar circular pavimentada com curvatura elíptica em torno do pequeno astro.
@@ -113,7 +113,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - Ponto de chegada supremo e meta final na barra de progresso do **Caminho da Serpente** (`CaminhoSerpenteProgressBar`).
 
 ### `EscotilhaCamaraPainter`
-- **Arquivo**: [`lib/widgets/escotilha_camara_painter.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/escotilha_camara_painter.dart)
+- **Arquivo**: [`lib/widgets/escotilha_camara_painter.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/escotilha_camara_painter.dart)
 - **Renderização**:
   - Aro exterior circular em liga metálica escura chanfrada em 3D com 8 rebites industriais prateados simétricos.
   - Anel de fluido bioenergético com gradiente Ouro Super Saiyajin e Laranja Ki (`#FFD700` $\to$ `#FF8C00`).
@@ -124,7 +124,7 @@ Eliminamos o uso excessivo de emojis genéricos (como 📦 ou ⚡) em favor de �
   - Visual temático do cronômetro circular de descanso (`CronometroWidget`), contextualizando a recuperação biológica dos guerreiros como a Câmara de Cura/Regeneração Médica de Dragon Ball Z.
 
 ### `KintoUnIcon`
-- **Arquivo**: [`lib/widgets/kinto_un_icon.dart`](file:///c:/Users/luand/Documents/Codigos/Dart/gym_saiyajin/lib/widgets/kinto_un_icon.dart)
+- **Arquivo**: [`lib/widgets/kinto_un_icon.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/widgets/kinto_un_icon.dart)
 - **Renderização**:
   - Silhueta cel-shaded da Nuvem Voadora (*Kinto-un*) com cúpulas volumétricas, gradiente dourado (`#FFF59D` $\to$ `#FFD700` $\to$ `#FFA000`), rastro aerodinâmico e halo de Ki opcional.
 - **Uso Oficial**:

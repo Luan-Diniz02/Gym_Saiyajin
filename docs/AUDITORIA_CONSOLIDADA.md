@@ -13,13 +13,13 @@
 
 ## 📑 Sumário
 
-1. [Visão Geral Executiva](#1-visão-geral-executiva)
-2. [Eixo 1: Auditoria de UI & UX](#2-eixo-1-auditoria-de-ui--ux)
-3. [Eixo 2: Documentação Técnica vs. Estado Real do Código](#3-eixo-2-documentação-técnica-vs-estado-real-do-código)
-4. [Eixo 3: Diagnóstico e Solução do Ícone de Notificação](#4-eixo-3-diagnóstico-e-solução-do-ícone-de-notificação)
-5. [Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software](#5-eixo-4-boas-práticas-arquitetura-e-engenharia-de-software)
-6. [Matriz de Priorização (Impacto vs. Esforço)](#6-matriz-de-priorização-impacto-vs-esforço)
-7. [Plano de Ação e Roadmap Técnico](#7-plano-de-ação-e-roadmap-técnico)
+1. [Visão Geral Executiva](#1-visao-geral-executiva)
+2. [Eixo 1: Auditoria de UI & UX](#2-eixo-1-auditoria-de-ui-ux)
+3. [Eixo 2: Documentação Técnica vs. Estado Real do Código](#3-eixo-2-documentacao-tecnica-vs-estado-real-do-codigo)
+4. [Eixo 3: Diagnóstico e Solução do Ícone de Notificação](#4-eixo-3-diagnostico-e-solucao-do-icone-de-notificacao)
+5. [Eixo 4: Boas Práticas, Arquitetura e Engenharia de Software](#5-eixo-4-boas-praticas-arquitetura-e-engenharia-de-software)
+6. [Matriz de Priorização (Impacto vs. Esforço)](#6-matriz-de-priorizacao-impacto-vs-esforco)
+7. [Plano de Ação e Roadmap Técnico](#7-plano-de-acao-e-roadmap-tecnico)
 
 ---
 

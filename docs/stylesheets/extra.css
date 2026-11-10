@@ -290,6 +290,31 @@
 /* --------------------------------------------------------------------------
    8. Tabelas Temáticas & Design System Vetorial
    -------------------------------------------------------------------------- */
+.md-typeset__scrollwrap {
+  margin: 1.2rem 0;
+  border-radius: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.md-typeset__scrollwrap::-webkit-scrollbar {
+  height: 4px;
+}
+
+.md-typeset__scrollwrap::-webkit-scrollbar-track {
+  background: rgba(13, 17, 23, 0.6);
+  border-radius: 2px;
+}
+
+.md-typeset__scrollwrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.35);
+  border-radius: 2px;
+}
+
+.md-typeset__scrollwrap:hover::-webkit-scrollbar-thumb {
+  background: var(--saiyajin-orange);
+}
+
 .md-typeset table:not([class]) {
   border-radius: 12px;
   overflow: hidden;
