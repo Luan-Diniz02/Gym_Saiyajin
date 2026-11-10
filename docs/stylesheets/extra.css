@@ -68,6 +68,26 @@
   filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.6));
 }
 
+/* Badge do Repositório GitHub */
+.md-header__source {
+  margin-left: 0.8rem;
+}
+
+.md-header__source .md-source {
+  background-color: rgba(22, 27, 34, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md-header__source .md-source:hover {
+  background-color: rgba(255, 140, 0, 0.12);
+  border-color: rgba(255, 140, 0, 0.45);
+  box-shadow: 0 0 14px rgba(255, 140, 0, 0.25);
+  transform: translateY(-1px);
+}
+
 /* --------------------------------------------------------------------------
    3. Caixa de Busca Futurista
    -------------------------------------------------------------------------- */
@@ -102,70 +122,87 @@
 }
 
 /* --------------------------------------------------------------------------
-   4. Barra de Abas (Navigation Tabs & Scroll Affordance)
+   4. Barra de Abas Centralizada (Navigation Tabs & High-Tech Pill Bar)
    -------------------------------------------------------------------------- */
 .md-tabs {
-  background-color: rgba(18, 22, 30, 0.95) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(13, 17, 23, 0.92) !important;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.18) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.38rem 0 !important;
   position: relative;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
-/* Container com rolagem horizontal suave */
+/* Centralização do grid das abas */
+.md-tabs .md-grid {
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  padding: 0 1rem;
+}
+
+/* Container com rolagem horizontal suave e abas centralizadas */
 .md-tabs__list {
+  display: flex !important;
+  justify-content: safe center !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  list-style: none !important;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none !important;
 }
 
-/* Scrollbar visível suavemente na barra de abas ao passar o cursor */
-.md-tabs::-webkit-scrollbar {
-  height: 3px;
-}
-
-.md-tabs::-webkit-scrollbar-track {
-  background: rgba(13, 17, 23, 0.6);
-}
-
-.md-tabs::-webkit-scrollbar-thumb {
-  background: rgba(255, 140, 0, 0.35);
-  border-radius: 2px;
-}
-
-.md-tabs:hover::-webkit-scrollbar-thumb {
-  background: var(--saiyajin-orange);
+.md-tabs__list::-webkit-scrollbar {
+  display: none !important;
 }
 
 .md-tabs__item {
+  height: auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
   flex-shrink: 0;
 }
 
 .md-tabs__link {
-  color: #94A3B8 !important;
-  font-weight: 500;
-  font-size: 0.82rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 0 !important;
+  height: auto !important;
+  padding: 0.42rem 0.92rem !important;
+  border-radius: 8px !important;
+  font-size: 0.84rem !important;
+  font-weight: 500 !important;
   letter-spacing: 0.01em;
-  opacity: 0.85;
-  transition: all 0.2s ease;
-  padding: 0.6rem 0.85rem;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
+  color: #94A3B8 !important;
+  opacity: 0.9;
+  border: 1px solid transparent !important;
+  white-space: nowrap !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .md-tabs__link:hover {
   color: var(--saiyajin-orange-light) !important;
   opacity: 1;
-  background-color: rgba(255, 140, 0, 0.05);
-  border-radius: 4px 4px 0 0;
+  background-color: rgba(255, 140, 0, 0.08) !important;
+  border-color: rgba(255, 140, 0, 0.25) !important;
+  transform: translateY(-1px);
 }
 
 .md-tabs__item--active .md-tabs__link,
 .md-tabs__link--active {
   color: var(--saiyajin-gold) !important;
   opacity: 1 !important;
-  font-weight: 700;
-  border-bottom: 2px solid var(--saiyajin-orange) !important;
-  text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+  font-weight: 700 !important;
+  background: linear-gradient(180deg, rgba(255, 140, 0, 0.18) 0%, rgba(255, 140, 0, 0.06) 100%) !important;
+  border: 1px solid rgba(255, 140, 0, 0.4) !important;
+  box-shadow: 0 2px 10px rgba(255, 140, 0, 0.25), inset 0 1px 0 rgba(255, 215, 0, 0.3) !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
 }
 
 /* --------------------------------------------------------------------------
@@ -403,6 +440,8 @@
 .md-sidebar .md-nav--secondary .md-nav__link--active {
   border-left: 2px solid var(--saiyajin-orange);
   padding-left: 0.5rem;
+  background: linear-gradient(90deg, rgba(255, 140, 0, 0.12) 0%, transparent 100%);
+  border-radius: 0 6px 6px 0;
 }
 
 /* TOC (Índice da Direita) refinado e legível */
@@ -415,20 +454,24 @@
   font-size: 0.78rem;
   line-height: 1.35;
   color: #8B949E;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  transition: all 0.15s ease;
 }
 
 .md-sidebar--secondary .md-nav__link:hover {
   color: var(--saiyajin-gold) !important;
+  background-color: rgba(255, 140, 0, 0.05);
 }
 
 /* Scrollbar ultrafina e discreta */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(13, 17, 23, 0.5);
+  background: rgba(13, 17, 23, 0.4);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -467,5 +510,41 @@
 
 .md-typeset table:not([class]) a:hover {
   color: #FFD700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Botão Flutuante Voltar ao Topo & Abas de Conteúdo (Pills)
+   -------------------------------------------------------------------------- */
+/* Botão Voltar ao Topo (Orb / Cápsula Saiyajin) */
+.md-top {
+  background-color: rgba(22, 27, 34, 0.9) !important;
+  border: 1px solid rgba(255, 140, 0, 0.35) !important;
+  color: var(--saiyajin-gold) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 140, 0, 0.2) !important;
+  border-radius: 50% !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.md-top:hover {
+  background-color: var(--saiyajin-orange) !important;
+  color: #0D1117 !important;
+  box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5) !important;
+  transform: translateY(-3px) scale(1.08);
+}
+
+/* Abas de Conteúdo Tabulado (pymdownx.tabbed) */
+.md-typeset .tabbed-set > input:checked + label {
+  color: var(--saiyajin-gold) !important;
+  border-color: var(--saiyajin-orange) !important;
+  font-weight: 600;
+}
+
+.md-typeset .tabbed-labels > label {
+  transition: color 0.2s ease, border-color 0.2s ease;
+  font-size: 0.82rem;
+}
+
+.md-typeset .tabbed-labels > label:hover {
+  color: var(--saiyajin-orange-light) !important;
 }
 
