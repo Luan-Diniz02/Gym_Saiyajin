@@ -512,10 +512,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-suite-de-testes-automatizados-133-testes" class="md-nav__link">
+  <a href="#4-suite-de-testes-automatizados-137-testes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Suíte de Testes Automatizados (133 Testes)
+        4. Suíte de Testes Automatizados (137 Testes)
       
     </span>
   </a>
@@ -723,10 +723,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-suite-de-testes-automatizados-133-testes" class="md-nav__link">
+  <a href="#4-suite-de-testes-automatizados-137-testes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Suíte de Testes Automatizados (133 Testes)
+        4. Suíte de Testes Automatizados (137 Testes)
       
     </span>
   </a>
@@ -766,7 +766,7 @@
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
         Widgets[Widgets Reutilizáveis, Modais &amp; ScouterAnatomicoWidget]
-        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, KiAuraIcon, KintoUnIcon, EscotilhaCamaraPainter]
+        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, KiAuraIcon, KintoUnIcon, EscotilhaCamaraPainter, BarraAnilhasPainter]
     end
 
     subgraph ControllersLayer ["Camada de Controle &amp; Estado"]
@@ -879,7 +879,7 @@
 <li>Ao iniciar um novo descanso ou reiniciar o cronômetro, o <code>NotificationService</code> cancela notificações anteriores agendadas antes de emitir um novo alerta, prevenindo toques ou vibrações duplicadas.</li>
 </ol>
 <hr />
-<h2 id="4-suite-de-testes-automatizados-133-testes">4. Suíte de Testes Automatizados (133 Testes)</h2>
+<h2 id="4-suite-de-testes-automatizados-137-testes">4. Suíte de Testes Automatizados (137 Testes)</h2>
 <p>O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta <code>test/</code>, executáveis via <code>flutter test</code>:</p>
 <table>
 <thead>
@@ -967,8 +967,8 @@
 </tr>
 <tr>
 <td style="text-align: left;"><a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/caminho_serpente_test.dart"><code>test/caminho_serpente_test.dart</code></a></td>
-<td style="text-align: left;">Caminho da Serpente &amp; Planeta Kaioh</td>
-<td style="text-align: left;">Progressão senoidal, PlanetaKaiohIcon, sessões sempre expandidas e modal de ajuste de tempo.</td>
+<td style="text-align: left;">Caminho da Serpente, Calendário &amp; Planeta Kaioh</td>
+<td style="text-align: left;">Progressão senoidal, <code>PlanetaKaiohIcon</code>, alternância entre Lista e Calendário Mensal (Dom-Sáb), cálculo de sequência semanal (<em>streak</em>) e modal de ajuste de tempo.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/cronometro_widget_test.dart"><code>test/cronometro_widget_test.dart</code></a></td>
@@ -987,8 +987,8 @@
 </tr>
 <tr>
 <td style="text-align: left;"><a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/serie_row_widget_test.dart"><code>test/serie_row_widget_test.dart</code></a></td>
-<td style="text-align: left;">Ergonomia e Segurança de Séries</td>
-<td style="text-align: left;">Confirmação de exclusão em <code>Dismissible</code>, cancelamento e remoção segura.</td>
+<td style="text-align: left;">Ergonomia, Segurança, Calculadora de Anilhas &amp; Proteção de Séries</td>
+<td style="text-align: left;">Confirmação de exclusão em <code>Dismissible</code>, detecção de inversão <code>Peso ↔ Reps</code> com correção em 1 toque, alerta de salto anômalo e decomposição/montagem na <code>CalculadoraAnilhasModal</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/treino_repository_test.dart"><code>test/treino_repository_test.dart</code></a></td>

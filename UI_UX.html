@@ -871,14 +871,15 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ Background        │ #000000 (Preto profundo OLED)           │
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│ Surface           │ #1E1E1E (Elevação de cards e painéis)   │
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│ Card Border       │ #2C2C2C (Bordas sutis com 1px)          │
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ Primary (Saiyajin)│ #FF8C00 (Laranja Ki vibrante)           │
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│ Accent (Ouro SSJ) │ #FFD700 (Dourado Super Saiyajin / PRs)  │
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│ Text Light        │ #FFFFFF (Texto primário de alta leitura)│
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ Text Dimmed       │ #AAAAAA (Rótulos e legendas auxiliares) │
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│ Text Muted        │ #757575 (Textos terciários/desativados) │
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│ Success           │ #00E676 (Verde de conclusão)            │
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ Danger            │ #FF4444 (Vermelho de perigo/exclusão)   │
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>└───────────────────┴─────────────────────────────────────────┘
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│ Button Border     │ #454545 (Borda de alto contraste modal) │
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│ Primary (Saiyajin)│ #FF8C00 (Laranja Ki vibrante)           │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│ Accent (Ouro SSJ) │ #FFD700 (Dourado Super Saiyajin / PRs)  │
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│ Text Light        │ #FFFFFF (Texto primário de alta leitura)│
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│ Text Dimmed       │ #AAAAAA (Rótulos e legendas auxiliares) │
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│ Text Muted        │ #757575 (Textos terciários/desativados) │
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│ Success           │ #00E676 (Verde de conclusão)            │
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│ Danger            │ #FF4444 (Vermelho de perigo/exclusão)   │
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>└───────────────────┴─────────────────────────────────────────┘
 </span></code></pre></div>
 <h3 id="paleta-dos-patamares-de-poder-transformacoes">Paleta dos Patamares de Poder (Transformações)</h3>
 <p>Cada nível de Ki possui uma identidade cromática exclusiva aplicada em auras, badges, bordas e na lente do Scouter:</p>
@@ -969,8 +970,20 @@
 <li><strong>Classificação Biomecânica Interativa (<code>TipoSerie</code>)</strong>:</li>
 <li>Toque curto no indicador circular alterna ciclicamente entre <strong>Série de Trabalho</strong> (<code>N</code> / numeração sequencial <code>1, 2, 3...</code>), <strong>Aquecimento</strong> (<code>W</code> / ícone vetorial <code>KintoUnIcon</code> dourado que blinda o 1RM e impede falsos PRs), <strong>Drop-set</strong> (<code>D</code> laranja Saiyajin) e <strong>Falha Total</strong> (<code>F</code> rubro Kaioken, atribuindo automaticamente <code>RIR 0 • RPE 10</code>).</li>
 <li>Toque longo abre um modal descritivo com a função fisiológica de cada tipo de série.</li>
-<li><strong>Seletor Retrátil de Esforço (<code>RIR / RPE</code>)</strong>:</li>
-<li>Pill compacto na base da série que expande horizontalmente os chips de <em>Reps in Reserve</em> (<code>RIR 0</code> a <code>RIR 4+</code> / <code>RPE 10</code> a <code>RPE 6</code>) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.</li>
+<li><strong>Seletor Retrátil de Esforço (<code>RIR / RPE</code>) &amp; Atalho da Calculadora de Anilhas (<code>ANILHAS</code>)</strong>:</li>
+<li>Pill compacto na base da série que expande horizontalmente os chips de <em>Reps in Reserve</em> (<code>RIR 0</code> a <code>RIR 4+</code> / <code>RPE 10</code> a <code>RPE 6</code>) sob demanda, acompanhado ao lado pelo atalho rápido <strong><code>[ 🏋️ ANILHAS ]</code></strong>.</li>
+<li><strong>Calculadora de Anilhas e Barra (<code>CalculadoraAnilhasModal</code> &amp; <code>BarraAnilhasPainter</code>)</strong>:<ul>
+<li>Exibe o vetor completo e simétrico da barra vista de frente, adicionando anilhas simultaneamente em <strong>ambos os lados</strong> (<span class="arithmatex">\(\leftarrow \text{Esquerda} \mid \text{Centro} \mid \text{Direita} \rightarrow\)</span>) na <strong>ordem exata em que foram clicadas</strong>.</li>
+<li>Padronização visual sem sobrecarga cromática: anilhas e chips em Laranja Saiyajin (<code>#FF8C00</code>) e botões de adição (<code>+25 KG</code> a <code>+1.25 KG</code>) em preto de alto contraste (<code>#000000</code> com borda <code>#454545</code>).</li>
+<li>Suporta decomposição automática ao digitar uma carga alvo (<code>CALCULAR KG</code>), seleção de equipamento (<code>20 KG</code>, <code>15 KG</code>, <code>10 KG</code> ou <code>SÓ ANILHAS</code>) e preenchimento direto na série (<code>APLICAR NA SÉRIE</code>).</li>
+</ul>
+</li>
+<li><strong>Pop-up de Proteção contra Inversão (<code>Peso ↔ Reps</code>) e Salto Anômalo</strong>:</li>
+<li>Ao marcar a série como concluída (<code>✓</code> ou <code>Done</code>), o método <code>TreinoController.diagnosticarAnomaliaSerie</code> verifica:<ol>
+<li><strong>Inversão Acidental (<code>VALORES INVERTIDOS?</code>)</strong>: Quando o atleta digita <code>peso &lt; reps</code> com repetições altas em um exercício cujo histórico/série anterior possui <code>peso &gt; reps</code> (ex.: fazia <code>60 kg × 12 reps</code> e digitou <code>12 kg × 60 reps</code>). Oferece o botão primário de 1 toque <strong><code>INVERTER (60 KG × 12 REPS)</code></strong>, que já corrige os campos e conclui a série automaticamente.</li>
+<li><strong>Salto Anômalo (<code>VALOR INCOMUM?</code>)</strong>: Quando a carga digitada é <span class="arithmatex">\(\ge 2.0\times\)</span> o recorde histórico (com diferença <span class="arithmatex">\(\ge 20\text{ kg}\)</span>, ex.: um zero extra acidental) ou repetições <span class="arithmatex">\(\ge 50\)</span>, solicitando confirmação antes de registrar um falso PR.</li>
+</ol>
+</li>
 </ul>
 <h3 id="2-escotilha-da-camara-de-regeneracao-cronometro-de-descanso-cronometrowidget">2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (<code>CronometroWidget</code>)</h3>
 <p align="center">
@@ -993,8 +1006,13 @@
 <li>Botões satélites <code>+/- 15s</code> para correções rápidas sem digitação.</li>
 <li>Grade simétrica 3×2 de atalhos rápidos (<code>00:45</code>, <code>1:00</code>, <code>1:30</code>, <code>2:00</code>, <code>3:00</code>, <code>4:00</code>).</li>
 </ul>
-<h3 id="3-linha-do-tempo-identificacao-de-prs-rotulos-de-series-historicoscreen-historicocardwidget">3. Linha do Tempo, Identificação de PRs &amp; Rótulos de Séries (<code>HistoricoScreen</code> &amp; <code>HistoricoCardWidget</code>)</h3>
+<h3 id="3-linha-do-tempo-calendario-mensal-identificacao-de-prs-rotulos-de-series-historicoscreen-historicocardwidget">3. Linha do Tempo, Calendário Mensal, Identificação de PRs &amp; Rótulos de Séries (<code>HistoricoScreen</code> &amp; <code>HistoricoCardWidget</code>)</h3>
 <ul>
+<li><strong>Alternador Segmentado (<code>LISTA</code> vs <code>CALENDÁRIO</code>)</strong>:</li>
+<li>Permite alternar instantaneamente entre a linha do tempo contínua e a grade mensal de <strong>Domingo a Sábado</strong> (<code>DOM</code> a <code>SÁB</code>).</li>
+<li><strong>Faixa de Consistência</strong>: Exibe <em>Sequência Atual (Semanas Consecutivas)</em>, <em>Dias Treinados no Mês</em> e <em>Dias de Descanso</em>.</li>
+<li><strong>Marcação Visual dos Dias</strong>: Todos os dias treinados recebem círculo preenchido em Laranja Saiyajin (<code>#FF8C00</code>), e os dias em que houve quebra de recorde recebem o micro-badge da Esfera do Dragão (<code>DragonBallIcon</code>) no canto superior direito do círculo.</li>
+<li><strong>Seletor de Data Unificado (<code>SaiyajinDatePickerModal</code>)</strong>: Substitui o <code>DatePicker</code> nativo em inglês por um modal 100% em português seguindo o mesmo padrão visual na tela de treino e na edição de sessão.</li>
 <li><strong>Alinhamento em Linha Única Fluida</strong>:</li>
 <li>Reúne em um único <code>Wrap</code> horizontal: <strong>Data do Treino</strong> (<code>21/09/2026</code>), <strong>Tag de Divisão/Nome</strong> (<code>[ COSTAS E BÍCEPS ]</code>) com fundo escuro e borda âmbar, e o <strong>Badge Dourado de PRs</strong> (<code>[ ✪ 2 PRs ]</code>) estilizado com a Esfera do Dragão.</li>
 <li>Alinhamento à direita exclusivo para o <strong>Menu Popup Unificado (<code>⋮</code>)</strong>, eliminando múltiplos botões avulsos na tela e reduzindo drasticamente a sobrecarga cognitiva.</li>
@@ -1238,6 +1256,9 @@
 <li><strong>Internacionalização Numérica dos Pesos</strong>:</li>
 <li>Cargas inteiras são exibidas sem decimais (<code>100 kg</code>), e cargas fracionárias exibem apenas uma casa decimal limpa (<code>12.5 kg</code>).</li>
 <li>Volumes e pontuações de Ki acima de 1.000 são pontuados automaticamente (<code>27.080 kg</code>, <code>+15.200 Ki</code>).</li>
+<li><strong>Padronização Global de Pop-ups e Alto Contraste de Botões</strong>:</li>
+<li>Todos os modais e diálogos utilizam <code>backgroundColor: AppColors.surface</code>, <code>borderRadius: BorderRadius.circular(20)</code>, contorno <code>AppColors.cardBorder</code>, cabeçalho com ícone dentro de badge circular (<code>38×38</code>) e títulos/botões padronizados em <strong>CAIXA ALTA (<code>UPPERCASE</code>)</strong>.</li>
+<li>Os botões secundários (<code>CANCELAR</code>, <code>CORRIGIR</code>, <code>CONTINUAR</code>) utilizam fundo preto profundo (<code>AppColors.background</code> <code>#000000</code>), texto branco puro (<code>AppColors.textLight</code> <code>#FFFFFF</code>) e borda de alto contraste (<code>AppColors.buttonBorder</code> <code>#454545</code>), garantindo leitura nítida sobre a superfície <code>#1E1E1E</code> do modal.</li>
 </ol>
 <hr />
 <h2 id="7-manifesto-de-identidade-seriedade-esportiva-vs-tematica-saiyajin">7. Manifesto de Identidade: Seriedade Esportiva vs Temática Saiyajin</h2>

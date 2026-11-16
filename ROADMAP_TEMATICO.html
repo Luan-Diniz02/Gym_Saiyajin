@@ -667,10 +667,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-backlog" class="md-nav__link">
+  <a href="#proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-concluido" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [📋 BACKLOG]
+        Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [✅ CONCLUÍDO]
       
     </span>
   </a>
@@ -689,10 +689,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#proximos-passos-de-execucao-recomendados" class="md-nav__link">
+  <a href="#historico-de-execucao-das-fases" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Próximos Passos de Execução Recomendados
+        Histórico de Execução das Fases
       
     </span>
   </a>
@@ -787,10 +787,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-backlog" class="md-nav__link">
+  <a href="#proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-concluido" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [📋 BACKLOG]
+        Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [✅ CONCLUÍDO]
       
     </span>
   </a>
@@ -809,10 +809,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#proximos-passos-de-execucao-recomendados" class="md-nav__link">
+  <a href="#historico-de-execucao-das-fases" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Próximos Passos de Execução Recomendados
+        Histórico de Execução das Fases
       
     </span>
   </a>
@@ -859,7 +859,7 @@
     C --&gt; C1[Jornada de Disciplina Contínua na Timeline do Histórico - Concluído]
     D --&gt; D1[Séries de Aquecimento, Warm-up &amp; RPE/RIR - Concluído]
     E --&gt; E1[Telemetria de Volume Semanal por Músculo - Concluído]
-    F --&gt; F1[Decomposição Visual de Carga na Barra - Próxima Fase]</code></pre>
+    F --&gt; F1[Decomposição Visual de Carga na Barra - Concluído]</code></pre>
 <hr />
 <h2 id="proposta-1-a-camara-de-regeneracao-medica-no-cronometro-de-descanso-concluido">Proposta 1: A "Câmara de Regeneração Médica" no Cronômetro de Descanso [✅ CONCLUÍDO]</h2>
 <h3 id="1-justificativa-lore-canonica">1. Justificativa &amp; Lore Canônica</h3>
@@ -941,13 +941,20 @@
 <li>Transição inteligente do badge <code>[🟠 PR]</code>: visível no cabeçalho do exercício quando recolhido e transferido exclusivamente para a linha da série ápice quando expandido, acompanhado de rótulos descritivos padronizados (<code>Aquecimento</code>, <code>Série X</code>, <code>Drop-set</code>, <code>Falha</code>).</li>
 </ul>
 <hr />
-<h2 id="proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-backlog">Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [📋 BACKLOG]</h2>
+<h2 id="proposta-5-pesos-pesados-do-senhor-kaioh-calculadora-de-anilhas-e-barra-concluido">Proposta 5: "Pesos Pesados do Senhor Kaioh" (Calculadora de Anilhas e Barra) [✅ CONCLUÍDO]</h2>
 <h3 id="1-justificativa-lore-canonica_4">1. Justificativa &amp; Lore Canônica</h3>
 <ul>
 <li>Para treinar Goku sob gravidade ampliada de 10x, o Senhor Kaioh colocou pesadas braçadeiras de treinamento que forçaram a superação dos limites biológicos básicos.</li>
 <li><strong>Aplicação no Treino</strong>:</li>
-<li>Calculadora de anilhas (<em>Plate Calculator</em>) rápida para exercícios de barra livre (Supino, Agachamento, Levantamento Terra, Desenvolvimento).</li>
-<li>Ao tocar no campo de carga ou em um ícone de anilha na série, um modal visual exibe a decomposição exata das anilhas necessárias por lado (ex: Barra de 20 kg + 2 anilhas de 20 kg + 1 anilha de 10 kg por lado = 80 kg).</li>
+<li>Calculadora de anilhas (<em>Plate Calculator</em>) rápida para exercícios de barra livre e máquinas articuladas.</li>
+<li>Ao tocar no atalho <code>ANILHAS</code> na série (<code>SerieRowWidget</code>), um modal interativo exibe a decomposição bilateral exata das anilhas necessárias por lado (ex: Barra de 10 kg + 1× 20 kg + 1× 10 kg + 1× 5 kg por lado = 80 kg) e permite montar a barra por toque.</li>
+</ul>
+<h3 id="2-implementacao-final-entregue_3">2. Implementação Final Entregue</h3>
+<ul>
+<li><strong>Barra Simétrica Completa em Canvas (<code>BarraAnilhasPainter</code>)</strong>:</li>
+<li>Desenho vetorial do eixo central (com recartilhado), dois batentes e duas ponteiras laterais, empilhando as anilhas simultaneamente em <strong>ambos os lados</strong> (<span class="arithmatex">\(\leftarrow \text{Esquerda} \mid \text{Centro} \mid \text{Direita} \rightarrow\)</span>) na <strong>ordem exata em que foram adicionadas</strong>.</li>
+<li>Padronização cromática em Laranja Saiyajin (<code>#FF8C00</code>) nas anilhas e fundo preto de alto contraste (<code>#000000</code> com borda <code>#454545</code>) nos botões <strong><code>+25 KG</code></strong> a <strong><code>+1.25 KG</code></strong>, eliminando sobrecarga cognitiva.</li>
+<li>Seletor rápido de equipamento (<code>20 KG</code>, <code>15 KG</code>, <code>10 KG</code> e <code>SÓ ANILHAS</code>, com detecção automática de <code>SÓ ANILHAS</code> em exercícios de máquina) e botão <strong><code>APLICAR NA SÉRIE</code></strong> em 1 toque.</li>
 </ul>
 <hr />
 <h2 id="tabela-comparativa-status-do-roadmap">Tabela Comparativa &amp; Status do Roadmap</h2>
@@ -999,22 +1006,22 @@
 </tr>
 <tr>
 <td style="text-align: left;"><strong>🏋️ Pesos do Sr. Kaioh</strong></td>
-<td style="text-align: left;"><code>CalculadoraAnilhasModal</code></td>
+<td style="text-align: left;"><code>CalculadoraAnilhasModal</code> + <code>BarraAnilhasPainter</code></td>
 <td style="text-align: left;"><code>SerieRowWidget</code> / Campos de Carga</td>
-<td style="text-align: left;">Baixa/Média (Algoritmo guloso de anilhas)</td>
-<td style="text-align: left;"><strong>🚀 Próxima Prioridade</strong></td>
+<td style="text-align: left;">Média (Vetor bilateral + montagem interativa)</td>
+<td style="text-align: left;"><strong>✅ CONCLUÍDO &amp; TESTADO</strong></td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="proximos-passos-de-execucao-recomendados">Próximos Passos de Execução Recomendados</h2>
+<h2 id="historico-de-execucao-das-fases">Histórico de Execução das Fases</h2>
 <ol>
 <li><strong>[✅ Concluído] Fase 1: Nuvem Voadora &amp; Tipos de Série com Métrica de Esforço (Kinto-un &amp; RPE/RIR)</strong>:</li>
 <li><code>KintoUnIcon</code> vetorial em Canvas, classificação biomecânica (<code>normal | warmup | dropset | falha</code>), blindagem de 1RM/PRs para séries de aquecimento e seletor retrátil de RIR/RPE.</li>
 <li><strong>[✅ Concluído] Fase 2: Scouter Anatômico (Mapa de Calor Muscular) &amp; PRs por Série no Histórico</strong>:</li>
 <li>Silhuetas anatômicas Frontal e Dorsal em SVG (<code>muscle_mapper</code>) em dupla camada para nitidez de contorno, janelas de 7 e 30 dias, alerta de pontos fracos e identificação da série ápice de PR no Histórico.</li>
-<li><strong>[🚀 Próxima Fase] Fase 3: Pesos Pesados do Senhor Kaioh (Calculadora de Anilhas)</strong>:</li>
-<li>Implementar algoritmo guloso de seleção de anilhas configurável (anilhas de 25kg, 20kg, 15kg, 10kg, 5kg, 2.5kg, 1.25kg e peso da barra).</li>
+<li><strong>[✅ Concluído] Fase 3: Pesos Pesados do Senhor Kaioh (Calculadora de Anilhas), Calendário Mensal &amp; Proteção de Séries</strong>:</li>
+<li>Calculadora bilateral de anilhas (<code>25 kg</code> a <code>1.25 kg</code> e pesos de barra <code>20/15/10/0 kg</code>), Calendário Mensal de Domingo a Sábado no Histórico e pop-up de proteção contra inversão de <code>Peso ↔ Reps</code> e saltos anômalos.</li>
 </ol>
 
 
