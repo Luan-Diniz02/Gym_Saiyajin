@@ -8,6 +8,7 @@ import 'package:gym_saiyajin/models/sessao_treino.dart';
 import 'package:gym_saiyajin/repositories/treino_repository.dart';
 import 'package:gym_saiyajin/services/notification_service.dart';
 import 'package:gym_saiyajin/services/preferences_service.dart';
+import 'package:gym_saiyajin/widgets/calculadora_anilhas_modal.dart';
 import 'package:gym_saiyajin/widgets/kinto_un_icon.dart';
 import 'package:gym_saiyajin/widgets/serie_row_widget.dart';
 
@@ -409,6 +410,62 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(controller.exercicioAtual!.seriesDetalhes[0].concluida, isTrue);
+
+        controller.dispose();
+      },
+    );
+
+    testWidgets(
+      'Calculadora de Anilhas decompõe carga alvo e aplica montagem na série [Proposta 5]',
+      (tester) async {
+        // 1. Verifica decomposição matemática pura (85 kg com barra de 20 kg = 32.5 kg/lado -> 25 + 5 + 2.5)
+        final decomp = CalculadoraAnilhas.decomporCarga(
+          pesoTotal: 85.0,
+          pesoBarra: 20.0,
+        );
+        expect(decomp.pesoPorLado, 32.5);
+        expect(decomp.anilhasPorLado, [25.0, 5.0, 2.5]);
+        expect(decomp.pesoTotalMontado, 85.0);
+
+        // 2. Verifica fluxo de UI a partir do botão ANILHAS na SerieRowWidget
+        controller.iniciarNovoExercicio(
+          'Supino Reto',
+          'PEITO',
+          quantidadeSeries: 1,
+        );
+        controller.atualizarPesoSerie(0, '60');
+        await tester.pumpWidget(
+          criarWidgetTestavel(
+            SerieRowWidget(index: 0, controller: controller),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Abre a Calculadora de Anilhas
+        await tester.tap(find.byKey(const ValueKey('btn-anilhas-0')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('CALCULADORA DE ANILHAS'), findsOneWidget);
+        // 60 kg (barra 20 + 20 kg cada lado)
+        expect(find.byKey(const Key('anilha-montada-20')), findsOneWidget);
+
+        // Adiciona +5 kg e depois +10 kg por lado (ordem crescente: 20 -> 5 -> 10) -> total passa para 90 kg
+        await tester.ensureVisible(find.byKey(const Key('btn-add-anilha-5')));
+        await tester.tap(find.byKey(const Key('btn-add-anilha-5')));
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.byKey(const Key('btn-add-anilha-10')));
+        await tester.tap(find.byKey(const Key('btn-add-anilha-10')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('90'), findsWidgets);
+        expect(find.byKey(const Key('anilha-montada-5')), findsOneWidget);
+        expect(find.byKey(const Key('anilha-montada-10')), findsOneWidget);
+
+        // Aplica na série
+        await tester.tap(find.byKey(const Key('btn-aplicar-anilhas')));
+        await tester.pumpAndSettle();
+
+        expect(controller.exercicioAtual!.seriesDetalhes[0].peso, 90.0);
 
         controller.dispose();
       },

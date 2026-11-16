@@ -15,7 +15,7 @@ graph TD
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
         Widgets[Widgets Reutilizáveis, Modais & ScouterAnatomicoWidget]
-        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, KiAuraIcon, KintoUnIcon, EscotilhaCamaraPainter]
+        Painters[CustomPainters: DragonBallIcon, ScouterIcon, DragonRadarIcon, CapsuleIcon, PlanetaKaiohIcon, KiAuraIcon, KintoUnIcon, EscotilhaCamaraPainter, BarraAnilhasPainter]
     end
 
     subgraph ControllersLayer ["Camada de Controle & Estado"]
@@ -137,7 +137,7 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (136 Testes)
+## 🧪 4. Suíte de Testes Automatizados (137 Testes)
 
 O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
@@ -162,6 +162,6 @@ O repositório possui cobertura ampla de testes unitários, de widgets e de pers
 | [`test/cronometro_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/cronometro_widget_test.dart) | Escotilha da Câmara de Regeneração | Estados de repouso, regeneração ativa com bolhas animadas, pausa e telemetria. |
 | [`test/ki_aura_icon_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/ki_aura_icon_test.dart) | CustomPainter Chamas de Ki | Dimensões, suporte a cores de transformação, núcleo de energia, glow e sparks. |
 | [`test/notification_service_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes, agendamento exato alarmClock e controle de concorrência. |
-| [`test/serie_row_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/serie_row_widget_test.dart) | Ergonomia, Segurança & Proteção de Séries | Confirmação de exclusão em `Dismissible`, detecção de inversão `Peso ↔ Reps` com correção em 1 toque e alerta de salto anômalo de carga/reps. |
+| [`test/serie_row_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/serie_row_widget_test.dart) | Ergonomia, Segurança, Calculadora de Anilhas & Proteção de Séries | Confirmação de exclusão em `Dismissible`, detecção de inversão `Peso ↔ Reps` com correção em 1 toque, alerta de salto anômalo e decomposição/montagem na `CalculadoraAnilhasModal`. |
 | [`test/treino_repository_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/treino_repository_test.dart) | Persistência SQLite em Memória (FFI) | Inserção/leitura de sessões, cascata (`ON DELETE CASCADE`), agregação de PRs e CRUD de fichas. |
 | [`test/render_preview_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/render_preview_test.dart) | Renderização de Arte Gráfica | Geração de previews em alta resolução dos CustomPainters em PNG. |

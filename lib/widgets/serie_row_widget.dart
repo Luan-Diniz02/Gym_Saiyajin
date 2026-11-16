@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../controllers/treino_controller.dart';
+import '../models/catalogo_exercicios.dart';
 import '../models/serie.dart';
 import '../theme/app_colors.dart';
+import 'calculadora_anilhas_modal.dart';
 import 'dragon_ball_icon.dart';
 import 'kinto_un_icon.dart';
 
@@ -629,57 +631,102 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    key: ValueKey('btn-rir-${widget.index}'),
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      setState(() {
-                        _seletorRirAberto = !_seletorRirAberto;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: serie.rir != null
-                            ? _corPorRir(serie.rir!).withValues(alpha: 0.14)
-                            : AppColors.background,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: serie.rir != null
-                              ? _corPorRir(serie.rir!).withValues(alpha: 0.6)
-                              : AppColors.cardBorder,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        key: ValueKey('btn-anilhas-${widget.index}'),
+                        onTap: () => _abrirCalculadoraAnilhas(
+                          pesoAtual: serie.peso,
+                          pesoAnterior: serieAnterior?.peso,
+                          nomeExercicio: nomeExercicioAtual,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.cardBorder),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.fitness_center_rounded,
+                                size: 11,
+                                color: AppColors.primary,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'ANILHAS',
+                                style: TextStyle(
+                                  color: AppColors.textDimmed,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.speed_rounded,
-                            size: 12,
-                            color: serie.rir != null
-                                ? _corPorRir(serie.rir!)
-                                : AppColors.textDimmed,
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        key: ValueKey('btn-rir-${widget.index}'),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(() {
+                            _seletorRirAberto = !_seletorRirAberto;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            serie.rir != null
-                                ? '${serie.rirLabel} • ${serie.rpeLabel}'
-                                : 'RIR / RPE',
-                            style: TextStyle(
+                          decoration: BoxDecoration(
+                            color: serie.rir != null
+                                ? _corPorRir(serie.rir!).withValues(alpha: 0.14)
+                                : AppColors.background,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
                               color: serie.rir != null
-                                  ? _corPorRir(serie.rir!)
-                                  : AppColors.textDimmed,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.3,
+                                  ? _corPorRir(serie.rir!).withValues(alpha: 0.6)
+                                  : AppColors.cardBorder,
                             ),
                           ),
-                        ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.speed_rounded,
+                                size: 12,
+                                color: serie.rir != null
+                                    ? _corPorRir(serie.rir!)
+                                    : AppColors.textDimmed,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                serie.rir != null
+                                    ? '${serie.rirLabel} • ${serie.rpeLabel}'
+                                    : 'RIR / RPE',
+                                style: TextStyle(
+                                  color: serie.rir != null
+                                      ? _corPorRir(serie.rir!)
+                                      : AppColors.textDimmed,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -930,6 +977,32 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
 
   void _concluirSeriePeloTeclado() {
     _aoTentarConcluirSerie();
+  }
+
+  Future<void> _abrirCalculadoraAnilhas({
+    required double? pesoAtual,
+    required double? pesoAnterior,
+    required String nomeExercicio,
+  }) async {
+    HapticFeedback.selectionClick();
+    final infoCatalogo = CatalogoExercicios.buscarPorNome(nomeExercicio);
+    final isMaquina = infoCatalogo?.equipamento == 'Máquina';
+    final pesoBarraPadrao = isMaquina ? 0.0 : 20.0;
+    final pesoAlvo =
+        (pesoAtual != null && pesoAtual > 0) ? pesoAtual : pesoAnterior;
+
+    final novoPeso = await CalculadoraAnilhasModal.show(
+      context: context,
+      pesoInicial: pesoAlvo,
+      pesoBarraInicial: pesoBarraPadrao,
+    );
+
+    if (novoPeso != null && mounted) {
+      final pesoFormatado = CalculadoraAnilhas.formatarPeso(novoPeso);
+      _pesoController.text = pesoFormatado;
+      widget.controller.atualizarPesoSerie(widget.index, pesoFormatado);
+      setState(() {});
+    }
   }
 
   void _aoTentarConcluirSerie() {

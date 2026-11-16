@@ -6,12 +6,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.2.0"><img src="https://img.shields.io/badge/Release-v2.2.0-FF8C00?logo=github&logoColor=white" alt="Release v2.2.0" /></a>
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/tag/v2.3.0"><img src="https://img.shields.io/badge/Release-v2.3.0-FF8C00?logo=github&logoColor=white" alt="Release v2.3.0" /></a>
   <a href="https://luan-diniz02.github.io/Gym_Saiyajin/"><img src="https://img.shields.io/badge/Docs-MkDocs%20Material-FF8C00?logo=materialformkdocs&logoColor=white" alt="Docs" /></a>
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-136%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-137%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -41,13 +41,13 @@ Todos os elementos temáticos foram construídos com `CustomPainter` vetorial ma
 A versão estável do aplicativo está pronta para instalação imediata no seu celular Android:
 
 <p align="center">
-  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.2.0/Gym.Saiyajin.v2.2.0.-.Offline.Edition.apk">
-    <img src="https://img.shields.io/badge/Download_APK-Gym_Saiyajin_v2.2.0-FF8C00?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+  <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.3.0/Gym.Saiyajin.v2.3.0.-.Offline.Edition.apk">
+    <img src="https://img.shields.io/badge/Download_APK-Gym_Saiyajin_v2.3.0-FF8C00?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
   </a>
 </p>
 
 ### 📥 Instruções para Instalação no Smartphone:
-1. **Baixar o APK**: Faça o download do arquivo **[`Gym.Saiyajin.v2.2.0.-.Offline.Edition.apk`](https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.2.0/Gym.Saiyajin.v2.2.0.-.Offline.Edition.apk)** diretamente no seu dispositivo Android.
+1. **Baixar o APK**: Faça o download do arquivo **[`Gym.Saiyajin.v2.3.0.-.Offline.Edition.apk`](https://github.com/Luan-Diniz02/Gym_Saiyajin/releases/download/v2.3.0/Gym.Saiyajin.v2.3.0.-.Offline.Edition.apk)** diretamente no seu dispositivo Android.
 2. **Autorizar Fontes Desconhecidas**: Ao abrir o arquivo baixado, caso o Android solicite, autorize a instalação a partir do navegador ou gerenciador de arquivos.
 3. **Instalar e Treinar**: Toque em **Instalar** e inicie o uso. O aplicativo opera **100% offline-first**, sem necessidade de cadastro, criação de conta ou acesso à internet.
 
@@ -65,12 +65,12 @@ A versão estável do aplicativo está pronta para instalação imediata no seu 
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite (v4) com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (136 testes automatizados).
-- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, proteção contra inversão de `Peso ↔ Reps`, padronização global de modais e alto contraste, arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `KintoUnIcon`, `EscotilhaCamaraPainter`), Mapa de Calor Muscular (`ScouterAnatomicoWidget`) e ergonomia do Histórico, Calendário e Cronômetro.
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite (v4) com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (137 testes automatizados).
+- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, Calculadora de Anilhas bilateral (`BarraAnilhasPainter`), proteção contra inversão de `Peso ↔ Reps`, padronização global de modais e alto contraste, arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `KintoUnIcon`, `EscotilhaCamaraPainter`), Mapa de Calor Muscular (`ScouterAnatomicoWidget`) e ergonomia do Histórico, Calendário e Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente, a Câmara de Regeneração Médica e a telemetria fisiológica do Mapa de Calor Muscular.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
 - 🏋️ **[Guia Técnico do Catálogo de Exercícios](docs/GUIA_CATALOGO_EXERCICIOS.md)**: Procedimento operacional padrão para curadoria, download de miniaturas/GIFs (`180×180`), cadastro de sinônimos brasileiros e validação automatizada dos 106 exercícios offline.
-- 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Histórico de implementações canônicas (Câmara de Regeneração, Caminho da Serpente, Nuvem Voadora / RIR e Mapa de Calor Muscular concluídos) e planejamento arquitetural futuro.
+- 📜 **[Propostas Temáticas & Próximos Passos](docs/ROADMAP_TEMATICO.md)**: Histórico completo das 5 implementações canônicas concluídas (Câmara de Regeneração, Caminho da Serpente, Nuvem Voadora / RIR, Mapa de Calor Muscular e Calculadora de Anilhas).
 
 ---
 
@@ -100,6 +100,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
   - Alinhamento simétrico, fluxo contínuo de teclado (`Next` pula para reps, `Done` conclui a série), micro-badge dinâmico `PR ⚡` em tempo real e remoção rápida de séries via gesto de deslizar (*Swipe*).
   - **Proteção Contra Erros de Digitação & Inversão `Peso ↔ Reps` (Estilo Hevy)**: Ao concluir uma série, o sistema detecta automaticamente se o peso e as repetições foram digitados invertidos (oferecendo inversão instantânea em 1 toque) ou se houve um salto anômalo acidental de carga/reps (ex.: um zero a mais), prevenindo falsos recordes (`PRs`).
   - **Classificação Biomecânica de Séries**: Toque no círculo da série para alternar entre **Série de Trabalho** (`N`), **Aquecimento / Kinto-un** (`W` com ícone vetorial `KintoUnIcon` que blinda o cálculo de 1RM e evita falsos PRs), **Drop-set** (`D`) e **Falha Total** (`F`).
+  - **Calculadora de Anilhas e Barra (`CalculadoraAnilhasModal` & `BarraAnilhasPainter`)**: Atalho direto `ANILHAS` em cada série para decompor cargas alvo por lado ou montar a barra interativamente (`+25 KG` a `+1.25 KG`) com visualização vetorial simétrica nos dois lados da barra, seletor de equipamento (`20 KG`, `15 KG`, `10 KG` ou `SÓ ANILHAS` automático em máquinas) e aplicação em 1 toque.
   - **Métrica de Esforço Retrátil (`RIR / RPE`)**: Seletor compacto de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) integrado à linha da série sem comprometer a velocidade de digitação.
 - **Escotilha da Câmara de Regeneração Médica (*Medical Machine / Cápsula de Namekusei*)**:
   - Cronômetro de descanso estilizado como a escotilha de inspeção blindada da câmara médica de Dragon Ball Z: aro exterior em liga de titânio escuro com **8 rebites prateados chanfrados**, anel de fluido bioenergético em **Ouro Super Saiyajin e Âmbar** (`#FFD700` $\to$ `#FF8C00`), micro-bolhas de oxigênio com física de subida contínua e silhueta imersiva da máscara respiratória submersa no fundo.
@@ -182,7 +183,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **flutter_local_notifications & timezone** (Notificações locais agendadas e resiliência de alarmes)
 - **flutter_ringtone_player** (Alerta sonoro nativo de alarme para encerramento de descansos)
 - **vibration** (Feedback háptico de hardware)
-- **flutter_test & sqflite_common_ffi** (Suíte robusta de 136 testes unitários, de widgets e de persistência SQLite em memória)
+- **flutter_test & sqflite_common_ffi** (Suíte robusta de 137 testes unitários, de widgets e de persistência SQLite em memória)
 
 ---
 
@@ -238,6 +239,7 @@ gym_saiyajin/
 │   ├── theme/                          # Design Tokens e paleta de cores centralizada
 │   │   └── app_colors.dart
 │   └── widgets/                        # Componentes visuais atômicos e CustomPainters
+│       ├── calculadora_anilhas_modal.dart # Calculadora de Anilhas e BarraAnilhasPainter
 │       ├── caminho_serpente_progress_bar.dart # Barra senoidal contínua e Planeta Kaioh
 │       ├── capsule_icon.dart           # CustomPainter da Cápsula Hoi-Poi da Capsule Corp
 │       ├── celebracao_transformacao_modal.dart
@@ -266,7 +268,7 @@ gym_saiyajin/
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                               # Suíte de 136 testes automatizados
+├── test/                               # Suíte de 137 testes automatizados
 │   ├── backup_test.dart
 │   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
@@ -307,7 +309,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (136 testes)
+# Executar a suíte completa de testes automatizados (137 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

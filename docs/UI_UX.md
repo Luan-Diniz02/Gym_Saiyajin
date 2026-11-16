@@ -113,8 +113,12 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
 - **Classificação Biomecânica Interativa (`TipoSerie`)**:
   - Toque curto no indicador circular alterna ciclicamente entre **Série de Trabalho** (`N` / numeração sequencial `1, 2, 3...`), **Aquecimento** (`W` / ícone vetorial `KintoUnIcon` dourado que blinda o 1RM e impede falsos PRs), **Drop-set** (`D` laranja Saiyajin) e **Falha Total** (`F` rubro Kaioken, atribuindo automaticamente `RIR 0 • RPE 10`).
   - Toque longo abre um modal descritivo com a função fisiológica de cada tipo de série.
-- **Seletor Retrátil de Esforço (`RIR / RPE`)**:
-  - Pill compacto na base da série que expande horizontalmente os chips de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.
+- **Seletor Retrátil de Esforço (`RIR / RPE`) & Atalho da Calculadora de Anilhas (`ANILHAS`)**:
+  - Pill compacto na base da série que expande horizontalmente os chips de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) sob demanda, acompanhado ao lado pelo atalho rápido **`[ 🏋️ ANILHAS ]`**.
+  - **Calculadora de Anilhas e Barra (`CalculadoraAnilhasModal` & `BarraAnilhasPainter`)**:
+    - Exibe o vetor completo e simétrico da barra vista de frente, adicionando anilhas simultaneamente em **ambos os lados** ($\leftarrow \text{Esquerda} \mid \text{Centro} \mid \text{Direita} \rightarrow$) na **ordem exata em que foram clicadas**.
+    - Padronização visual sem sobrecarga cromática: anilhas e chips em Laranja Saiyajin (`#FF8C00`) e botões de adição (`+25 KG` a `+1.25 KG`) em preto de alto contraste (`#000000` com borda `#454545`).
+    - Suporta decomposição automática ao digitar uma carga alvo (`CALCULAR KG`), seleção de equipamento (`20 KG`, `15 KG`, `10 KG` ou `SÓ ANILHAS`) e preenchimento direto na série (`APLICAR NA SÉRIE`).
 - **Pop-up de Proteção contra Inversão (`Peso ↔ Reps`) e Salto Anômalo**:
   - Ao marcar a série como concluída (`✓` ou `Done`), o método `TreinoController.diagnosticarAnomaliaSerie` verifica:
     1. **Inversão Acidental (`VALORES INVERTIDOS?`)**: Quando o atleta digita `peso < reps` com repetições altas em um exercício cujo histórico/série anterior possui `peso > reps` (ex.: fazia `60 kg × 12 reps` e digitou `12 kg × 60 reps`). Oferece o botão primário de 1 toque **`INVERTER (60 KG × 12 REPS)`**, que já corrige os campos e conclui a série automaticamente.
