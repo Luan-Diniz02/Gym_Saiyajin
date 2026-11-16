@@ -1,4 +1,4 @@
-site_name: "Gym Saiyajin — Documentação Técnica"
+site_name: "Gym Saiyajin"
 site_url: "https://luan-diniz02.github.io/Gym_Saiyajin/"
 repo_url: "https://github.com/Luan-Diniz02/Gym_Saiyajin"
 repo_name: "Luan-Diniz02/Gym_Saiyajin"
@@ -63,13 +63,13 @@ markdown_extensions:
   - tables
 
 nav:
-  - 🏠 Início: index.md
-  - 🏛️ Arquitetura: ARQUITETURA.md
-  - 🎨 Design System: UI_UX.md
-  - ⚡ Sistema Ki: SISTEMA_SAIYAJIN.md
-  - 📸 Social & Cards: COMPARTILHAMENTO_SOCIAL.md
-  - 🏋️ Catálogo: GUIA_CATALOGO_EXERCICIOS.md
-  - 📜 Roadmap: ROADMAP_TEMATICO.md
+  - Início: index.md
+  - Arquitetura: ARQUITETURA.md
+  - Design System: UI_UX.md
+  - Sistema Ki: SISTEMA_SAIYAJIN.md
+  - Social & Cards: COMPARTILHAMENTO_SOCIAL.md
+  - Catálogo: GUIA_CATALOGO_EXERCICIOS.md
+  - Roadmap: ROADMAP_TEMATICO.md
 
 not_in_nav: |
   AUDITORIA_CONSOLIDADA.md

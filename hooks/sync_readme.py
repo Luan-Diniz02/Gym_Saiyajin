@@ -29,7 +29,12 @@ def on_pre_build(config):
             re.DOTALL
         )
         welcome_callout = (
-            "> 🥋 **Portal de Engenharia & Documentação Técnica**: Explore as camadas da arquitetura offline-first, "
+            '<div class="saiyajin-cta-group">\n'
+            '  <a href="ARQUITETURA.html" class="saiyajin-btn saiyajin-btn-primary">Explorar Arquitetura</a>\n'
+            '  <a href="UI_UX.html" class="saiyajin-btn saiyajin-btn-secondary">Design System &amp; UI/UX</a>\n'
+            '  <a href="SISTEMA_SAIYAJIN.html" class="saiyajin-btn saiyajin-btn-secondary">Sistema Ki</a>\n'
+            '</div>\n\n'
+            "> **Portal de Engenharia & Documentação Técnica**: Explore as camadas da arquitetura offline-first, "
             "o design system vetorial no Canvas do Flutter, a matemática da progressão de Ki e a telemetria esportiva "
             "navegando pelas abas superiores ou pela busca instantânea.\n\n"
         )

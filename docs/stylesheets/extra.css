@@ -22,26 +22,26 @@
   --md-accent-fg-color--transparent: rgba(255, 215, 0, 0.15);
 }
 
-/* Modo Escuro (Slate - High-Tech Obsidian) */
+/* Modo Escuro (Slate - OLED Obsidian alinhado a AppColors) */
 [data-md-color-scheme="slate"] {
-  --md-default-bg-color:         #0D1117;
-  --md-default-bg-color--light:   #161B22;
-  --md-default-bg-color--lighter: #21262D;
-  --md-default-fg-color:         #E6EDF3;
-  --md-default-fg-color--light:  #8B949E;
-  --md-default-fg-color--lighter:#6E7681;
-  --md-text-color:               #E6EDF3;
-  --md-code-bg-color:            #161B22;
+  --md-default-bg-color:         #07080B;
+  --md-default-bg-color--light:   #14161A;
+  --md-default-bg-color--lighter: #1E1E1E;
+  --md-default-fg-color:         #F0F4F8;
+  --md-default-fg-color--light:  #AAAAAA;
+  --md-default-fg-color--lighter:#757575;
+  --md-text-color:               #F0F4F8;
+  --md-code-bg-color:            #121419;
 }
 
 /* --------------------------------------------------------------------------
    2. Cabeçalho Glassmorphism & Barra Superior
    -------------------------------------------------------------------------- */
 .md-header {
-  background-color: rgba(13, 17, 23, 0.85) !important;
+  background-color: rgba(7, 8, 11, 0.88) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 140, 0, 0.18) !important;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.2) !important;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
@@ -125,7 +125,7 @@
    4. Barra de Abas Centralizada (Navigation Tabs & High-Tech Pill Bar)
    -------------------------------------------------------------------------- */
 .md-tabs {
-  background-color: rgba(13, 17, 23, 0.92) !important;
+  background-color: rgba(7, 8, 11, 0.92) !important;
   border-bottom: 1px solid rgba(255, 140, 0, 0.18) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -255,23 +255,33 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. Screenshots do App (Moldura de Dispositivo & Elevação 3D)
+   6. Screenshots do App, GIFs & Presets (Moldura de Dispositivo & Elevação 3D)
    -------------------------------------------------------------------------- */
-.md-typeset img[alt*="Tela"],
-.md-typeset img[alt*="Histórico"],
-.md-typeset img[alt*="Progresso"] {
-  border-radius: 20px !important;
-  border: 2px solid rgba(255, 140, 0, 0.25) !important;
-  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 140, 0, 0.12) !important;
-  margin: 0.8rem 0.5rem !important;
+.md-typeset img[src*="treino.png"],
+.md-typeset img[src*="historico.png"],
+.md-typeset img[src*="progresso.png"],
+.md-typeset img[src*="series_input.png"],
+.md-typeset img[src*="caminho_serpente.png"],
+.md-typeset img[src*="mapa_calor.png"],
+.md-typeset img[src*="preset_"],
+.md-typeset img[src*="demo_"] {
+  border-radius: 18px !important;
+  border: 1.5px solid rgba(255, 140, 0, 0.28) !important;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 140, 0, 0.12) !important;
+  margin: 0.8rem 0.45rem !important;
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-.md-typeset img[alt*="Tela"]:hover,
-.md-typeset img[alt*="Histórico"]:hover,
-.md-typeset img[alt*="Progresso"]:hover {
-  transform: translateY(-6px) scale(1.025) !important;
-  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 215, 0, 0.35) !important;
+.md-typeset img[src*="treino.png"]:hover,
+.md-typeset img[src*="historico.png"]:hover,
+.md-typeset img[src*="progresso.png"]:hover,
+.md-typeset img[src*="series_input.png"]:hover,
+.md-typeset img[src*="caminho_serpente.png"]:hover,
+.md-typeset img[src*="mapa_calor.png"]:hover,
+.md-typeset img[src*="preset_"]:hover,
+.md-typeset img[src*="demo_"]:hover {
+  transform: translateY(-5px) scale(1.02) !important;
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.95), 0 0 28px rgba(255, 215, 0, 0.32) !important;
   border-color: var(--saiyajin-gold) !important;
 }
 
@@ -546,5 +556,102 @@
 
 .md-typeset .tabbed-labels > label:hover {
   color: var(--saiyajin-orange-light) !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Botões CTA da Hero (Ergonomia 44px+ & Estética Saiyajin)
+   -------------------------------------------------------------------------- */
+.saiyajin-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.2rem 0 1.5rem;
+}
+
+.saiyajin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.saiyajin-btn-primary {
+  background: linear-gradient(135deg, var(--saiyajin-orange) 0%, var(--saiyajin-gold) 100%);
+  color: #07080B !important;
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.35);
+}
+
+.saiyajin-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.45);
+  color: #000000 !important;
+}
+
+.saiyajin-btn-secondary {
+  background: rgba(30, 30, 30, 0.85);
+  color: #F0F4F8 !important;
+  border: 1px solid rgba(255, 140, 0, 0.35);
+}
+
+.saiyajin-btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--saiyajin-gold);
+  color: var(--saiyajin-gold) !important;
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   14. Responsividade Mobile (Imagens, Mermaid & MathJax sem cortes)
+   -------------------------------------------------------------------------- */
+.mermaid {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.4rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media screen and (max-width: 600px) {
+  .md-typeset p[align="center"] img[src*="treino.png"],
+  .md-typeset p[align="center"] img[src*="historico.png"],
+  .md-typeset p[align="center"] img[src*="progresso.png"],
+  .md-typeset p[align="center"] img[src*="series_input.png"],
+  .md-typeset p[align="center"] img[src*="caminho_serpente.png"],
+  .md-typeset p[align="center"] img[src*="mapa_calor.png"],
+  .md-typeset p[align="center"] img[src*="preset_"],
+  .md-typeset p[align="center"] img[src*="demo_"] {
+    width: 100% !important;
+    max-width: 310px !important;
+    display: block !important;
+    margin: 0.9rem auto !important;
+  }
+
+  .mermaid {
+    padding-bottom: 0.5rem;
+  }
+
+  .mermaid svg {
+    min-width: 480px;
+    height: auto !important;
+  }
+
+  .saiyajin-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
