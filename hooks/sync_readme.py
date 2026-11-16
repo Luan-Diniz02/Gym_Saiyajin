@@ -50,3 +50,29 @@ def on_pre_build(config):
             f.write(content)
         
         print("[Gym Saiyajin] Sincronização inteligente README.md -> docs/index.md concluída com UTF-8.")
+
+
+_HEADING_EMOJI_RE = re.compile(
+    r'^(#{1,6}\s+)(?:[\U0001F000-\U0001FAFF\u2600-\u27BF\u2300-\u23FF\uFE0F\u200D]+\s*)+'
+)
+
+
+def on_page_markdown(markdown, page, config, files):
+    """Remove emojis iniciais dos títulos Markdown apenas na renderização do portal."""
+    lines = markdown.splitlines(keepends=True)
+    in_fence = False
+    cleaned = []
+
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            cleaned.append(line)
+            continue
+
+        if not in_fence and stripped.startswith("#"):
+            line = _HEADING_EMOJI_RE.sub(r"\1", line)
+
+        cleaned.append(line)
+
+    return "".join(cleaned)
