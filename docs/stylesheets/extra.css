@@ -454,24 +454,39 @@
   border-radius: 0 6px 6px 0;
 }
 
-/* TOC (Índice da Direita) refinado e legível */
+/* TOC (Índice da Direita) padronizado e estável entre abas */
+.md-sidebar--secondary .md-sidebar__scrollwrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 140, 0, 0.28) transparent;
+}
+
+.md-sidebar--secondary .md-nav__title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--saiyajin-orange-light);
+  padding-bottom: 0.4rem;
+}
+
 .md-sidebar--secondary .md-nav__item {
-  padding-top: 0.15rem;
-  padding-bottom: 0.15rem;
+  padding-top: 0.12rem;
+  padding-bottom: 0.12rem;
 }
 
 .md-sidebar--secondary .md-nav__link {
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: #8B949E;
-  border-radius: 4px;
-  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #9AA4B2;
+  border-radius: 6px;
+  padding: 0.28rem 0.55rem;
   transition: all 0.15s ease;
 }
 
 .md-sidebar--secondary .md-nav__link:hover {
   color: var(--saiyajin-gold) !important;
-  background-color: rgba(255, 140, 0, 0.05);
+  background-color: rgba(255, 140, 0, 0.06);
 }
 
 /* Scrollbar ultrafina e discreta */
