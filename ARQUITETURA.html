@@ -482,12 +482,12 @@
   <a href="#1-visao-geral-das-camadas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🏗️ 1. Visão Geral das Camadas
+        1. Visão Geral das Camadas
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🏗️ 1. Visão Geral das Camadas">
+    <nav class="md-nav" aria-label="1. Visão Geral das Camadas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -510,12 +510,12 @@
   <a href="#2-banco-de-dados-sqlite-schema-v4-migracoes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        💾 2. Banco de Dados SQLite (Schema v4 &amp; Migrações)
+        2. Banco de Dados SQLite (Schema v4 &amp; Migrações)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="💾 2. Banco de Dados SQLite (Schema v4 &amp; Migrações)">
+    <nav class="md-nav" aria-label="2. Banco de Dados SQLite (Schema v4 &amp; Migrações)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -549,7 +549,7 @@
   <a href="#3-resiliencia-de-ciclo-de-vida-e-segundo-plano" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ⏱️ 3. Resiliência de Ciclo de Vida e Segundo Plano
+        3. Resiliência de Ciclo de Vida e Segundo Plano
       
     </span>
   </a>
@@ -560,7 +560,7 @@
   <a href="#4-suite-de-testes-automatizados-133-testes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🧪 4. Suíte de Testes Automatizados (133 Testes)
+        4. Suíte de Testes Automatizados (133 Testes)
       
     </span>
   </a>
@@ -738,12 +738,12 @@
   <a href="#1-visao-geral-das-camadas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🏗️ 1. Visão Geral das Camadas
+        1. Visão Geral das Camadas
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🏗️ 1. Visão Geral das Camadas">
+    <nav class="md-nav" aria-label="1. Visão Geral das Camadas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -766,12 +766,12 @@
   <a href="#2-banco-de-dados-sqlite-schema-v4-migracoes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        💾 2. Banco de Dados SQLite (Schema v4 &amp; Migrações)
+        2. Banco de Dados SQLite (Schema v4 &amp; Migrações)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="💾 2. Banco de Dados SQLite (Schema v4 &amp; Migrações)">
+    <nav class="md-nav" aria-label="2. Banco de Dados SQLite (Schema v4 &amp; Migrações)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -805,7 +805,7 @@
   <a href="#3-resiliencia-de-ciclo-de-vida-e-segundo-plano" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ⏱️ 3. Resiliência de Ciclo de Vida e Segundo Plano
+        3. Resiliência de Ciclo de Vida e Segundo Plano
       
     </span>
   </a>
@@ -816,7 +816,7 @@
   <a href="#4-suite-de-testes-automatizados-133-testes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🧪 4. Suíte de Testes Automatizados (133 Testes)
+        4. Suíte de Testes Automatizados (133 Testes)
       
     </span>
   </a>
@@ -851,7 +851,7 @@
 
 <p>O <strong>Gym Saiyajin</strong> é estruturado sobre princípios sólidos de arquitetura limpa e separação de preocupações (<em>Separation of Concerns</em>), projetado para operar em modelo <strong>offline-first</strong> com tolerância a falhas, integridade referencial e alta performance em dispositivos móveis Android.</p>
 <hr />
-<h2 id="1-visao-geral-das-camadas">🏗️ 1. Visão Geral das Camadas</h2>
+<h2 id="1-visao-geral-das-camadas">1. Visão Geral das Camadas</h2>
 <pre class="mermaid"><code>graph TD
     subgraph UI ["Camada de Apresentação (UI)"]
         Screens[Screens: Treino, Histórico, Progresso]
@@ -897,7 +897,7 @@
 <li><strong><code>lib/theme/</code></strong>: Design tokens e paleta centralizada em <code>AppColors</code>.</li>
 </ul>
 <hr />
-<h2 id="2-banco-de-dados-sqlite-schema-v4-migracoes">💾 2. Banco de Dados SQLite (Schema v4 &amp; Migrações)</h2>
+<h2 id="2-banco-de-dados-sqlite-schema-v4-migracoes">2. Banco de Dados SQLite (Schema v4 &amp; Migrações)</h2>
 <p>O banco de dados relacional é gerenciado pela classe <a href="https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/lib/database/db_helper.dart"><code>DatabaseHelper</code></a>, armazenado no arquivo <code>gym_saiyajin.db</code>.</p>
 <h3 id="configuracoes-de-integridade">Configurações de Integridade:</h3>
 <ul>
@@ -958,7 +958,7 @@
 <li>Adição idempotente das colunas biomecânicas <code>tipo TEXT NOT NULL DEFAULT 'normal'</code> (<code>normal</code>, <code>warmup</code>, <code>dropset</code>, <code>falha</code>) e <code>rir INTEGER</code> (<em>Reps in Reserve</em>) na tabela <code>series</code>.</li>
 </ul>
 <hr />
-<h2 id="3-resiliencia-de-ciclo-de-vida-e-segundo-plano">⏱️ 3. Resiliência de Ciclo de Vida e Segundo Plano</h2>
+<h2 id="3-resiliencia-de-ciclo-de-vida-e-segundo-plano">3. Resiliência de Ciclo de Vida e Segundo Plano</h2>
 <p>O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre séries foram desenvolvidos para serem à prova de interrupções de hardware (como tela bloqueada ou alternância de aplicativos):</p>
 <ol>
 <li><strong>Sincronização com Timestamp Real</strong>:</li>
@@ -969,7 +969,7 @@
 <li>Ao iniciar um novo descanso ou reiniciar o cronômetro, o <code>NotificationService</code> cancela notificações anteriores agendadas antes de emitir um novo alerta, prevenindo toques ou vibrações duplicadas.</li>
 </ol>
 <hr />
-<h2 id="4-suite-de-testes-automatizados-133-testes">🧪 4. Suíte de Testes Automatizados (133 Testes)</h2>
+<h2 id="4-suite-de-testes-automatizados-133-testes">4. Suíte de Testes Automatizados (133 Testes)</h2>
 <p>O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta <code>test/</code>, executáveis via <code>flutter test</code>:</p>
 <table>
 <thead>

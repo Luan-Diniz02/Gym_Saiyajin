@@ -645,7 +645,7 @@
   <a href="#ux-01-exclusao-acidental-de-series-via-dismissible-sem-confirmacao-ou-undo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔴 UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo
+        UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo
       
     </span>
   </a>
@@ -656,7 +656,7 @@
   <a href="#ux-02-acao-rapida-de-auto-preenchimento-orfa-preencherseriecomanterior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔴 UX-02: Ação Rápida de Auto-preenchimento Órfã (preencherSerieComAnterior)
+        UX-02: Ação Rápida de Auto-preenchimento Órfã (preencherSerieComAnterior)
       
     </span>
   </a>
@@ -667,7 +667,7 @@
   <a href="#ux-03-falta-de-controle-de-saida-popscope-e-risco-de-perda-de-treino-ativo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔴 UX-03: Falta de Controle de Saída (PopScope) e Risco de Perda de Treino Ativo
+        UX-03: Falta de Controle de Saída (PopScope) e Risco de Perda de Treino Ativo
       
     </span>
   </a>
@@ -678,7 +678,7 @@
   <a href="#ux-04-alerta-de-descanso-invasivo-barrierdismissible-false" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🟡 UX-04: Alerta de Descanso Invasivo (barrierDismissible: false)
+        UX-04: Alerta de Descanso Invasivo (barrierDismissible: false)
       
     </span>
   </a>
@@ -689,7 +689,7 @@
   <a href="#ux-05-flicker-de-estado-vazio-falta-de-loading-states-nos-controllers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🟡 UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)
+        UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)
       
     </span>
   </a>
@@ -700,7 +700,7 @@
   <a href="#ux-06-editor-de-fichas-com-ergonomia-deficiente-e-sem-reordenacao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🟡 UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação
+        UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação
       
     </span>
   </a>
@@ -711,7 +711,7 @@
   <a href="#ux-07-valores-padrao-arbitrarios-69kg-170m-criam-diagnostico-fantasma" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🟡 UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma
+        UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma
       
     </span>
   </a>
@@ -722,7 +722,7 @@
   <a href="#ui-01-ui-02-consistencia-visual-tema-global-e-text-scaling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🟢 UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling
+        UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling
       
     </span>
   </a>
@@ -917,7 +917,7 @@
 <hr />
 <h2 id="4-analise-detalhada-dos-problemas-e-solucoes-recomendadas">4. Análise Detalhada dos Problemas e Soluções Recomendadas</h2>
 <hr />
-<h3 id="ux-01-exclusao-acidental-de-series-via-dismissible-sem-confirmacao-ou-undo">🔴 UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo</h3>
+<h3 id="ux-01-exclusao-acidental-de-series-via-dismissible-sem-confirmacao-ou-undo">UX-01: Exclusão Acidental de Séries via Dismissible sem Confirmação ou Undo</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/widgets/serie_row_widget.dart</code> (Linhas 306-345)</li>
 <li><strong>Cenário Real de Uso</strong>: O atleta está na academia com mãos suadas ou descansando entre séries. Ao tentar fazer o scroll vertical da lista de séries, acidentalmente faz um leve gesto horizontal para a esquerda.</li>
@@ -944,7 +944,7 @@
 <li>Implementar suporte a restauração no <code>TreinoController</code> e adicionar botão <code>SnackBarAction(label: 'DESFAZER', onPressed: ...)</code> na SnackBar.</li>
 </ul>
 <hr />
-<h3 id="ux-02-acao-rapida-de-auto-preenchimento-orfa-preencherseriecomanterior">🔴 UX-02: Ação Rápida de Auto-preenchimento Órfã (<code>preencherSerieComAnterior</code>)</h3>
+<h3 id="ux-02-acao-rapida-de-auto-preenchimento-orfa-preencherseriecomanterior">UX-02: Ação Rápida de Auto-preenchimento Órfã (<code>preencherSerieComAnterior</code>)</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/controllers/treino_controller.dart</code> (Linhas 614-637) vs <code>lib/widgets/serie_row_widget.dart</code> (Linhas 102-110, 215-265)</li>
 <li><strong>Problema de UX</strong>: Nos principais apps de musculação do mercado (Hevy, Strong, RepCount), o usuário pode copiar os valores da última sessão com um único toque. No Gym Saiyajin, o controller possui a lógica pronta:
@@ -956,7 +956,7 @@
 <li>Sincronizar imediatamente os <code>TextEditingController</code> dos campos de peso e repetições.</li>
 </ul>
 <hr />
-<h3 id="ux-03-falta-de-controle-de-saida-popscope-e-risco-de-perda-de-treino-ativo">🔴 UX-03: Falta de Controle de Saída (<code>PopScope</code>) e Risco de Perda de Treino Ativo</h3>
+<h3 id="ux-03-falta-de-controle-de-saida-popscope-e-risco-de-perda-de-treino-ativo">UX-03: Falta de Controle de Saída (<code>PopScope</code>) e Risco de Perda de Treino Ativo</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/main.dart</code> (Linhas 119-147)</li>
 <li><strong>Problema de UX</strong>: No Android, o botão/gesto nativo de "Voltar" (Back gesture) encerra ou minimiza o app imediatamente caso o usuário esteja em qualquer aba.</li>
@@ -982,7 +982,7 @@
 </span></code></pre></div></li>
 </ul>
 <hr />
-<h3 id="ux-04-alerta-de-descanso-invasivo-barrierdismissible-false">🟡 UX-04: Alerta de Descanso Invasivo (<code>barrierDismissible: false</code>)</h3>
+<h3 id="ux-04-alerta-de-descanso-invasivo-barrierdismissible-false">UX-04: Alerta de Descanso Invasivo (<code>barrierDismissible: false</code>)</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/screens/treino_screen.dart</code> (Linhas 76-128)</li>
 <li><strong>Problema de UX</strong>: Quando o cronômetro atinge 00:00, o app dispara vibração, som e abre um <code>AlertDialog</code> com <code>barrierDismissible: false</code>:
@@ -1002,7 +1002,7 @@
   Substituir o <code>AlertDialog</code> bloqueante por uma <strong>notificação in-app não intrusiva</strong> (Banner deslizante no topo ou SnackBar flutuante elegante) que desapareça sozinha em 4 segundos ou com um toque, sem bloquear a digitação e a visualização do treino.</li>
 </ul>
 <hr />
-<h3 id="ux-05-flicker-de-estado-vazio-falta-de-loading-states-nos-controllers">🟡 UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)</h3>
+<h3 id="ux-05-flicker-de-estado-vazio-falta-de-loading-states-nos-controllers">UX-05: Flicker de Estado Vazio (Falta de Loading States nos Controllers)</h3>
 <ul>
 <li><strong>Arquivos</strong>: <code>lib/controllers/historico_controller.dart</code> e <code>lib/controllers/progresso_controller.dart</code></li>
 <li><strong>Problema de UX</strong>:</li>
@@ -1016,7 +1016,7 @@
 <li>Exibir o <code>_buildEmptyState()</code> <strong>apenas se</strong> <code>!isLoading &amp;&amp; historico.isEmpty</code>.</li>
 </ul>
 <hr />
-<h3 id="ux-06-editor-de-fichas-com-ergonomia-deficiente-e-sem-reordenacao">🟡 UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação</h3>
+<h3 id="ux-06-editor-de-fichas-com-ergonomia-deficiente-e-sem-reordenacao">UX-06: Editor de Fichas com Ergonomia Deficiente e Sem Reordenação</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/widgets/gerenciar_fichas_modal.dart</code> (Linhas 973-1109)</li>
 <li><strong>Problemas Identificados</strong>:</li>
@@ -1029,7 +1029,7 @@
 <li>Aumentar a área de clique para o padrão ergonômico de pelo menos 44x44 dp ou 48x48 dp.</li>
 </ul>
 <hr />
-<h3 id="ux-07-valores-padrao-arbitrarios-69kg-170m-criam-diagnostico-fantasma">🟡 UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma</h3>
+<h3 id="ux-07-valores-padrao-arbitrarios-69kg-170m-criam-diagnostico-fantasma">UX-07: Valores Padrão Arbitrários (69kg / 1.70m) Criam Diagnóstico Fantasma</h3>
 <ul>
 <li><strong>Arquivo</strong>: <code>lib/controllers/progresso_controller.dart</code> (Linhas 24-28, 86-98)</li>
 <li><strong>Problema de UX</strong>:
@@ -1046,7 +1046,7 @@
   <code>"Toque para cadastrar seu peso e altura e acompanhar sua evolução física"</code>.</li>
 </ul>
 <hr />
-<h3 id="ui-01-ui-02-consistencia-visual-tema-global-e-text-scaling">🟢 UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling</h3>
+<h3 id="ui-01-ui-02-consistencia-visual-tema-global-e-text-scaling">UI-01 &amp; UI-02: Consistência Visual, Tema Global e Text Scaling</h3>
 <ul>
 <li><strong>Arquivos</strong>: <code>lib/theme/app_colors.dart</code>, <code>lib/main.dart</code> e múltiplos widgets em <code>lib/widgets/</code></li>
 <li><strong>Problemas</strong>:</li>
