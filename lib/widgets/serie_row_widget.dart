@@ -513,10 +513,8 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                   ),
                   const SizedBox(width: 14),
                   GestureDetector(
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      widget.controller.toggleConcluidaSerie(widget.index);
-                    },
+                    key: ValueKey('btn-check-serie-${widget.index}'),
+                    onTap: _aoTentarConcluirSerie,
                     child: Container(
                       width: 44,
                       height: 44,
@@ -811,24 +809,104 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
                 return AlertDialog(
                   backgroundColor: AppColors.surface,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
+                    side: const BorderSide(color: AppColors.cardBorder),
                   ),
-                  title: Text('Remover Série ${widget.index + 1}?'),
+                  title: Row(
+                    children: [
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.danger.withValues(alpha: 0.14),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.danger.withValues(alpha: 0.35),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: AppColors.danger,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'REMOVER SÉRIE ${widget.index + 1}?',
+                          style: const TextStyle(
+                            color: AppColors.textLight,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   content: const Text(
                     'Tem certeza que deseja remover esta série do treino atual?',
-                    style: TextStyle(color: AppColors.textLight),
+                    style: TextStyle(
+                      color: AppColors.textDimmed,
+                      fontSize: 13.5,
+                      height: 1.4,
+                    ),
                   ),
                   actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancelar'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, true),
-                      child: const Text(
-                        'Remover',
-                        style: TextStyle(color: AppColors.danger),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 44,
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: AppColors.background,
+                                foregroundColor: AppColors.textLight,
+                                side: const BorderSide(
+                                  color: AppColors.buttonBorder,
+                                  width: 1.2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                'CANCELAR',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 12,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: SizedBox(
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.danger,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                'REMOVER',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 12,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 );
@@ -851,8 +929,250 @@ class _SerieRowWidgetState extends State<SerieRowWidget> {
   }
 
   void _concluirSeriePeloTeclado() {
+    _aoTentarConcluirSerie();
+  }
+
+  void _aoTentarConcluirSerie() {
+    final anomalia = widget.controller.diagnosticarAnomaliaSerie(widget.index);
+    if (anomalia != null) {
+      HapticFeedback.mediumImpact();
+      _mostrarDialogoAnomaliaSerie(anomalia);
+      return;
+    }
+
     HapticFeedback.selectionClick();
     widget.controller.toggleConcluidaSerie(widget.index);
+  }
+
+  Future<void> _mostrarDialogoAnomaliaSerie(AnomaliaSerie anomalia) async {
+    final isInversao = anomalia.tipo == TipoAnomaliaSerie.inversaoPesoReps;
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+          title: Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.accent.withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Icon(
+                  isInversao
+                      ? Icons.swap_horiz_rounded
+                      : Icons.warning_amber_rounded,
+                  color: AppColors.accent,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  isInversao
+                      ? 'VALORES INVERTIDOS?'
+                      : 'VALOR INCOMUM?',
+                  style: const TextStyle(
+                    color: AppColors.textLight,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                isInversao
+                    ? 'Você digitou ${anomalia.pesoDigitadoFormatado} kg × ${anomalia.repsDigitadas} reps. Parece que o peso e as repetições foram invertidos.'
+                    : 'Você digitou ${anomalia.pesoDigitadoFormatado} kg × ${anomalia.repsDigitadas} reps, um valor muito acima do habitual para este exercício.',
+                style: const TextStyle(
+                  color: AppColors.textDimmed,
+                  fontSize: 13.5,
+                  height: 1.4,
+                ),
+              ),
+              if (anomalia.pesoReferenciaFormatado != null) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 9,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.cardBorder),
+                  ),
+                  child: Text(
+                    anomalia.repsReferencia != null
+                        ? 'Referência anterior: ${anomalia.pesoReferenciaFormatado} kg × ${anomalia.repsReferencia} reps'
+                        : 'Maior carga anterior: ${anomalia.pesoReferenciaFormatado} kg',
+                    style: const TextStyle(
+                      color: AppColors.textLight,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          actions: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (isInversao &&
+                    anomalia.pesoSugeridoFormatado != null &&
+                    anomalia.repsSugeridas != null) ...[
+                  SizedBox(
+                    height: 44,
+                    child: ElevatedButton.icon(
+                      key: const Key('btn-inverter-serie'),
+                      onPressed: () {
+                        Navigator.pop(dialogContext);
+                        _pesoController.text = anomalia.pesoSugeridoFormatado!;
+                        _repsController.text = '${anomalia.repsSugeridas}';
+                        widget.controller.inverterEConcluirSerie(widget.index);
+                      },
+                      icon: const Icon(Icons.swap_horiz_rounded, size: 18),
+                      label: Text(
+                        'INVERTER (${anomalia.pesoSugeridoFormatado} KG × ${anomalia.repsSugeridas} REPS)',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: OutlinedButton(
+                          key: const Key('btn-editar-anomalia'),
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                            FocusScope.of(context).requestFocus(_pesoFocusNode);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: AppColors.background,
+                            foregroundColor: AppColors.textLight,
+                            side: const BorderSide(
+                              color: AppColors.buttonBorder,
+                              width: 1.2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'CORRIGIR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: isInversao
+                            ? OutlinedButton(
+                                key: const Key('btn-confirmar-anomalia'),
+                                onPressed: () {
+                                  Navigator.pop(dialogContext);
+                                  widget.controller.toggleConcluidaSerie(
+                                    widget.index,
+                                  );
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: AppColors.background,
+                                  foregroundColor: AppColors.accent,
+                                  side: BorderSide(
+                                    color: AppColors.accent.withValues(
+                                      alpha: 0.65,
+                                    ),
+                                    width: 1.2,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'MANTER ASSIM',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              )
+                            : ElevatedButton(
+                                key: const Key('btn-confirmar-anomalia'),
+                                onPressed: () {
+                                  Navigator.pop(dialogContext);
+                                  widget.controller.toggleConcluidaSerie(
+                                    widget.index,
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: AppColors.background,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'CONFIRMAR',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildCustomTextField({

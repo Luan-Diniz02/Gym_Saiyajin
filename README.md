@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/Flutter-%3E%3D3.22.0-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%3E%3D3.11.4-0175C2?logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Tests-133%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-136%20Passing-brightgreen?logo=checkmarx&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Portfolio%20%2F%20Non--Commercial-FF8C00" alt="License: Portfolio / Non-Commercial" />
 </p>
 
@@ -65,8 +65,8 @@ A versão estável do aplicativo está pronta para instalação imediata no seu 
 
 Para manter o repositório organizado e detalhar com profundidade cada engenharia do projeto, a documentação está dividida nos seguintes guias modulares:
 
-- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite (v4) com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (133 testes automatizados).
-- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, fluxo contínuo de teclado, micro-badges de PRs, proteção de layout (SafeArea/insets), arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `KintoUnIcon`, `EscotilhaCamaraPainter`), Mapa de Calor Muscular (`ScouterAnatomicoWidget`) e ergonomia do Histórico e do Cronômetro.
+- 🏛️ **[Arquitetura & Engenharia de Software](docs/ARQUITETURA.md)**: Detalhamento das camadas do app (Controllers, Repositories, Services, Models), schema do banco de dados SQLite (v4) com integridade referencial, estratégias de migração de banco, tratamento de ciclo de vida do SO e matriz da suíte de testes (136 testes automatizados).
+- 🎨 **[Design System, Ergonomia & UI/UX](docs/UI_UX.md)**: Princípios de usabilidade sob fadiga física, manifesto de identidade anti-caricatura (seriedade esportiva e fisiologia em primeiro lugar), design tokens, anatomia simétrica das séries, proteção contra inversão de `Peso ↔ Reps`, padronização global de modais e alto contraste, arte vetorial nativa no Canvas (`DragonBallIcon`, `ScouterIcon`, `DragonRadarIcon`, `CapsuleIcon`, `PlanetaKaiohIcon`, `KiAuraIcon`, `KintoUnIcon`, `EscotilhaCamaraPainter`), Mapa de Calor Muscular (`ScouterAnatomicoWidget`) e ergonomia do Histórico, Calendário e Cronômetro.
 - ⚡ **[Sistema Saiyajin & Progressão de Poder (Ki)](docs/SISTEMA_SAIYAJIN.md)**: Matemática da fórmula híbrida do Ki (Força Base, Vigor Saiyajin e Limites Superados), patamares de poder canônicos, design do Super Saiyajin 2, componentes vetoriais nativos, fórmula de Epley refinada para estimativa de 1RM, a jornada de 1.000.000 km no Caminho da Serpente, a Câmara de Regeneração Médica e a telemetria fisiológica do Mapa de Calor Muscular.
 - 📸 **[Compartilhamento Social Personalizável](docs/COMPARTILHAMENTO_SOCIAL.md)**: Guia completo do gerador de cartões sociais, proporções Stories (9:16) e Feed (1:1), os 3 presets de overlay (Slim Clássico, Scouter HUD e Rodapé Minimalista), personalização de cores/legenda e pipeline de captura em alta resolução (3x DPI).
 - 🏋️ **[Guia Técnico do Catálogo de Exercícios](docs/GUIA_CATALOGO_EXERCICIOS.md)**: Procedimento operacional padrão para curadoria, download de miniaturas/GIFs (`180×180`), cadastro de sinônimos brasileiros e validação automatizada dos 106 exercícios offline.
@@ -98,6 +98,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Carga Anterior Inteligente (Sobrecarga Progressiva)**: O app busca o histórico do exercício e sugere a última carga e reps nos campos (`hintText`) e na linha de apoio. Tocar no check com campos vazios auto-preenche a série com os valores anteriores.
 - **Séries com Ergonomia Avançada, Nuvem Voadora (*Kinto-un*) & Esforço (RIR/RPE)**:
   - Alinhamento simétrico, fluxo contínuo de teclado (`Next` pula para reps, `Done` conclui a série), micro-badge dinâmico `PR ⚡` em tempo real e remoção rápida de séries via gesto de deslizar (*Swipe*).
+  - **Proteção Contra Erros de Digitação & Inversão `Peso ↔ Reps` (Estilo Hevy)**: Ao concluir uma série, o sistema detecta automaticamente se o peso e as repetições foram digitados invertidos (oferecendo inversão instantânea em 1 toque) ou se houve um salto anômalo acidental de carga/reps (ex.: um zero a mais), prevenindo falsos recordes (`PRs`).
   - **Classificação Biomecânica de Séries**: Toque no círculo da série para alternar entre **Série de Trabalho** (`N`), **Aquecimento / Kinto-un** (`W` com ícone vetorial `KintoUnIcon` que blinda o cálculo de 1RM e evita falsos PRs), **Drop-set** (`D`) e **Falha Total** (`F`).
   - **Métrica de Esforço Retrátil (`RIR / RPE`)**: Seletor compacto de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) integrado à linha da série sem comprometer a velocidade de digitação.
 - **Escotilha da Câmara de Regeneração Médica (*Medical Machine / Cápsula de Namekusei*)**:
@@ -119,10 +120,9 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **Caminho da Serpente (*Snake Way*)**:
   - Barra de progresso senoidal contínua com curvas suaves de alta fidelidade matemática, nuvens celestiais do Outro Mundo, aura de Ki do guerreiro e o Planeta do Senhor Kaioh vetorial (`PlanetaKaiohIcon`) na chegada. Sempre visível no card.
   - Card interativo com Kanji Kaioh oficial (**界王**) e alternância de dados analíticos: odômetro de ferro (meta épica de 1.000.000 km), marcos de lore canônica e métricas consolidadas (*Carga Total*, *Tempo Total* e *Sessões*).
-- **Timeline Contínua, Identificação de PRs por Série & Rótulos Padronizados**:
-  - Navegação vertical fluida com acesso rápido a todos os exercícios e séries da sessão.
-  - Nós uniformes com ícone de calendário Saiyajin (`Icons.calendar_month`) em laranja vibrante com sombra.
-  - Cabeçalho harmonizado em linha única: **Data** + **Tag da Divisão** (`[ TREINO A ]`) + **Badge Dourado de PRs** (`[ ✪ 2 PRs ]`).
+- **Timeline Contínua, Calendário Mensal, Identificação de PRs por Série & Rótulos Padronizados**:
+  - **Alternador `LISTA` vs `CALENDÁRIO`**: Alterne entre a linha do tempo completa e a grade mensal de **Domingo a Sábado** (`DOM` a `SÁB`) com faixa de resumo (*Sequência Semanal / Streak*, *Dias Treinados no Mês* e *Dias de Descanso*), destaque em Laranja Saiyajin nos dias treinados, micro-badge `DragonBallIcon` nos dias com quebra de recorde (`PR`) e consulta instantânea dos treinos da data selecionada.
+  - **Seletor de Data Saiyajin Unificado (`SaiyajinDatePickerModal`)**: Calendário customizado 100% em português na tela de treino e na edição de sessões.
   - **Rastreamento de PR por Exercício e Série Ápice**: Quando o card do exercício está recolhido, o badge `[🟠 PR]` é exibido no cabeçalho ao lado da contagem de séries; ao expandir o card, o badge do cabeçalho é ocultado e exibido exclusivamente na **série ápice** que bateu o recorde daquela sessão, eliminando redundância visual.
   - **Rótulos Descritivos de Séries (Estilo Hevy)**: Identificação clara por tipo de série tanto no Histórico quanto nos Exercícios Concluídos: `(☁️) Aquecimento`, `(1) Série 1`, `(D) Drop-set` e `(F) Falha`.
   - Linha de métricas esportivas em caixa alta: `EXERCÍCIOS • SÉRIES • VOLUME • DURAÇÃO • DESCANSO`.
@@ -182,7 +182,7 @@ Para manter o repositório organizado e detalhar com profundidade cada engenhari
 - **flutter_local_notifications & timezone** (Notificações locais agendadas e resiliência de alarmes)
 - **flutter_ringtone_player** (Alerta sonoro nativo de alarme para encerramento de descansos)
 - **vibration** (Feedback háptico de hardware)
-- **flutter_test & sqflite_common_ffi** (Suíte robusta de 133 testes unitários, de widgets e de persistência SQLite em memória)
+- **flutter_test & sqflite_common_ffi** (Suíte robusta de 136 testes unitários, de widgets e de persistência SQLite em memória)
 
 ---
 
@@ -261,11 +261,12 @@ gym_saiyajin/
 │       ├── poder_luta_card_widget.dart
 │       ├── progresso_grafico_widget.dart
 │       ├── quadro_recordes_modal.dart
+│       ├── saiyajin_date_picker_modal.dart # Seletor de data unificado em PT-BR (Dom-Sáb)
 │       ├── scouter_anatomico_widget.dart # Mapa de Calor Muscular Frontal e Dorsal (MuscleMapper)
 │       ├── scouter_icon.dart           # CustomPainter do Scouter com lente e telemetria
 │       ├── selecao_exercicio_modal.dart
 │       └── serie_row_widget.dart
-├── test/                               # Suíte de 133 testes automatizados
+├── test/                               # Suíte de 136 testes automatizados
 │   ├── backup_test.dart
 │   ├── caminho_serpente_test.dart
 │   ├── capsule_icon_test.dart
@@ -306,7 +307,7 @@ gym_saiyajin/
 # Obter dependências do projeto
 flutter pub get
 
-# Executar a suíte completa de testes automatizados (133 testes)
+# Executar a suíte completa de testes automatizados (136 testes)
 flutter test
 
 # Verificar análise estática de código (Linter)

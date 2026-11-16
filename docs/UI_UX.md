@@ -58,6 +58,7 @@ A paleta é construída sobre uma base **OLED True Dark**, minimizando o consumo
 │ Background        │ #000000 (Preto profundo OLED)           │
 │ Surface           │ #1E1E1E (Elevação de cards e painéis)   │
 │ Card Border       │ #2C2C2C (Bordas sutis com 1px)          │
+│ Button Border     │ #454545 (Borda de alto contraste modal) │
 │ Primary (Saiyajin)│ #FF8C00 (Laranja Ki vibrante)           │
 │ Accent (Ouro SSJ) │ #FFD700 (Dourado Super Saiyajin / PRs)  │
 │ Text Light        │ #FFFFFF (Texto primário de alta leitura)│
@@ -114,6 +115,10 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Toque longo abre um modal descritivo com a função fisiológica de cada tipo de série.
 - **Seletor Retrátil de Esforço (`RIR / RPE`)**:
   - Pill compacto na base da série que expande horizontalmente os chips de *Reps in Reserve* (`RIR 0` a `RIR 4+` / `RPE 10` a `RPE 6`) sob demanda, sem adicionar altura permanente nem distrair a digitação rápida de carga e repetições.
+- **Pop-up de Proteção contra Inversão (`Peso ↔ Reps`) e Salto Anômalo**:
+  - Ao marcar a série como concluída (`✓` ou `Done`), o método `TreinoController.diagnosticarAnomaliaSerie` verifica:
+    1. **Inversão Acidental (`VALORES INVERTIDOS?`)**: Quando o atleta digita `peso < reps` com repetições altas em um exercício cujo histórico/série anterior possui `peso > reps` (ex.: fazia `60 kg × 12 reps` e digitou `12 kg × 60 reps`). Oferece o botão primário de 1 toque **`INVERTER (60 KG × 12 REPS)`**, que já corrige os campos e conclui a série automaticamente.
+    2. **Salto Anômalo (`VALOR INCOMUM?`)**: Quando a carga digitada é $\ge 2.0\times$ o recorde histórico (com diferença $\ge 20\text{ kg}$, ex.: um zero extra acidental) ou repetições $\ge 50$, solicitando confirmação antes de registrar um falso PR.
 
 ### 2. Escotilha da Câmara de Regeneração / Cronômetro de Descanso (`CronometroWidget`)
 
@@ -136,7 +141,12 @@ A linha de execução da série é a unidade mais utilizada do aplicativo, deman
   - Botões satélites `+/- 15s` para correções rápidas sem digitação.
   - Grade simétrica 3×2 de atalhos rápidos (`00:45`, `1:00`, `1:30`, `2:00`, `3:00`, `4:00`).
 
-### 3. Linha do Tempo, Identificação de PRs & Rótulos de Séries (`HistoricoScreen` & `HistoricoCardWidget`)
+### 3. Linha do Tempo, Calendário Mensal, Identificação de PRs & Rótulos de Séries (`HistoricoScreen` & `HistoricoCardWidget`)
+- **Alternador Segmentado (`LISTA` vs `CALENDÁRIO`)**:
+  - Permite alternar instantaneamente entre a linha do tempo contínua e a grade mensal de **Domingo a Sábado** (`DOM` a `SÁB`).
+  - **Faixa de Consistência**: Exibe *Sequência Atual (Semanas Consecutivas)*, *Dias Treinados no Mês* e *Dias de Descanso*.
+  - **Marcação Visual dos Dias**: Todos os dias treinados recebem círculo preenchido em Laranja Saiyajin (`#FF8C00`), e os dias em que houve quebra de recorde recebem o micro-badge da Esfera do Dragão (`DragonBallIcon`) no canto superior direito do círculo.
+  - **Seletor de Data Unificado (`SaiyajinDatePickerModal`)**: Substitui o `DatePicker` nativo em inglês por um modal 100% em português seguindo o mesmo padrão visual na tela de treino e na edição de sessão.
 - **Alinhamento em Linha Única Fluida**:
   - Reúne em um único `Wrap` horizontal: **Data do Treino** (`21/09/2026`), **Tag de Divisão/Nome** (`[ COSTAS E BÍCEPS ]`) com fundo escuro e borda âmbar, e o **Badge Dourado de PRs** (`[ ✪ 2 PRs ]`) estilizado com a Esfera do Dragão.
   - Alinhamento à direita exclusivo para o **Menu Popup Unificado (`⋮`)**, eliminando múltiplos botões avulsos na tela e reduzindo drasticamente a sobrecarga cognitiva.
@@ -373,6 +383,9 @@ Substituímos o uso de emojis convencionais por arte vetorial matemática render
 4. **Internacionalização Numérica dos Pesos**:
    - Cargas inteiras são exibidas sem decimais (`100 kg`), e cargas fracionárias exibem apenas uma casa decimal limpa (`12.5 kg`).
    - Volumes e pontuações de Ki acima de 1.000 são pontuados automaticamente (`27.080 kg`, `+15.200 Ki`).
+5. **Padronização Global de Pop-ups e Alto Contraste de Botões**:
+   - Todos os modais e diálogos utilizam `backgroundColor: AppColors.surface`, `borderRadius: BorderRadius.circular(20)`, contorno `AppColors.cardBorder`, cabeçalho com ícone dentro de badge circular (`38×38`) e títulos/botões padronizados em **CAIXA ALTA (`UPPERCASE`)**.
+   - Os botões secundários (`CANCELAR`, `CORRIGIR`, `CONTINUAR`) utilizam fundo preto profundo (`AppColors.background` `#000000`), texto branco puro (`AppColors.textLight` `#FFFFFF`) e borda de alto contraste (`AppColors.buttonBorder` `#454545`), garantindo leitura nítida sobre a superfície `#1E1E1E` do modal.
 
 ---
 

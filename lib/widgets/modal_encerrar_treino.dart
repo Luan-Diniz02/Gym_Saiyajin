@@ -942,55 +942,72 @@ class _ModalEncerrarTreinoDialogState extends State<ModalEncerrarTreinoDialog> {
 
               // Botões de Ação do Rodapé
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textDimmed,
-                      side: const BorderSide(color: AppColors.cardBorder),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                      minimumSize: const Size(0, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.background,
+                          foregroundColor: AppColors.textLight,
+                          side: const BorderSide(
+                            color: AppColors.buttonBorder,
+                            width: 1.2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'CANCELAR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      'Cancelar',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                     ),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final nomeTreinoFinal = _nomeTreinoController.text.trim();
-                      final nomeFichaFinal = _nomeFichaController.text.trim();
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          final nomeTreinoFinal = _nomeTreinoController.text.trim();
+                          final nomeFichaFinal = _nomeFichaController.text.trim();
 
-                      Navigator.pop(
-                        context,
-                        ResultadoEncerrarTreino(
-                          descartarAtual: _descartarAtual,
-                          nomeTreino: nomeTreinoFinal.isNotEmpty ? nomeTreinoFinal : null,
-                          salvarComoFicha: _salvarComoFicha,
-                          nomeFicha: nomeFichaFinal.isNotEmpty ? nomeFichaFinal : nomeTreinoFinal,
-                          duracaoSegundos: _duracaoSegundos,
-                          descansoTotalSegundos: _descansoTotalSegundos,
+                          Navigator.pop(
+                            context,
+                            ResultadoEncerrarTreino(
+                              descartarAtual: _descartarAtual,
+                              nomeTreino: nomeTreinoFinal.isNotEmpty ? nomeTreinoFinal : null,
+                              salvarComoFicha: _salvarComoFicha,
+                              nomeFicha: nomeFichaFinal.isNotEmpty ? nomeFichaFinal : nomeTreinoFinal,
+                              duracaoSegundos: _duracaoSegundos,
+                              descansoTotalSegundos: _descansoTotalSegundos,
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.check_circle_outline, size: 18),
+                        label: const Text(
+                          'CONCLUIR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.check_circle_outline, size: 20),
-                    label: const Text(
-                      'Concluir Treino',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
-                      minimumSize: const Size(0, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.background,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                       ),
                     ),
                   ),

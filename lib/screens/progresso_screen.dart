@@ -43,7 +43,41 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('COMPOSIÇÃO & MEDIDAS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppColors.cardBorder),
+          ),
+          title: Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.35),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.monitor_weight_outlined,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'COMPOSIÇÃO & MEDIDAS',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 15,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -56,7 +90,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                     labelText: 'Peso (kg)',
                     filled: true,
                     fillColor: AppColors.background,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -67,7 +101,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                     labelText: 'Altura (m)',
                     filled: true,
                     fillColor: AppColors.background,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -79,7 +113,7 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                     hintText: 'Ex: 12.5',
                     filled: true,
                     fillColor: AppColors.background,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -91,25 +125,70 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final novoPeso = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? _controller.pesoAtual;
-                final novaAltura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? _controller.altura;
-                final textoGordura = gorduraController.text.trim().replaceAll(',', '.');
-                final novaGordura = textoGordura.isNotEmpty ? double.tryParse(textoGordura) : null;
-                _controller.atualizarMedidas(
-                  peso: novoPeso,
-                  altura: novaAltura,
-                  percentualGordura: novaGordura,
-                );
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: AppColors.background),
-              child: const Text('SALVAR', style: TextStyle(fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColors.background,
+                        foregroundColor: AppColors.textLight,
+                        side: const BorderSide(
+                          color: AppColors.buttonBorder,
+                          width: 1.2,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'CANCELAR',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final novoPeso = double.tryParse(pesoController.text.replaceAll(',', '.')) ?? _controller.pesoAtual;
+                        final novaAltura = double.tryParse(alturaController.text.replaceAll(',', '.')) ?? _controller.altura;
+                        final textoGordura = gorduraController.text.trim().replaceAll(',', '.');
+                        final novaGordura = textoGordura.isNotEmpty ? double.tryParse(textoGordura) : null;
+                        _controller.atualizarMedidas(
+                          peso: novoPeso,
+                          altura: novaAltura,
+                          percentualGordura: novaGordura,
+                        );
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'SALVAR',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -131,18 +210,49 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
           builder: (context, setStateModal) {
             return AlertDialog(
               backgroundColor: AppColors.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Center(
-                child: Text('META SEMANAL', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: AppColors.cardBorder),
+              ),
+              title: Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.14),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.35),
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.radar_rounded,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'META SEMANAL',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Quantos dias você quer treinar?',
-                    style: TextStyle(color: AppColors.textDimmed, fontSize: 12),
+                    'Quantos dias por semana você quer treinar?',
+                    style: TextStyle(color: AppColors.textDimmed, fontSize: 13),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -169,20 +279,62 @@ class _ProgressoScreenState extends State<ProgressoScreen> {
                 ],
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _controller.atualizarMetaDiasSemana(metaTemporaria);
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
-                  ),
-                  child: const Text('SALVAR', style: TextStyle(fontWeight: FontWeight.bold)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: AppColors.background,
+                            foregroundColor: AppColors.textLight,
+                            side: const BorderSide(
+                              color: AppColors.buttonBorder,
+                              width: 1.2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'CANCELAR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _controller.atualizarMetaDiasSemana(metaTemporaria);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.background,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'SALVAR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );

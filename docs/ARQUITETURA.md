@@ -137,7 +137,7 @@ O monitoramento do tempo de treino e o cronômetro regressivo de descanso entre 
 
 ---
 
-## 🧪 4. Suíte de Testes Automatizados (133 Testes)
+## 🧪 4. Suíte de Testes Automatizados (136 Testes)
 
 O repositório possui cobertura ampla de testes unitários, de widgets e de persistência na pasta `test/`, executáveis via `flutter test`:
 
@@ -158,10 +158,10 @@ O repositório possui cobertura ampla de testes unitários, de widgets e de pers
 | [`test/imc_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/imc_test.dart) | Métricas Corporais & Eixo X do Gráfico | Cálculo de IMC nas 6 faixas da OMS, categorização de BF e algoritmo de espaçamento inteligente de datas no gráfico. |
 | [`test/dragon_radar_icon_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/dragon_radar_icon_test.dart) | CustomPainter Radar do Dragão | Variação de 0 a 7 esferas dinâmicas, mira, dial metálico e shouldRepaint. |
 | [`test/capsule_icon_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/capsule_icon_test.dart) | CustomPainter Cápsula Hoi-Poi | Cores personalizadas, dimensões, botão push trigger e shouldRepaint. |
-| [`test/caminho_serpente_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/caminho_serpente_test.dart) | Caminho da Serpente & Planeta Kaioh | Progressão senoidal, PlanetaKaiohIcon, sessões sempre expandidas e modal de ajuste de tempo. |
+| [`test/caminho_serpente_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/caminho_serpente_test.dart) | Caminho da Serpente, Calendário & Planeta Kaioh | Progressão senoidal, `PlanetaKaiohIcon`, alternância entre Lista e Calendário Mensal (Dom-Sáb), cálculo de sequência semanal (*streak*) e modal de ajuste de tempo. |
 | [`test/cronometro_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/cronometro_widget_test.dart) | Escotilha da Câmara de Regeneração | Estados de repouso, regeneração ativa com bolhas animadas, pausa e telemetria. |
 | [`test/ki_aura_icon_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/ki_aura_icon_test.dart) | CustomPainter Chamas de Ki | Dimensões, suporte a cores de transformação, núcleo de energia, glow e sparks. |
 | [`test/notification_service_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/notification_service_test.dart) | Notificações e Hardware | Cancelamento atômico de alarmes, agendamento exato alarmClock e controle de concorrência. |
-| [`test/serie_row_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/serie_row_widget_test.dart) | Ergonomia e Segurança de Séries | Confirmação de exclusão em `Dismissible`, cancelamento e remoção segura. |
+| [`test/serie_row_widget_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/serie_row_widget_test.dart) | Ergonomia, Segurança & Proteção de Séries | Confirmação de exclusão em `Dismissible`, detecção de inversão `Peso ↔ Reps` com correção em 1 toque e alerta de salto anômalo de carga/reps. |
 | [`test/treino_repository_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/treino_repository_test.dart) | Persistência SQLite em Memória (FFI) | Inserção/leitura de sessões, cascata (`ON DELETE CASCADE`), agregação de PRs e CRUD de fichas. |
 | [`test/render_preview_test.dart`](https://github.com/Luan-Diniz02/Gym_Saiyajin/blob/main/test/render_preview_test.dart) | Renderização de Arte Gráfica | Geração de previews em alta resolução dos CustomPainters em PNG. |

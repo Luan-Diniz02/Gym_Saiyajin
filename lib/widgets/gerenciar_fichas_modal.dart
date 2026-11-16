@@ -64,45 +64,105 @@ class _GerenciarFichasModalState extends State<GerenciarFichasModal> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: AppColors.cardBorder),
         ),
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
-                color: AppColors.danger.withValues(alpha: 0.15),
+                color: AppColors.danger.withValues(alpha: 0.14),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.danger.withValues(alpha: 0.35),
+                ),
               ),
-              child: const Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 20),
+              child: const Icon(
+                Icons.delete_outline_rounded,
+                color: AppColors.danger,
+                size: 20,
+              ),
             ),
             const SizedBox(width: 12),
-            const Text(
-              'Excluir Ficha?',
-              style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 17),
+            const Expanded(
+              child: Text(
+                'EXCLUIR FICHA?',
+                style: TextStyle(
+                  color: AppColors.textLight,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                  letterSpacing: 0.6,
+                ),
+              ),
             ),
           ],
         ),
         content: Text(
           'Deseja excluir a ficha "${ficha.nome}"? Esta ação não pode ser desfeita.',
-          style: const TextStyle(color: AppColors.textDimmed, fontSize: 14, height: 1.4),
+          style: const TextStyle(
+            color: AppColors.textDimmed,
+            fontSize: 13.5,
+            height: 1.4,
+          ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed, fontWeight: FontWeight.w600)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.danger,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              elevation: 0,
-            ),
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir', style: TextStyle(fontWeight: FontWeight.bold)),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: AppColors.background,
+                      foregroundColor: AppColors.textLight,
+                      side: const BorderSide(
+                        color: AppColors.buttonBorder,
+                        width: 1.2,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'CANCELAR',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 12,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.danger,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text(
+                      'EXCLUIR',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 12,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -594,23 +654,34 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: AppColors.cardBorder),
         ),
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.12),
+                color: AppColors.primary.withValues(alpha: 0.14),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.35),
+                ),
               ),
               child: const Icon(Icons.history_rounded, color: AppColors.primary, size: 20),
             ),
-            const SizedBox(width: 10),
-            const Text(
-              'Importar do Histórico',
-              style: TextStyle(color: AppColors.textLight, fontWeight: FontWeight.bold, fontSize: 16),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Text(
+                'IMPORTAR DO HISTÓRICO',
+                style: TextStyle(
+                  color: AppColors.textLight,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  letterSpacing: 0.5,
+                ),
+              ),
             ),
           ],
         ),
@@ -658,9 +729,31 @@ class _FichaEditorBottomSheetState extends State<_FichaEditorBottomSheet> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed, fontWeight: FontWeight.w600)),
+          SizedBox(
+            width: double.infinity,
+            height: 44,
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                backgroundColor: AppColors.background,
+                foregroundColor: AppColors.textLight,
+                side: const BorderSide(
+                  color: AppColors.buttonBorder,
+                  width: 1.2,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 12,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
           ),
         ],
       ),

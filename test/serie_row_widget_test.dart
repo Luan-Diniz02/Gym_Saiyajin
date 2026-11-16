@@ -100,12 +100,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Confere se o diálogo foi aberto
-      expect(find.text('Remover Série 1?'), findsOneWidget);
-      expect(find.text('Cancelar'), findsOneWidget);
-      expect(find.text('Remover'), findsOneWidget);
+      expect(find.text('REMOVER SÉRIE 1?'), findsOneWidget);
+      expect(find.text('CANCELAR'), findsOneWidget);
+      expect(find.text('REMOVER'), findsOneWidget);
 
-      // Toca em Cancelar
-      await tester.tap(find.text('Cancelar'));
+      // Toca em CANCELAR
+      await tester.tap(find.text('CANCELAR'));
       await tester.pumpAndSettle();
 
       // A série ainda deve existir no controller
@@ -129,10 +129,10 @@ void main() {
       await tester.drag(find.byType(Dismissible), const Offset(-500, 0));
       await tester.pumpAndSettle();
 
-      expect(find.text('Remover Série 1?'), findsOneWidget);
+      expect(find.text('REMOVER SÉRIE 1?'), findsOneWidget);
 
-      // Toca em Remover
-      await tester.tap(find.text('Remover'));
+      // Toca em REMOVER
+      await tester.tap(find.text('REMOVER'));
       await tester.pumpAndSettle();
 
       // Agora o controller deve ter apenas 2 séries
@@ -305,5 +305,113 @@ void main() {
 
       controller.dispose();
     });
+
+    testWidgets(
+      'Detecta inversão acidental entre Peso e Reps e permite inverter com 1 toque no pop-up',
+      (tester) async {
+        repository.recordeHistoricoMock = const RecordePessoal(
+          exercicioNome: 'Supino Reto',
+          grupo: 'PEITO',
+          cargaMaxima: 60.0,
+          repsCargaMaxima: 12,
+          umRepMaxEstimado: 84.0,
+          peso1RM: 60.0,
+          reps1RM: 12,
+        );
+
+        controller.iniciarNovoExercicio(
+          'Supino Reto',
+          'PEITO',
+          quantidadeSeries: 1,
+        );
+        await tester.pumpAndSettle();
+
+        await tester.pumpWidget(
+          criarWidgetTestavel(
+            SerieRowWidget(index: 0, controller: controller),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Atleta digita 12 kg x 60 reps por engano (invertido)
+        controller.atualizarPesoSerie(0, '12');
+        controller.atualizarRepsSerie(0, '60');
+        await tester.pumpAndSettle();
+
+        // Toca no botão de check da série
+        await tester.tap(find.byKey(const ValueKey('btn-check-serie-0')));
+        await tester.pumpAndSettle();
+
+        // O pop-up de aviso de inversão deve aparecer e a série ainda não está concluída
+        expect(find.text('VALORES INVERTIDOS?'), findsOneWidget);
+        expect(controller.exercicioAtual!.seriesDetalhes[0].concluida, isFalse);
+
+        // Toca no botão de inverter (60 kg x 12 reps)
+        await tester.tap(find.byKey(const Key('btn-inverter-serie')));
+        await tester.pumpAndSettle();
+
+        final serieCorrigida = controller.exercicioAtual!.seriesDetalhes[0];
+        expect(serieCorrigida.peso, 60.0);
+        expect(serieCorrigida.reps, 12);
+        expect(serieCorrigida.concluida, isTrue);
+
+        controller.dispose();
+      },
+    );
+
+    testWidgets(
+      'Detecta salto anômalo de carga (ex: dígito extra) e exibe pop-up de confirmação antes de concluir',
+      (tester) async {
+        repository.recordeHistoricoMock = const RecordePessoal(
+          exercicioNome: 'Rosca Direta',
+          grupo: 'BÍCEPS',
+          cargaMaxima: 30.0,
+          repsCargaMaxima: 10,
+          umRepMaxEstimado: 40.0,
+          peso1RM: 30.0,
+          reps1RM: 10,
+        );
+
+        controller.iniciarNovoExercicio(
+          'Rosca Direta',
+          'BÍCEPS',
+          quantidadeSeries: 1,
+        );
+        await tester.pumpAndSettle();
+
+        await tester.pumpWidget(
+          criarWidgetTestavel(
+            SerieRowWidget(index: 0, controller: controller),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Atleta digita 300 kg em vez de 30 kg
+        controller.atualizarPesoSerie(0, '300');
+        controller.atualizarRepsSerie(0, '10');
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byKey(const ValueKey('btn-check-serie-0')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('VALOR INCOMUM?'), findsOneWidget);
+        expect(controller.exercicioAtual!.seriesDetalhes[0].concluida, isFalse);
+
+        // Se escolher CORRIGIR, fecha o modal e mantém a série pendente
+        await tester.tap(find.byKey(const Key('btn-editar-anomalia')));
+        await tester.pumpAndSettle();
+        expect(controller.exercicioAtual!.seriesDetalhes[0].concluida, isFalse);
+
+        // Se tocar novamente e escolher CONFIRMAR ASSIM, conclui a série
+        await tester.tap(find.byKey(const ValueKey('btn-check-serie-0')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('btn-confirmar-anomalia')));
+        await tester.pumpAndSettle();
+
+        expect(controller.exercicioAtual!.seriesDetalhes[0].concluida, isTrue);
+
+        controller.dispose();
+      },
+    );
   });
 }

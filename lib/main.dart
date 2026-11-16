@@ -144,40 +144,105 @@ class _TelaBaseState extends State<TelaBase> {
           builder: (context) => AlertDialog(
             backgroundColor: AppColors.surface,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
+              side: const BorderSide(color: AppColors.cardBorder),
             ),
-            title: const Row(
+            title: Row(
               children: [
-                KiAuraIcon(
-                  size: 20,
-                  primaryColor: AppColors.accent,
-                  secondaryColor: AppColors.primary,
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.14),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: const KiAuraIcon(
+                    size: 20,
+                    primaryColor: AppColors.accent,
+                    secondaryColor: AppColors.primary,
+                  ),
                 ),
-                SizedBox(width: 8),
-                Text(
-                  'Treino em Andamento',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'TREINO EM ANDAMENTO',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                      color: AppColors.textLight,
+                    ),
                   ),
                 ),
               ],
             ),
             content: const Text(
               'Você possui um treino em andamento. Deseja realmente sair do aplicativo?',
-              style: TextStyle(color: AppColors.textLight),
+              style: TextStyle(
+                color: AppColors.textDimmed,
+                fontSize: 13.5,
+                height: 1.4,
+              ),
             ),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Continuar Treino'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text(
-                  'Sair do App',
-                  style: TextStyle(color: AppColors.danger),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.background,
+                          foregroundColor: AppColors.textLight,
+                          side: const BorderSide(
+                            color: AppColors.buttonBorder,
+                            width: 1.2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'CONTINUAR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.danger,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'SAIR DO APP',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

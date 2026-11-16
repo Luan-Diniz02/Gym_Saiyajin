@@ -15,6 +15,47 @@ import '../services/exercicio_custom_midia_service.dart';
 import '../services/notification_service.dart';
 import '../services/preferences_service.dart';
 
+enum TipoAnomaliaSerie {
+  inversaoPesoReps,
+  saltoAnomalo,
+}
+
+class AnomaliaSerie {
+  final TipoAnomaliaSerie tipo;
+  final double pesoDigitado;
+  final int repsDigitadas;
+  final double? pesoSugerido;
+  final int? repsSugeridas;
+  final double? pesoReferencia;
+  final int? repsReferencia;
+
+  const AnomaliaSerie({
+    required this.tipo,
+    required this.pesoDigitado,
+    required this.repsDigitadas,
+    this.pesoSugerido,
+    this.repsSugeridas,
+    this.pesoReferencia,
+    this.repsReferencia,
+  });
+
+  String get pesoDigitadoFormatado => pesoDigitado % 1 == 0
+      ? pesoDigitado.toInt().toString()
+      : pesoDigitado.toStringAsFixed(1);
+
+  String? get pesoSugeridoFormatado => pesoSugerido == null
+      ? null
+      : (pesoSugerido! % 1 == 0
+          ? pesoSugerido!.toInt().toString()
+          : pesoSugerido!.toStringAsFixed(1));
+
+  String? get pesoReferenciaFormatado => pesoReferencia == null
+      ? null
+      : (pesoReferencia! % 1 == 0
+          ? pesoReferencia!.toInt().toString()
+          : pesoReferencia!.toStringAsFixed(1));
+}
+
 class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
   final TreinoRepository _repository;
   final PreferencesService _preferencesService;
@@ -731,6 +772,127 @@ class TreinoController extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     notifyListeners();
+  }
+
+  /// Analisa se os valores digitados na série apresentam indícios de inversão
+  /// acidental entre `Peso (kg)` e `Reps` ou salto anômalo de digitação (ex: zero a mais).
+  /// Retorna `null` caso os valores estejam dentro do padrão esperado ou se a série já estiver concluída.
+  AnomaliaSerie? diagnosticarAnomaliaSerie(int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return null;
+    }
+
+    final serie = atual.seriesDetalhes[index];
+    if (serie.concluida) return null;
+
+    final peso = serie.peso;
+    final reps = serie.reps;
+    if (peso == null || reps == null || peso <= 0 || reps <= 0) {
+      return null;
+    }
+
+    // Busca referência da sessão anterior ou de série já concluída hoje no mesmo exercício
+    Serie? refSerie = obterSerieAnterior(atual.nome, index);
+    if (refSerie == null || refSerie.peso == null || refSerie.reps == null) {
+      for (int i = index - 1; i >= 0; i--) {
+        final candidata = atual.seriesDetalhes[i];
+        if (candidata.concluida &&
+            candidata.peso != null &&
+            candidata.reps != null &&
+            candidata.peso! > 0 &&
+            candidata.reps! > 0) {
+          refSerie = candidata;
+          break;
+        }
+      }
+    }
+
+    final recordeBase = obterRecordeBase(atual.nome);
+    final double? pesoRef = refSerie?.peso ??
+        ((recordeBase != null && recordeBase.cargaMaxima > 0)
+            ? recordeBase.cargaMaxima
+            : null);
+    final int? repsRef = refSerie?.reps ??
+        ((recordeBase != null && recordeBase.repsCargaMaxima > 0)
+            ? recordeBase.repsCargaMaxima
+            : null);
+
+    final bool pesoInteiroValidoParaReps = peso % 1 == 0 && peso >= 1;
+
+    // 1. Gatilho de Inversão (Peso <-> Reps)
+    if (pesoInteiroValidoParaReps && peso < reps) {
+      final bool inversaoComReferencia = pesoRef != null &&
+          repsRef != null &&
+          pesoRef > repsRef &&
+          pesoRef >= 15 &&
+          reps >= 15 &&
+          peso <= 20;
+
+      final bool inversaoSemReferencia =
+          pesoRef == null && peso <= 15 && reps >= 30 && reps >= peso * 2;
+
+      if (inversaoComReferencia || inversaoSemReferencia) {
+        return AnomaliaSerie(
+          tipo: TipoAnomaliaSerie.inversaoPesoReps,
+          pesoDigitado: peso,
+          repsDigitadas: reps,
+          pesoSugerido: reps.toDouble(),
+          repsSugeridas: peso.toInt(),
+          pesoReferencia: pesoRef,
+          repsReferencia: repsRef,
+        );
+      }
+    }
+
+    // 2. Gatilho de Salto Anômalo de Carga ou Repetições (ex: dígito extra acidental)
+    double? maiorPesoConhecido = pesoRef;
+    if (recordeBase != null && recordeBase.cargaMaxima > 0) {
+      if (maiorPesoConhecido == null ||
+          recordeBase.cargaMaxima > maiorPesoConhecido) {
+        maiorPesoConhecido = recordeBase.cargaMaxima;
+      }
+    }
+
+    final bool saltoCargaComHistorico = maiorPesoConhecido != null &&
+        maiorPesoConhecido >= 10 &&
+        peso >= maiorPesoConhecido * 2.0 &&
+        (peso - maiorPesoConhecido) >= 20;
+
+    final bool saltoCargaSemHistorico =
+        maiorPesoConhecido == null && peso >= 250;
+
+    final bool saltoReps = reps >= 50 ||
+        (repsRef != null && repsRef <= 20 && reps >= 35);
+
+    if (saltoCargaComHistorico || saltoCargaSemHistorico || saltoReps) {
+      return AnomaliaSerie(
+        tipo: TipoAnomaliaSerie.saltoAnomalo,
+        pesoDigitado: peso,
+        repsDigitadas: reps,
+        pesoReferencia: maiorPesoConhecido ?? pesoRef,
+        repsReferencia: repsRef,
+      );
+    }
+
+    return null;
+  }
+
+  /// Inverte os valores de `Peso (kg)` e `Reps` da série no índice informado e a marca como concluída.
+  void inverterEConcluirSerie(int index) {
+    final atual = _sessaoTreino.exercicioAtual;
+    if (atual == null || index < 0 || index >= atual.seriesDetalhes.length) {
+      return;
+    }
+
+    final serie = atual.seriesDetalhes[index];
+    final pesoAtual = serie.peso;
+    final repsAtuais = serie.reps;
+    if (pesoAtual == null || repsAtuais == null) return;
+
+    serie.peso = repsAtuais.toDouble();
+    serie.reps = pesoAtual.round();
+    toggleConcluidaSerie(index);
   }
 
   /// Verifica se uma série do exercício atual supera a marca histórica anterior.

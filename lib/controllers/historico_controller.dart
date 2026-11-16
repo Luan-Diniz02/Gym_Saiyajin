@@ -158,4 +158,100 @@ class HistoricoController extends ChangeNotifier {
             )
             .toList(),
       );
+
+  /// Agrupa as sessões realizadas em um determinado mês e ano pelo dia do mês (`1..31`).
+  Map<int, List<HistoricoDia>> obterDiasTreinadosNoMes(int ano, int mes) {
+    final mapa = <int, List<HistoricoDia>>{};
+    for (final sessao in _sessoesTreino) {
+      final d = sessao.data;
+      if (d == null || d.year != ano || d.month != mes) continue;
+      mapa.putIfAbsent(d.day, () => []).add(
+            HistoricoDia(
+              dataLabel: _formatarData(d),
+              sessao: sessao,
+            ),
+          );
+    }
+    return mapa;
+  }
+
+  /// Retorna todas as sessões realizadas em uma data específica (`ano/mês/dia`).
+  List<HistoricoDia> obterSessoesDoDia(DateTime data) {
+    return _sessoesTreino
+        .where((s) {
+          final d = s.data;
+          return d != null &&
+              d.year == data.year &&
+              d.month == data.month &&
+              d.day == data.day;
+        })
+        .map(
+          (sessao) => HistoricoDia(
+            dataLabel: _formatarData(sessao.data),
+            sessao: sessao,
+          ),
+        )
+        .toList();
+  }
+
+  /// Calcula a sequência atual (*streak*) de semanas consecutivas com pelo menos 1 treino.
+  /// Se na semana atual ainda não houve treino, verifica a partir da semana imediatamente anterior.
+  int calcularSequenciaSemanas({DateTime? referencia}) {
+    if (_sessoesTreino.isEmpty) return 0;
+
+    final agora = referencia ?? DateTime.now();
+    final hoje = DateTime(agora.year, agora.month, agora.day);
+    final inicioSemanaAtual =
+        hoje.subtract(Duration(days: hoje.weekday % 7));
+
+    final semanasComTreino = <DateTime>{};
+    for (final sessao in _sessoesTreino) {
+      final d = sessao.data;
+      if (d == null) continue;
+      final diaNormalizado = DateTime(d.year, d.month, d.day);
+      final inicioSemana = diaNormalizado.subtract(
+        Duration(days: diaNormalizado.weekday % 7),
+      );
+      semanasComTreino.add(inicioSemana);
+    }
+
+    DateTime cursorSemana = inicioSemanaAtual;
+    if (!semanasComTreino.contains(cursorSemana)) {
+      final semanaAnterior = cursorSemana.subtract(const Duration(days: 7));
+      if (!semanasComTreino.contains(semanaAnterior)) {
+        return 0;
+      }
+      cursorSemana = semanaAnterior;
+    }
+
+    int sequencia = 0;
+    while (semanasComTreino.contains(cursorSemana)) {
+      sequencia++;
+      cursorSemana = cursorSemana.subtract(const Duration(days: 7));
+    }
+    return sequencia;
+  }
+
+  /// Calcula a quantidade de dias de descanso no mês selecionado.
+  /// Para o mês atual, contabiliza apenas os dias transcorridos até hoje.
+  int calcularDiasDescansoNoMes(int ano, int mes, {DateTime? referencia}) {
+    final agora = referencia ?? DateTime.now();
+    final inicioMesAlvo = DateTime(ano, mes, 1);
+    final inicioMesAtual = DateTime(agora.year, agora.month, 1);
+
+    if (inicioMesAlvo.isAfter(inicioMesAtual)) {
+      return 0;
+    }
+
+    final totalDiasNoMes = DateTime(ano, mes + 1, 0).day;
+    final diasConsiderados =
+        (ano == agora.year && mes == agora.month) ? agora.day : totalDiasNoMes;
+
+    final diasTreinados = obterDiasTreinadosNoMes(ano, mes)
+        .keys
+        .where((dia) => dia <= diasConsiderados)
+        .length;
+
+    return (diasConsiderados - diasTreinados).clamp(0, totalDiasNoMes);
+  }
 }

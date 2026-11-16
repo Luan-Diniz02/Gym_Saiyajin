@@ -18,6 +18,7 @@ import '../widgets/gerenciar_fichas_modal.dart';
 import '../widgets/ki_aura_icon.dart';
 import '../widgets/kinto_un_icon.dart';
 import '../widgets/modal_encerrar_treino.dart';
+import '../widgets/saiyajin_date_picker_modal.dart';
 import '../widgets/selecao_exercicio_modal.dart';
 import '../widgets/serie_row_widget.dart';
 
@@ -84,32 +85,56 @@ class _TreinoScreenState extends State<TreinoScreen> {
         return AlertDialog(
           backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppColors.cardBorder),
           ),
-          title: const Row(
+          title: Row(
             children: [
-              KiAuraIcon(
-                size: 24,
-                primaryColor: AppColors.accent,
-                secondaryColor: AppColors.primary,
-                showGlow: true,
-                showSparks: false,
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.35),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: const KiAuraIcon(
+                  size: 22,
+                  primaryColor: AppColors.accent,
+                  secondaryColor: AppColors.primary,
+                  showGlow: true,
+                  showSparks: false,
+                ),
               ),
-              SizedBox(width: 10),
-              Text(
-                'REGENERAÇÃO CONCLUÍDA!',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'REGENERAÇÃO CONCLUÍDA!',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                    color: AppColors.textLight,
+                  ),
+                ),
               ),
             ],
           ),
           content: const Text(
             'Seu Ki e energia foram restaurados. Prepare-se para a próxima série!',
-            style: TextStyle(color: AppColors.textLight),
+            style: TextStyle(
+              color: AppColors.textDimmed,
+              fontSize: 13.5,
+              height: 1.4,
+            ),
           ),
           actions: [
             SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 46,
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
@@ -121,7 +146,11 @@ class _TreinoScreenState extends State<TreinoScreen> {
                 ),
                 child: const Text(
                   'BORA!',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 14,
+                    letterSpacing: 0.6,
+                  ),
                 ),
               ),
             ),
@@ -155,11 +184,12 @@ class _TreinoScreenState extends State<TreinoScreen> {
   }
 
   Future<void> _selecionarDataSessao() async {
-    final dataEscolhida = await showDatePicker(
+    final dataEscolhida = await SaiyajinDatePickerModal.show(
       context: context,
       initialDate: _controller.dataSessao,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
+      titulo: 'DATA DO TREINO',
     );
 
     if (dataEscolhida != null) {
@@ -185,30 +215,136 @@ class _TreinoScreenState extends State<TreinoScreen> {
           builder: (context) => AlertDialog(
             backgroundColor: AppColors.surface,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
               side: const BorderSide(color: AppColors.cardBorder),
             ),
-            title: const Text('Exercício em andamento', style: TextStyle(color: AppColors.textLight)),
+            title: Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.14),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.fitness_center_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'EXERCÍCIO EM ANDAMENTO',
+                    style: TextStyle(
+                      color: AppColors.textLight,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             content: Text(
               'Você tem séries em "${atual.nome}". Deseja salvá-lo antes de iniciar "${item.nome}"?',
-              style: const TextStyle(color: AppColors.textDimmed),
+              style: const TextStyle(
+                color: AppColors.textDimmed,
+                fontSize: 13.5,
+                height: 1.4,
+              ),
             ),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, null),
-                child: const Text('Cancelar', style: TextStyle(color: AppColors.textDimmed)),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Descartar atual', style: TextStyle(color: AppColors.danger)),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                ),
-                child: const Text('Salvar e Iniciar'),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'SALVAR E INICIAR',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 44,
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context, null),
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: AppColors.background,
+                              foregroundColor: AppColors.textLight,
+                              side: const BorderSide(
+                                color: AppColors.buttonBorder,
+                                width: 1.2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'CANCELAR',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 12,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: SizedBox(
+                          height: 44,
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: AppColors.background,
+                              foregroundColor: AppColors.danger,
+                              side: BorderSide(
+                                color: AppColors.danger.withValues(alpha: 0.65),
+                                width: 1.2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'DESCARTAR',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -274,23 +410,104 @@ class _TreinoScreenState extends State<TreinoScreen> {
         return AlertDialog(
           backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppColors.cardBorder),
           ),
-          title: const Text('Remover Exercício?'),
+          title: Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.danger.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.danger.withValues(alpha: 0.35),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.danger,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'REMOVER EXERCÍCIO?',
+                  style: TextStyle(
+                    color: AppColors.textLight,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
           content: Text(
             'Tem certeza que deseja remover ${exercicio.nome} do treino atual?',
+            style: const TextStyle(
+              color: AppColors.textDimmed,
+              fontSize: 13.5,
+              height: 1.4,
+            ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text(
-                'Remover',
-                style: TextStyle(color: AppColors.danger),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColors.background,
+                        foregroundColor: AppColors.textLight,
+                        side: const BorderSide(
+                          color: AppColors.buttonBorder,
+                          width: 1.2,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'CANCELAR',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.danger,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'REMOVER',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );

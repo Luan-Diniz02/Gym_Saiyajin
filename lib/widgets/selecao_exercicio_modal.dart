@@ -714,17 +714,37 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
             return AlertDialog(
               backgroundColor: AppColors.surface,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(20),
                 side: const BorderSide(color: AppColors.cardBorder, width: 1),
               ),
-              title: const Row(
+              title: Row(
                 children: [
-                  Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 22),
-                  SizedBox(width: 8),
-                  Expanded(
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.danger.withValues(alpha: 0.14),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.danger.withValues(alpha: 0.35),
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.danger,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
                     child: Text(
-                      'Excluir Exercício?',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      'EXCLUIR EXERCÍCIO?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                        letterSpacing: 0.6,
+                        color: AppColors.textLight,
+                      ),
                     ),
                   ),
                 ],
@@ -735,7 +755,7 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                 children: [
                   Text(
                     'Deseja remover "$nome" ($grupo) da sua lista de exercícios personalizados e das fichas?',
-                    style: const TextStyle(color: AppColors.textLight, fontSize: 13, height: 1.4),
+                    style: const TextStyle(color: AppColors.textDimmed, fontSize: 13.5, height: 1.4),
                   ),
                   const SizedBox(height: 12),
                   InkWell(
@@ -778,18 +798,59 @@ class _SelecaoExercicioModalState extends State<SelecaoExercicioModal> {
                 ],
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext, false),
-                  child: const Text('CANCELAR', style: TextStyle(color: AppColors.textDimmed)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.danger,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: () => Navigator.pop(dialogContext, true),
-                  child: const Text('EXCLUIR', style: TextStyle(fontWeight: FontWeight.w900)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: AppColors.background,
+                            foregroundColor: AppColors.textLight,
+                            side: const BorderSide(
+                              color: AppColors.buttonBorder,
+                              width: 1.2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'CANCELAR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.danger,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(dialogContext, true),
+                          child: const Text(
+                            'EXCLUIR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );

@@ -11,4 +11,5 @@ class AppColors {
   static const Color danger = Color(0xFFFF4444);     // Vermelho vivo de perigo/exclusão com alto contraste
   static const Color success = Color(0xFF00E676);    // Verde de sucesso/conclusão
   static const Color cardBorder = Color(0xFF2C2C2C); // Borda suave de cards
+  static const Color buttonBorder = Color(0xFF454545); // Borda de alto contraste para botões secundários
 }

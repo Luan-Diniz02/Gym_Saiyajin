@@ -381,5 +381,78 @@ void main() {
       expect(find.text('Meta: 1.000.000 km'), findsNothing);
       expect(find.byType(CaminhoSerpenteProgressBar), findsOneWidget);
     });
+
+    testWidgets(
+      'HistoricoScreen alterna entre Lista e Calendário e filtra sessões do dia selecionado',
+      (tester) async {
+        final sessaoDia10 = SessaoTreino(
+          id: 1,
+          data: DateTime(2026, 11, 10),
+          nomeTreino: 'Treino Peito',
+          duracaoSegundos: 2400,
+          exerciciosConcluidosHoje: [
+            Exercicio(
+              nome: 'Supino Reto',
+              grupo: 'PEITO',
+              seriesDetalhes: [Serie(reps: 10, peso: 80, concluida: true)],
+            ),
+          ],
+        );
+        final sessaoDia15 = SessaoTreino(
+          id: 2,
+          data: DateTime(2026, 11, 15),
+          nomeTreino: 'Treino Costas',
+          duracaoSegundos: 3000,
+          exerciciosConcluidosHoje: [
+            Exercicio(
+              nome: 'Barra Fixa',
+              grupo: 'COSTAS',
+              seriesDetalhes: [Serie(reps: 8, peso: 10, concluida: true)],
+            ),
+          ],
+        );
+
+        repository.sessoes = [sessaoDia15, sessaoDia10];
+        await controller.carregarHistorico();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: HistoricoScreen(controller: controller),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Verifica métodos do controller para o mês 11/2026
+        final diasMes = controller.obterDiasTreinadosNoMes(2026, 11);
+        expect(diasMes.keys, containsAll([10, 15]));
+        expect(
+          controller.calcularSequenciaSemanas(
+            referencia: DateTime(2026, 11, 15),
+          ),
+          2,
+        );
+
+        // Alterna para o modo Calendário
+        await tester.tap(find.byKey(const Key('toggle-modo-calendario')));
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('card-calendario-mensal')), findsOneWidget);
+        expect(find.text('NOVEMBRO 2026'), findsOneWidget);
+        expect(find.text('2 DIAS'), findsOneWidget);
+
+        // Inicialmente o dia mais recente (15/11) está selecionado
+        expect(find.text('TREINO COSTAS'), findsOneWidget);
+        expect(find.text('TREINO PEITO'), findsNothing);
+
+        // Toca no dia 10/11 no calendário
+        await tester.tap(find.byKey(const Key('dia-calendario-2026-11-10')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('TREINO PEITO'), findsOneWidget);
+        expect(find.text('TREINO COSTAS'), findsNothing);
+      },
+    );
   });
 }

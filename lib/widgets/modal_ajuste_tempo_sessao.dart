@@ -304,15 +304,23 @@ class _ModalAjusteTempoSessaoState extends State<ModalAjusteTempoSessao> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.textDimmed,
-                          side: const BorderSide(color: AppColors.cardBorder),
+                          backgroundColor: AppColors.background,
+                          foregroundColor: AppColors.textLight,
+                          side: const BorderSide(
+                            color: AppColors.buttonBorder,
+                            width: 1.2,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: const Text(
                           'CANCELAR',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/sessao_treino.dart';
 import '../theme/app_colors.dart';
 import 'modal_ajuste_tempo_sessao.dart';
+import 'saiyajin_date_picker_modal.dart';
 
 class ModalEditarSessaoDialog extends StatefulWidget {
   final SessaoTreino sessao;
@@ -71,24 +72,12 @@ class _ModalEditarSessaoDialogState extends State<ModalEditarSessaoDialog> {
   }
 
   Future<void> _selecionarData() async {
-    final novaData = await showDatePicker(
+    final novaData = await SaiyajinDatePickerModal.show(
       context: context,
       initialDate: _data,
       firstDate: DateTime(2020),
       lastDate: DateTime.now().add(const Duration(days: 365)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.primary,
-              onPrimary: AppColors.background,
-              surface: AppColors.surface,
-              onSurface: AppColors.textLight,
-            ),
-          ),
-          child: child!,
-        );
-      },
+      titulo: 'DATA DA SESSÃO',
     );
 
     if (novaData != null && mounted) {
@@ -494,49 +483,66 @@ class _ModalEditarSessaoDialogState extends State<ModalEditarSessaoDialog> {
 
               // Botões
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textDimmed,
-                      side: const BorderSide(color: AppColors.cardBorder),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                      minimumSize: const Size(0, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.background,
+                          foregroundColor: AppColors.textLight,
+                          side: const BorderSide(
+                            color: AppColors.buttonBorder,
+                            width: 1.2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'CANCELAR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      'Cancelar',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                     ),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final nomeTreinoFinal = _nomeTreinoController.text.trim();
-                      final sessaoEditada = widget.sessao.copyWith(
-                        nomeTreino: nomeTreinoFinal.isNotEmpty ? nomeTreinoFinal : null,
-                        data: _data,
-                        duracaoSegundos: _duracaoSegundos,
-                        descansoTotalSegundos: _descansoTotalSegundos,
-                      );
-                      Navigator.pop(context, sessaoEditada);
-                    },
-                    icon: const Icon(Icons.save_rounded, size: 20),
-                    label: const Text(
-                      'Salvar Alterações',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
-                      minimumSize: const Size(0, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          final nomeTreinoFinal = _nomeTreinoController.text.trim();
+                          final sessaoEditada = widget.sessao.copyWith(
+                            nomeTreino: nomeTreinoFinal.isNotEmpty ? nomeTreinoFinal : null,
+                            data: _data,
+                            duracaoSegundos: _duracaoSegundos,
+                            descansoTotalSegundos: _descansoTotalSegundos,
+                          );
+                          Navigator.pop(context, sessaoEditada);
+                        },
+                        icon: const Icon(Icons.save_rounded, size: 18),
+                        label: const Text(
+                          'SALVAR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.background,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                       ),
                     ),
                   ),
